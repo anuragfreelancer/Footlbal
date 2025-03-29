@@ -1,22 +1,22 @@
  import imageIndex from "../assets/imageIndex";
 import TabNavigator from "../navigators/TabNavigator";
-import CreateNewPassword from "../screen/auth/CreateNewPassword";
-import Login from "../screen/auth/Login";
-import OnboardingScreen from "../screen/auth/Onboarding";
-import OtpScreen from "../screen/auth/OtpScreen";
-import PasswordReset from "../screen/auth/PasswordReset";
-import ReadyScreen from "../screen/auth/ReadyScreen";
-import SignUp from "../screen/auth/SignUp";
-import Splash from "../screen/auth/Splash";
+import CreateNewPassword from "../screen/auth/createNewPassword/CreateNewPassword";
+import Login from "../screen/auth/login/Login";
+ import OnboardingScreen from "../screen/auth/Onboarding";
+import OtpScreen from "../screen/auth/otpScreen/OtpScreen";
+import PasswordReset from "../screen/auth/passwordReset/PasswordReset";
+import SignUp from "../screen/auth/signUp/SignUp";
+ import Splash from "../screen/auth/Splash";
 import Calendar from "../screen/bottom/calendar/Calendar";
 import ChatScreen from "../screen/bottom/chat/ChatScreen";
 import Home from "../screen/bottom/home/Home";
 import Messages from "../screen/bottom/messages/Messages";
 import PlayerDetails from "../screen/bottom/playerDetails/PlayerDetails";
-import AddPlayer from "../screen/bottom/players/playe/addPlayer/AddPlayer";
+import AddPlayer from "../screen/bottom/players/addFiledPlayes/AddPlayer";
 import Players from "../screen/bottom/players/playe/Players";
 import AboutFootb from "../screen/bottom/profile/about/AboutFootb";
 import ChangePassword from "../screen/bottom/profile/changePassword/ChangePassword";
+import EditProfile from "../screen/bottom/profile/editProfile/EditProfile";
 import Legalinfor from "../screen/bottom/profile/legal/Legalinfor";
 import MyTeam from "../screen/bottom/profile/myTeam/MyTeam";
 import Ourplatform from "../screen/bottom/profile/ourplatform/Ourplatform";
@@ -44,6 +44,11 @@ const _routes:any = {
     {
       name: ScreenNameEnum.OnboardingScreen,
       Component: OnboardingScreen,
+    },
+ 
+    {
+      name: ScreenNameEnum.EditProfile,
+      Component: EditProfile,
     },
  
  

@@ -1,22 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-// State का टाइप डिफाइन
-interface AuthState {
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  isLogin: boolean;
-  isLogOut: boolean;
-  userData: any;  // यहां पर आप specific userData type दे सकते हैं
-  token: string | null;
-  forgotData: any;  // अगर structure पता हो तो type बना सकते हैं
-  betOption: any;
-  gameResult: any;
-  newbetOption: any;
-}
+ 
 
 // Initial state
-const initialState: AuthState = {
+const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -29,19 +15,13 @@ const initialState: AuthState = {
   gameResult: null,
   newbetOption: null,
 };
-
-// Login payload type
-interface LoginPayload {
-  userData: any;  // इसको भी टाइप कर सकते हैं
-  token: string;
-}
-
+ 
 // Slice
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginSuccess(state, action: PayloadAction<LoginPayload>) {
+    loginSuccess(state, action) {
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;

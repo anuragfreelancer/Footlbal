@@ -1,61 +1,25 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, KeyboardAvoidingView } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from
+import { CodeField, Cursor, } from
   'react-native-confirmation-code-field';
-import Loading from '../../utils/Loader';
-import imageIndex from '../../assets/imageIndex';
-import CustomButton from '../../compoent/CustomButton';
-import StatusBarComponent from '../../compoent/StatusBarCompoent';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { otp_Verify } from '../../Api/apiRequest';
-import CustomHeader from '../../compoent/CustomHeader';
-import ScreenNameEnum from '../../routes/screenName.enum';
+import Loading from '../../../utils/Loader';
+import imageIndex from '../../../assets/imageIndex';
+import CustomButton from '../../../compoent/CustomButton';
+import StatusBarComponent from '../../../compoent/StatusBarCompoent';
+import CustomHeader from '../../../compoent/CustomHeader';
+import useOtp from './useOtp';
 
 export default function OtpScreen() {
-  const route = useRoute();
-  const { email } = route.params || ""; // Provide a fallback if route.params is undefined
-  const navigation = useNavigation();
-  const [value, setValue] = useState('');
-  const ref = useBlurOnFulfill({ value, cellCount: 4 });
-  const [isLoading, setisLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+  const { props, getCellOnLayoutHandler,
+    isLoading,
+    errorMessage,
+    ref,
+    handleChangeText, navigation,
     value,
-    setValue,
-  });
-  const handleChangeText = (text: string) => {
-    setValue(text);
-
-    if (text.length < 4) {
-      setErrorMessage('Please enter a 4-digit code.');
-    } else {
-      setErrorMessage('');
-    }
-  };
-  const handleVerifyOTP = async () => {
-    const role = await AsyncStorage.getItem('userRole');
-    if (value.length !== 4) {
-      setErrorMessage('Please enter a valid 4-digit OTP.');
-      return;
-    }
-    setErrorMessage('');
-    setisLoading(true);
-    try {
-      const params = {
-        email: email,
-        navigation: navigation,
-        otp: value,
-      };
-      const response = await otp_Verify(params, setisLoading);
-    } catch (error) {
-      console.error("Login error:", error);
-    }
-  };
-  ;
-
-
+    ResendOtp,
+    timer,
+    handleVerifyOTP, email } = useOtp()
 
   return (
     <View style={{
@@ -70,9 +34,7 @@ export default function OtpScreen() {
           <CustomHeader imageSource={imageIndex.backorange} />
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-
           <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-
             <Image
               source={imageIndex.forBag}
               style={{ height: 230, width: 300 }} resizeMode='cover'
@@ -80,8 +42,9 @@ export default function OtpScreen() {
           </View>
           <View style={{ marginTop: 7 }}>
             <Text style={styles.txtHeading}>Check your mail</Text>
+            <Text style={styles.txtHeading}>{email}</Text>
             <Text style={styles.txtsubHeading}>
-            Please put the 4 digits sent to you
+              Please put the 4 digits sent to you
             </Text>
           </View>
           <View
@@ -92,17 +55,10 @@ export default function OtpScreen() {
               value={value}
               onChangeText={handleChangeText}
               cellCount={4}
-              rootStyle={{
-
-
-              }}
-
               keyboardType="number-pad"
               textContentType="oneTimeCode"
               renderCell={({ index, symbol, isFocused }) => (
                 <View style={{ marginStart: -1, backgroundColor: '#E9E9E9', borderRadius: 10, }}>
-
-
                   <Text
                     key={index}
                     style={[styles.cell, isFocused && styles.focusCell]}
@@ -112,21 +68,35 @@ export default function OtpScreen() {
                 </View>
               )}
             />
-            {/* {errorMessage ? (
+            {errorMessage ? (
               <Text style={{ color: 'red', marginTop: 18 }}>{errorMessage}</Text>
-            ) : null} */}
+            ) : null}
           </View>
-
-
+          <TouchableOpacity
+            onPress={ResendOtp}
+            style={{
+              alignSelf: 'center',
+              marginTop: 16,
+            }}>
+            <Text
+              style={{
+                color: 'rgba(237, 126, 98, 1)',
+                fontSize: 16,
+                fontWeight: '400',
+                lineHeight: 18,
+              }}>
+              {timer ? `00:${timer} seconds` : "Resend OTP"}
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
+
         <View style={{
           justifyContent: 'flex-start', marginBottom: 11
         }}>
           <CustomButton
             title={'Verify'}
-            onPress={()=>
-              navigation.navigate(ScreenNameEnum.CreatePassword)
-            }
+            onPress={handleVerifyOTP}
+
           />
         </View>
 

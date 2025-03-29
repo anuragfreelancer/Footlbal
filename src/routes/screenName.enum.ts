@@ -23,7 +23,8 @@ enum ScreenNameEnum {
   Ourplatform="Ourplatform",
   Legalinfor="Legalinfor",
   Messages="Messages",
-  ChatScreen="ChatScreen"
+  ChatScreen="ChatScreen",
+  EditProfile="EditProfile"
  
  }
 

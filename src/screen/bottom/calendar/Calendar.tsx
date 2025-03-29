@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView, FlatList, ScrollView } from "react-native";
- import imageIndex from "../../../assets/imageIndex";
+import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import CalendarComponent from "../../../compoent/CalendarComponent";
 
@@ -32,55 +32,45 @@ const CustomCalendar = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBarComponent/>
+      <StatusBarComponent />
       <Text style={styles.header}>State</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{
-        alignItems:"center",
-        justifyContent:"center",
 
-      }}>
-      <Image source={imageIndex.calenderBag} 
-      
-      style={{height:300, width:400}}
-      resizeMode="cover"
-      />
-      </View>
-      {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <CalendarComponent />
-    </View> */}
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <CalendarComponent />
+        </View>
 
-           <Text style={{
-                marginLeft:15,
-                fontSize:18,
-                color:"#192126",
-                fontWeight:"700",
-                marginTop:15
-              }}>Players Attending Session</Text>
-      <FlatList
-        data={players}
-        showsVerticalScrollIndicator={false}
-        style={{marginTop:15}}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image source={imageIndex.foodBagImg} style={styles.avatar} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.position}>{item.position}</Text>
+        <Text style={{
+          marginLeft: 15,
+          fontSize: 18,
+          color: "#192126",
+          fontWeight: "700",
+          marginTop: 15
+        }}>Players Attending Session</Text>
+        <FlatList
+          data={players}
+          showsVerticalScrollIndicator={false}
+          style={{ marginTop: 15 }}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Image source={imageIndex.foodBagImg} style={styles.avatar} />
+              <View style={styles.infoContainer}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.position}>{item.position}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Training Type</Text>
+                <Text style={styles.value}>{item.trainingType}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.label}>Intensity</Text>
+                <Text style={styles.value}>{item.intensity}</Text>
+              </View>
             </View>
-            <View style={styles.detailContainer}>
-              <Text style={styles.label}>Training Type</Text>
-              <Text style={styles.value}>{item.trainingType}</Text>
-            </View>
-            <View style={styles.detailContainer}>
-              <Text style={styles.label}>Intensity</Text>
-              <Text style={styles.value}>{item.intensity}</Text>
-            </View>
-          </View>
-        )}
-      />
-</ScrollView>
+          )}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -123,9 +123,9 @@ const styles = StyleSheet.create({
     color: "#7B827E",
   },
   dayBox: {
-    width: 40,
-    height: 40,
-    margin: 5,
+    width: 38,
+    height: 38,
+    margin: 4,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#A0D803",
   },
   dayText: {
-    fontSize: 16,
+    fontSize: 14,
+    color:"black"
   },
 });
 

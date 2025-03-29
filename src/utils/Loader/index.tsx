@@ -17,7 +17,7 @@ const LoadingModal = ({ visible }:any) => {
     >
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          <ActivityIndicator size="large" color="rgba(251, 91, 43, 1)"  style={{marginTop:10}} />
+          <ActivityIndicator size="large" color="#A0D803"  style={{marginTop:10}} />
           <Text style={styles.loadingText}>Please wait...</Text>
         </View>
       </View>

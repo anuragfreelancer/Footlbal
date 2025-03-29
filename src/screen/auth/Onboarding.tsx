@@ -40,15 +40,7 @@ const OnboardingScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         setCurrentIndex(index);
     };
 
-    const handleNextPress = () => {
-        if (currentIndex < slides.length - 1) {
-            const nextIndex = currentIndex + 1;
-            flatListRef.current?.scrollToIndex({ index: nextIndex });
-            setCurrentIndex(nextIndex);
-        } else {
-            navigation.replace('HomeScreen');  // Last slide pe Home ya Login pe navigate karna
-        }
-    };
+ 
 
     const renderSlide = ({ item }: { item: Slide }) => (
         <View style={styles.slide}>

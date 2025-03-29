@@ -68,5 +68,9 @@ export default {
     circleBak: require('./images/circleBak.png'),
     bagePng: require('./images/bagePng.png'),
     circleleft: require('./images/circleleft.png'),
+    closeImg: require('./images/closeImg.png'),
+    editLogo: require('./images/editLogo.png'),
+    logut: require('./images/logut.png'),
+    radioSlied: require('./images/radioSlied.png'),
     // 
   }; 

@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
+import { View, Image, StyleSheet,   SafeAreaView } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
  import ScreenNameEnum from '../../routes/screenName.enum';
 import { useSelector } from 'react-redux';
-import { color } from '../../constant';
-import imageIndex from '../../assets/imageIndex';
+ import imageIndex from '../../assets/imageIndex';
 import StatusBarComponent from '../../compoent/StatusBarCompoent';
 
 // Define the navigation type
@@ -16,24 +15,23 @@ type RootStackParamList = {
 const Splash: React.FC = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
      // console.log("isLogOut",isLogOut)
-      const isLogin = useSelector((state:any) => state.auth);
+    const isLogin = useSelector((state) => state.auth);
     const isFocus = useIsFocused();
-    // const checkLogout = () => {
-    //   if (isLogin?.isLogin) {
-    //     navigation.navigate('DrawerNav');
-    //   } else {
-    //      navigation.navigate(ScreenNameEnum.ChooseRoleScreen);
-    //    }
-    // };
+    const checkLogout = () => {
+      if (isLogin?.isLogin) {
+        navigation.navigate(ScreenNameEnum.TabNavigator);
+      } else {
+         navigation.navigate(ScreenNameEnum.LoginScreen);
+       }
+    };
   
     useEffect(() => {
       const timer = setTimeout(() => {
-        // checkLogout(); 
-        navigation.navigate(ScreenNameEnum.OnboardingScreen);
-      }, 3000);  
-  
-      return () => clearTimeout(timer);  
+        checkLogout();
+      }, 2000); // 2 सेकंड बाद checkLogout() कॉल होगा
+      return () => clearTimeout(timer); // क्लीनअप के लिए
     }, [isFocus, navigation]);
+
 
     return (
         <View style={styles.container}>
