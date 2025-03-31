@@ -1,10 +1,11 @@
-  import { base_url, constant } from "../../config/constant";
+import { base_url, constant } from "../../config/constant";
 import ScreenNameEnum from "../../routes/screenName.enum";
 import { errorToast, successToast } from "../../utils/customToast";
 import { loginSuccess } from "../feature/authSlice";
-  
- 
-    
+import { getSuccess } from "../feature/authGetSlice";
+
+
+
 const LoginUserApi = async (
     param,
     setLoading,
@@ -69,7 +70,7 @@ const SinupUserApi = async (param, setLoading) => {
             body: formData,
         };
         const response = await fetch(`${base_url}${constant.SignUp}`, requestOptions);
-         const res = await response.text();
+        const res = await response.text();
         const jsonResponse = JSON.parse(res);
         setLoading(false);
         if (jsonResponse?.status === "1") {
@@ -82,7 +83,7 @@ const SinupUserApi = async (param, setLoading) => {
         }
     } catch (error) {
         setLoading(false);
-         errorToast("Network error");
+        errorToast("Network error");
     }
 };
 
@@ -105,24 +106,24 @@ const ForgotPassUserApi = async (
             .then((response) => response.text())
             .then((res) => {
                 const response = JSON.parse(res)
-                 if (response?.status == '1') {
+                if (response?.status == '1') {
                     setLoading(false)
                     successToast(
                         response?.message
-                    ); 
-                    if(param?.type =="Resend") {
-                        
+                    );
+                    if (param?.type == "Resend") {
+
                     }
-                    else{
+                    else {
                         param?.navigation.navigate(ScreenNameEnum.OtpScreen, {
                             email: param?.email
                         });
                     }
-                  
+
                     return response
                 } else {
                     setLoading(false)
-                     errorToast(
+                    errorToast(
                         response.message,
                     );
                     return response
@@ -213,7 +214,7 @@ const UpdatePassUserApi = async (
                     successToast(
                         response?.message
                     );
-                    param.navigation.navigate(ScreenNameEnum.loginSuccess)
+                    param.navigation.navigate(ScreenNameEnum.LoginScreen)
                     return response
                 } else {
                     setLoading(false)
@@ -238,9 +239,9 @@ const UpdateProfile_Api = async (
     param,
     setLoading,
 ) => {
-     try {
-        console.log("param?.countrycode",param?.countrycode)
+    try {
         setLoading(true)
+        console.log("param?.images?.path", param?.images?.path);
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
@@ -253,9 +254,9 @@ const UpdateProfile_Api = async (
         }
         formData.append("user_name", param?.name ?? '');
         formData.append("user_id", param?.userId);
-        formData.append("gender", param?.gender);
+        formData.append("user_name", param?.name);
         formData.append("mobile", param?.mobile);
-        formData.append("country_code", param?.countrycode);
+        formData.append("email", param?.email);
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
@@ -270,7 +271,8 @@ const UpdateProfile_Api = async (
                     successToast(
                         response?.message
                     );
-
+                    param.navigation.goBack()
+                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
                 } else {
                     setLoading(false)
@@ -321,6 +323,40 @@ const GetProfile = async (userId, dispatch) => {
     }
 };
 
+const GetaboutusePolicyApi = async (
+    setLoading,
+) => {
+    try {
+        setLoading(true)
+
+        const requestOptions = {
+            method: "GET",
+        };
+        const respons = await fetch(`${base_url}${constant.getAboutUs}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
 const PrivacyPolicyApi = async (
     setLoading,
 ) => {
@@ -355,7 +391,6 @@ const PrivacyPolicyApi = async (
         );
     }
 };
-
 
 
 const AddContactUs = async (
@@ -410,31 +445,7 @@ const AddContactUs = async (
 };
 
 
-const GetfaqApi = async (setisLoading) => {
-    setisLoading(true);
-    try {
-        const myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-        };
-        const url = `${base_url}${constant.Getfaq}`;
-        const response = await fetch(url, requestOptions);
-        const responseData = await response.json(); // Directly parse JSON
-        setisLoading(false);
-        if (responseData?.status === '1') {
-            return { userGetData: responseData?.result };
-        } else {
-            errorToast(responseData?.message);
-            return null;
-        }
-    } catch (error) {
-        errorToast('Network error');
-        setisLoading(false);
-        return null;
-    }
-};
+
 
 const ChangePasswordApi = async (
     param,
@@ -447,7 +458,9 @@ const ChangePasswordApi = async (
         const formData = new FormData();
         formData.append("user_id", param?.userId);
         formData.append("password", param?.password);
-         const requestOptions = {
+        formData.append("confirm_password", param?.confirm_password);
+        formData.append("old_password", param?.currentPass);
+        const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
@@ -482,4 +495,4 @@ const ChangePasswordApi = async (
     }
 };
 
-export { PrivacyPolicyApi, GetfaqApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+export { PrivacyPolicyApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

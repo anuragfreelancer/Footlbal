@@ -12,7 +12,8 @@ const Profile = () => {
 
   const {
     modal, setModal,
-    handleLogout, navigation
+    handleLogout, navigation ,
+    getLogin
   } = useProfileScreen()
   const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
@@ -57,9 +58,9 @@ const Profile = () => {
           <TouchableOpacity  
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
           style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <Image source={imageIndex.name} style={styles.avatar} />
+            <Image source={getLogin?.userGetData?.image ?  {uri:getLogin?.userGetData?.image} : imageIndex?.ProfielImge} style={styles.avatar} />
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>Dulce Lubin</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
               <TouchableOpacity >
                 <Text style={styles.profileLink}>View my profile</Text>
               </TouchableOpacity>

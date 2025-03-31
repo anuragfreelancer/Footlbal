@@ -5,23 +5,23 @@ import { UpdatePassUserApi } from '../../../redux/Api/AuthApi';
  
 
 const useCreateNewPassword = () => {
-  const [credentials, setCredentials] = useState({
+  const [credentials, setCredentials] = useState <any>({
     password: '',
     confirmPassword: '',
   });
-  const route = useRoute();
+  const route:any = useRoute();
   const { userId } = route.params || ''; // Provide a fallback if route.params is undefined
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<any>({});
   const [isLoading, setisLoading] = useState(false);
   const navigation = useNavigation();
   const handleChange = (field:string, value:string) => {
-    setCredentials(prev => ({ ...prev, [field]: value }));
-    setErrors(prev => ({ ...prev, [field]: '' }));
+    setCredentials((prev:any) => ({ ...prev, [field]: value }));
+    setErrors((prev:any) => ({ ...prev, [field]: '' }));
     if (field === "password" && value.length < 5) {
-      setErrors((prev) => ({ ...prev, password: "Password must be at least 5 characters." }));
+      setErrors((prev:any) => ({ ...prev, password: "Password must be at least 5 characters." }));
     }
     if (field === "confirmPassword" && value !== credentials.password) {
-      setErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+      setErrors((prev:any) => ({ ...prev, confirmPassword: "Passwords do not match." }));
     }
 
   };

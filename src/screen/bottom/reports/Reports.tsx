@@ -8,23 +8,7 @@ import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 const screenWidth = Dimensions.get("window").width;
 
 const Reports = () => {
-  const data = {
-    labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43, 50],
-        strokeWidth: 2,
-        color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-      },
-    ],
-  };
-  const players = Array(2).fill({
-    name: "Animes S.",
-    position: "Forward",
-    trainingType: "Chest",
-    intensity: "Beginner",
-    image: "https://via.placeholder.com/50", // Replace with actual image URL
-  });
+ 
   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>

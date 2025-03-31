@@ -5,7 +5,7 @@ import { useBlurOnFulfill, useClearByFocusCell } from
 import { ForgotPassUserApi, OtpUserApi } from '../../../redux/Api/AuthApi';
 
 const useOtp = () => {
-    const route = useRoute();
+    const route:any = useRoute();
     const { email } = route.params || ""; // Provide a fallback if route.params is undefined
     const navigation = useNavigation();
     const [value, setValue] = useState('');
@@ -38,15 +38,19 @@ const useOtp = () => {
         }
     };
     useEffect(() => {
-        let interval;
+        let interval: NodeJS.Timeout | number | undefined;
         if (timer > 0) {
             interval = setInterval(() => {
                 setTimer((prev) => prev - 1);
             }, 1000);
-        } else if (timer === 0) {
         }
-        return () => clearInterval(interval);
+        return () => {
+            if (interval !== undefined) {
+                clearInterval(interval);
+            }
+        };
     }, [timer]);
+    
 
     const handleVerifyOTP = async () => {
         if (value.length !== 4) {

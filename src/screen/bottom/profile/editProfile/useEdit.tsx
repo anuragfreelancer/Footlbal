@@ -3,32 +3,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import ImagePicker from "react-native-image-crop-picker";
-import { GetProfile } from '../../../../redux/Api/AuthApi';
+import { GetProfile, UpdateProfile_Api } from '../../../../redux/Api/AuthApi';
  const useEdit = () => {
   const [isLoading, setisLoading] = useState()
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [dropOpen, setDropOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState();
-  const [fullName, setFullName] = useState("");
+   const [fullName, setFullName] = useState <string>();
   const [PhoneNumber, setPhoneNumber] = useState();
   const [email, setEmail] = useState();
-  //  const isLogin = useSelector((state) => state?.auth);
-  const [imagePrfile, setImagePrfile] = useState();
+   const [imagePrfile, setImagePrfile] = useState<any>();
+  const getLogin = useSelector((state: any) => state?.feature);
+   const [isModalVisible, setIsModalVisible] = useState(false);
+   const [errorMessage, setErrorMessage] = useState("");
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  // const getLogin = useSelector((state) => state?.feature);
-
-  // useEffect(() => {
-  //   if (getLogin?.userGetData) {
-  //     setFullName(getLogin?.userGetData?.user_name);
-  //     setPhoneNumber(getLogin?.userGetData?.mobile);
-  //   setEmail(getLogin?.userGetData?.email);
-  //     setSelectedOption(getLogin.userGetData.gender);
-  //     }
-  // }, [isLogin]);
-   
-   const pickImageFromGallery = () => {
+  useEffect(() => {
+    if (getLogin?.userGetData) {
+       setFullName(getLogin?.userGetData?.user_name || "");
+      setPhoneNumber(getLogin?.userGetData?.mobile || "") ;
+        }
+  }, [getLogin]);
+    const pickImageFromGallery = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
@@ -56,26 +50,32 @@ import { GetProfile } from '../../../../redux/Api/AuthApi';
   };
 
   const handleSubmit = async () => {
-     
-    try {
+    if (fullName.trim() === "") {
+      setErrorMessage("Full Name is required.");
+      return; // Stop execution if validation fails
+  }
+    try { 
         const params = {
             name: fullName,
             images: imagePrfile,
-            userId: isLogin.userData.id,
-            gender:selectedOption,
-            mobile:PhoneNumber
+            userId: getLogin?.userGetData.id  ,
+             mobile:PhoneNumber,
+             email:getLogin?.userGetData?.email,
+             navigation:navigation
         };
-        console.log("params",params.images)
-        const response = await UpdateProfile_Api(params, setisLoading, navigation);
+         const response = await UpdateProfile_Api(params, setisLoading);
         if(response){
-          GetProfile(isLogin?.userData?.id,dispatch);
+          GetProfile(getLogin?.userGetData?.id,dispatch);
         }
-
     } catch (error) {
         console.error("Error updating profile:", error);
     }
 };
 
+   const handleTextChange = (text:string) => {
+  setFullName(text);
+  setErrorMessage(""); // Clear error when typing
+};
 
   return {
     imagePrfile,
@@ -84,13 +84,13 @@ import { GetProfile } from '../../../../redux/Api/AuthApi';
     takePhotoFromCamera,
     pickImageFromGallery,
     isModalVisible, setIsModalVisible,
-    dropOpen, setDropOpen,
-    selectedOption, setSelectedOption,
-    fullName, setFullName,
+     fullName, setFullName,
     PhoneNumber, setPhoneNumber,
     email, setEmail,
     handleSubmit ,
-    
+    getLogin ,
+    errorMessage, setErrorMessage, 
+    handleTextChange
    };
 };
 

@@ -10,31 +10,29 @@ const useChange = () => {
     currentPass:"",
     password: '',
     confirmPassword: '',
-  });
- 
-  const [errors, setErrors] = useState({});
+  }); 
+  const [errors, setErrors] = useState<any>({});
   const [isLoading, setisLoading] = useState(false);
   const navigation = useNavigation();
-  const isLogin = useSelector((state) => state?.auth);
-
-  const handleChange = (field, value) => {
+  const isLogin = useSelector((state:any) => state?.auth);
+  const handleChange = (field:string, value:string) => {
     setCredentials(prev => ({ ...prev, [field]: value }));
-    setErrors(prev => ({ ...prev, [field]: '' }));
+    setErrors((prev:any) => ({ ...prev, [field]: '' }));
     if (field === "password" && value.length < 6) {
-      setErrors((prev) => ({ ...prev, password: "Password must be at least 6 characters." }));
+      setErrors((prev:any) => ({ ...prev, password: "Password must be at least 6 characters." }));
     }
     if (field === "currentPass" && value.length < 6) {
-      setErrors((prev) => ({ ...prev, currentPass: "Password must be at least 6 characters." }));
+      setErrors((prev:any) => ({ ...prev, currentPass: "Password must be at least 6 characters." }));
     }
     if (field === "confirmPassword" && value !== credentials.password) {
-      setErrors((prev) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+      setErrors((prev:any) => ({ ...prev, confirmPassword: "Passwords do not match." }));
     }
 
   };
 
   const handleResetPass = async () => {
     const { password, confirmPassword, currentPass } = credentials;
-    let validationErrors = {};
+    let validationErrors:any = {};
   
     if (!currentPass.trim()) validationErrors.currentPass = 'Current password is required.';
     if (!password.trim()) validationErrors.password = 'Password is required.';
@@ -57,7 +55,7 @@ const useChange = () => {
       currentPass:currentPass,
       password: password,
       confirm_password: confirmPassword,
-      userId: isLogin.userData.id,
+      userId: isLogin?.userData?.id,
       navigation: navigation,
     };
   

@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 12,
     paddingHorizontal: 25,
-    backgroundColor: 'rgba(21, 190, 119, 1)', // Friendly green button
+    backgroundColor: '#A0D803', // Friendly green button
     borderRadius: 20,
   },
   buttonText: {

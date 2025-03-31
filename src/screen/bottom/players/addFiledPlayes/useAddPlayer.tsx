@@ -9,12 +9,14 @@ const useAddPlayer = () => {
     const navigation = useNavigation();
     const [dob, setDob] = useState("");
     const [playerId, setPlayerId] = useState("");
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<any>({});
     const [isLoading, setisLoading] = useState(false)
-    const [injuryHistory, setInjuryHistory] = useState(null);
+    const [injuryHistory, setInjuryHistory] = useState <any>(null);
     const [open, setOpen] = useState(false);
-    const [imagePrfile, setImagePrfile] = useState();
+    const [imagePrfile, setImagePrfile] = useState<any>();
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [dropOpen, setDropOpen] = useState(false);
+    const [selectedOption, setSelectedOption] = useState();
     const validate = () => {
       let valid = true;
       let newErrors:any = {};
@@ -29,11 +31,8 @@ const useAddPlayer = () => {
       if (!playerId.trim()) {
         newErrors.playerId = "Player ID is required";
         valid = false;
-      } else if (isNaN(playerId)) {
-        newErrors.playerId = "Player ID must be a number";
-        valid = false;
-      }
-  
+      } 
+
       setErrors(newErrors);
       return valid;
     };
@@ -83,7 +82,10 @@ const useAddPlayer = () => {
     imagePrfile,
     isModalVisible, setIsModalVisible ,
     takePhotoFromCamera ,
-    pickImageFromGallery
-  };
+    pickImageFromGallery ,
+    dropOpen, setDropOpen ,
+    selectedOption, setSelectedOption,
+    isLoading
+  }; 
 };
  export default useAddPlayer;

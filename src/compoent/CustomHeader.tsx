@@ -6,8 +6,9 @@ interface BackButtonWithLabelProps {
     label?: string;
     imageSource: any;
     onPress?: () => void;
-    imageProps:any,
-    mainView:any
+    imageProps?: any;  // Make it optional
+    mainView?: any;     // Make it optional
+
 }
 
 const CustomHeader: React.FC<BackButtonWithLabelProps> = ({

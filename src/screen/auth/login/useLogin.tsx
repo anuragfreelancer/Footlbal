@@ -6,6 +6,7 @@ import { LoginUserApi } from '../../../redux/Api/AuthApi';
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  
 const useLogin = () => {
+  // const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [credentials, setCredentials] = useState({ email: 'test11@gmail.com', password: '1234567' });
   const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();

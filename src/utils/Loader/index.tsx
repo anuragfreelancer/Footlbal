@@ -48,9 +48,10 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 15,
-    fontSize: 15,
-    color: '#333',
-    fontWeight: '500',
+    fontSize: 16,
+    color: 'black',
+    fontWeight: '600',
+    marginBottom:15
   },
 });
 

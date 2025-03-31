@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomButton from '../../../../compoent/CustomButton';
@@ -8,6 +8,7 @@ import styles from './style';
 import useAddPlayer from './useAddPlayer';
 import DatePicker from "react-native-date-picker";
 import ImagePickerModal from '../../../../compoent/ImagePickerModal';
+import DropdownModal from '../../../../compoent/DropdownModal';
 
 
 const AddPlayer = () => {
@@ -15,15 +16,17 @@ const AddPlayer = () => {
     fullName, setFullName,
     dob, setDob,
     playerId, setPlayerId,
-    errors,
-    navigation,
+    errors, 
     injuryHistory, setInjuryHistory,
     handleSubmit,
     open, setOpen,
     imagePrfile,
     isModalVisible, setIsModalVisible,
     takePhotoFromCamera,
-    pickImageFromGallery
+    pickImageFromGallery,
+    dropOpen, setDropOpen,
+    selectedOption, setSelectedOption,
+    isLoading
   } = useAddPlayer()
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -36,10 +39,12 @@ const AddPlayer = () => {
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profileContainer}>
-          <Image source={imagePrfile ? { uri: imagePrfile.path } : imageIndex.prfEdit} style={styles.profileImage} />
+          <Image
+          resizeMode='cover'
+          source={imagePrfile ? { uri: imagePrfile.path } : imageIndex.prfEdit} style={styles.profileImage} />
           <TouchableOpacity style={{
-            bottom: 15,
-            left: 8
+            bottom: 20,
+            left: 12
           }} onPress={() => setIsModalVisible(true)}>
             <Image source={imageIndex.floter} style={{
               height: 33,
@@ -81,37 +86,26 @@ const AddPlayer = () => {
             onChangeText={setPlayerId}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
             style={styles.textInupt}
-       
           />
         </View>
         {errors.playerId && <Text style={{ color: "red", bottom: 5 }}>{errors.playerId}</Text>}
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8',
-          }}>
+          onPress={() => setDropOpen(true)}
+          style={styles.rowView}>
           <View style={{ flexDirection: "row", alignItems: "center", padding: 9 }}>
             <View style={{ flexDirection: "column" }}>
               <Text style={{
                 color: '#2D2D2D',
                 fontSize: 14,
-              }}>{"Team"}
+              }}>{selectedOption || "Team"}
               </Text>
             </View>
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
         <TouchableOpacity
-
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8',
-          }}>
-          <View style={{ flexDirection: "row", alignItems: "center", padding: 9 }}>
+          style={styles.rowView}>
+          <View style={styles.dropView}>
             <View style={{ flexDirection: "column" }}>
               <Text style={{
                 color: '#2D2D2D',
@@ -124,13 +118,8 @@ const AddPlayer = () => {
         </TouchableOpacity>
         <Text style={styles.sectionTitle}>Training & Performance</Text>
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8',
-          }}>
-          <View style={{ flexDirection: "row", alignItems: "center", padding: 9 }}>
+          style={styles.rowView}>
+          <View style={styles.dropView}>
             <View style={{ flexDirection: "column" }}>
               <Text style={{
                 color: '#2D2D2D',
@@ -147,10 +136,8 @@ const AddPlayer = () => {
             justifyContent: "space-between"
           }]}>
           <Text style={styles.radioText}>No Injury</Text>
-          <Image source={injuryHistory != 'no-injury' ? imageIndex.radio : imageIndex.radioSlied} style={{
-            height: 22,
-            width: 22
-          }}
+          <Image source={injuryHistory != 'no-injury' ? imageIndex.radio : imageIndex.radioSlied}
+            style={styles.img}
             resizeMode='contain'
           />
         </TouchableOpacity>
@@ -158,11 +145,9 @@ const AddPlayer = () => {
           justifyContent: "space-between"
         }]}>
           <Text style={styles.radioText}>Select Previous Injuries</Text>
-          <Image 
-          source={injuryHistory != 'previous-injury' ? imageIndex.radio : imageIndex.radioSlied} style={{
-            height: 22,
-            width: 22
-          }}
+          <Image
+            source={injuryHistory != 'previous-injury' ? imageIndex.radio : imageIndex.radioSlied} style={styles.img}
+
             resizeMode='contain'
           />
         </TouchableOpacity>
@@ -174,10 +159,7 @@ const AddPlayer = () => {
           />
         </View>
       </ScrollView>
-      <View style={{
-        justifyContent: 'flex-start', marginBottom: 11,
-        marginHorizontal: 15
-      }}>
+      <View style={styles.butt}>
         <CustomButton
           title={'Save'}
           onPress={() =>
@@ -190,7 +172,7 @@ const AddPlayer = () => {
         open={open}
         date={dob || new Date()}
         mode="date"
-        onConfirm={(date) => {
+        onConfirm={(date:any) => {
           setDob(date);
           setOpen(false);
         }}
@@ -201,6 +183,12 @@ const AddPlayer = () => {
         setModalVisible={setIsModalVisible}
         pickImageFromGallery={pickImageFromGallery}
         takePhotoFromCamera={takePhotoFromCamera}
+      />
+      <DropdownModal
+        visible={dropOpen}
+        options={["Team 1", "Team 2"]}
+        onClose={() => setDropOpen(false)}
+        onSelect={(option: any) => setSelectedOption(option)}
       />
     </SafeAreaView>
   );

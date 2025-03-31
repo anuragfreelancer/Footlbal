@@ -17,7 +17,12 @@ const styles = StyleSheet.create({
     iamgeView :{
         height: ResponsiveSize.height(108), width: ResponsiveSize.width(108),   
 
-    }
+    },
+    errorText: {
+        color: "red",
+        marginTop: 10,
+        fontSize: 12,
+      },
 
 })
 export default styles;

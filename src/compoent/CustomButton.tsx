@@ -9,8 +9,9 @@ interface CustomButtonProps {
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   disabled?: boolean;
-  secoundImg:any
+  secoundImg?: any;  // Add "?" to make it optional
 }
+
 
 // Functional component
 const CustomButton: React.FC<CustomButtonProps> = ({

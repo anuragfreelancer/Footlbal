@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
+import { View,   Image, Text,TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import useEdit from "./useEdit";
 import styles from "./style";
 import CustomButton from "../../../../compoent/CustomButton";
@@ -15,14 +15,16 @@ const EditProfile = () => {
     const {
         imagePrfile,
         isLoading,
-        navigation,
         takePhotoFromCamera,
         pickImageFromGallery,
         isModalVisible, setIsModalVisible,
-        fullName, setFullName,
+        fullName,  
         PhoneNumber, setPhoneNumber,
         email, setEmail,
         handleSubmit,
+        getLogin ,
+        errorMessage,  
+        handleTextChange
     } = useEdit()
 
     return (
@@ -41,15 +43,15 @@ const EditProfile = () => {
                         <View style={styles.iamgeView}>
                             <Image
                                 resizeMode="cover"
-                                source={imagePrfile ? { uri: imagePrfile.path } : imageIndex.ProfielImge}
-                                style={{ height: ResponsiveSize.height(105), width: ResponsiveSize.width(105), borderRadius: 105 }}
+                                source={imagePrfile ? { uri: imagePrfile?.path } : { uri: getLogin?.userGetData?.image }}
+                                style={{ height: ResponsiveSize.height(105), width: ResponsiveSize.width(105), borderRadius: 90,borderWidth:1 ,borderColor:"#9DB2BF"}}
                             />
                         </View>
                         <TouchableOpacity
                             onPress={() => setIsModalVisible(true)}
                             style={{ bottom: ResponsiveSize.height(23), alignItems: "center", justifyContent: "center", height: 30, width: 30, borderRadius: 30 }}>
                             <Image
-                                source={imageIndex.editLogo}
+                                source={imageIndex.floter}
                                 style={{ marginLeft: 30, height: ResponsiveSize.height(33), width: ResponsiveSize.width(33) }}
                                 resizeMode='contain'
                             />
@@ -58,14 +60,16 @@ const EditProfile = () => {
                     <View style={{ marginHorizontal: 15 }}>
                         <View style={{ marginTop: 15 }}>
                             <TextInputField
-                                text={fullName}
-                                onChangeText={setFullName}
+                               text={fullName}
+                               onChangeText={handleTextChange}
                                 lable={"Full Name"}
                                 placeholder={'Full Name '}
                                 firstLogo={true}
                                 img={imageIndex.myteam}
                             />
                         </View>
+                        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
                         <View style={{ marginTop: 15 }}>
                             <TextInputField
                                 text={PhoneNumber}
@@ -74,6 +78,7 @@ const EditProfile = () => {
                                 placeholder="Mobile Number"
                                 firstLogo={true}
                                 img={imageIndex.myteam}
+                                type={"decimal-pad"}
                             />
                         </View>
                     </View>

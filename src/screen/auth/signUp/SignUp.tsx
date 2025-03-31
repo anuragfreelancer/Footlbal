@@ -10,8 +10,7 @@ import {
 import React from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
-import Loading from '../../../utils/Loader';
-import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
+ import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
 import imageIndex from '../../../assets/imageIndex';
 import { styles } from '../loginStyle';
 import ResponsiveSize from '../../../utils/ResponsiveSize';
@@ -72,10 +71,9 @@ export default function SignUp() {
                                 lable={"Mobile No."}
                                 onChangeText={(value: string) => handleChange('mobile', value)} // Handles email input dynamically
                                 text={credentials.mobile}
-
                                 placeholder={'Mobile No.'}
                                 firstLogo={true}
-                                showEye={true}
+                                showEye={false}
                                 img={imageIndex.phone}
                                 type="decimal-pad"
                             />

@@ -6,7 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import React, { useState } from 'react';
+import React  from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
  import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
@@ -61,7 +61,7 @@ export default function CreateNewPassword() {
               lable={"Password"}
               text={credentials.password}
               placeholder={'Password'}
-              onChangeText={(value) => handleChange('password', value)} // Handles email input dynamically
+              onChangeText={(value:string) => handleChange('password', value)} // Handles email input dynamically
 
               firstLogo={true}
               showEye={true}
@@ -72,7 +72,7 @@ export default function CreateNewPassword() {
               <TextInputField
                 lable={"Confirm Password"}
                 text={credentials.confirmPassword}
-                onChangeText={(value) => handleChange('confirmPassword', value)} // Handles email input dynamically
+                onChangeText={(value:string) => handleChange('confirmPassword', value)} // Handles email input dynamically
                 placeholder={'Confirm Password'}
                 firstLogo={true}
                 showEye={true}
@@ -80,10 +80,7 @@ export default function CreateNewPassword() {
               />
             </View>
             {errors.confirmPassword ? <Text style={{ color: 'red', fontSize: 12 ,marginTop:10}}>{errors.confirmPassword}</Text> : null}
-
           </View>
-
-
         </View>
 
       </ScrollView>

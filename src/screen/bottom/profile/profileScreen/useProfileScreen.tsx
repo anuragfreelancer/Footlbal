@@ -1,6 +1,6 @@
 import { useState } from 'react';
  import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ScreenNameEnum from '../../../../routes/screenName.enum';
 import { logout } from '../../../../redux/feature/authSlice';
 import { successToast } from '../../../../utils/customToast';
@@ -9,6 +9,8 @@ import { successToast } from '../../../../utils/customToast';
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [modal, setModal] = useState(false)
+    const getLogin = useSelector((state: any) => state?.feature);
+
     const handleLogout = () => {
       dispatch(logout());
       setModal(false);
@@ -20,7 +22,8 @@ import { successToast } from '../../../../utils/customToast';
     };
   return {
     modal, setModal ,
-    handleLogout,navigation
+    handleLogout,navigation ,
+    getLogin
   };
 };
 

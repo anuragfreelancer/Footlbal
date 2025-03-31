@@ -1,12 +1,23 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, Image, ScrollView,   StyleSheet, SafeAreaView, useWindowDimensions } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
+import useLegalinfor from './useLegalinfor';
+import HTML from 'react-native-render-html';
+import LoadingModal from '../../../../utils/Loader';
 
-const Legalinfor = ({ navigation }) => {
+const Legalinfor = () => {
+    const {
+        privacyData,
+        isLoading,
+        navigation
+    } = useLegalinfor()
+    const { width } = useWindowDimensions();
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+            {isLoading ? <LoadingModal /> : null}
             <StatusBarComponent />
             <View style={{ marginHorizontal: 12, marginTop: 12 }}>
                 <CustomHeader imageSource={imageIndex.backNav} label="Legal information" />
@@ -17,22 +28,22 @@ const Legalinfor = ({ navigation }) => {
                 <View style={styles.logoContainer}>
                     <Image source={imageIndex.app} style={styles.logo} />
                 </View>
+                {privacyData?.length != 0 && (
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>Policies</Text>
 
-                {/* App About Details Section */}
-                <View style={styles.sectionContainer}>
-                    <Text style={styles.sectionTitle}>Policies</Text>
-                    <Text style={styles.sectionText}>
-                    This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You. We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the
-                     </Text>
-                </View>
-
+                    </View>
+                )}
+ 
+                {privacyData &&
+                    <HTML
+                        source={{ html: privacyData?.description || '<p>No content available</p>' }}
+                        contentWidth={width}
+                        tagsStyles={styles.htmlStyles}
+                    />
+                }
                 {/* App Usage Section */}
-                <View style={styles.sectionContainer}>
-                    <Text style={styles.sectionTitle}>App Usage</Text>
-                    <Text style={styles.sectionText}>
-                    The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural
-                     </Text>
-                </View>
+
             </ScrollView>
         </SafeAreaView>
 
@@ -44,6 +55,33 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF',
         paddingTop: 50,
+    },
+    htmlStyles: {
+        p: {
+            fontSize: 14,
+            color: 'black',
+            lineHeight: 24,
+            fontWeight: "500",
+            marginTop: 8,
+            marginLeft: 15
+
+        },
+        h1: {
+            fontSize: 22,
+            fontWeight: '500',
+            color: '#000',
+            marginBottom: 10,
+        },
+        h2: {
+            fontSize: 18,
+            fontWeight: '500',
+            color: '#222',
+            marginBottom: 8,
+        },
+        a: {
+            color: '#007bff',
+            // textDecorationLine: 'underline',
+        },
     },
     headerContainer: {
         flexDirection: 'row',

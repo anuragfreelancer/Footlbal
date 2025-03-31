@@ -1,6 +1,6 @@
 
 import { StyleSheet } from 'react-native';
- 
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', padding: 15, marginBottom: 20, },
   header: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
@@ -19,6 +19,24 @@ const styles = StyleSheet.create({
     color: "#2D2D2D",
     fontSize: 14,
     fontWeight: "400"
-  }
+  },
+  rowView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8',
+  },
+  img: {
+    height: 22,
+    width: 22
+  },
+butt:{
+  justifyContent: 'flex-start', marginBottom: 11,
+  marginHorizontal: 15
+},
+dropView:{
+  height:45,
+  justifyContent:"center"
+}
 });
 export default styles;

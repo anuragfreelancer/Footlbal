@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from "react
 import moment from "moment";
 import imageIndex from "../assets/imageIndex";
 
-const CalendarComponent = () => {
+const CalendarComponent = ({ onDateSelect }) => {
   const [currentMonth, setCurrentMonth] = useState(moment());
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -14,9 +14,15 @@ const CalendarComponent = () => {
   };
 
   const toggleDateSelection = (date) => {
-    setSelectedDates((prev) =>
-      prev.includes(date) ? prev.filter((d) => d !== date) : [...prev, date]
-    );
+    let updatedDates;
+    if (selectedDates.includes(date)) {
+      updatedDates = selectedDates.filter((d) => d !== date);
+    } else {
+      updatedDates = [...selectedDates, date];
+    }
+
+    setSelectedDates(updatedDates);
+    onDateSelect(updatedDates); // Notify parent about selected dates
   };
 
   const renderDays = () => {
@@ -39,18 +45,11 @@ const CalendarComponent = () => {
     <View style={styles.card}>
       <View style={styles.calendarHeader}>
         <TouchableOpacity onPress={() => changeMonth("prev")} style={styles.arrowButton}>
-          <Image source={imageIndex.circleBak}
-            style={{ height: 24, width: 24 }}
-            resizeMode="contain"
-          />
-
+          <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} resizeMode="contain" />
         </TouchableOpacity>
         <Text style={styles.monthText}>{currentMonth.format("MMMM YYYY")}</Text>
         <TouchableOpacity onPress={() => changeMonth("next")} style={styles.arrowButton}>
-          <Image source={imageIndex.circleleft}
-            style={{ height: 24, width: 24 }}
-            resizeMode="contain"
-          />
+          <Image source={imageIndex.circleleft} style={{ height: 24, width: 24 }} resizeMode="contain" />
         </TouchableOpacity>
       </View>
       <View style={styles.weekRow}>
@@ -64,16 +63,13 @@ const CalendarComponent = () => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={[
-              styles.dayBox,
-              selectedDates.includes(item) && styles.selectedDay
-            ]}
+            style={[styles.dayBox, selectedDates.includes(item) && styles.selectedDay]}
             onPress={() => item && toggleDateSelection(item)}
             disabled={!item}
           >
-            <Text style={!selectedDates.includes(item) ? styles.dayText : {
-              color: "white"
-            }}>{item ? moment(item).date() : ""}</Text>
+            <Text style={!selectedDates.includes(item) ? styles.dayText : { color: "white" }}>
+              {item ? moment(item).date() : ""}
+            </Text>
           </TouchableOpacity>
         )}
       />
@@ -100,42 +96,41 @@ const styles = StyleSheet.create({
     marginTop: 11
   },
   monthText: {
-    fontSize: 11,
+    fontSize: 15,
     fontWeight: "700",
     color: "#0A1811"
   },
   arrowButton: {
     padding: 10,
   },
-  arrowText: {
-    fontSize: 20,
-  },
   weekRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "100%",
-    marginVertical: 10,
+     marginVertical: 10,
   },
   weekDay: {
     fontWeight: "700",
-    width: 40,
+    width: 42,
     textAlign: "center",
     color: "#7B827E",
+    fontSize:12,
   },
   dayBox: {
     width: 38,
-    height: 38,
+    height: 20,
     margin: 4,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 5,
+     marginBottom:8
   },
   selectedDay: {
     backgroundColor: "#A0D803",
+    width: 35,
+    height: 33,
   },
   dayText: {
-    fontSize: 14,
-    color:"black"
+    fontSize: 13,
+    color: "#0A1811"
   },
 });
 

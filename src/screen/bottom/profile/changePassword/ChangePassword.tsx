@@ -40,7 +40,7 @@ const ChangePassword = () => {
             placeholder={'Current Password'}
             firstLogo={true}
             text={credentials.currentPass}
-            onChangeText={(value) => handleChange('currentPass', value)} // Ha
+            onChangeText={(value:any) => handleChange('currentPass', value)} // Ha
             img={imageIndex.lock}
           />
           {errors.currentPass && <ErrorText message={errors.currentPass} Styles={{ marginTop: 15 }} />}
@@ -52,7 +52,7 @@ const ChangePassword = () => {
               firstLogo={true}
               showEye={true}
               text={credentials.password}
-              onChangeText={(value) => handleChange('password', value)} // Handles email input dynamically
+              onChangeText={(value:any) => handleChange('password', value)} // Handles email input dynamically
               img={imageIndex.lock}
             />
             {errors.password && <ErrorText message={errors.password} Styles={{ marginTop: 15 }} />}
@@ -61,7 +61,7 @@ const ChangePassword = () => {
           <View style={{ marginTop: 12 }}>
             <TextInputField
               lable={"Confirm Password"}
-              onChangeText={(value) => handleChange('confirmPassword', value)} // Handles email input dynamically
+              onChangeText={(value:any) => handleChange('confirmPassword', value)} // Handles email input dynamically
               text={credentials.confirmPassword}
               placeholder={'Confirm Password'}
               firstLogo={true}

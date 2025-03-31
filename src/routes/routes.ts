@@ -6,7 +6,7 @@ import Login from "../screen/auth/login/Login";
 import OtpScreen from "../screen/auth/otpScreen/OtpScreen";
 import PasswordReset from "../screen/auth/passwordReset/PasswordReset";
 import SignUp from "../screen/auth/signUp/SignUp";
- import Splash from "../screen/auth/Splash";
+ import Splash from "../screen/auth/splash/Splash";
 import Calendar from "../screen/bottom/calendar/Calendar";
 import ChatScreen from "../screen/bottom/chat/ChatScreen";
 import Home from "../screen/bottom/home/Home";
