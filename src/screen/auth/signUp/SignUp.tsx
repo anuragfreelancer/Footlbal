@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
- import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
+import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
 import imageIndex from '../../../assets/imageIndex';
 import { styles } from '../loginStyle';
 import ResponsiveSize from '../../../utils/ResponsiveSize';
@@ -19,6 +19,7 @@ import CustomButton from '../../../compoent/CustomButton';
 import ScreenNameEnum from '../../../routes/screenName.enum';
 import useSignup from './useSinup';
 import LoadingModal from '../../../utils/Loader';
+import DropdownModal from '../../../compoent/DropdownModal';
 
 export default function SignUp() {
     const {
@@ -28,8 +29,18 @@ export default function SignUp() {
         handleChange,
         handleSignup,
         navigation,
+        selectedOption, setSelectedOption,
+        dropOpen, setDropOpen
     } = useSignup()
-
+    interface Option {
+        team_name: string;
+        id: string;
+      }
+      
+    const options: Option[] = [
+        { team_name: "Coach", id: "1" },
+        { team_name: "Player", id: "2" },
+      ];
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <StatusBarCompoent />
@@ -79,7 +90,6 @@ export default function SignUp() {
                             />
                         </View>
                         {errors.mobile ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.mobile}</Text> : null}
-
                         <View style={{ marginTop: 12 }}>
                             <TextInputField
                                 lable={"Password"}
@@ -92,12 +102,56 @@ export default function SignUp() {
                             />
                         </View>
                         {errors.password ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.password}</Text> : null}
-
                     </View>
+                    <TouchableOpacity
+                        onPress={() => setDropOpen(true)}
+                        style={{
+                            flexDirection: 'row',
+                            backgroundColor: 'white',
+                            borderColor: "#EBEBEB",
+                            height: 60,
+                            borderRadius: 15,
+                            paddingHorizontal: 5,
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderWidth: 1.8,
+                            marginTop: 5
+                        }}>
+                        <View style={{ flexDirection: "row", alignItems: "center", padding: 9 }}>
+
+                            <Image source={imageIndex.addUser}
+
+
+                                tintColor={"#EBEBEB"}
+                                style={{ height: 24, width: 24 }} resizeMode='contain' />
+                            <View style={{
+                                borderWidth: 1,
+                                borderColor: "#EBEBEB",
+                                height: 31,
+                                width: 2,
+                                borderRadius: 10,
+                                marginLeft: 15
+                            }} />
+                            <View style={{ flexDirection: "column" }}>
+                                <Text style={{
+                                    color: 'black',
+                                    fontSize: 14,
+                                    marginLeft: 18
+                                }}>{selectedOption?.team_name ?? "Account Type"}
+                                </Text>
+                            </View>
+
+
+                        </View>
+                        <Image source={imageIndex.arrowDown}
+                            tintColor={"#EBEBEB"}
+                            style={{ height: 24, width: 24, right: 10 }} resizeMode='contain' />
+                    </TouchableOpacity>
+                    {errors.selectedOption ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.selectedOption}</Text> : null}
                     <CustomButton
                         title={'Sign up'}
                         onPress={() => handleSignup()}
-                         buttonStyle={{ width: "100%", marginTop: 28 }}
+                        buttonStyle={{ width: "100%", marginTop: 28 }}
                     />
                 </View>
                 <View
@@ -106,7 +160,7 @@ export default function SignUp() {
                         alignItems: 'center',
                         marginTop: 40,
                         alignSelf: 'center',
-                        justifyContent: 'flex-end', // Change this to flex-end
+                        justifyContent: 'flex-end', // Change this to flex-end 
                     }}>
                     <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)' }}>
                         Don’t have an account?{' '}
@@ -120,6 +174,12 @@ export default function SignUp() {
                 </View>
 
             </ScrollView>
+            <DropdownModal
+                visible={dropOpen}
+                options={options}
+                onClose={() => setDropOpen(false)}
+                onSelect={(option) => setSelectedOption(option)}
+            />
         </SafeAreaView>
     );
 }

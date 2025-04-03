@@ -3,7 +3,7 @@ import ScreenNameEnum from "../../routes/screenName.enum";
 import { errorToast, successToast } from "../../utils/customToast";
 import { loginSuccess } from "../feature/authSlice";
 import { getSuccess } from "../feature/authGetSlice";
-
+ 
 
 
 const LoginUserApi = async (
@@ -64,14 +64,16 @@ const SinupUserApi = async (param, setLoading) => {
         formData.append("mobile", param?.mobile);
         formData.append("email", param?.email);
         formData.append("password", param?.password);
+        formData.append("type", param?.type);
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
         };
+        
         const response = await fetch(`${base_url}${constant.SignUp}`, requestOptions);
         const res = await response.text();
-        const jsonResponse = JSON.parse(res);
+         const jsonResponse = JSON.parse(res);
         setLoading(false);
         if (jsonResponse?.status === "1") {
             successToast(jsonResponse?.message);
@@ -257,7 +259,7 @@ const UpdateProfile_Api = async (
         formData.append("user_name", param?.name);
         formData.append("mobile", param?.mobile);
         formData.append("email", param?.email);
-        const requestOptions = {
+         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
@@ -495,4 +497,271 @@ const ChangePasswordApi = async (
     }
 };
 
-export { PrivacyPolicyApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+
+
+
+const PlayerPostApi = async (
+    param,
+    setLoading,
+) => {
+    try {
+        setLoading(true)
+        const myHeaders = new Headers();
+        const formattedDate = param?.dob ? param?.dob?.toLocaleDateString() : '';
+
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        if (param?.addImage) {
+            formData.append("image", {
+                uri: param?.addImage?.path,
+                type: 'image/jpeg',
+                name: 'image.jpg'
+            });
+        }
+        formData.append("user_id", param?.userId);
+        formData.append("position_id", param?.posttion);
+        formData.append("load_type_id", param?.traing);
+        formData.append("team_id", param?.team);
+        formData.append("player_name", param?.fullName ?? '');
+        formData.append("player_details", param?.notes ?? '');
+        formData.append("dob", formattedDate ?? '');
+        formData.append("injury", param?.injury ?? '');
+        console.log("formData", formData)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const respons = await fetch(`${base_url}${constant.addPlayer}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                console.log("res", res);
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                    param.navigation.goBack()
+                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+
+
+const PlayerPostEditApi = async (
+    param,
+    setLoading,
+) => {
+
+    try {
+        setLoading(true)
+        const myHeaders = new Headers();
+        const formattedDate = param?.dob ? param?.dob?.toLocaleDateString() : '';
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        if (param?.addImage) {
+            formData.append("image", {
+                uri: param?.addImage?.path,
+                type: 'image/jpeg',
+                name: 'image.jpg'
+            });
+        }
+        formData.append("user_id", param?.userId);
+             formData.append("player_id", param?.player_id);
+
+    
+        if (param?.posttion) {
+            formData.append("position_id", param?.posttion);
+        }
+        if (param?.traing) {
+            formData.append("load_type_id", param?.traing);
+        }
+        if (param?.team) {
+            formData.append("team_id", param?.team);
+        }
+            //  formData.append("dob", formattedDate ?? '');
+         formData.append("player_name", param?.fullName ?? '');
+        formData.append("player_details", param?.notes ?? '');
+
+        formData.append("injury", param?.injury ?? '');
+        console.log(" --- formData", formData)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const respons = await fetch(`${base_url}${constant.updatePlayer}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                console.log("res", res);
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                    param.navigation.navigate(ScreenNameEnum.TabNavigator)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        console.log("error",error)
+
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+
+const Teamcategory = async (
+    setisLoading
+) => {
+    try {
+        setisLoading(true)
+        const requestOptions = {
+            method: "GET",
+        };
+        const respons = await fetch(`${base_url}${constant.GettTeam}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setisLoading(false)
+
+                    return response
+                } else {
+                    errorToast(
+                        response.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+
+const PositioncCategory = async (
+) => {
+    try {
+        const requestOptions = {
+            method: "GET",
+        };
+        const respons = await fetch(`${base_url}${constant.getPosition}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+
+                    return response
+                } else {
+                    errorToast(
+                        response.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+const TrainingCategory = async (
+) => {
+    try {
+        const requestOptions = {
+            method: "GET",
+        };
+        const respons = await fetch(`${base_url}${constant.getLoadType}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+
+                    return response
+                } else {
+                    errorToast(
+                        response.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+
+const Getplayer = async (userId, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+        };
+        const response = await fetch(`${base_url}${constant.getPlayer}?user_id=${userId}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        if (responseData.status === '1') {
+            successToast(responseData.message);
+            return { userGetData: responseData.result };
+        } else {
+            errorToast(responseData.message);
+            return null;
+        }
+    } catch (error) {
+        errorToast('Network error');
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
+
+export { PrivacyPolicyApi, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

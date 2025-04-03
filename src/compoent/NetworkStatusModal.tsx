@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 25,
     backgroundColor: '#A0D803', // Friendly green button
-    borderRadius: 20,
+    borderRadius: 12,
   },
   buttonText: {
     fontSize: 16,

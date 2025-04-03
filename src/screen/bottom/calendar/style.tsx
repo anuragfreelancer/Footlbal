@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginHorizontal: 15,
   },
-  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginVertical: 10 },
+  header: { fontSize: 24, color: "black",marginTop:30, fontWeight: "700", textAlign: "center", marginVertical: 10 },
   card: {
     flexDirection: "row",
     alignItems: "center",

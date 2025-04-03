@@ -5,12 +5,14 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: "white",
-      marginHorizontal: 15
+      marginHorizontal: 15,
+      marginTop:25
     },
     header: {
       flexDirection: "row",
       alignItems: "center",
-      marginHorizontal:15
+      marginHorizontal:15,
+      marginTop:30
     },
     card: {
       flexDirection: "row",
@@ -47,39 +49,6 @@ const styles = StyleSheet.create({
     },
     notificationIcon: {
       padding: 10,
-    },
-    bellIcon: {
-      width: 24,
-      height: 24,
-    },
-    sectionContainer: {
-      backgroundColor: "white",
-      margin: 10,
-      borderRadius: 10,
-      padding: 15,
-      shadowColor: "#000",
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
-    },
-    sectionHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 10,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: "bold",
-    },
-    weeklyButton: {
-      backgroundColor: "#FF7043",
-      padding: 5,
-      borderRadius: 5,
-    },
-    weeklyText: {
-      color: "white",
-      fontSize: 12,
     },
     chartStyle: {
       marginVertical: 8,

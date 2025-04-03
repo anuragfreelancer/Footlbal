@@ -1,33 +1,31 @@
 import { useEffect, useState } from 'react';
  import { useNavigation } from '@react-navigation/native';
-import { GetaboutusePolicyApi } from '../../../redux/Api/AuthApi';
+import {   Getplayer } from '../../../redux/Api/AuthApi';
+import { useSelector } from 'react-redux';
   const useCalendar = () => {
    const [isLoading,setisLoading] = useState(false)
    const navigation = useNavigation();
-  const [allPlay, setAllPlay] = useState<any>([]);
-  const [selectedDates, setSelectedDates] = useState([]);
-
-  const GetAbout = async () => {
+   const [selectedDates, setSelectedDates] = useState([]);
+   const isLogin = useSelector((state: any) => state?.auth);
+   
+    const [players, setPlayers] = useState<any>([]);
+    useEffect(()=>{
+      GetplayerApi()
+    },[])
+   const GetplayerApi = async () => {
     try {
-        const state = await GetaboutusePolicyApi(setisLoading);
-        if (state) {
-          setAllPlay(state?.result);   
-        }
+      const state = await Getplayer(isLogin?.userData?.id,setisLoading);
+      if (state) {
+         setPlayers(state);
+
+      }
     } catch (error) {
-      setAllPlay([]);  
     }
-};
-
-useEffect(() => {
-  GetAbout();  // Function call
-}, []);
-
-
+  };
 
   return {
-    allPlay, setAllPlay,
-    isLoading,
-    navigation ,
+    players,  
+    isLoading,navigation ,
     selectedDates, setSelectedDates
     };
 };

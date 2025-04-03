@@ -72,5 +72,7 @@ export default {
     editLogo: require('./images/editLogo.png'),
     logut: require('./images/logut.png'),
     radioSlied: require('./images/radioSlied.png'),
+    addUser: require('./images/addUser.png'),
+    calender: require('./images/calender.png'),
     // 
   }; 

@@ -36,11 +36,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingVertical: 5,
     borderWidth: 0.2,
-    shadowColor: "rgba(0, 0, 0, 0.1)",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 6, // Works for Android
   },
   icon: {
     height: 20,

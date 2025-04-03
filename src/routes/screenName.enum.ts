@@ -24,7 +24,10 @@ enum ScreenNameEnum {
   Legalinfor="Legalinfor",
   Messages="Messages",
   ChatScreen="ChatScreen",
-  EditProfile="EditProfile"
+  EditProfile="EditProfile",
+  Feedback="Feedback" ,
+  PlayerEdit="PlayerEdit" ,
+  SubmitRPE="SubmitRPE"
  
  }
 

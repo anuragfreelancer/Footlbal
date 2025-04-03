@@ -3,7 +3,7 @@ import {   StyleSheet } from 'react-native';
       
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
-  headerContainer: { flexDirection: 'row', alignItems: 'center', padding: 5 },
+  headerContainer: { flexDirection: 'row', alignItems: 'center', padding: 5,marginTop:25 },
   backIcon: { width: 24, height: 24, tintColor: '#000' },
   headerTitle: { fontSize: 20, fontWeight: 'bold', marginLeft: 10, color: '#000' },
   profileContainer: { alignItems: 'center', marginVertical: 20 },
@@ -17,7 +17,10 @@ const styles = StyleSheet.create({
   buttonContainer: { flexDirection: 'row', justifyContent: 'space-around', padding: 20 },
   button: {height:55,alignItems:"center",justifyContent:"center",  paddingVertical: 12, paddingHorizontal: 20, borderRadius: 40,width:"40%" },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-
+butt:{
+  justifyContent: 'flex-start', marginBottom: 11,
+  marginHorizontal: 15
+},
   buttCol: {  backgroundColor: "#A0D803", padding: 10, borderTopRightRadius: 20, borderBottomRightRadius: 20 }
 });
 export default styles;

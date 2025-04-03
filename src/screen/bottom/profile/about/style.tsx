@@ -1,7 +1,5 @@
 
-import {   StyleSheet } from 'react-native';
-import ResponsiveSize from '../../../../utils/ResponsiveSize';
-     
+import {   StyleSheet } from 'react-native';     
 const styles = StyleSheet.create({
     container: {
         flex: 1,

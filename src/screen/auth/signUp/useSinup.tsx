@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SinupUserApi } from '../../../redux/Api/AuthApi';
-
+ 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const useSignup = () => {
   const [errors, setErrors] = useState<any>({});
   const navigation = useNavigation();
   const [isLoading, setisLoading] = useState(false)
+  const [dropOpen, setDropOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -24,14 +26,17 @@ const useSignup = () => {
     } else if (!emailRegex.test(email)) {
       validationErrors.email = 'Enter a valid email address.';
     }
-    if (!mobile!.trim()) validationErrors.mobile = 'Mobile is required.';
-
+    if (!mobile!.trim()) {
+      validationErrors.mobile = 'Mobile is required.';
+    }
     if (!password.trim()) {
       validationErrors.password = 'Password is required.';
     } else if (password.length < 6) {
       validationErrors.password = 'Password must be at least 6 characters.';
     }
-
+    if (!selectedOption) {
+      validationErrors.selectedOption = 'Please select an option.';
+    }
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return false;
@@ -47,8 +52,9 @@ const useSignup = () => {
         password: credentials?.password,
         mobile: credentials?.mobile,
         navigation: navigation,
+        type:selectedOption?.team_name
       };
-      const response = await SinupUserApi(params, setisLoading);
+       const response = await SinupUserApi(params, setisLoading);
     } catch (error) {
       console.error("Signup Error:", error);
     }
@@ -59,7 +65,9 @@ const useSignup = () => {
     isLoading,
     handleChange,
     handleSignup,
-    navigation,
+    navigation, 
+    selectedOption, setSelectedOption ,
+    dropOpen, setDropOpen
   };
 };
 

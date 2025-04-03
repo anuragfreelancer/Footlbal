@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginVertical: 10 },
+  header: { fontSize: 24,marginTop:28, color: "black", fontWeight: "700", textAlign: "center", marginVertical: 10 },
 
   profileHeader: {
     flexDirection: "row",

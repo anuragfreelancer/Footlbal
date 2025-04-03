@@ -21,17 +21,17 @@ const ChangePassword = () => {
     isLoading,
     handleChange,
     handleResetPass,
-    navigation,
-  } = useChange()
+   } = useChange()
 
   return (
-    <SafeAreaView style={{
-      flex: 1,
-      backgroundColor: "white"
-    }}>
+    <SafeAreaView style={styles.mainView}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
+    <View style={{
+      marginTop:30
+    }}>
       <CustomHeader imageSource={imageIndex.backNav} label="Change Password" />
+      </View>
       <ScrollView style={styles.container}>
         <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
           <TextInputField
@@ -56,7 +56,6 @@ const ChangePassword = () => {
               img={imageIndex.lock}
             />
             {errors.password && <ErrorText message={errors.password} Styles={{ marginTop: 15 }} />}
-
           </View>
           <View style={{ marginTop: 12 }}>
             <TextInputField
@@ -72,10 +71,7 @@ const ChangePassword = () => {
           {errors.confirmPassword && <ErrorText message={errors.confirmPassword} Styles={{ marginTop: 15 }} />}
         </View>
       </ScrollView>
-      <View style={{
-        justifyContent: 'flex-start', marginBottom: 11,
-        marginHorizontal: 12
-      }}>
+      <View style={styles.butt}>
         <CustomButton
           title={'Save'}
           onPress={() =>

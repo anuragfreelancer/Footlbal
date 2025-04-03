@@ -7,6 +7,14 @@ const styles = StyleSheet.create({
       backgroundColor: "#fff",
       marginHorizontal:15
     },
+    mainView:{
+      flex: 1,
+      backgroundColor: "white"
+    },
+    butt:{
+      justifyContent: 'flex-start', marginBottom: 11,
+      marginHorizontal: 12
+    }
    
   });
   

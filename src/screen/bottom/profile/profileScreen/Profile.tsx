@@ -5,18 +5,21 @@ import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import LogoutModal from "../../../../compoent/LogoutModal";
 import styles from "./style";
-import MenuItems from "./MenuItemsData";
+import MenuItemsData from "./MenuItemsData";
+const { MenuItems, PlayData } = MenuItemsData;
 import useProfileScreen from "./useProfileScreen";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
 const Profile = () => {
 
   const {
     modal, setModal,
-    handleLogout, navigation ,
-    getLogin
+    handleLogout, navigation,
+    getLogin,
+    isLogin
   } = useProfileScreen()
   const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
+
     return (
       <TouchableOpacity style={styles.menuItem}
         onPress={() => {
@@ -31,8 +34,8 @@ const Profile = () => {
           <Image source={icon} style={{
             height: 26,
             width: 26
-          }} 
-          tintColor={"#5A6565"}
+          }}
+            tintColor={"#5A6565"}
             resizeMode="contain"
           />
           <Text style={styles.menuText}>{title}</Text>
@@ -54,35 +57,50 @@ const Profile = () => {
       <StatusBarComponent />
       <Text style={styles.header}>Profile</Text>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.profileHeader}>
-          <TouchableOpacity  
+        <TouchableOpacity style={styles.profileHeader}
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
-          style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <Image source={getLogin?.userGetData?.image ?  {uri:getLogin?.userGetData?.image} : imageIndex?.ProfielImge} style={styles.avatar} />
+        >
+          <View
+            style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+            <Image source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex?.ProfielImge} style={styles.avatar} />
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
               <TouchableOpacity >
                 <Text style={styles.profileLink}>View my profile</Text>
+                <Text style={styles.profileLink}>{getLogin?.userGetData?.email}</Text>
               </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
           <Image source={imageIndex.arroRight} style={{
             height: 23,
             width: 23
           }}
             resizeMode="contain"
           />
-        </View>
+        </TouchableOpacity>
         <View style={{
           height: 15,
           backgroundColor: "rgba(237, 243, 243, 1)"
         }} />
         <View style={{ marginTop: 22, }}>
-          <FlatList
-            data={MenuItems}
-            keyExtractor={(item) => item.screen}
-            renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
-          />
+          {isLogin?.userData?.type === "Coach" ? (
+            <FlatList
+              data={MenuItems}
+              keyExtractor={(item) => item.screen}
+              renderItem={({ item }) => (
+                <MenuItem title={item.title} icon={item.icon} screen={item.screen} />
+              )}
+            />
+          ) : (
+            <FlatList
+              data={PlayData}
+              keyExtractor={(item) => item.screen}
+              renderItem={({ item }) => (
+                <MenuItem title={item.title} icon={item.icon} screen={item.screen} />
+              )}
+            />
+          )}
+
         </View>
         <LogoutModal isVisible={modal} close={() => setModal(false)}
           onSumbit={handleLogout}

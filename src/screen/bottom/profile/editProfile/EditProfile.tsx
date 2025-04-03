@@ -34,7 +34,7 @@ const EditProfile = () => {
             {isLoading ? <LoadingModal /> : null}
             <SafeAreaView style={styles.mainView}
             >
-                <View style={{ marginHorizontal: 12, marginTop: 15 }}>
+                <View style={{ marginHorizontal: 12, marginTop: 28 }}>
                     <CustomHeader imageSource={imageIndex.backNav} label={"Edit profile"} />
                 </View>
                 <StatusBarComponent />
@@ -44,12 +44,12 @@ const EditProfile = () => {
                             <Image
                                 resizeMode="cover"
                                 source={imagePrfile ? { uri: imagePrfile?.path } : { uri: getLogin?.userGetData?.image }}
-                                style={{ height: ResponsiveSize.height(105), width: ResponsiveSize.width(105), borderRadius: 90,borderWidth:1 ,borderColor:"#9DB2BF"}}
+                                style={{ height: ResponsiveSize.height(100), width: ResponsiveSize.width(95), borderRadius: 95,borderWidth:1 ,borderColor:"#9DB2BF"}}
                             />
                         </View>
                         <TouchableOpacity
                             onPress={() => setIsModalVisible(true)}
-                            style={{ bottom: ResponsiveSize.height(23), alignItems: "center", justifyContent: "center", height: 30, width: 30, borderRadius: 30 }}>
+                            style={{ bottom: ResponsiveSize.height(35), alignItems: "center", justifyContent: "center", height: 30, width: 30, borderRadius: 30 }}>
                             <Image
                                 source={imageIndex.floter}
                                 style={{ marginLeft: 30, height: ResponsiveSize.height(33), width: ResponsiveSize.width(33) }}
@@ -69,7 +69,6 @@ const EditProfile = () => {
                             />
                         </View>
                         {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-
                         <View style={{ marginTop: 15 }}>
                             <TextInputField
                                 text={PhoneNumber}
@@ -82,7 +81,6 @@ const EditProfile = () => {
                             />
                         </View>
                     </View>
-
                     <ImagePickerModal
                         modalVisible={isModalVisible}
                         setModalVisible={setIsModalVisible}

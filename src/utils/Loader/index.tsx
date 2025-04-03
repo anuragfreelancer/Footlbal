@@ -5,8 +5,7 @@ import {
   ActivityIndicator, 
   Modal, 
   StyleSheet, 
-  Platform 
-} from 'react-native';
+ } from 'react-native';
 
 const LoadingModal = ({ visible }:any) => {
   return (

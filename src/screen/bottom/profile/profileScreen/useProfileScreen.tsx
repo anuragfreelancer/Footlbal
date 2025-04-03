@@ -10,6 +10,7 @@ import { successToast } from '../../../../utils/customToast';
     const dispatch = useDispatch();
     const [modal, setModal] = useState(false)
     const getLogin = useSelector((state: any) => state?.feature);
+    const isLogin = useSelector((state: any) => state?.auth);
 
     const handleLogout = () => {
       dispatch(logout());
@@ -23,7 +24,8 @@ import { successToast } from '../../../../utils/customToast';
   return {
     modal, setModal ,
     handleLogout,navigation ,
-    getLogin
+    getLogin ,
+    isLogin
   };
 };
 

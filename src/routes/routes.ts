@@ -11,18 +11,21 @@ import Calendar from "../screen/bottom/calendar/Calendar";
 import ChatScreen from "../screen/bottom/chat/ChatScreen";
 import Home from "../screen/bottom/home/Home";
 import Messages from "../screen/bottom/messages/Messages";
-import PlayerDetails from "../screen/bottom/playerDetails/PlayerDetails";
-import AddPlayer from "../screen/bottom/players/addFiledPlayes/AddPlayer";
+import PlayerDetails from "../screen/bottom/playerDetails/playerDetail/PlayerDetails";
+import AddPlayer from "../screen/bottom/playerDetails/addFiledPlayes/AddPlayer";
 import Players from "../screen/bottom/players/playe/Players";
 import AboutFootb from "../screen/bottom/profile/about/AboutFootb";
 import ChangePassword from "../screen/bottom/profile/changePassword/ChangePassword";
 import EditProfile from "../screen/bottom/profile/editProfile/EditProfile";
+import Feedback from "../screen/bottom/profile/feedback/Feedback";
 import Legalinfor from "../screen/bottom/profile/legal/Legalinfor";
 import MyTeam from "../screen/bottom/profile/myTeam/MyTeam";
 import Ourplatform from "../screen/bottom/profile/ourplatform/Ourplatform";
 import Profile from "../screen/bottom/profile/profileScreen/Profile";
 import Reports from "../screen/bottom/reports/Reports";
     import ScreenNameEnum from "./screenName.enum";
+import PlayerEdit from "../screen/bottom/playerDetails/playerEdit/PlayerEdit";
+import SubmitRPE from "../screen/bottom/submitRPE/SubmitRPE";
 
 const _routes:any = {
   REGISTRATION_ROUTE: [
@@ -49,6 +52,12 @@ const _routes:any = {
     {
       name: ScreenNameEnum.EditProfile,
       Component: EditProfile,
+    },
+ 
+ 
+    {
+      name: ScreenNameEnum.SubmitRPE,
+      Component: SubmitRPE,
     },
  
  
@@ -85,12 +94,21 @@ const _routes:any = {
       name: ScreenNameEnum.AddPlayer,
       Component:AddPlayer,
     },
+    {
+      name: ScreenNameEnum.Feedback,
+      Component:Feedback,
+    },
     
  
  
     {
       name: ScreenNameEnum.PlayerDetails,
       Component:PlayerDetails,
+    },
+ 
+    {
+      name: ScreenNameEnum.PlayerEdit,
+      Component:PlayerEdit,
     },
     
     {

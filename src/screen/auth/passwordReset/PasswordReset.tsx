@@ -91,9 +91,9 @@ export default function PasswordReset() {
           }}>
             <CustomButton
               title={'Next'}
-              onPress={() => handleForgot()
+                onPress={() => handleForgot()
 
-              }
+                }
               // onPress={()=>navigation.navigate(ScreenNameEnum.OtpScreen)}
               buttonStyle={{ width: "100%", marginTop: 28 }}
             />

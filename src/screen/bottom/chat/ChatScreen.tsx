@@ -26,8 +26,17 @@ const ChatScreen = () => {
         setMessageText("");
     };
 
-    const renderMessage = ({ item }) => (
+    const renderMessage = ({ item }:any) => (
         <View>
+            {item.sentByUser && (
+                 <View style={{flexDirection:"row",alignItems:"center"}}>
+                 <Image source={imageIndex.ProfielImge} style={{height:33,width:33}}/>
+             <Text style={{ color: item.sentByUser ? "black" : "#000",marginLeft:12 }}>Ram</Text>
+ 
+             </View>
+ 
+            )}
+           
             <View
                 style={{
                     alignSelf: item.sentByUser ? "flex-end" : "flex-start",
@@ -35,6 +44,7 @@ const ChatScreen = () => {
                     padding: 10,
                     marginVertical: 5,
                     maxWidth: "75%",
+                    marginLeft:40,
                     borderBottomLeftRadius: item.sentByUser ? 20 : 11,  // Adjust this value as needed
                     borderTopRightRadius: item.sentByUser ? 20 : 11, // Adjust this value as needed
                 }}

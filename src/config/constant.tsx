@@ -10,6 +10,14 @@ export const constant = {
   getPrivacy:"get-privacy-policy",
   getAboutUs:"get-about-us",
   updateProfile:"update-profile",
+  GettTeam:"get_team", 
+  getPosition:"get_position",
+  getLoadType:"get_load_type",
+  addPlayer:"add_player",
+  getPlayer:"get_player",
+  updatePlayer:"update_player",
+
+
   getHotels :"get_hotels",
   getCategory:"get_category",
   Getfaq:"get_faq",

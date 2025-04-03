@@ -8,7 +8,7 @@ import { GetProfile, UpdateProfile_Api } from '../../../../redux/Api/AuthApi';
   const [isLoading, setisLoading] = useState()
   const dispatch = useDispatch();
   const navigation = useNavigation();
-   const [fullName, setFullName] = useState <string>();
+   const [fullName, setFullName] = useState <any>();
   const [PhoneNumber, setPhoneNumber] = useState();
   const [email, setEmail] = useState();
    const [imagePrfile, setImagePrfile] = useState<any>();

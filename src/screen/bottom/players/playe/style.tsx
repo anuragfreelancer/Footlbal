@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
  
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white",},
-  header: { fontSize: 24,color:"black", fontWeight: "700", textAlign: "center",   },
+  header: { fontSize: 24,color:"black", fontWeight: "700", textAlign: "center", marginTop:28  },
   card: {
     flexDirection: "row",
     alignItems: "center",

@@ -27,30 +27,24 @@ const useChange = () => {
     if (field === "confirmPassword" && value !== credentials.password) {
       setErrors((prev:any) => ({ ...prev, confirmPassword: "Passwords do not match." }));
     }
-
   };
 
   const handleResetPass = async () => {
     const { password, confirmPassword, currentPass } = credentials;
     let validationErrors:any = {};
-  
     if (!currentPass.trim()) validationErrors.currentPass = 'Current password is required.';
     if (!password.trim()) validationErrors.password = 'Password is required.';
     else if (password.length < 6) validationErrors.password = 'Password must be at least 6 characters long.';
-    
     if (!confirmPassword.trim()) validationErrors.confirmPassword = 'Confirm Password is required.';
     else if (confirmPassword.length < 6) validationErrors.confirmPassword = 'Confirm Password must be at least 6 characters long.';
-  
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-  
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match.');
       return;
     }
-  
     const params = {
       currentPass:currentPass,
       password: password,
@@ -62,6 +56,9 @@ const useChange = () => {
     try {
       console.log("params",params)
        const response = await ChangePasswordApi(params, setisLoading);
+       if(response){
+        setCredentials("")
+       }
     } catch (error) {
       console.error(error);
     }

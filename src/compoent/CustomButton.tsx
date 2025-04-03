@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, Platform, Image } from 'react-native';
-import { color } from '../constant';
-
+ 
 // Define props type
 interface CustomButtonProps {
   title: string;
@@ -9,12 +8,11 @@ interface CustomButtonProps {
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   disabled?: boolean;
-  secoundImg?: any;  // Add "?" to make it optional
+  secoundImg?: any;  // Optional image
 }
 
-
-// Functional component
-const CustomButton: React.FC<CustomButtonProps> = ({
+// Functional component with React.memo
+const CustomButton: React.FC<CustomButtonProps> = React.memo(({
   title,
   onPress,
   buttonStyle,
@@ -30,19 +28,15 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       activeOpacity={0.7}
     >
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-      {
-        secoundImg && (
-          <Image source={secoundImg} style={{
-            height:24,
-            width:24,
-            resizeMode:"contain",
-            marginLeft:20
-          }} />
-        )
-      }
+      {secoundImg && (
+        <Image 
+          source={secoundImg} 
+          style={styles.image} 
+        />
+      )}
     </TouchableOpacity>
   );
-};
+});
 
 // Default styles
 const styles = StyleSheet.create({
@@ -54,8 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-     flexDirection: "row",
-    // Shadow added here
+    flexDirection: 'row',
     ...Platform.select({
       ios: {
         shadowColor: 'rgba(9, 40, 34, 0.15)',
@@ -64,8 +57,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
       },
       android: {
-        elevation: 1, // Android ke liye
-
+        elevation: 1,
       },
     }),
   },
@@ -76,7 +68,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   disabledButton: {
-    backgroundColor: color.buttonColor,
+   },
+  image: {
+    height: 24,
+    width: 24,
+    resizeMode: 'contain',
+    marginLeft: 20,
   },
 });
 

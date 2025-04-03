@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
      profileContainer: { alignItems: "center", marginTop: 40, },
     name: { fontSize: 19, fontWeight: "700", color: "rgba(174, 133, 44, 1)", marginTop: 9 },
     car: { fontSize: 12, color: "rgba(255, 255, 255, 1)", marginTop: 5, fontWeight: "400" },
-    buttView:{ justifyContent: 'flex-start', marginHorizontal: 12, marginBottom: 11 },
+    buttView:{ justifyContent: 'flex-start', marginHorizontal: 12, marginBottom: 15 },
     iamgeView :{
         height: ResponsiveSize.height(108), width: ResponsiveSize.width(108),   
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, FlatList, TouchableOpacity, Text, StyleSheet, Modal, Pressable } from "react-native";
+import EmptyListComponent from "./EmptyListComponent";
 
 interface DropdownModalProps {
   visible: boolean;
@@ -18,7 +19,10 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
             showsVerticalScrollIndicator={false}
             data={options}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
+
+            ListEmptyComponent={<EmptyListComponent message="Not Found Data" />} // Common Empty Component
+
+            renderItem={({ item }:any) => (
               <TouchableOpacity
                 style={styles.option}
                 onPress={() => {
@@ -26,7 +30,7 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
                   onClose();
                 }}
               >
-                <Text style={styles.optionText}>{item}</Text>
+                <Text style={styles.optionText}>{item?.team_name || item?.position_name || item?.load_type} </Text>
               </TouchableOpacity>
             )}
           />
@@ -58,20 +62,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     borderRadius: 10,
     alignSelf: "center",
-   },
+  },
   option: {
     padding: 5,
-     borderBottomWidth: 0.8,
+    borderBottomWidth: 0.8,
     borderColor: "#9DB2BF",
-    alignItems:"center",
-    justifyContent:"center"
+    alignItems: "center",
+    justifyContent: "center"
   },
   optionText: {
     fontSize: 14,
-     color: "rgba(53, 44, 72, 1)",
+    color: "black",
     fontWeight: "500",
-    marginBottom:6,
-    marginTop:5
+    marginBottom: 6,
+    marginTop: 5 ,
+    textTransform: 'uppercase' 
 
   },
   closeButton: {
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A0D803",
     borderRadius: 15,
     alignItems: "center",
-   },
+  },
   closeButtonText: {
     color: "white",
     fontWeight: "600",
