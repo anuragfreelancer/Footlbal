@@ -586,8 +586,6 @@ const PlayerPostEditApi = async (
         }
         formData.append("user_id", param?.userId);
              formData.append("player_id", param?.player_id);
-
-    
         if (param?.posttion) {
             formData.append("position_id", param?.posttion);
         }
@@ -597,7 +595,7 @@ const PlayerPostEditApi = async (
         if (param?.team) {
             formData.append("team_id", param?.team);
         }
-            //  formData.append("dob", formattedDate ?? '');
+          formData.append("dob", formattedDate ?? '');
          formData.append("player_name", param?.fullName ?? '');
         formData.append("player_details", param?.notes ?? '');
 
@@ -764,4 +762,83 @@ const Getplayer = async (userId, setLoading) => {
     }
 };
 
-export { PrivacyPolicyApi, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+
+
+const SumitRpfFrom = async (
+    param,
+    setLoading,
+) => {
+    try {
+        setLoading(true)
+         const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+         formData.append("user_id", param?.userId);
+         formData.append("rpf_session", param?.session);
+         formData.append("rpf_date", param?.date);
+         formData.append("rate_efforts",param?.effort);
+         formData.append("comment", param?.comments);
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const respons = await fetch(`${base_url}${constant.addubmitRPF}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                    param.navigation.goBack()
+                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+
+const GetSubmitRPF = async (userId, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+        };
+        const response = await fetch(`${base_url}${constant.getSubmit_RPF}?user_id=${userId}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        if (responseData.status === '1') {
+            successToast(responseData.message);
+            return { userGetData: responseData.result };
+        } else {
+            errorToast(responseData.message);
+            return null;
+        }
+    } catch (error) {
+        errorToast('Network error');
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
+export { PrivacyPolicyApi,GetSubmitRPF,SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

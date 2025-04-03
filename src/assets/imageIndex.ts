@@ -74,5 +74,9 @@ export default {
     radioSlied: require('./images/radioSlied.png'),
     addUser: require('./images/addUser.png'),
     calender: require('./images/calender.png'),
+    solaruploadbold: require('./images/solaruploadbold.png'),
+    graySolar: require('./images/graySolar.png'),
+    redGrap: require('./images/redGrap.png'),
+    greenGrap: require('./images/greenGrap.png'),
     // 
   }; 

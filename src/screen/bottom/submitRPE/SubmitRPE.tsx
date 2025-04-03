@@ -1,23 +1,27 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, SafeAreaView, ScrollView, Animated, PanResponder } from "react-native";
+import React from "react";
+import { View, Text, TextInput, TouchableOpacity, Image, Modal, SafeAreaView, ScrollView, Animated, PanResponder } from "react-native";
 import { Calendar } from "react-native-calendars";
 import imageIndex from "../../../assets/imageIndex";
 import CustomButton from "../../../compoent/CustomButton";
+import styles from "./style";
+import useSubmitRPE from "./useSubmitRPE";
+import LoadingModal from "../../../utils/Loader";
 
 const SubmitRPE = () => {
-    const [session, setSession] = useState("training");
-    const [date, setDate] = useState("");
-    const [comments, setComments] = useState("");
-    const [showCalendar, setShowCalendar] = useState(false);
-    const [effort, setEffort] = useState(6);
-    const pan = useState(new Animated.Value(0))[0];
-
-    const getEffortColor = (value: any) => {
-        if (value <= 3) return '#A0D803'; // Light effort (Yellow)
-        if (value <= 6) return '#A0D803'; // Moderate effort (Light Green)
-        if (value <= 9) return '#A0D803'; // Hard effort (Dark Green)
-        return '#A0D803'; // Maximum effort (Black)
-    };
+    const {
+        isLoading, setisLoading,
+        navigation,
+        isLogin,
+        handleSubmit,
+        getEffortColor,
+        session, setSession,
+        date, setDate,
+        comments, setComments,
+        showCalendar, setShowCalendar,
+        effort, setEffort,
+        pan,
+        errors, setErrors
+    } = useSubmitRPE()
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
@@ -32,13 +36,15 @@ const SubmitRPE = () => {
 
     return (
         <SafeAreaView style={{ flex: 1, }}>
+                        {isLoading ? <LoadingModal /> : null}
+
             <View style={styles.container}>
                 <Text style={styles.header}>Submit RPE</Text>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
 
                     <Text style={styles.label}>Select Session:</Text>
                     <View style={styles.radioGroup}>
-                        {["training", "biketech"].map((item) => (
+                        {["Training", "Match"].map((item) => (
                             <TouchableOpacity
                                 key={item}
                                 onPress={() => setSession(item)}
@@ -55,7 +61,7 @@ const SubmitRPE = () => {
                             </TouchableOpacity>
                         ))}
                     </View>
-
+                    {errors.session && <Text style={{ color: "red" ,marginTop:10 , }}>{errors.session}</Text>}
                     {/* Date Picker */}
                     <Text style={styles.label}>Select Date:</Text>
                     <TouchableOpacity
@@ -70,6 +76,7 @@ const SubmitRPE = () => {
 
                         />
                     </TouchableOpacity>
+                    {errors.date && <Text style={{ color: "red" ,marginTop:10 }}>{errors.date}</Text>}
 
                     <Modal visible={showCalendar} transparent animationType="slide">
                         <View style={styles.modalContainer}>
@@ -146,6 +153,7 @@ const SubmitRPE = () => {
 
                     }, { color: getEffortColor(effort) }]}>Effort: {effort}</Text>
 
+                    {errors.effort && <Text style={{ color: "red" ,marginTop:10 }}>{errors.effort}</Text>}
 
                     <Text style={[styles.label, {
                         marginTop: 20
@@ -166,11 +174,13 @@ const SubmitRPE = () => {
                         />
 
                     </View>
+                    {errors.comments && <Text style={{ color: "red" ,marginTop:10 }}>{errors.comments}</Text>}
 
                 </ScrollView>
                 <View style={styles.buttView}>
                     <CustomButton
                         title={'Submit'}
+                        onPress={()=>handleSubmit()}
                     />
                 </View>
             </View>
@@ -178,24 +188,6 @@ const SubmitRPE = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-    header: { fontSize: 22, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
-    label: { fontSize: 16, marginTop: 10, fontWeight: "600" },
-    radioGroup: { flexDirection: "row", alignItems: "center", marginBottom: 10, marginTop: 15 },
-    radioItem: { flexDirection: "row", alignItems: "center", marginRight: 20 },
-    radioIcon: { height: 22, width: 22, marginRight: 5 },
-    radioText: { color: "black", fontSize: 16, fontWeight: "600" },
-    datePicker: { borderColor: "#0000000D", padding: 10, borderWidth: 1, flexDirection: "row", borderRadius: 5, marginTop: 15, backgroundColor: "#f9f9f9", justifyContent: "space-between" },
-    input: { backgroundColor: "#F3F3F3", borderRadius: 20, padding: 10, marginTop: 20, height: 160, },
-    submitButton: { backgroundColor: "#A8EB12", padding: 15, alignItems: "center", borderRadius: 5, marginTop: 20 },
-    submitText: { color: "#000", fontWeight: "bold", fontSize: 16 },
-    modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
-    calendarContainer: { backgroundColor: "white", padding: 20, borderRadius: 10, width: 320 },
-    closeButton: { marginTop: 10, padding: 10, backgroundColor: "#A8EB12", borderRadius: 25, alignItems: "center" },
-    closeButtonText: { fontSize: 14, fontWeight: "bold", color: "white" },
-    buttView: { justifyContent: 'flex-start', marginBottom: 15 },
 
-});
 
 export default SubmitRPE;

@@ -10,6 +10,7 @@ import DatePicker from "react-native-date-picker";
 import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
+import { useSelector } from 'react-redux';
 
 
 const PlayerEdit = () => {

@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 const RegistrationRoutes: FunctionComponent = () => {
+  const routes = _routes(); // पहले _routes() को कॉल करें
+
   return (
     <Stack.Navigator
       // initialRouteName={ScreenNameEnum.SPLASH_SCREEN}
@@ -16,7 +18,7 @@ const RegistrationRoutes: FunctionComponent = () => {
         gestureDirection: 'horizontal',
 
       }}>
-      {_routes.REGISTRATION_ROUTE.map(screen => (
+      {routes.REGISTRATION_ROUTE.map(screen => (
         <Stack.Screen
           key={screen.name}
           name={screen.name}

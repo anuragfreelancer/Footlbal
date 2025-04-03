@@ -27,8 +27,8 @@ enum ScreenNameEnum {
   EditProfile="EditProfile",
   Feedback="Feedback" ,
   PlayerEdit="PlayerEdit" ,
-  SubmitRPE="SubmitRPE"
- 
+  SubmitRPE="SubmitRPE",
+  
  }
 
 export default ScreenNameEnum;

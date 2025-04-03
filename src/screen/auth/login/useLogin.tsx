@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { LoginUserApi } from '../../../redux/Api/AuthApi';
-  
+ 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  
 const useLogin = () => {
-    // const [credentials, setCredentials] = useState({ email: 'kp12@gmail.com', password: '1234567' });
-//  coach 
+  const [credentials, setCredentials] = useState({ email: 'kp12@gmail.com', password: '1234567' });
+//   
 //  test465@gmail.com 
 //  12345678
-   const [credentials, setCredentials] = useState({ email: '', password: '' });
+// coach 
+  //  const [credentials, setCredentials] = useState({ email: 'test465@gmail.com', password: '12345678' });
   const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
   const navigation = useNavigation();

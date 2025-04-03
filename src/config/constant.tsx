@@ -16,7 +16,8 @@ export const constant = {
   addPlayer:"add_player",
   getPlayer:"get_player",
   updatePlayer:"update_player",
-
+  addubmitRPF :"add_submit_RPF",
+  getSubmit_RPF:"get_submit_RPF",
 
   getHotels :"get_hotels",
   getCategory:"get_category",

@@ -7,30 +7,54 @@ import ScreenNameEnum from '../../../../routes/screenName.enum';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import usePlayerDetails from './usePlayerDetails';
 import styles from './style';
-  
+
 
 const PlayerDetails = () => {
     const {
         navigation,
-        item
+        item,
+        isLogin
     } = usePlayerDetails();
-    const formatDate = (dob: any) => {
-        if (!dob || typeof dob !== 'string') return 'Invalid Date'; // Handle empty or incorrect data
-        const parts = dob.split('/');
-        if (parts.length !== 3) return 'Invalid Date'; // Ensure the format is correct
-        const [day, month, year] = parts.map(Number); // Convert to numbers
-        if (isNaN(day) || isNaN(month) || isNaN(year)) return 'Invalid Date'; // Ensure numbers are valid
-        const date = new Date(year, month - 1, day); // Month is 0-based in JS Date
-        if (isNaN(date.getTime())) return 'Invalid Date'; // Handle invalid dates
-        return new Intl.DateTimeFormat('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        }).format(date);
-    };
-    const formattedDate = formatDate(item?.dob);
-     
-     
+  const formatDate = (dob: any): string => {
+    if (!dob || typeof dob !== 'string') return 'Invalid Date'; 
+
+    // Trim spaces and split by '/'
+    const parts = dob.trim().split('/');
+    
+    if (parts.length !== 3) return 'Invalid Date'; 
+
+    const [day, month, year] = parts.map(part => parseInt(part, 10));
+
+    // Validate extracted values
+    if (!day || !month || !year || isNaN(day) || isNaN(month) || isNaN(year)) {
+        return 'Invalid Date'; 
+    }
+
+    // Create date object (JS months are 0-based)
+    const date = new Date(year, month - 1, day);
+
+    // Ensure created date matches input values
+    if (
+        date.getDate() !== day ||
+        date.getMonth() + 1 !== month ||
+        date.getFullYear() !== year
+    ) {
+        return 'Invalid Date';
+    }
+
+    return new Intl.DateTimeFormat('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    }).format(date);
+};
+
+// Example usage
+const formattedDate = formatDate(item?.dob);
+console.log(formattedDate);
+
+console.log("item?.dob",item?.dob)
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBarComponent />
@@ -66,27 +90,28 @@ const PlayerDetails = () => {
                             <Text style={styles.detailLabel}>Dob</Text>
                         </View>
                         {/* <Text style={styles.detailValue}>{item?.dob}</Text> */}
-                        <Text style={styles.detailValue}>{formattedDate}</Text>  
+                        <Text style={styles.detailValue}>{formattedDate}</Text>
                     </View>
                 </View>
                 <View style={styles.notesContainer}>
                     <Text style={styles.notesTitle}>Coach Notes</Text>
                     <Text style={styles.notesText}>{item?.player_details}</Text>
                 </View>
-                {/* <View style={styles.butt}>
-                    <CustomButton
-                        title={'Export Report'}
-                        onPress={() => navigation.navigate(ScreenNameEnum.TabNavigator)
-                        }
-                        buttonStyle={{ width: "100%", marginTop: 28 }}
-                    />
-                </View> */}
+                {isLogin?.userData?.type === "Coach" ? (
+                      <View style={styles.butt}>
+                      <CustomButton
+                          title={'Export Report'}
+                          onPress={() => navigation.navigate(ScreenNameEnum.TabNavigator)
+                          }
+                          buttonStyle={{ width: "100%", marginTop: 28 }}
+                      />
+                  </View>
+                ) : null}
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-
-                    onPress={() => navigation.navigate(ScreenNameEnum.PlayerEdit,{
-                        item:item
+                    onPress={() => navigation.navigate(ScreenNameEnum.PlayerEdit, {
+                        item: item
                     })}
                     style={[styles.button, {
                         borderColor: '#A0D803',
@@ -96,6 +121,8 @@ const PlayerDetails = () => {
                         color: "#A0D803"
                     }]}>Edit</Text>
                 </TouchableOpacity>
+
+
                 <TouchableOpacity style={[styles.button, {
                     backgroundColor: '#A0D803',
                 }]}

@@ -46,7 +46,7 @@ const usePlayerEdit = () => {
         addImage: imagePrfile,
         userId: isLogin?.userData?.id,
         navigation: navigation,
-        dob: dob  ,
+        dob: dob,
         // playerId: playerId,
         notes: notes,
         injury: injuryHistory,
@@ -145,7 +145,8 @@ const usePlayerEdit = () => {
     selectedTraining, setSelectedTraining,
     postionData,
     trainingData ,
-    item
+    item,
+    isLogin
   };
 };
 export default usePlayerEdit;

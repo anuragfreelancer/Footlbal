@@ -1,4 +1,5 @@
  import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 const usePlayerDetails = () => {
@@ -6,10 +7,12 @@ const usePlayerDetails = () => {
     const { item } = route.params || ""; // Provide a fallback if route.params is undefined
     const navigation = useNavigation();
  
+    const isLogin = useSelector((state: any) => state?.auth);
 
     return {
          navigation,
-        item
+        item,
+        isLogin
     };
 };
 

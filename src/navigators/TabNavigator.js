@@ -29,6 +29,7 @@ export default function TabNavigator() {
       keyboardDidHideListener.remove();
     };
   }, []);
+  const routes = _routes(); // पहले _routes() को कॉल करें
 
   return (
     <Tab.Navigator
@@ -43,7 +44,7 @@ export default function TabNavigator() {
         },
       }}
     >
-      {_routes.BOTTOMTAB_ROUTE.map(screen => (
+      {routes.BOTTOMTAB_ROUTE.map(screen => (
         <Tab.Screen
           key={screen.name}
           name={screen.name}
@@ -58,6 +59,7 @@ export default function TabNavigator() {
                     height: 25,
                     resizeMode:"contain"
                    }}
+                   tintColor={focused ? "#A0D803" : "#999999"}
                 />
                 {screen.label && (
                   <Text
@@ -66,7 +68,7 @@ export default function TabNavigator() {
                       color: focused ? 'rgba(160, 216, 3, 1)' : 'rgba(153, 153, 153, 1)',
                       fontSize: 10,
                       marginTop: 4, // Adds space between icon and label
-                      width: 45,
+                      width: 70,
                       textAlign: "center"
                     }}
                   >
