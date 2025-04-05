@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
    const navigation = useNavigation();
    const [selectedDates, setSelectedDates] = useState([]);
    const isLogin = useSelector((state: any) => state?.auth);
-   
     const [players, setPlayers] = useState<any>([]);
     useEffect(()=>{
       GetplayerApi()

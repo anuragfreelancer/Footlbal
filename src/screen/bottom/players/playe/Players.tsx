@@ -16,6 +16,7 @@ const Players = () => {
     navigation,
     isLogin,
   } = usePlayers();
+  console.log("00",allPlay?.userGetData)
     return (
     <SafeAreaView style={styles.container}>
        {isLoading ? <LoadingModal /> : null}
@@ -31,6 +32,7 @@ const Players = () => {
           ListEmptyComponent={<EmptyListComponent message="No players found" />} // Common Empty Component
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }:any) => (
+            console.log("ss",item),
              <CommonCard
               item={item}
               onPress={() => navigation.navigate(ScreenNameEnum.PlayerDetails, {

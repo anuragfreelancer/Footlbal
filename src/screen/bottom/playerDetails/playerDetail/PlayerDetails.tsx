@@ -53,8 +53,7 @@ const PlayerDetails = () => {
 const formattedDate = formatDate(item?.dob);
 console.log(formattedDate);
 
-console.log("item?.dob",item?.dob)
-
+ 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBarComponent />
@@ -70,7 +69,7 @@ console.log("item?.dob",item?.dob)
                         <View style={styles.buttCol}>
                             <Text style={styles.detailLabel}>Player Details</Text>
                         </View>
-                        <Text style={styles.detailValue}>{item?.player_name}</Text>
+                        <Text style={styles.detailValue}>{item?.user_name}</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <View style={styles.buttCol}>
@@ -126,7 +125,10 @@ console.log("item?.dob",item?.dob)
                 <TouchableOpacity style={[styles.button, {
                     backgroundColor: '#A0D803',
                 }]}
-                    onPress={() => navigation.navigate(ScreenNameEnum.Messages)}
+                    onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen,{
+                        item:item
+                    })}
+                    // onPress={() => navigation.navigate(ScreenNameEnum.Messages)}
                 >
                     <Text style={styles.buttonText}>Message</Text>
                 </TouchableOpacity>

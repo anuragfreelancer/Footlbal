@@ -1,27 +1,24 @@
-import React from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity, SafeAreaView, FlatList, ImageBackground, ActivityIndicator, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity, SafeAreaView, FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import styles from "./style";
 import useHome from "./useHome";
 import CommonCard from "../../../compoent/CommonCard";
 import ChartComponent from "../../../compoent/ChartComponent";
-
-import { LineChart, BarChart } from "react-native-chart-kit";
-import EmptyListComponent from "../../../compoent/EmptyListComponent";
+ import EmptyListComponent from "../../../compoent/EmptyListComponent";
+import ScreenNameEnum from "../../../routes/screenName.enum";
+ import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+ 
 
 const DashboardScreen = () => {
-  const players = Array(1).fill({
-    name: "Animes S.",
-    position: "Forward",
-    trainingType: "Chest",
-    intensity: "Beginner",
-    image: imageIndex.bagePng, // Replace with actual image URL
-  });
+  
   const {
     getLogin,
     imgloading,
-    setImgloading
+    setImgloading,
+    navigation
   } = useHome();
   const chartDataScreen1 = {
     weekly: { data: [5, 10, 30, 45, 5] },
@@ -37,24 +34,64 @@ const DashboardScreen = () => {
 
 
   const screenWidth = Dimensions.get("window").width;
+ 
+  const [notificationReceived, setNotificationReceived] = useState(false);
 
-  const data = [
-      { day: "Sun", value: 30 },
-      { day: "Mon", value: 50 },
-      { day: "Tue", value: 90 },
-      { day: "Wed", value: 60 },
-      { day: "Thu", value: 70 },
-      { day: "Fri", value: 40 },
-      { day: "Sat", value: 80 },
-  ];
-  
+  useEffect(() => {
+    // This handles foreground push notifications
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
+      // Create a channel for push notifications
+      PushNotification.createChannel(
+        {
+          channelId: 'SportAppFootlball', // Unique channel ID
+            channelName: 'App Sport Notifications', // Channel name shown in system settings
+            channelDescription: 'Notifications for FootlbalApp App', // Optional description
+            importance: 4, // High importance for heads-up notifications
+            vibrate: true, // Enable vibration
+        },
+        (created) => console.log(`Channel created: ${created}`), // Debugging callback
+      );
+
+      // Cancel any previous local notifications
+      PushNotification.cancelAllLocalNotifications();
+
+      // Display the local notification with the message from Firebase
+      PushNotification.localNotification({
+        channelId: 'SportAppFootlball',
+          title: remoteMessage?.notification?.title,
+          message: remoteMessage?.notification?.body,
+      });
+
+
+    });
+
+    return () => unsubscribe();
+
+  }, []);
+
+  // Handle background notifications
+  useEffect(() => {
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      navigateToNotification();
+    });
+
+    // Handle initial notification when the app is opened from a notification
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          navigateToNotification();
+        }
+      });
+  }, []);
+
+   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
       <View style={styles.header}>
         <View style={{ position: 'relative' }}>
           <Image
-
             source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex.prfEdit}
             style={{
               height: 53,
@@ -82,13 +119,17 @@ const DashboardScreen = () => {
           <Text style={styles.userName}>{getLogin?.userGetData?.user_name || ""}</Text>
           <Text style={styles.userSubtitle}>Breach of the peace</Text>
         </View>
-        <TouchableOpacity style={styles.notificationIcon}>
-          <Image source={imageIndex.Notification2}
+         
+        <TouchableOpacity style={styles.notificationIcon} 
+        onPress={()=>navigation.navigate(ScreenNameEnum.Notifications)}
+        >
+          <Image source={notificationReceived ? imageIndex.Notification2 :imageIndex.Shape}
             style={{
-              height: 53,
-              width: 53
+              height: notificationReceived ?44:22,
+              width:notificationReceived ? 44 :22
             }}
-          />
+            resizeMode="contain"
+           />
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

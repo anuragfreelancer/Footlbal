@@ -28,7 +28,8 @@ enum ScreenNameEnum {
   Feedback="Feedback" ,
   PlayerEdit="PlayerEdit" ,
   SubmitRPE="SubmitRPE",
-  
+  Notifications ="Notifications"
+   
  }
 
 export default ScreenNameEnum;

@@ -17,7 +17,7 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress }) => 
       <Image source={{ uri: item?.image }} style={styles.avatar} />
       <View style={styles.contentContainer}>
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{item.player_name}</Text>
+          <Text style={styles.name}>{item.user_name}</Text>
           <Text style={styles.position}>Forward</Text>
         </View>
         <View style={styles.detailContainer}>

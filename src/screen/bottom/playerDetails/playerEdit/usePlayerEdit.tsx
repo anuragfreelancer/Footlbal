@@ -33,7 +33,7 @@ const usePlayerEdit = () => {
     Teamlist();
     Positionlist();
     Traininglist() ;
-    setFullName(item?.player_name) ;
+    setFullName(item?.user_name) ;
     setNotes(item?.player_details) ;
     setInjuryHistory(item?.injury)
     
@@ -46,20 +46,18 @@ const usePlayerEdit = () => {
         addImage: imagePrfile,
         userId: isLogin?.userData?.id,
         navigation: navigation,
-        dob: dob,
+        dob: dob ,
         // playerId: playerId,
         notes: notes,
         injury: injuryHistory,
         team: selectedOption?.id,
          posttion: selectedPosition.id ||item?.position_id,
         traing: selectedTraining.id ||item?.load_type_id,
-        player_id: item?.id
+         player_id: item?.id ,
+        newDate: item?.dob
       };
-
       console.log("params",params)
-      const response = await PlayerPostEditApi(params, setisLoading);
-      if (response) {
-      }
+   const response = await PlayerPostEditApi(params, setisLoading);
     } catch (error) {
       console.error("Error updating profile:", error);
     }

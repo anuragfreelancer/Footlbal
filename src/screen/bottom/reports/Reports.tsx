@@ -74,7 +74,7 @@ const Reports = () => {
         {/* <ChartComponent data={chartDataScreen2} statusText="Medium" statusColor="#FFF100" />
         <ChartComponent data={chartDataScreen2} statusText="High Risk" statusColor="#E81224" /> */}
       </ScrollView>
-      <TouchableOpacity style={styles.fab}
+      {/* <TouchableOpacity style={styles.fab}
         onPress={() => {
           navigation.navigate(ScreenNameEnum.AddPlayer)
         }}
@@ -83,7 +83,7 @@ const Reports = () => {
           style={{ height: 74, width: 74 }}
           resizeMode="contain"
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

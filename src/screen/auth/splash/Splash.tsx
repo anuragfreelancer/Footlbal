@@ -20,7 +20,7 @@ const Splash: React.FC = () => {
       if (isLogin?.isLogin) {
         navigation.navigate(ScreenNameEnum.TabNavigator);
       } else {
-         navigation.navigate(ScreenNameEnum.LoginScreen);
+         navigation.navigate(ScreenNameEnum.ChooseRoleScreen);
        }
     };
   

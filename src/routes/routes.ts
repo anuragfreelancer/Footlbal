@@ -28,6 +28,8 @@ import PlayerEdit from "../screen/bottom/playerDetails/playerEdit/PlayerEdit";
 import SubmitRPE from "../screen/bottom/submitRPE/SubmitRPE";
 import { useSelector } from "react-redux";
 import imageIndex from "../assets/imageIndex";
+import ChooseRoleScreen from "../screen/auth/ChooseRoleScreen";
+import Notifications from "../screen/bottom/notifications/Notifications";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -35,7 +37,7 @@ const useAuth = () => {
 
 const _routes = () => {
   const isLogin = useAuth(); // Hook function inside component/function
-console.log("isLogin",isLogin)
+  console.log("isLogin", isLogin)
   return {
     REGISTRATION_ROUTE: [
       { name: ScreenNameEnum.SPLASH_SCREEN, Component: Splash },
@@ -59,6 +61,8 @@ console.log("isLogin",isLogin)
       { name: ScreenNameEnum.Legalinfor, Component: Legalinfor },
       { name: ScreenNameEnum.Messages, Component: Messages },
       { name: ScreenNameEnum.ChatScreen, Component: ChatScreen },
+      { name: ScreenNameEnum.ChooseRoleScreen, Component: ChooseRoleScreen },
+      { name: ScreenNameEnum.Notifications, Component: Notifications },
     ],
 
     BOTTOMTAB_ROUTE: [
@@ -69,32 +73,32 @@ console.log("isLogin",isLogin)
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
+     
       // {
       //   name: ScreenNameEnum.Calendar,
       //   Component: Calendar,
-      //   label: "Calendar",
+      //   label: 'Calendar',
       //   logo: imageIndex.calendar,
-      //   logo1: imageIndex.calendaractive,
+      //   logo1: imageIndex.calendar
       // },
       {
-        name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.Players : ScreenNameEnum.Calendar,
-        Component: isLogin?.userData?.type !=  "Coach" ? Players : Calendar,
-        label: isLogin?.userData?.type !=  "Coach" ? 'Players' : 'Calendar',
-        logo: isLogin?.userData?.type !=  "Coach" ? imageIndex.players : imageIndex.calendar,
-        logo1: isLogin?.userData?.type !=  "Coach" ? imageIndex.playersActive : imageIndex.calendar
+        name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.Messages : ScreenNameEnum.Calendar,
+        Component: isLogin?.userData?.type != "Coach" ? Messages : Calendar,
+        label: isLogin?.userData?.type != "Coach" ? 'Messages' : 'Calendar',
+        logo: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar,
+        logo1: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar
       },
       {
         name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,
-        Component: isLogin?.userData?.type !=  "Coach" ? SubmitRPE : Players,
-        label: isLogin?.userData?.type !=  "Coach" ? 'Submit RPE' : 'Players',
-        logo: isLogin?.userData?.type !=  "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
-        logo1: isLogin?.userData?.type !=  "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
+        Component: isLogin?.userData?.type != "Coach" ? SubmitRPE : Players,
+        label: isLogin?.userData?.type != "Coach" ? 'Submit RPE' : 'Players',
+        logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
+        logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
       },
-      
       {
         name: ScreenNameEnum.Reports,
         Component: Reports,
-        label:isLogin?.userData?.type !=  "Coach" ? 'Performance' : 'Reports', 
+        label: isLogin?.userData?.type != "Coach" ? 'Performance' : 'Reports',
         logo: imageIndex.reports,
         logo1: imageIndex.reportsActivE,
       },

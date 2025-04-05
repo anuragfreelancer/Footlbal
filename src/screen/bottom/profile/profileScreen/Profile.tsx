@@ -16,11 +16,10 @@ const Profile = () => {
     handleLogout, navigation,
     getLogin,
     isLogin
-  } = useProfileScreen()
+  } = useProfileScreen();
   const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
-
-    return (
+     return (
       <TouchableOpacity style={styles.menuItem}
         onPress={() => {
           if (title == "Logout") {

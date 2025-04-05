@@ -36,6 +36,8 @@ const AddPlayer = () => {
     selectedTraining, setSelectedTraining,
     trainingData,
     postionData,
+    email, setEmail ,
+    password, setPassword
   } = useAddPlayer()
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -75,6 +77,26 @@ const AddPlayer = () => {
           />
         </View>
         {errors.fullName && <Text style={styles.redText}>{errors.fullName}</Text>}
+        <View style={styles.input} >
+          <TextInput placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholderTextColor={"rgba(45, 45, 45, 1)"}
+            style={styles.textInupt}
+          />
+        </View>
+        {errors.email && <Text style={styles.redText}>{errors.email}</Text>}
+
+        <View style={styles.input} >
+          <TextInput placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholderTextColor={"rgba(45, 45, 45, 1)"}
+            style={styles.textInupt}
+          />
+        </View>
+        {errors.password && <Text style={styles.redText}>{errors.password}</Text>}
+
         <TouchableOpacity
           onPress={() => setOpen(true)}
           style={[styles.input, {
@@ -105,7 +127,7 @@ const AddPlayer = () => {
               <Text style={{
                 color: '#2D2D2D',
                 fontSize: 14,
-              }}>{selectedOption?.team_name || "Team"}
+              }}>{selectedOption?.name || "Team"}
               </Text>
             </View>
           </View>

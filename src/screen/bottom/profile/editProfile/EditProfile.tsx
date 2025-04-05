@@ -20,8 +20,7 @@ const EditProfile = () => {
         isModalVisible, setIsModalVisible,
         fullName,  
         PhoneNumber, setPhoneNumber,
-        email, setEmail,
-        handleSubmit,
+         handleSubmit,
         getLogin ,
         errorMessage,  
         handleTextChange

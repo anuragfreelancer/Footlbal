@@ -30,7 +30,7 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
                   onClose();
                 }}
               >
-                <Text style={styles.optionText}>{item?.team_name || item?.position_name || item?.load_type} </Text>
+                <Text style={styles.optionText}>{ item?.team_name|| item?.name || item?.position_name || item?.load_type} </Text>
               </TouchableOpacity>
             )}
           />

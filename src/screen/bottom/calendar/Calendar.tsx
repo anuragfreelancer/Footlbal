@@ -93,12 +93,12 @@ const CustomCalendar = () => {
   }, [selectedDates, setSelectedDates]);
 
    function formatDate(dateStr:any) {
-      return dateStr.split(" ")[0]; 
+      return dateStr?.split(" ")[0]; 
   }
   const filteredPlayers = useMemo(() => {
     return (
       players?.userGetData?.filter((player: any) => {
-         return formatDate(player.date_time) === selectedDates;
+         return formatDate(player?.date_time) === selectedDates;
       }) || []
     );
   }, [players, selectedDates]);

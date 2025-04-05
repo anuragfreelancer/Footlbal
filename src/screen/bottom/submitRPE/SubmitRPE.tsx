@@ -73,11 +73,9 @@ const SubmitRPE = () => {
                         <Image
                             source={imageIndex.calender}
                             style={{ height: 22, width: 22 }}
-
                         />
                     </TouchableOpacity>
-                    {errors.date && <Text style={{ color: "red" ,marginTop:10 }}>{errors.date}</Text>}
-
+                    {errors?.date && <Text style={{ color: "red" ,marginTop:10 }}>{errors?.date}</Text>}
                     <Modal visible={showCalendar} transparent animationType="slide">
                         <View style={styles.modalContainer}>
                             <View style={styles.calendarContainer}>
@@ -108,22 +106,19 @@ const SubmitRPE = () => {
                                         return <Text style={{ fontSize: 20, fontWeight: "bold", color: "#000" }}>{monthName}</Text>;
                                     }}
                                 />
-
-
                             </View>
                         </View>
                     </Modal>
-
                     {/* Comments */}
-
-
                     <View style={{
-                        width: '100%',
+                        width: '92%',
                         height: 8,
                         backgroundColor: '#D3D3D3',
                         borderRadius: 4,
                         position: 'relative',
                         marginVertical: 20,
+                        marginLeft:5,
+                        marginTop:20
 
                     }}>
                         <Animated.View
@@ -137,8 +132,8 @@ const SubmitRPE = () => {
                         <Animated.View
                             {...panResponder.panHandlers}
                             style={[{
-                                width: 20,
-                                height: 20,
+                                width: 18,
+                                height: 18,
                                 borderRadius: 10,
                                 backgroundColor: '#000',
                                 position: 'absolute',
@@ -150,8 +145,16 @@ const SubmitRPE = () => {
                         fontSize: 18,
                         fontWeight: 'bold',
                         marginVertical: 10,
+                        color:"black"
 
-                    }, { color: getEffortColor(effort) }]}>Effort: {effort}</Text>
+                    },  ]}>Effort : {effort}</Text>
+                    {/* <Text style={[{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        marginVertical: 10,
+                        color:"black"
+
+                    }, { color: getEffortColor(effort) }]}>Effort: {effort}</Text> */}
 
                     {errors.effort && <Text style={{ color: "red" ,marginTop:10 }}>{errors.effort}</Text>}
 

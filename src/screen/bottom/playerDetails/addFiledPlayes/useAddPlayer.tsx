@@ -26,6 +26,9 @@ const useAddPlayer = () => {
   const [selectedOption, setSelectedOption] = useState  <any>('');
   const [selectedPosition, setSelectedPosition] = useState  <any>('');
   const [selectedTraining, setSelectedTraining] = useState  <any>('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+ 
   const isLogin = useSelector((state: any) => state?.auth);
   useEffect(() => {
     Teamlist();
@@ -35,42 +38,74 @@ const useAddPlayer = () => {
   const validate = () => {
     let valid = true;
     let newErrors: any = {};
+  
     if (!fullName.trim()) {
-      newErrors.fullName = "Full Name is required";
+      newErrors.fullName = "Full Name is required.";
       valid = false;
     }
+  
     if (!injuryHistory.trim()) {
-      newErrors.injuryHistory = "Please Select Injury  is required";
-     }
+      newErrors.injuryHistory = "Please select an injury history.";
+      valid = false;
+    }
+  
+    if (!password.trim()) {
+      newErrors.password = "Password is required.";
+      valid = false;
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+      valid = false;
+    }
+  
+    // Email validation with regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = "Email is required.";
+      valid = false;
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address.";
+      valid = false;
+    }
+  
     if (!selectedOption) {
-      newErrors.selectedOption = 'Please select a Team.';
+      newErrors.selectedOption = "Please select a team.";
+      valid = false;
     }
-
+  
     if (!selectedPosition) {
-      newErrors.selectedPosition = 'Please select a Position.';
+      newErrors.selectedPosition = "Please select a position.";
+      valid = false;
     }
+  
     if (!selectedTraining) {
-      newErrors.selectedTraining = "Please select a Training type.";
+      newErrors.selectedTraining = "Please select a training type.";
+      valid = false;
     }
+  
     if (!notes.trim()) {
-      newErrors.notes = "Notes Performance is required";
+      newErrors.notes = "Performance notes are required.";
       valid = false;
     }
+  
     if (!imagePrfile) {
-      newErrors.imagePrfile = "Image is required";
+      newErrors.imagePrfile = "Profile image is required.";
       valid = false;
     }
+  
     if (!dob) {
-      newErrors.dob = "Date of Birth is required";
+      newErrors.dob = "Date of Birth is required.";
       valid = false;
     }
+  
     if (!playerId.trim()) {
-      newErrors.playerId = "Player ID is required";
+      newErrors.playerId = "Player ID is required.";
       valid = false;
     }
+  
     setErrors(newErrors);
     return valid;
   };
+  
    const handleSubmit = async () => {
     if (validate()) {
       try {
@@ -83,9 +118,11 @@ const useAddPlayer = () => {
           playerId: playerId,
           notes: notes,
           injury: injuryHistory ,
-           team:selectedOption?.id,
+          team:selectedOption?.id,
           posttion:selectedPosition.id,
-          traing:selectedTraining.id
+          traing:selectedTraining.id,
+          email:email,
+          pass:password
         };
          const response = await PlayerPostApi(params, setisLoading);
         if (response) {
@@ -126,7 +163,7 @@ const useAddPlayer = () => {
     try {
       const state = await Teamcategory(setisLoading);
       if (state) {
-        setTeamData(state?.result);
+         setTeamData(state?.result);
 
       }
     } catch (error) {
@@ -174,7 +211,9 @@ const useAddPlayer = () => {
     selectedPosition, setSelectedPosition,
     selectedTraining, setSelectedTraining,
     postionData,
-    trainingData
+    trainingData ,
+    email, setEmail ,
+    password, setPassword
   };
 };
 export default useAddPlayer;

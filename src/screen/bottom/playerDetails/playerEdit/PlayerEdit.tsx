@@ -17,7 +17,7 @@ const PlayerEdit = () => {
   const {
     fullName, setFullName,
     dob, setDob,
-     errors,
+    errors,
     injuryHistory, setInjuryHistory,
     handleSubmit,
     open, setOpen,
@@ -37,10 +37,10 @@ const PlayerEdit = () => {
     trainingData,
     postionData,
     item
-  } = useAddPlayer() ;
-//    const filteredTeam = selectedOption.find(item => item?.id === item?.team_id);
+  } = useAddPlayer();
+  //    const filteredTeam = selectedOption.find(item => item?.id === item?.team_id);
 
-// console.log("Selected Team Name:", filteredTeam);
+  // console.log("Selected Team Name:", filteredTeam);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -48,7 +48,7 @@ const PlayerEdit = () => {
       <StatusBarComponent />
       <View style={{
         marginHorizontal: 12,
-         marginTop:28
+        marginTop: 28
       }}>
         <CustomHeader imageSource={imageIndex.circleBak} label="Edit Player" />
       </View>
@@ -56,7 +56,7 @@ const PlayerEdit = () => {
         <View style={styles.profileContainer}>
           <Image
             resizeMode='cover'
-            source={imagePrfile ? { uri: imagePrfile.path } : {uri: item?.image}} style={styles.profileImage} />
+            source={imagePrfile ? { uri: imagePrfile.path } : { uri: item?.image }} style={styles.profileImage} />
           <TouchableOpacity style={{
             bottom: 20,
             left: 12
@@ -79,7 +79,7 @@ const PlayerEdit = () => {
             style={styles.textInupt}
           />
         </View>
-         <TouchableOpacity
+        <TouchableOpacity
           onPress={() => setOpen(true)}
           style={[styles.input, {
             height: 55,
@@ -88,12 +88,12 @@ const PlayerEdit = () => {
           }]}
         >
           <Text style={styles.dobText}>
-          {dob ? dob.toDateString() : item?.dob || "Date of Birth"}
+            {dob ? dob.toDateString() : item?.dob || "Date of Birth"}
 
-       
+
           </Text>
         </TouchableOpacity>
-         
+
         <TouchableOpacity
           onPress={() => setDropOpen(true)}
           style={styles.rowView}>
@@ -102,7 +102,7 @@ const PlayerEdit = () => {
               <Text style={{
                 color: '#2D2D2D',
                 fontSize: 14,
-              }}>{selectedOption?.team_name || item?.team_id || "Team"}
+              }}>{selectedOption?.name || item?.team_id || "Team"}
               </Text>
             </View>
           </View>
@@ -119,13 +119,13 @@ const PlayerEdit = () => {
                 fontSize: 14,
                 marginLeft: 8
               }}>
-                 {selectedPosition?.position_name || item?.position_id || "Position"}
+                {selectedPosition?.position_name || item?.position_id || "Position"}
               </Text>
             </View>
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
-         <Text style={styles.sectionTitle}>Training & Performance</Text>
+        <Text style={styles.sectionTitle}>Training & Performance</Text>
         <TouchableOpacity
           onPress={() => setTariningModal(true)}
           style={styles.rowView}>
@@ -135,14 +135,13 @@ const PlayerEdit = () => {
                 color: '#2D2D2D',
                 fontSize: 14,
               }}>
-                                 {selectedTraining?.load_type || item?.load_type_id || "Default Training Load Type"}
-
-               </Text>
+                {selectedTraining?.load_type || item?.load_type_id || "Default Training Load Type"}
+              </Text>
             </View>
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
-         <Text style={styles.sectionTitle}>Injury History</Text>
+        <Text style={styles.sectionTitle}>Injury History</Text>
         <TouchableOpacity onPress={() => setInjuryHistory('no-injury')}
           style={[styles.radioButton, {
             justifyContent: "space-between"
@@ -164,7 +163,7 @@ const PlayerEdit = () => {
             tintColor={"#A0D803"}
           />
         </TouchableOpacity>
-         <Text style={styles.sectionTitle}>Additional Player Details</Text>
+        <Text style={styles.sectionTitle}>Additional Player Details</Text>
         <View style={styles.input} >
           <TextInput placeholder="Performance Notes"
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
@@ -173,7 +172,7 @@ const PlayerEdit = () => {
             onChangeText={setNotes}
           />
         </View>
-     
+
       </ScrollView>
       <View style={styles.butt}>
         <CustomButton
