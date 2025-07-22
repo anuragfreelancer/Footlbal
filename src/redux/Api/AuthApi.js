@@ -38,6 +38,7 @@ const LoginUserApi = async (
                         index: 0,
                         routes: [{ name: ScreenNameEnum.TabNavigator }],
                     });
+                  
                     return response
                 } else {
                     setLoading(false)
@@ -477,7 +478,7 @@ const ChangePasswordApi = async (
                     successToast(
                         response?.message
                     );
-                    param.navigation.navigate(ScreenNameEnum.BOTTOM_TAB)
+                    param.navigation.goBack()
                     return response
                 } else {
                     setLoading(false)
@@ -609,8 +610,7 @@ const PlayerPostEditApi = async (
         const respons = await fetch(`${base_url}${constant.updatePlayer}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res", res);
-                const response = JSON.parse(res);
+                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
                     successToast(
@@ -763,13 +763,40 @@ const Getplayer = async (userId, setLoading) => {
     }
 };
 
-
+const GetNotifications = async (userId, setLoading) => {
+    console.log("userId",userId)
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+        };
+        const response = await fetch(`${base_url}${constant.getNotifications}?user_id=${userId}`, requestOptions);
+          const resText = await response.text();
+        const responseData = JSON.parse(resText);
+         if (responseData.status === '1') {
+            successToast(responseData.message);
+            return { userGetData: responseData.result };
+        } else {
+            errorToast(responseData.message);
+            return null;
+        }
+    } catch (error) {
+        errorToast('Network error');
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
 
 const SumitRpfFrom = async (
     param,
     setLoading,
 ) => {
-    try {
+     
+     try {
         setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
@@ -778,6 +805,7 @@ const SumitRpfFrom = async (
         formData.append("rpf_session", param?.session);
         formData.append("rpf_date", param?.date);
         formData.append("rate_efforts", param?.effort);
+        formData.append("rpf_start_time", param?.Starttime);
         formData.append("comment", param?.comments);
         const requestOptions = {
             method: "POST",
@@ -817,6 +845,109 @@ const SumitRpfFrom = async (
 };
 
 
+
+// const EndRpfFrom = async (
+//     param,
+//     setLoading,
+// ) => {
+//     try {
+//         setLoading(true)
+//         const myHeaders = new Headers();
+//         myHeaders.append("Accept", "application/json");
+//         const formData = new FormData();
+//         formData.append("submit_RPF_id", param?.userId);
+//         formData.append("rpf_end_time",param.time);
+//         formData.append("rpf_end_date",param.data);
+//         constant.log("formData",formData)
+//          const requestOptions = {
+//             method: "POST",
+//             headers: myHeaders,
+//             body: formData,
+//         };
+//         const respons = await fetch(`${base_url}${constant.submit_RPF_id}`, requestOptions)
+//             .then((response) => response.text())
+//             .then((res) => {
+//                 console.log("res", res)
+//                 const response = JSON.parse(res);
+//                 if (response.status == '1') {
+//                     setLoading(false)
+//                     successToast(
+//                         response?.message
+//                     );
+//                     param.navigation.goBack()
+//                      return response
+//                 } else {
+//                     setLoading(false)
+//                     errorToast(
+//                         response?.message || response?.error,
+//                     );
+//                     return response
+//                 }
+//             })
+//             .catch((error) =>
+//                 console.error(error));
+//         return respons
+//     } catch (error) {
+//         console.log("res", error)
+
+//         setLoading(false)
+//         errorToast(
+//             'Network error',
+//         );
+//     }
+// };
+
+const EndRpfFrom = async (param, setLoading) => {
+    setLoading(true);
+    try {
+        const formData = new FormData();
+        formData.append("submit_RPF_id", param?.userId);
+        formData.append("rpf_end_time", param?.date);
+        formData.append("rpf_end_date", param?.time);
+         console.log("Form Data: ", formData);
+
+        const response = await fetch("https://server-php-8-3.technorizen.com/Football/api/update_submit_RPF", {
+            method: "POST",
+            body: formData,
+        });
+
+        // Log status and headers of the response
+        console.log("Response Status:", response.status);
+        console.log("Response Headers:", response.headers);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const text = await response.text();
+        console.log("Raw Response Text:", text);
+
+        let jsonResponse;
+        try {
+            jsonResponse = JSON.parse(text);
+        } catch (parseError) {
+            throw new Error("Failed to parse JSON: " + parseError.message);
+        }
+         if (jsonResponse.status === '1') {
+            successToast(jsonResponse.message);
+            param.navgation.goBack();
+        } else {
+            errorToast(jsonResponse.message || jsonResponse.error || "Something went wrong");
+        }
+
+        return jsonResponse;
+
+    } catch (error) {
+        console.error("Error:", error);
+        errorToast('Network error');
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
+
+
+
 const GetSubmitRPF = async (userId, setLoading) => {
     try {
         setLoading(true);
@@ -833,7 +964,7 @@ const GetSubmitRPF = async (userId, setLoading) => {
             successToast(responseData.message);
             return { userGetData: responseData.result };
         } else {
-            errorToast(responseData.message);
+            // errorToast(responseData.message);
             return null;
         }
     } catch (error) {
@@ -944,14 +1075,11 @@ const SendMessage = async (
         const respons = await fetch(`${base_url}${constant.sendChat}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("-ol", res)
-                const response = JSON.parse(res);
+                 const response = JSON.parse(res);
                 if (response.result.chat_message) {
                     setLoading(false)
-                    successToast(
-                        "chat"
-                    );
-                    param.navigation.goBack()
+                   
+                    
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
                 } else {
@@ -1059,4 +1187,4 @@ const GetChat = async (
         );
     }
 };
-export { SendMessage, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+export { SendMessage,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

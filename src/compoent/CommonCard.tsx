@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ImageSourcePropType } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 interface CommonCardProps {
   item: {
-    image: ImageSourcePropType;
+    image: string;
     player_name: string;
     load_type_id: string;
-    injury: string;
+    injury: string; 
+    user_name:string
   };
   onPress: () => void;
 }

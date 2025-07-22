@@ -3,40 +3,31 @@ import { View, Text, Image, ScrollView, TouchableOpacity, SafeAreaView, FlatList
 import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import styles from "./style";
-import useHome from "./useHome";
-import CommonCard from "../../../compoent/CommonCard";
 import ChartComponent from "../../../compoent/ChartComponent";
- import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import ScreenNameEnum from "../../../routes/screenName.enum";
- import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
- 
+import useHome from "./useHome";
+import EmptyListComponent from "../../../compoent/EmptyListComponent";
+
 
 const DashboardScreen = () => {
-  
   const {
     getLogin,
     imgloading,
     setImgloading,
-    navigation
+    navigation,
+    chatMess,
+
   } = useHome();
   const chartDataScreen1 = {
-    weekly: { data: [5, 10, 30, 45, 5] },
-    monthly: { data: [100, 200, 150] },
-    yearly: { data: [500, 700, 800] },
+    weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
+    monthly: { data: [70, 200, 150] },
+    yearly: { data: [180, 222, 111] },
   };
-
-  const chartDataScreen2 = {
-    weekly: { data: [15, 25, 35] },
-    monthly: { data: [120, 180] },
-    yearly: { data: [600, 750, 900] },
-  };
-
 
   const screenWidth = Dimensions.get("window").width;
- 
   const [notificationReceived, setNotificationReceived] = useState(false);
-
   useEffect(() => {
     // This handles foreground push notifications
     const unsubscribe = messaging().onMessage((remoteMessage) => {
@@ -44,10 +35,10 @@ const DashboardScreen = () => {
       PushNotification.createChannel(
         {
           channelId: 'SportAppFootlball', // Unique channel ID
-            channelName: 'App Sport Notifications', // Channel name shown in system settings
-            channelDescription: 'Notifications for FootlbalApp App', // Optional description
-            importance: 4, // High importance for heads-up notifications
-            vibrate: true, // Enable vibration
+          channelName: 'App Sport Notifications', // Channel name shown in system settings
+          channelDescription: 'Notifications for FootlbalApp App', // Optional description
+          importance: 4, // High importance for heads-up notifications
+          vibrate: true, // Enable vibration
         },
         (created) => console.log(`Channel created: ${created}`), // Debugging callback
       );
@@ -58,8 +49,8 @@ const DashboardScreen = () => {
       // Display the local notification with the message from Firebase
       PushNotification.localNotification({
         channelId: 'SportAppFootlball',
-          title: remoteMessage?.notification?.title,
-          message: remoteMessage?.notification?.body,
+        title: remoteMessage?.notification?.title,
+        message: remoteMessage?.notification?.body,
       });
 
 
@@ -85,7 +76,7 @@ const DashboardScreen = () => {
       });
   }, []);
 
-   
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
@@ -119,37 +110,44 @@ const DashboardScreen = () => {
           <Text style={styles.userName}>{getLogin?.userGetData?.user_name || ""}</Text>
           <Text style={styles.userSubtitle}>Breach of the peace</Text>
         </View>
-         
-        <TouchableOpacity style={styles.notificationIcon} 
-        onPress={()=>navigation.navigate(ScreenNameEnum.Notifications)}
+
+        <TouchableOpacity style={styles.notificationIcon}
+          onPress={() => navigation.navigate(ScreenNameEnum.Notifications)}
         >
-          <Image source={notificationReceived ? imageIndex.Notification2 :imageIndex.Shape}
+          <Image source={notificationReceived ? imageIndex.Notification2 : imageIndex.Shape}
             style={{
-              height: notificationReceived ?44:22,
-              width:notificationReceived ? 44 :22
+              height: notificationReceived ? 44 : 22,
+              width: notificationReceived ? 44 : 22
             }}
             resizeMode="contain"
-           />
+          />
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" />
-        {/* <ChartComponent data={chartDataScreen2} statusText="Medium" statusColor="#FFF100" />
-        <ChartComponent data={chartDataScreen2} statusText="High Risk" statusColor="#E81224" /> */}
-        <Text
-          style={{ color: "rgba(25, 33, 38, 1)", fontSize: 18, fontWeight: "700", marginTop: 15 }}
-        >Players Attending Session</Text>
         <FlatList
-          style={{ marginTop: 10, }}
-          data={[]}
           showsVerticalScrollIndicator={false}
-          ListEmptyComponent={<EmptyListComponent message="No playlist available" />} // Common Empty Component
+          data={chatMess}
+          ListEmptyComponent={<EmptyListComponent message="No chat history found" />}
+          keyExtractor={(item: any) => item.id}
+          renderItem={({ item }: any) => (
+            <TouchableOpacity style={styles.card}
+              onPress={() =>
+                navigation.navigate(ScreenNameEnum.StartTrainingFed, {
+                  item: item
+                })
+              }
+            >
+              <Image source={{
+                uri: item.image
+              }}
+                style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.name}>{item.user_name}</Text>
+ 
+              </View>
 
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => (
-            <CommonCard
-              item={item}
-            />
+            </TouchableOpacity>
           )}
         />
       </ScrollView>
@@ -157,62 +155,3 @@ const DashboardScreen = () => {
   );
 };
 export default DashboardScreen;
-{/* <View
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10, // Smooth corners
-            shadowColor: "#000",
-            shadowOpacity: 0.2,
-            marginVertical: 2,
-            marginHorizontal: 3,
-            shadowRadius: 5,
-            shadowOffset: { width: 0, height: 3 }, // iOS shadow
-            elevation: 1.1,
-            overflow: "hidden",
-            alignItems: "center",
-            marginTop: 30
-          }}
-        >
-          <Image
-            source={imageIndex.workFirst}
-            style={{
-              width: "100%", // Ensures the image takes up full width of parent
-              height: undefined, // Allows dynamic height based on aspect ratio
-              aspectRatio: 384 / 263, // Maintains the correct aspect ratio
-              resizeMode: "contain", // Ensures full visibility without cropping
-            }}
-          />
-        </View> */}
-
-
-    //     <View style={{ alignItems: "center", padding: 10 }}>
-    //     <View style={{ flexDirection: "row", alignItems: "center" }}>
-            
-    //          <LineChart
-    //             data={{
-    //                 labels: data.map((item) => item.day), // ✅ Days displayed correctly
-    //                 datasets: [{ data: data.map((item) => item.value) }],
-    //             }}
-    //             width={screenWidth - 80} // Adjust width
-    //             height={220}
-    //             yAxisSuffix="%"
-    //             withHorizontalLabels={false} // Hide Y-axis numbers
-    //             chartConfig={{
-    //                 backgroundGradientFrom: "#fff",
-    //                 backgroundGradientTo: "#fff",
-    //                 color: (opacity = 1) => `rgba(255, 99, 71, ${opacity})`,
-    //                 labelColor: () => "#000",
-    //                 propsForDots: { r: "5", strokeWidth: "2", stroke: "#FF6347" }
-    //             }}
-    //             style={{ marginVertical: 10, borderRadius: 10 }}
-    //         />
-
-    //          <View style={{ marginLeft: 10, alignItems: "flex-start" }}>
-    //             {data.map((item, index) => (
-    //                 <Text key={index} style={{ fontSize: 14, fontWeight: "bold", marginBottom: 12, color: "#FF6347" }}>
-    //                     {item.value}%
-    //                 </Text>
-    //             ))}
-    //         </View>
-    //     </View>
-    // </View>

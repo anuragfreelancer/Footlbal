@@ -14,6 +14,7 @@ const MenuItems = [
 
   const PlayData = [
      { title: "Change Password", icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
+   //   { title: "Achieve Training", icon: imageIndex.feedback, screen: ScreenNameEnum.TrainingFedBack },
      { title: "About Football", icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
      { title: "Legal Information", icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
      { title: "Chat Messages", icon: imageIndex.bubbleChat,  screen: ScreenNameEnum.Messages  },

@@ -17,6 +17,7 @@ const Profile = () => {
     getLogin,
     isLogin
   } = useProfileScreen();
+  console.log("dddd",isLogin)
   const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
      return (

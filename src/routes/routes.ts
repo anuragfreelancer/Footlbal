@@ -30,6 +30,8 @@ import { useSelector } from "react-redux";
 import imageIndex from "../assets/imageIndex";
 import ChooseRoleScreen from "../screen/auth/ChooseRoleScreen";
 import Notifications from "../screen/bottom/notifications/Notifications";
+ import TrainingFedBack from "../screen/bottom/trainingFedBack/TrainingFedBack";
+import StartTrainingFed from "../screen/bottom/startTrainingFed/StartTrainingFed";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -63,7 +65,9 @@ const _routes = () => {
       { name: ScreenNameEnum.ChatScreen, Component: ChatScreen },
       { name: ScreenNameEnum.ChooseRoleScreen, Component: ChooseRoleScreen },
       { name: ScreenNameEnum.Notifications, Component: Notifications },
-    ],
+      { name: ScreenNameEnum.TrainingFedBack, Component: TrainingFedBack },
+      { name: ScreenNameEnum.StartTrainingFed, Component: StartTrainingFed },
+     ],
 
     BOTTOMTAB_ROUTE: [
       {
@@ -73,14 +77,7 @@ const _routes = () => {
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
-     
-      // {
-      //   name: ScreenNameEnum.Calendar,
-      //   Component: Calendar,
-      //   label: 'Calendar',
-      //   logo: imageIndex.calendar,
-      //   logo1: imageIndex.calendar
-      // },
+      
       {
         name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.Messages : ScreenNameEnum.Calendar,
         Component: isLogin?.userData?.type != "Coach" ? Messages : Calendar,
@@ -95,9 +92,17 @@ const _routes = () => {
         logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
         logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
       },
+      // {
+      //   name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,
+      //   Component: isLogin?.userData?.type != "Coach" ? SubmitRPE : Players,
+      //   label: isLogin?.userData?.type != "Coach" ? 'Submit RPE' : 'Players',
+      //   logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
+      //   logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
+      // },
       {
         name: ScreenNameEnum.Reports,
-        Component: Reports,
+        Component: isLogin?.userData?.type != "Coach" ? Reports : Players,
+        // Component: Reports,
         label: isLogin?.userData?.type != "Coach" ? 'Performance' : 'Reports',
         logo: imageIndex.reports,
         logo1: imageIndex.reportsActivE,

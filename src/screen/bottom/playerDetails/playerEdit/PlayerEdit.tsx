@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomButton from '../../../../compoent/CustomButton';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -10,7 +10,6 @@ import DatePicker from "react-native-date-picker";
 import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
-import { useSelector } from 'react-redux';
 
 
 const PlayerEdit = () => {
@@ -38,9 +37,34 @@ const PlayerEdit = () => {
     postionData,
     item
   } = useAddPlayer();
-  //    const filteredTeam = selectedOption.find(item => item?.id === item?.team_id);
+  const team_id = item?.team_id;
+  const team = teamData?.find((obj: any) => obj?.id === team_id);
+  const positions = item?.position_id;
+  const postion = postionData?.find((obj: any) => obj?.id === positions);
+  const TrainingTypeId = item?.load_type_id
+  const training = trainingData?.find((obj: any) => obj?.id === TrainingTypeId);
 
-  // console.log("Selected Team Name:", filteredTeam);
+
+  const injuryOptions = [
+    { id: '1', label: 'No Injury' },
+    { id: '2', label: 'Select Previous Injuries' },
+    { id: '3', label: 'Beginner' }
+  ];
+
+  const renderItem = ({ item }:any) => (
+    <TouchableOpacity
+      onPress={() => setInjuryHistory(item.label)}
+      style={[styles.radioButton, { justifyContent: 'space-between' }]}
+    >
+      <Text style={styles.radioText}>{item.label}</Text>
+      <Image
+        source={injuryHistory !== item.label ? imageIndex.radio : imageIndex.radioSlied}
+        style={styles.img}
+        resizeMode='contain'
+        tintColor="#A0D803"
+      />
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -89,11 +113,8 @@ const PlayerEdit = () => {
         >
           <Text style={styles.dobText}>
             {dob ? dob.toDateString() : item?.dob || "Date of Birth"}
-
-
           </Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => setDropOpen(true)}
           style={styles.rowView}>
@@ -102,7 +123,7 @@ const PlayerEdit = () => {
               <Text style={{
                 color: '#2D2D2D',
                 fontSize: 14,
-              }}>{selectedOption?.name || item?.team_id || "Team"}
+              }}>{selectedOption?.name || team?.name || "Team"}
               </Text>
             </View>
           </View>
@@ -119,7 +140,7 @@ const PlayerEdit = () => {
                 fontSize: 14,
                 marginLeft: 8
               }}>
-                {selectedPosition?.position_name || item?.position_id || "Position"}
+                {selectedPosition?.position_name || postion?.position_name || "Position"}
               </Text>
             </View>
           </View>
@@ -135,34 +156,18 @@ const PlayerEdit = () => {
                 color: '#2D2D2D',
                 fontSize: 14,
               }}>
-                {selectedTraining?.load_type || item?.load_type_id || "Default Training Load Type"}
+                {selectedTraining?.load_type || training?.load_type || "Default Training Load Type"}
               </Text>
             </View>
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
         <Text style={styles.sectionTitle}>Injury History</Text>
-        <TouchableOpacity onPress={() => setInjuryHistory('no-injury')}
-          style={[styles.radioButton, {
-            justifyContent: "space-between"
-          }]}>
-          <Text style={styles.radioText}>No Injury</Text>
-          <Image source={injuryHistory != 'no-injury' ? imageIndex.radio : imageIndex.radioSlied}
-            style={styles.img}
-            resizeMode='contain'
-            tintColor={"#A0D803"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setInjuryHistory('previous-injury')} style={[styles.radioButton, {
-          justifyContent: "space-between"
-        }]}>
-          <Text style={styles.radioText}>Select Previous Injuries</Text>
-          <Image
-            source={injuryHistory != 'previous-injury' ? imageIndex.radio : imageIndex.radioSlied} style={styles.img}
-            resizeMode='contain'
-            tintColor={"#A0D803"}
-          />
-        </TouchableOpacity>
+        <FlatList
+          data={injuryOptions}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
         <Text style={styles.sectionTitle}>Additional Player Details</Text>
         <View style={styles.input} >
           <TextInput placeholder="Performance Notes"

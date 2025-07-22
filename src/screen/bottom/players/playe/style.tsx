@@ -39,5 +39,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 1,
   },
+  contentContainer: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 });
 export default styles;

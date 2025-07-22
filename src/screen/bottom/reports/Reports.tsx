@@ -24,15 +24,15 @@ const Reports = () => {
   };
 
   const {
-    rpfData,  
-    isLoading,  
+    rpfData,
+    isLoading,
     navigation,
     isLogin
   } = useReports();
-   const RecentSessionCard = ({ item }) => {
-     return (
+  const RecentSessionCard = ({ item, onPress }) => {
+    return (
       <View style={styles.card}>
-        <View style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={onPress}>
           <View>
             <Text style={styles.boldText}>Date - {item?.rpf_date}</Text>
             <Text style={styles.lightText}>{item.rpf_session}</Text>
@@ -42,12 +42,9 @@ const Reports = () => {
             <Text style={styles.scoreText}>{item.rate_efforts}</Text>
           </View>
           <View style={styles.scoreSection}>
-            <Image
-              source={item.rate_efforts > 6 ? imageIndex.greenGrap : imageIndex.redGrap}
-              style={{ height: 24, width: 24 }}
-            />
+            <Text style={{color:"green"}}>End section</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -66,24 +63,18 @@ const Reports = () => {
           <FlatList
             data={rpfData?.userGetData}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <RecentSessionCard item={item} />}
+            renderItem={({ item }) => <RecentSessionCard item={item} onPress={() => {
+              navigation.navigate(ScreenNameEnum.TrainingFedBack, {
+                item: item
+              })
+            }} />}
           />
         </View>
 
-        <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" />
+        {/* <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" /> */}
         {/* <ChartComponent data={chartDataScreen2} statusText="Medium" statusColor="#FFF100" />
         <ChartComponent data={chartDataScreen2} statusText="High Risk" statusColor="#E81224" /> */}
       </ScrollView>
-      {/* <TouchableOpacity style={styles.fab}
-        onPress={() => {
-          navigation.navigate(ScreenNameEnum.AddPlayer)
-        }}
-      >
-        <Image source={imageIndex.floter}
-          style={{ height: 74, width: 74 }}
-          resizeMode="contain"
-        />
-      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
@@ -104,21 +95,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
-  fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#7ED321",
-    borderRadius: 30,
-    width: 56,
-    height: 56,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-  },
+
   card: {
     backgroundColor: "#f9f9f9",
     padding: 15,
@@ -150,4 +127,3 @@ const styles = StyleSheet.create({
 });
 
 export default Reports;
- 

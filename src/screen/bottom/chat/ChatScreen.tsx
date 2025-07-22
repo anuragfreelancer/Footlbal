@@ -21,8 +21,7 @@ const ChatScreen = () => {
     const currentUserId = userName?.id; // Change this to logged-in user ID
 
 
-    console.log("messages", messages)
-    const renderMessage = ({ item }: any) => {
+     const renderMessage = ({ item }: any) => {
         const isCurrentUser = item.sender_id === currentUserId;
         return (
             <View

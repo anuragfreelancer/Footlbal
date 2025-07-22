@@ -18,11 +18,12 @@ export const constant = {
   updatePlayer:"update_player",
   addubmitRPF :"add_submit_RPF",
   getSubmit_RPF:"get_submit_RPF", 
-
   getConversation:"get_conversation",
   sendChat:"insert_chat",
   addFeedback:"add_feedback",
   getChat:"get_chat",
+  getNotifications:"getNotifications",
+  update_submit_RPF:"update_submit_RPF",
   getHotels :"get_hotels",
   getCategory:"get_category",
   Getfaq:"get_faq",

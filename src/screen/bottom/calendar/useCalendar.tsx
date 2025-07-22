@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
     try {
       const state = await Getplayer(isLogin?.userData?.id,setisLoading);
       if (state) {
-         setPlayers(state);
+          setPlayers(state);
 
       }
     } catch (error) {

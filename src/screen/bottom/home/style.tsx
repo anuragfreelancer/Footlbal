@@ -21,11 +21,12 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 15,
       marginVertical: 6,
-      marginHorizontal:1,
+      marginHorizontal:2,
       shadowColor: "#000",
       shadowOpacity: 0.1,
       shadowRadius: 5,
       elevation: 1,
+    
     },
     avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
     infoContainer: { flex: 1 },

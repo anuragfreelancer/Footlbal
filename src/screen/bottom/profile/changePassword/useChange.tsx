@@ -54,11 +54,8 @@ const useChange = () => {
     };
   
     try {
-      console.log("params",params)
-       const response = await ChangePasswordApi(params, setisLoading);
-       if(response){
-        setCredentials("")
-       }
+        const response = await ChangePasswordApi(params, setisLoading);
+       
     } catch (error) {
       console.error(error);
     }

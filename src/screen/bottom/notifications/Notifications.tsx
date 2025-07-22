@@ -1,57 +1,58 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import CustomHeader from '../../../compoent/CustomHeader';
 import imageIndex from '../../../assets/imageIndex';
 import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import styles from './style';
 import useNotifications from './useNotifications';
-import LoadingModal from '../../../utils/Loader';
-import EmptyListComponent from '../../../compoent/EmptyListComponent';
+ import EmptyListComponent from '../../../compoent/EmptyListComponent';
+import moment from 'moment';
 
-const NotifiData = [
-  {
-    title: "Today",
-    data: [
-      { id: '1', name: 'Warson D.', time: '32 minutes ago', status: 'Successful' },
-      ],
-  },
-   
-];
 
 const Notifications = () => {
   const {
     isLoading,
-    navigation,
-    notifications, setNotifications
+    notifications,
   } = useNotifications()
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
-      {isLoading ? <LoadingModal /> : null}
       <View style={{ marginTop: 25 }}>
         <CustomHeader imageSource={imageIndex.backNav} label={"Notifications"} />
       </View>
       <View style={styles.container}>
-
-        <FlatList
-          style={{ marginTop: 18 }}
-          data={NotifiData}
-          keyExtractor={(_, index) => index.toString()}
-          ListEmptyComponent={<EmptyListComponent message="No Notifications available" />} // Common Empty Component
-          renderItem={({ item }) => (
-            <View style={styles.notificationCard}>
-              <Image
-                source={imageIndex.user}
-                style={styles.avatar}
-              />
-              <View style={styles.notificationText}>
-                <Text style={styles.name}>Warson D.</Text>
-                <Text style={styles.time}>32 minutes ago</Text>
+        {isLoading ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size={30} color="#A0D803" />
+          </View>
+        ) : (
+          <FlatList
+            style={{ marginTop: 18 }}
+            data={notifications}
+            keyExtractor={(_, index) => index.toString()}
+            ListEmptyComponent={<EmptyListComponent message="No Notifications available" />} // Common Empty Component
+            renderItem={({ item }) =>  {
+              const formattedDate = moment(item?.created_at).format("h:mm A");
+              return(
+                <View style={styles.notificationCard}>
+                {/* <Image
+                  source={{
+                    uri:item?.image
+                  }}
+                  style={styles.avatar}
+                /> */}
+                <View style={styles.notificationText}>
+                  <Text style={styles.name}>{item?.message}</Text>
+                  {/* <Text style={styles.time}></Text> */}
+                </View>
+                <Text style={styles.time}>{formattedDate}</Text>
+                {/* <Text style={styles.status}>{item.read_status}</Text> */}
               </View>
-              {/* <Text style={styles.status}>{item.status}</Text> */}
-            </View>
-          )}
-        />
+              )
+            }}
+          />
+        )}
+
       </View>
     </SafeAreaView>
   );

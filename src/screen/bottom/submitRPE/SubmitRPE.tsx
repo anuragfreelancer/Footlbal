@@ -1,11 +1,13 @@
-import React from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, Modal, SafeAreaView, ScrollView, Animated, PanResponder } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, LayoutAnimation, TextInput, TouchableOpacity, Image, Modal, SafeAreaView, ScrollView, Animated, PanResponder, ActivityIndicator, Platform } from "react-native";
 import { Calendar } from "react-native-calendars";
 import imageIndex from "../../../assets/imageIndex";
 import CustomButton from "../../../compoent/CustomButton";
 import styles from "./style";
 import useSubmitRPE from "./useSubmitRPE";
 import LoadingModal from "../../../utils/Loader";
+import axios from "axios";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const SubmitRPE = () => {
     const {
@@ -20,7 +22,11 @@ const SubmitRPE = () => {
         showCalendar, setShowCalendar,
         effort, setEffort,
         pan,
-        errors, setErrors
+        errors, setErrors,
+        showTimePicker, setShowTimePicker,
+        formattedTime, setFormattedTime,
+        time, setTime,
+        onChangeTime
     } = useSubmitRPE()
 
     const panResponder = PanResponder.create({
@@ -32,11 +38,65 @@ const SubmitRPE = () => {
             pan.setValue(newEffort * 30);
         },
     });
+    const [trainingData, setTrainingData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [expandedItemId, setExpandedItemId] = useState(null);
 
+    const getTrainingData = async () => {
+        try {
+            const response = await axios.get('https://server-php-8-3.technorizen.com/Football/api/get_training?type=before_training');
+            if (response.data.status === "1") {
+                setTrainingData(response.data.result);
+            }
+        } catch (error) {
+            console.log('API Error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
+        getTrainingData();
+    }, []);
+
+    const renderItem = ({ item }) => {
+        const isExpanded = expandedItemId === item.id;
+        return (
+            <View style={styles.cardWrapper}>
+                <TouchableOpacity style={styles.card} onPress={() => handlePress(item.id)} activeOpacity={0.7}>
+                    <Text style={styles.title}>{item.type}</Text>
+                    <Image
+                        source={imageIndex.arroRight}
+                        style={[
+                            styles.arrowIcon,
+                            { transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] },
+                        ]}
+                    />
+                </TouchableOpacity>
+
+                {isExpanded && (
+                    <View style={styles.expandedSection}>
+                        <Text style={styles.datetime}>{item.training_title}</Text>
+                    </View>
+                )}
+            </View>
+        );
+    };
+
+    if (loading) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color="##A0D803" />
+            </View>
+        );
+    }
+    const handlePress = (id) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setExpandedItemId(prevId => (prevId === id ? null : id));
+    };
     return (
         <SafeAreaView style={{ flex: 1, }}>
-                        {isLoading ? <LoadingModal /> : null}
+            {isLoading ? <LoadingModal /> : null}
 
             <View style={styles.container}>
                 <Text style={styles.header}>Submit RPE</Text>
@@ -61,10 +121,34 @@ const SubmitRPE = () => {
                             </TouchableOpacity>
                         ))}
                     </View>
-                    {errors.session && <Text style={{ color: "red" ,marginTop:10 , }}>{errors.session}</Text>}
+                    {errors.session && <Text style={{ color: "red", marginTop: 10, }}>{errors.session}</Text>}
                     {/* Date Picker */}
                     <Text style={styles.label}>Select Date:</Text>
-                    <TouchableOpacity
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                        <TouchableOpacity
+                            style={styles.datePicker}
+                            onPress={() => setShowCalendar(true)}
+                            activeOpacity={0.7}
+                        >
+                            <Text>{date||"Select Date-"}</Text>
+                            <Image
+                                source={imageIndex.calender}
+                                style={{ height: 22, width: 22 ,marginLeft: 8}}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.datePicker}
+                            onPress={() => setShowTimePicker(true)}
+                            activeOpacity={0.7}
+                        >
+                            <Text>Time - {formattedTime}</Text>
+                            <Image
+                                source={imageIndex.clocks}
+                                style={{ height: 22, width: 22, marginLeft: 8 }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {/* <TouchableOpacity
                         style={styles.datePicker}
                         onPress={() => setShowCalendar(true)}
                         activeOpacity={0.7}
@@ -74,8 +158,8 @@ const SubmitRPE = () => {
                             source={imageIndex.calender}
                             style={{ height: 22, width: 22 }}
                         />
-                    </TouchableOpacity>
-                    {errors?.date && <Text style={{ color: "red" ,marginTop:10 }}>{errors?.date}</Text>}
+                    </TouchableOpacity> */}
+                    {errors?.date && <Text style={{ color: "red", marginTop: 10 }}>{errors?.date}</Text>}
                     <Modal visible={showCalendar} transparent animationType="slide">
                         <View style={styles.modalContainer}>
                             <View style={styles.calendarContainer}>
@@ -117,8 +201,8 @@ const SubmitRPE = () => {
                         borderRadius: 4,
                         position: 'relative',
                         marginVertical: 20,
-                        marginLeft:5,
-                        marginTop:20
+                        marginLeft: 5,
+                        marginTop: 20
 
                     }}>
                         <Animated.View
@@ -145,9 +229,9 @@ const SubmitRPE = () => {
                         fontSize: 18,
                         fontWeight: 'bold',
                         marginVertical: 10,
-                        color:"black"
+                        color: "black"
 
-                    },  ]}>Effort : {effort}</Text>
+                    },]}>Effort : {effort}</Text>
                     {/* <Text style={[{
                         fontSize: 18,
                         fontWeight: 'bold',
@@ -156,7 +240,7 @@ const SubmitRPE = () => {
 
                     }, { color: getEffortColor(effort) }]}>Effort: {effort}</Text> */}
 
-                    {errors.effort && <Text style={{ color: "red" ,marginTop:10 }}>{errors.effort}</Text>}
+                    {errors.effort && <Text style={{ color: "red", }}>{errors.effort}</Text>}
 
                     <Text style={[styles.label, {
                         marginTop: 20
@@ -177,15 +261,34 @@ const SubmitRPE = () => {
                         />
 
                     </View>
-                    {errors.comments && <Text style={{ color: "red" ,marginTop:10 }}>{errors.comments}</Text>}
-
+                    {errors.comments && <Text style={{ color: "red", marginTop: 10 }}>{errors.comments}</Text>}
+                    <Text style={{ color: "black", fontSize: 20, fontWeight: "700" }}>Training  Session </Text>
+                    <FlatList
+                        data={trainingData}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        contentContainerStyle={{
+                            marginTop: 11,
+                            marginVertical: 5,
+                            marginHorizontal: 1
+                        }}
+                        showsVerticalScrollIndicator={false}
+                    />
                 </ScrollView>
                 <View style={styles.buttView}>
                     <CustomButton
                         title={'Submit'}
-                        onPress={()=>handleSubmit()}
+                        onPress={() => handleSubmit()}
                     />
                 </View>
+                {showTimePicker && (
+                    <DateTimePicker
+                        value={time} // ✅ time is a Date object now
+                        mode="time"
+                        display={Platform.OS === "ios" ? "spinner" : "default"}
+                        onChange={onChangeTime}
+                    />
+                )}
             </View>
         </SafeAreaView>
     );

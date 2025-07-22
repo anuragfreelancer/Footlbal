@@ -28,7 +28,9 @@ enum ScreenNameEnum {
   Feedback="Feedback" ,
   PlayerEdit="PlayerEdit" ,
   SubmitRPE="SubmitRPE",
-  Notifications ="Notifications"
+  Notifications ="Notifications" ,
+  TrainingFedBack="TrainingFedBack" ,
+  StartTrainingFed="StartTrainingFed"
    
  }
 

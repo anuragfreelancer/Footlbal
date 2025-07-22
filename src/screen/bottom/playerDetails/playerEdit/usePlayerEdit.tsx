@@ -56,8 +56,7 @@ const usePlayerEdit = () => {
          player_id: item?.id ,
         newDate: item?.dob
       };
-      console.log("params",params)
-   const response = await PlayerPostEditApi(params, setisLoading);
+    const response = await PlayerPostEditApi(params, setisLoading);
     } catch (error) {
       console.error("Error updating profile:", error);
     }

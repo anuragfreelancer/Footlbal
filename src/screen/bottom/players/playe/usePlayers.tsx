@@ -8,6 +8,8 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
   const [isLoading, setisLoading] = useState(false)
   const isLogin = useSelector((state: any) => state?.auth);
     const [allPlay, setAllPlay] = useState<any>([]);
+    const [searchPlaylist, setSearchPlaylist] = useState<string>("");
+    const [filterData, setFilterData] = useState<any>("");
     useFocusEffect(
       useCallback(() => {
         GetplayerApi();
@@ -18,19 +20,32 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     try {
       const state = await Getplayer(isLogin?.userData?.id,setisLoading);
       if (state) {
-         setAllPlay(state);
+         setAllPlay(state?.userGetData);
+         setFilterData(state?.userGetData)
 
       }
     } catch (error) {
     }
   };
- 
+  useEffect(() => {
+    if (searchPlaylist?.trim() === '') {
+      setFilterData(allPlay);
+    } else {
+      const filtered = allPlay?.filter((msg:any) =>
+        msg?.user_name?.toLowerCase()?.includes(searchPlaylist?.toLowerCase())
+      );
+      setFilterData(filtered);
+    }
+  }, [searchPlaylist, allPlay]);
+  
   
   return {
     allPlay, setAllPlay,
     isLoading,setisLoading,
     navigation ,
-    isLogin
+    isLogin ,
+    searchPlaylist, setSearchPlaylist ,
+    filterData, setFilterData
   };
 };
 

@@ -84,5 +84,6 @@ export default {
   playersP: require('./images/playersP.png'),
   Shape: require('./images/Shape.png'),
   bubbleChat: require('./images/bubbleChat.png'),
+  clocks: require('./images/clocks.png'),
   // 
 }; 

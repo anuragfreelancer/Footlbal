@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import CustomButton from '../../../../compoent/CustomButton';
@@ -13,7 +13,9 @@ const PlayerDetails = () => {
     const {
         navigation,
         item,
-        isLogin
+        isLogin,
+        loading,
+        downloadVideo
     } = usePlayerDetails();
   const formatDate = (dob: any): string => {
     if (!dob || typeof dob !== 'string') return 'Invalid Date'; 
@@ -51,7 +53,6 @@ const PlayerDetails = () => {
 
 // Example usage
 const formattedDate = formatDate(item?.dob);
-console.log(formattedDate);
 
  
     return (
@@ -97,13 +98,25 @@ console.log(formattedDate);
                     <Text style={styles.notesText}>{item?.player_details}</Text>
                 </View>
                 {isLogin?.userData?.type === "Coach" ? (
-                      <View style={styles.butt}>
-                      <CustomButton
-                          title={'Export Report'}
-                          onPress={() => navigation.navigate(ScreenNameEnum.TabNavigator)
-                          }
-                          buttonStyle={{ width: "100%", marginTop: 28 }}
-                      />
+                      <View style={styles.butt}>  
+
+
+                      {loading  ? (
+                        <ActivityIndicator size="large" color="#0000ff" style={{
+                            marginTop: 20,
+
+                        }} />
+                      ):(
+                        <CustomButton
+                        title={'Export Report'}
+                        // onPress={downloadVideo
+                        // }
+                        // onPress={() => navigation.navigate(ScreenNameEnum.TabNavigator)
+                        // }
+                        buttonStyle={{ width: "100%", marginTop: 28 }}
+                    />
+                      )}
+                     
                   </View>
                 ) : null}
             </ScrollView>

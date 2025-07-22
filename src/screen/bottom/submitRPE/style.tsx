@@ -17,8 +17,53 @@
     calendarContainer: { backgroundColor: "white", padding: 20, borderRadius: 10, width: 320 },
     closeButton: { marginTop: 10, padding: 10, backgroundColor: "#A8EB12", borderRadius: 25, alignItems: "center" },
     closeButtonText: { fontSize: 14, fontWeight: "bold", color: "white" },
-    buttView: { justifyContent: 'flex-start',  marginTop:30},
-
+    buttView: { justifyContent: 'flex-start',  marginTop:2},
+     
+    cardWrapper: {
+      marginBottom: 15,
+      borderRadius: 10,
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    card: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: 18,
+      alignItems: 'center',
+      backgroundColor: 'white',
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#2c3e50',
+      flex: 1,
+    },
+    arrowIcon: {
+      height: 16,
+      width: 16,
+      tintColor: '#2c3e50',
+    },
+    expandedSection: {
+      padding: 15,
+      backgroundColor: '#fff',
+      borderTopWidth: 1,
+      borderTopColor: '#ddd',
+    },
+    datetime: {
+      fontSize: 14,
+      color: 'balck',
+      fontWeight: "500"
+    },
+    loader: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
     
     export default styles;

@@ -42,7 +42,7 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                         width: 60,
                     }} resizeMode="contain" />
 
-                    <Text style={[styles.buttonText,]}>Coach</Text>
+                    {/* <Text style={[styles.buttonText,]}>Coach</Text> */}
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.bottomButton, {
                     borderColor: selectedRole === 'Player' ? "#A0D803" : "#9DB2BF"
@@ -57,7 +57,7 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                            height: 60,
                            width: 60,
                     }} resizeMode="contain" />
-                    <Text style={styles.buttonText}>Player</Text>
+                    {/* <Text style={styles.buttonText}>Player</Text> */}
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

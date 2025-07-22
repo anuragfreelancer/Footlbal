@@ -86,8 +86,7 @@ const CustomCalendar = () => {
   const { players, isLoading, selectedDates, setSelectedDates } = useCalendar();
 
   const handleDateSelect = useCallback((date:any) => {
-    console.log("-----date", date);
-    if (date !== selectedDates) {
+     if (date !== selectedDates) {
       setSelectedDates(date);
     }
   }, [selectedDates, setSelectedDates]);
@@ -98,11 +97,12 @@ const CustomCalendar = () => {
   const filteredPlayers = useMemo(() => {
     return (
       players?.userGetData?.filter((player: any) => {
-         return formatDate(player?.date_time) === selectedDates;
+         return formatDate(player?.created_at) === selectedDates;
       }) || []
     );
   }, [players, selectedDates]);
-  
+
+   
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? <LoadingModal /> : null}

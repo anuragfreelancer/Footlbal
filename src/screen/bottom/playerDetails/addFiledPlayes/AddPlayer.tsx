@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomButton from '../../../../compoent/CustomButton';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -38,7 +38,27 @@ const AddPlayer = () => {
     postionData,
     email, setEmail ,
     password, setPassword
-  } = useAddPlayer()
+  } = useAddPlayer() 
+  const injuryOptions = [
+    { id: '1', label: 'No Injury' },
+    { id: '2', label: 'Select Previous Injuries' },
+    { id: '3', label: 'Beginner' }
+  ];
+
+  const renderItem = ({ item }:any) => (
+    <TouchableOpacity
+      onPress={() => setInjuryHistory(item.label)}
+      style={[styles.radioButton, { justifyContent: 'space-between' }]}
+    >
+      <Text style={styles.radioText}>{item.label}</Text>
+      <Image
+        source={injuryHistory !== item.label ? imageIndex.radio : imageIndex.radioSlied}
+        style={styles.img}
+        resizeMode='contain'
+        tintColor="#A0D803"
+      />
+    </TouchableOpacity>
+  );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? <LoadingModal /> : null}
@@ -168,27 +188,11 @@ const AddPlayer = () => {
         </TouchableOpacity>
         {errors.selectedTraining && <Text style={styles.redText}>{errors.selectedTraining}</Text>}
         <Text style={styles.sectionTitle}>Injury History</Text>
-        <TouchableOpacity onPress={() => setInjuryHistory('no-injury')}
-          style={[styles.radioButton, {
-            justifyContent: "space-between"
-          }]}>
-          <Text style={styles.radioText}>No Injury</Text>
-          <Image source={injuryHistory != 'no-injury' ? imageIndex.radio : imageIndex.radioSlied}
-            style={styles.img}
-            resizeMode='contain'
-            tintColor={"#A0D803"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setInjuryHistory('previous-injury')} style={[styles.radioButton, {
-          justifyContent: "space-between"
-        }]}>
-          <Text style={styles.radioText}>Select Previous Injuries</Text>
-          <Image
-            source={injuryHistory != 'previous-injury' ? imageIndex.radio : imageIndex.radioSlied} style={styles.img}
-            resizeMode='contain'
-            tintColor={"#A0D803"}
-          />
-        </TouchableOpacity>
+         <FlatList
+             data={injuryOptions}
+             keyExtractor={(item) => item?.id}
+             renderItem={renderItem}
+           />
         {errors.injuryHistory && <Text style={[styles.redText, {
           marginTop: 5
         }]}>{errors.injuryHistory}</Text>}
