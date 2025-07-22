@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, LayoutAnimation, TextInput, TouchableOpacity, Image, Modal, SafeAreaView, ScrollView, Animated, PanResponder, ActivityIndicator, Platform } from "react-native";
+import { View, Text, FlatList, LayoutAnimation, TextInput, TouchableOpacity, Image, Modal,   ScrollView, Animated, PanResponder, ActivityIndicator, Platform } from "react-native";
 import { Calendar } from "react-native-calendars";
 import imageIndex from "../../../assets/imageIndex";
 import CustomButton from "../../../compoent/CustomButton";
@@ -7,7 +7,9 @@ import styles from "./style";
 import useSubmitRPE from "./useSubmitRPE";
 import LoadingModal from "../../../utils/Loader";
 import axios from "axios";
-import DateTimePicker from "@react-native-community/datetimepicker";
+ import { SafeAreaView } from "react-native-safe-area-context";
+import TimePickerModal from "../../../compoent/TimePickerModal";
+import AddAttendanceModal from "../../../compoent/AddAttendanceModal";
 
 const SubmitRPE = () => {
     const {
@@ -26,7 +28,9 @@ const SubmitRPE = () => {
         showTimePicker, setShowTimePicker,
         formattedTime, setFormattedTime,
         time, setTime,
-        onChangeTime
+        onChangeTime ,
+        modalVisible, setModalVisible ,
+        handleConfirm
     } = useSubmitRPE()
 
     const panResponder = PanResponder.create({
@@ -95,13 +99,12 @@ const SubmitRPE = () => {
         setExpandedItemId(prevId => (prevId === id ? null : id));
     };
     return (
-        <SafeAreaView style={{ flex: 1, }}>
+        <SafeAreaView style={{ flex: 1,backgroundColor:"white" }}>
             {isLoading ? <LoadingModal /> : null}
 
             <View style={styles.container}>
                 <Text style={styles.header}>Submit RPE</Text>
                 <ScrollView showsVerticalScrollIndicator={false}>
-
                     <Text style={styles.label}>Select Session:</Text>
                     <View style={styles.radioGroup}>
                         {["Training", "Match"].map((item) => (
@@ -275,21 +278,29 @@ const SubmitRPE = () => {
                         showsVerticalScrollIndicator={false}
                     />
                 </ScrollView>
-                <View style={styles.buttView}>
+              
+             
+            </View>
+              <View style={styles.buttView}>
                     <CustomButton
                         title={'Submit'}
                         onPress={() => handleSubmit()}
                     />
                 </View>
-                {showTimePicker && (
-                    <DateTimePicker
-                        value={time} // ✅ time is a Date object now
-                        mode="time"
-                        display={Platform.OS === "ios" ? "spinner" : "default"}
-                        onChange={onChangeTime}
-                    />
-                )}
-            </View>
+                <TimePickerModal
+  time={time}
+  setTime={(t) => {
+    setTime(t);
+    setFormattedTime(t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  }}
+  visible={showTimePicker}
+  onClose={() => setShowTimePicker(false)}
+/>
+<AddAttendanceModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onConfirm={handleConfirm}
+      />
         </SafeAreaView>
     );
 };

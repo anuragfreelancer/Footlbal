@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { SumitRpfFrom } from '../../../redux/Api/AuthApi';
+import { AttendanceApi, SumitRpfFrom } from '../../../redux/Api/AuthApi';
 import { Alert, Animated } from 'react-native';
 import { Platform } from 'react-native';
 
@@ -19,7 +19,36 @@ const useSubmitRPE = () => {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [formattedTime, setFormattedTime] = useState("Select Time");
     const [time, setTime] = useState(new Date());
+    const [modalVisible, setModalVisible] = useState(true);
 
+  
+
+    const handleConfirm = async (type:any) => {
+        setModalVisible(false);
+        
+
+        try {
+            const params = {
+                userId: isLogin?.userData?.id,
+                navigation: navigation,
+                type: type,
+                
+
+            };
+            const response = await AttendanceApi(params, setisLoading);
+            if (response) {
+                setSession("");
+                setDate("");
+                setComments("")
+            }
+        } catch (error) {
+            console.error("API Call Failed:", error);
+            // Show an error message to the user
+        } finally {
+            setisLoading(false); // Stop loading after API response/error
+        }
+    };
+  
     const getEffortColor = (value: any) => {
         if (value <= 3) return '#A0D803'; // Light effort (Yellow)
         if (value <= 6) return '#A0D803'; // Moderate effort (Light Green)
@@ -75,18 +104,16 @@ const useSubmitRPE = () => {
             setisLoading(false); // Stop loading after API response/error
         }
     };
-
     const onChangeTime = (event, selectedTime) => {
-        if (Platform.OS !== "ios") setShowTimePicker(false);
-        if (selectedTime) {
-            setTime(selectedTime);
-            const formatted = selectedTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-            });
-            setFormattedTime(formatted);
+        if (Platform.OS === 'android') {
+          setShowTimePicker(false);
         }
-    };
+        if (selectedTime) {
+          setTime(selectedTime);
+          setFormattedTime(selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        }
+      };
+   
 
     return {
         isLoading, setisLoading,
@@ -104,7 +131,9 @@ const useSubmitRPE = () => {
         showTimePicker, setShowTimePicker,
         formattedTime, setFormattedTime,
         time, setTime,
-        onChangeTime
+        onChangeTime ,
+        modalVisible, setModalVisible ,
+        handleConfirm
     };
 };
 

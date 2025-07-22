@@ -38,7 +38,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               <Text allowFontScaling={false} style={styles.optionText}>📷 Pick from Gallery</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setModalVisible(false);
                 takePhotoFromCamera();
@@ -46,7 +46,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               style={styles.optionButton}
             >
               <Text allowFontScaling={false} style={styles.optionText}>📸 Take a Photo</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={() => setModalVisible(false)}

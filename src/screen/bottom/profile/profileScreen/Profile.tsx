@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, FlatList, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -9,6 +9,7 @@ import MenuItemsData from "./MenuItemsData";
 const { MenuItems, PlayData } = MenuItemsData;
 import useProfileScreen from "./useProfileScreen";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
+import { SafeAreaView } from "react-native-safe-area-context";
 const Profile = () => {
 
   const {
@@ -17,8 +18,7 @@ const Profile = () => {
     getLogin,
     isLogin
   } = useProfileScreen();
-  console.log("dddd",isLogin)
-  const MenuItem = ({ title, icon, screen }: any) => {
+   const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
      return (
       <TouchableOpacity style={styles.menuItem}

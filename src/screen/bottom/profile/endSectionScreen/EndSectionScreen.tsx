@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-    ActivityIndicator, Alert
+  SafeAreaView, ActivityIndicator, Alert
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
-import ScreenNameEnum from "../../../../routes/screenName.enum";
-import styles from "./style";
-import usePlayers from "./usePlayers";
-import EmptyListComponent from "../../../../compoent/EmptyListComponent";
+   import EmptyListComponent from "../../../../compoent/EmptyListComponent";
 import SearchBar from "../../../../compoent/SearchBar";
 import StartSectionModal from "../../../../compoent/StartSectionModal";
-import { StartSection } from "../../../../redux/Api/AuthApi";
+import { EndSection, StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
-import { SafeAreaView } from "react-native-safe-area-context";
+import usePlayers from "../../players/playe/usePlayers";
+import CustomHeader from "../../../../compoent/CustomHeader";
+import styles from "./style";
 
-const Players = () => {
+const EndSectionScreen = () => {
   const {
  
     isLoading,  
@@ -67,7 +66,7 @@ const [is,setIsLoading]= useState(false)
   
       console.log('📤 Sending to API:', params);
   
-      const response = await StartSection(params, setIsLoading);
+      const response = await EndSection(params, setIsLoading);
   
       if (response?.status === '1') {
         Alert.alert('✅ Success', 'Section started successfully!');
@@ -135,54 +134,32 @@ const [is,setIsLoading]= useState(false)
 
   return (
     <SafeAreaView style={styles.container}>
-            {is ? <LoadingModal /> : null}
+            <StatusBarComponent />
 
-      <StatusBarComponent />
+            {is ? <LoadingModal /> : null}
+            <CustomHeader imageSource={imageIndex.backNav} label="My Team" />
       <View style={[styles.container, { padding: 15 }]}>
-        <Text style={styles.header}>Players</Text>
-        <SearchBar
+        {/* <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}
-        />
- <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: 'rgba(160, 216, 3, 1)', // greenish tone for "Start"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={handleOpenModal}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      Start Section ({selectedPlayerIds.length})
-    </Text>
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: '#F44336', // reddish tone for "End"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={()=>{
-      navigation.navigate(ScreenNameEnum.EndSectionScreen)
-    }}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      End Section  
-    </Text>
-  </TouchableOpacity>
-</View>
+        /> */}
+         <TouchableOpacity
+          style={{
+            backgroundColor: 'gray',
+            padding: 12,
+            borderRadius: 10,
+            alignItems: 'center',
+            marginBottom: 15 ,
+            height:55 ,
+            justifyContent:"center",
+            marginTop:15
+          }}
+          onPress={handleOpenModal}
+        >
+          <Text style={{ fontWeight: 'bold', color: '#fff',fontSize:20 }}>
+          End Section  ({selectedPlayerIds.length})
+          </Text>
+        </TouchableOpacity>
 
         {isLoading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -205,12 +182,7 @@ const [is,setIsLoading]= useState(false)
           />
         )}
 
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => navigation.navigate(ScreenNameEnum.AddPlayer)}
-        >
-          <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />
-        </TouchableOpacity>
+        
       </View>
       <StartSectionModal
         visible={modalVisible}
@@ -222,4 +194,4 @@ const [is,setIsLoading]= useState(false)
   );
 };
 
-export default Players;
+export default EndSectionScreen;

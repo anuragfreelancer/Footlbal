@@ -32,6 +32,17 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+		 <key>NSCameraUsageDescription</key>
+<string>We use your camera to allow you to take a profile picture when setting up your account.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We use your photo library to let you upload profile pictures or images for posts and listings.</string>
+
+<key>NSMicrophoneUsageDescription</key>
+<string>We use your microphone so you can record and send voice messages to other users in chat.</string>
+
+<key>NSContactsUsageDescription</key>
+<string>We use your contacts to help you find and connect with friends who are already using the app.</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

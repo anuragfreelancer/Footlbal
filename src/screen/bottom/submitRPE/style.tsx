@@ -17,8 +17,30 @@
     calendarContainer: { backgroundColor: "white", padding: 20, borderRadius: 10, width: 320 },
     closeButton: { marginTop: 10, padding: 10, backgroundColor: "#A8EB12", borderRadius: 25, alignItems: "center" },
     closeButtonText: { fontSize: 14, fontWeight: "bold", color: "white" },
-    buttView: { justifyContent: 'flex-start',  marginTop:2},
-     
+    buttView: { justifyContent: 'flex-start', marginHorizontal:15,marginBottom:11  },
+    
+    pickerContainer: {
+      backgroundColor: '#fff',
+      margin: 20,
+      borderRadius: 10,
+      padding: 20,
+      alignItems: 'center',
+    },
+    modalTitle: {
+      fontSize: 20,
+      marginBottom: 10,
+    },
+    doneButton: {
+      marginTop: 20,
+      backgroundColor: '#007bff',
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderRadius: 8,
+    },
+    doneButtonText: {
+      color: 'white',
+      fontSize: 16,
+    },
     cardWrapper: {
       marginBottom: 15,
       borderRadius: 10,

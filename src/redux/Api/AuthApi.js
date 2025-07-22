@@ -246,13 +246,12 @@ const UpdateProfile_Api = async (
 ) => {
     try {
         setLoading(true)
-        console.log("param?.images?.path", param?.images?.path);
-        const myHeaders = new Headers();
+         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
         if (param?.images) {
             formData.append("image", {
-                uri: param?.images?.path,
+                uri: param?.images,
                 type: 'image/jpeg',
                 name: 'image.jpg'
             });
@@ -297,7 +296,54 @@ const UpdateProfile_Api = async (
     }
 };
 
-
+const StartSection = async (
+    param,
+    setLoading,
+) => {
+    try {
+        setLoading(true)
+         const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("user_id", param?.players);
+        formData.append("session_start_date", param?.time);
+        formData.append("session_start_time", param?.date);
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        console.log("hshss",formData)
+        const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                    param.navigation.goBack()
+                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
 const GetProfile = async (userId, dispatch) => {
     try {
         const myHeaders = new Headers();
@@ -515,7 +561,7 @@ const PlayerPostApi = async (
         const formData = new FormData();
         if (param?.addImage) {
             formData.append("image", {
-                uri: param?.addImage?.path,
+                uri: param?.addImage,
                 type: 'image/jpeg',
                 name: 'image.jpg'
             });
@@ -844,7 +890,56 @@ const SumitRpfFrom = async (
     }
 };
 
+const EndSection = async (
+    param,
+    setLoading,
+) => {
+    try {
+        setLoading(true)
+         const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("id", param?.players);
+        // formData.append("user_id", param?.players);
+        formData.append("session_end_time", param?.time);
+        formData.append("session_end_date", param?.date);
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+         const respons = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                const response = JSON.parse(res);
+                console.log("response.status",response.status)
 
+                 if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                    param.navigation.goBack()
+                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
+                    return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
 
 // const EndRpfFrom = async (
 //     param,
@@ -1187,4 +1282,56 @@ const GetChat = async (
         );
     }
 };
-export { SendMessage,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+
+
+
+
+const AttendanceApi = async (
+    param,
+    setLoading,
+) => {
+     
+     try {
+        setLoading(true)
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("user_id", param?.userId);
+        formData.append("attendance", param?.type);
+       
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const respons = await fetch(`${base_url}${constant.add_attendance}`, requestOptions)
+            .then((response) => response.text())
+            .then((res) => {
+                console.log("res", res)
+                const response = JSON.parse(res);
+                if (response.status == '1') {
+                    setLoading(false)
+                    successToast(
+                        response?.message
+                    );
+                      return response
+                } else {
+                    setLoading(false)
+                    errorToast(
+                        response?.message || response?.error,
+                    );
+                    return response
+                }
+            })
+            .catch((error) =>
+                console.error(error));
+        return respons
+    } catch (error) {
+        setLoading(false)
+        errorToast(
+            'Network error',
+        );
+    }
+};
+
+export { SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

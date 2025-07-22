@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 6, // Works for Android
+    height:55
   },
   icon: {
     height: 20,

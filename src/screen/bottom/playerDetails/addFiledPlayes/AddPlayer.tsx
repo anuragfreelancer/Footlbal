@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, FlatList } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomButton from '../../../../compoent/CustomButton';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -10,6 +10,7 @@ import DatePicker from "react-native-date-picker";
 import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const AddPlayer = () => {
@@ -65,7 +66,7 @@ const AddPlayer = () => {
       <StatusBarComponent />
       <View style={{
         marginHorizontal: 12,
-        marginTop: 15
+  
       }}>
         <CustomHeader imageSource={imageIndex.backNavs} label="Add Player" />
       </View>
@@ -73,7 +74,7 @@ const AddPlayer = () => {
         <View style={styles.profileContainer}>
           <Image
             resizeMode='cover'
-            source={imagePrfile ? { uri: imagePrfile.path } : imageIndex.prfEdit} style={styles.profileImage} />
+            source={imagePrfile ? { uri: imagePrfile } : imageIndex.prfEdit} style={styles.profileImage} />
           <TouchableOpacity style={{
             bottom: 20,
             left: 12

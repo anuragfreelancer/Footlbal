@@ -10,6 +10,7 @@ enum ScreenNameEnum {
   CreatePassword="CreatePassword",
   PasswordReset="PasswordReset",
   HOME_SCREEN="HOME_SCREEN" ,
+  EndSectionScreen="EndSectionScreen",
   Calendar="Calendar"   ,
   Players="Players",
   Reports="Reports",

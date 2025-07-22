@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import ImagePicker from "react-native-image-crop-picker";
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';  
 import { GetProfile, UpdateProfile_Api } from '../../../../redux/Api/AuthApi';
 const useEdit = () => {
   const [isLoading, setisLoading] = useState()
@@ -21,17 +22,41 @@ const useEdit = () => {
       setPhoneNumber(getLogin?.userGetData?.mobile || "");
     }
   }, [getLogin]);
-  const pickImageFromGallery = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: false,
-    })
-      .then((image) => {
-        setImagePrfile(image)
-        setIsModalVisible(false);
-      })
-      .catch((error) => console.log(error));
+  // const pickImageFromGallery = () => {
+  //   ImagePicker.openPicker({
+  //     width: 300,
+  //     height: 400,
+  //     cropping: false,
+  //   })
+  //     .then((image) => {
+  //       setImagePrfile(image)
+  //       setIsModalVisible(false);
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
+  const pickImageFromGallery = async () => {
+    setTimeout(() => {
+      const options = {
+        mediaType: 'photo',
+        maxWidth: 300,
+        maxHeight: 400,
+        quality: 0.8,
+        includeBase64: false,
+      };
+  
+      launchImageLibrary(options, (response) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('Image Picker Error: ', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          const imageUri = response.assets?.[0]?.uri;
+           setImagePrfile(imageUri)
+           setIsModalVisible(false);
+           
+        }
+      });
+    }, 200); // Delay helps when launched from modal or state update
   };
 
   const takePhotoFromCamera = async () => {

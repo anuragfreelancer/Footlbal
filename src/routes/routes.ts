@@ -32,6 +32,7 @@ import ChooseRoleScreen from "../screen/auth/ChooseRoleScreen";
 import Notifications from "../screen/bottom/notifications/Notifications";
  import TrainingFedBack from "../screen/bottom/trainingFedBack/TrainingFedBack";
 import StartTrainingFed from "../screen/bottom/startTrainingFed/StartTrainingFed";
+import EndSectionScreen from "../screen/bottom/profile/endSectionScreen/EndSectionScreen";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -67,6 +68,7 @@ const _routes = () => {
       { name: ScreenNameEnum.Notifications, Component: Notifications },
       { name: ScreenNameEnum.TrainingFedBack, Component: TrainingFedBack },
       { name: ScreenNameEnum.StartTrainingFed, Component: StartTrainingFed },
+      { name: ScreenNameEnum.EndSectionScreen, Component: EndSectionScreen },
      ],
 
     BOTTOMTAB_ROUTE: [

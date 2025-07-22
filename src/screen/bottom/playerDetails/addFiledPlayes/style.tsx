@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
    profileContainer: { alignItems: 'center', marginTop: 20 },
   profileImage: { width: 70, height: 70, borderRadius: 70 },
   sectionTitle: { fontSize: 16, fontWeight: '700', marginTop: 18, marginBottom: 10, color: "#000000" },
-  input: { borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8', },
+  input: {justifyContent:"center", height:55, borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8', },
   dropdownContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 10, backgroundColor: '#f8f8f8' },
   picker: { height: 50, width: '100%' },
   radioButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, },

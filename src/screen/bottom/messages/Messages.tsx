@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import CustomHeader from "../../../compoent/CustomHeader";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
@@ -10,6 +10,7 @@ import useMessageList from "./useMessageList";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import moment from "moment";
 import LoadingModal from "../../../utils/Loader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const Messages = () => {

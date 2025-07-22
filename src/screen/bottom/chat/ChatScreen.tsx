@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, FlatList, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, FlatList, StyleSheet, ScrollView } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import useChatScreen from "./useChatScreen";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
  import moment from "moment";
 import { ActivityIndicator } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatScreen = () => {
 
@@ -51,7 +52,7 @@ const ChatScreen = () => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 ,backgroundColor:"white"}}>
             <StatusBarComponent />
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -103,8 +104,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginBottom: 10,
-        marginTop: 25
-    },
+     },
     backIcon: {
         height: 30,
         width: 30,

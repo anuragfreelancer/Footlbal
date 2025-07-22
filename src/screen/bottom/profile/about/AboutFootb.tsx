@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, SafeAreaView, useWindowDimensions } from 'react-native';
+import { View, Text, Image, ScrollView,   useWindowDimensions } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -7,6 +7,7 @@ import styles from './style';
 import useAboutFootb from './useAboutFootb';
 import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AboutFootb = () => {
 

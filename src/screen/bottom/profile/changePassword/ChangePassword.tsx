@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView,  SafeAreaView } from "react-native";
+import { View, ScrollView,    } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import CustomHeader from "../../../../compoent/CustomHeader";
@@ -11,6 +11,7 @@ import styles from "./style";
 import useChange from "./useChange";
 import ErrorText from "../../../../compoent/ErrorText";
 import LoadingModal from "../../../../utils/Loader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -28,7 +29,7 @@ const ChangePassword = () => {
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
     <View style={{
-      marginTop:30
+      marginTop:11
     }}>
       <CustomHeader imageSource={imageIndex.backNav} label="Change Password" />
       </View>
