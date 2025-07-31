@@ -1,13 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView,  Image, FlatList, SafeAreaView, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView,  Image, FlatList, ActivityIndicator } from "react-native";
  import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import CustomHeader from "../../../../compoent/CustomHeader";
-import CustomButton from "../../../../compoent/CustomButton";
-import styles from "./style";
+ import styles from "./style";
 import useMyTeam from "./useMyTeam";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
-import LoadingModal from "../../../../utils/Loader";
+ import localizationStrings from "../../../../compoent/Localization/Localization";
+import { SafeAreaView } from "react-native-safe-area-context";
  
  
 const MyTeam = () => {
@@ -25,16 +25,16 @@ const MyTeam = () => {
     }}>
       <StatusBarComponent />
       <View style={{ marginHorizontal: 8, marginTop: 12 }}>
-        <CustomHeader imageSource={imageIndex.backNav} label="My Team" />
+        <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
       </View>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profileHeader}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
             <Image source={{ uri: getLogin?.userGetData?.image }} style={styles.avatar} />
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
               <TouchableOpacity  >
-                <Text style={styles.profileLink}>Lorem ipsum dolor sit amet</Text>
+              <Text style={styles.profileLink}>{localizationStrings?.StrengthTraining}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -48,7 +48,7 @@ const MyTeam = () => {
             fontWeight: "700"
           }}
         >
-          Players ({MyTeam?.userGetData?.length || 0})
+          {localizationStrings?.Players} ({MyTeam?.userGetData?.length || 0})
         </Text>
         {
           isLoading ? (
@@ -61,7 +61,7 @@ const MyTeam = () => {
               style={{
                 marginTop: 15
               }}
-              ListEmptyComponent={<EmptyListComponent message="No MyTeam found" />} // Common Empty Component
+              ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers}/>} // Common Empty Component
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (

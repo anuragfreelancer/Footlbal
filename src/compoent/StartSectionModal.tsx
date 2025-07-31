@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import localizationStrings from './Localization/Localization';
 
 const StartSectionModal = ({
   visible,
@@ -52,7 +53,7 @@ const StartSectionModal = ({
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.title}>Selected Players</Text>
+          <Text style={styles.title}>{localizationStrings?.SelectedPlayers}</Text>
 
           {/* <FlatList
             data={selectedPlayers}
@@ -77,7 +78,7 @@ const StartSectionModal = ({
             Date: {date.toLocaleDateString()}
           </Text>
           <Text style={styles.selectedText}>
-            Time: {time.toLocaleTimeString()}
+            {localizationStrings?.Time}: {time.toLocaleTimeString()}
           </Text>
 
           {/* Modal Date/Time Pickers */}
@@ -104,13 +105,13 @@ const StartSectionModal = ({
                 style={[styles.actionBtn, { backgroundColor: '#ccc' }]}
                 onPress={onClose}
               >
-                <Text>Cancel</Text>
+                <Text>{localizationStrings.Cancel}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.actionBtn, { backgroundColor: 'rgba(160, 216, 3, 1)' }]}
                 onPress={handleStart}
               >
-                <Text style={{ color: '#fff' ,fontSize:15 }}>Start</Text>
+                <Text style={{ color: '#fff' ,fontSize:15 }}>{localizationStrings?.Start}</Text>
               </TouchableOpacity>
             </View>
           )}

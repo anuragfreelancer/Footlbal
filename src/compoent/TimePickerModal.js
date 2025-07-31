@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import localizationStrings from './Localization/Localization';
 
 const TimePickerModal = ({ time, setTime, visible, onClose }) => {
   const [tempTime, setTempTime] = useState(time);
@@ -32,7 +33,7 @@ const TimePickerModal = ({ time, setTime, visible, onClose }) => {
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Select Time</Text>
+          <Text style={styles.modalTitle}>{localizationStrings?.SelectTime}</Text>
 
           <DateTimePicker
             value={tempTime}
@@ -44,7 +45,7 @@ const TimePickerModal = ({ time, setTime, visible, onClose }) => {
 
           {Platform.OS === 'ios' && (
             <TouchableOpacity style={styles.doneButton} onPress={handleConfirm}>
-              <Text style={styles.doneButtonText}>Done</Text>
+              <Text style={styles.doneButtonText}>{localizationStrings.Save}</Text>
             </TouchableOpacity>
           )}
         </View>

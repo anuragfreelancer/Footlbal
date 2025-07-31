@@ -11,6 +11,7 @@ import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 
 const PlayerEdit = () => {
@@ -74,7 +75,7 @@ const PlayerEdit = () => {
       <View style={{
         marginHorizontal: 12,
        }}>
-        <CustomHeader imageSource={imageIndex.circleBak} label="Edit Player" />
+        <CustomHeader imageSource={imageIndex.circleBak} label={localizationStrings?.EditPlayer} />
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profileContainer}>
@@ -94,9 +95,9 @@ const PlayerEdit = () => {
         {errors.imagePrfile && <Text style={[styles.redText, {
           textAlign: "center"
         }]}>{errors.imagePrfile}</Text>}
-        <Text style={styles.sectionTitle}>Basic Information</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.BasicInformation}</Text>
         <View style={styles.input} >
-          <TextInput placeholder="Full Name"
+          <TextInput placeholder={localizationStrings.full}
             value={fullName}
             onChangeText={setFullName}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
@@ -146,7 +147,7 @@ const PlayerEdit = () => {
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
-        <Text style={styles.sectionTitle}>Training & Performance</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings.TrainingPerformance}</Text>
         <TouchableOpacity
           onPress={() => setTariningModal(true)}
           style={styles.rowView}>
@@ -162,15 +163,15 @@ const PlayerEdit = () => {
           </View>
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
-        <Text style={styles.sectionTitle}>Injury History</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings.InjuryHistory}</Text>
         <FlatList
           data={injuryOptions}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
         />
-        <Text style={styles.sectionTitle}>Additional Player Details</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.aAdditionala}</Text>
         <View style={styles.input} >
-          <TextInput placeholder="Performance Notes"
+          <TextInput placeholder={localizationStrings?.PerformanceNotes}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
             style={styles.textInupt}
             value={notes}
@@ -181,7 +182,7 @@ const PlayerEdit = () => {
       </ScrollView>
       <View style={styles.butt}>
         <CustomButton
-          title={'Save'}
+          title={localizationStrings?.Save}
           onPress={() =>
             handleSubmit()
           }

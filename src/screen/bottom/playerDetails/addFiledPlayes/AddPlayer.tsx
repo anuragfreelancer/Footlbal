@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import { Keyboard } from 'react-native';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 
 const AddPlayer = () => {
@@ -71,7 +72,7 @@ const AddPlayer = () => {
         marginHorizontal: 12,
   
       }}>
-        <CustomHeader imageSource={imageIndex.backNavs} label="Add Player" />
+        <CustomHeader imageSource={imageIndex.backNavs} label={localizationStrings?.AddPlayer} />
       </View>
       
       <KeyboardAvoidingView
@@ -103,9 +104,9 @@ const AddPlayer = () => {
         {errors.imagePrfile && <Text style={[styles.redText, {
           textAlign: "center"
         }]}>{errors.imagePrfile}</Text>}
-        <Text style={styles.sectionTitle}>Basic Information</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.BasicInformation}</Text>
         <View style={styles.input} >
-          <TextInput placeholder="Full Name"
+          <TextInput placeholder={localizationStrings?.full}
             value={fullName}
             onChangeText={setFullName}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
@@ -124,7 +125,7 @@ const AddPlayer = () => {
         {errors.email && <Text style={styles.redText}>{errors.email}</Text>}
 
         <View style={styles.input} >
-          <TextInput placeholder="Password"
+          <TextInput placeholder={localizationStrings.newpass}
             value={password}
             onChangeText={setPassword}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
@@ -147,7 +148,7 @@ const AddPlayer = () => {
         </TouchableOpacity>
         {errors.dob && <Text style={styles.redText}>{errors.dob}</Text>}
         <View style={styles.input} >
-          <TextInput placeholder="Player ID"
+          <TextInput placeholder={localizationStrings?.PlayerID}
             value={playerId}
             onChangeText={setPlayerId}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
@@ -187,7 +188,7 @@ const AddPlayer = () => {
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
         {errors.selectedPosition && <Text style={styles.redText}>{errors.selectedPosition}</Text>}
-        <Text style={styles.sectionTitle}>Training & Performance</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.TrainingPerformance}</Text>
         <TouchableOpacity
           onPress={() => setTariningModal(true)}
           style={styles.rowView}>
@@ -203,7 +204,7 @@ const AddPlayer = () => {
           <Image source={imageIndex.arrowDown} style={{ height: 22, width: 22 }} resizeMode='contain' />
         </TouchableOpacity>
         {errors.selectedTraining && <Text style={styles.redText}>{errors.selectedTraining}</Text>}
-        <Text style={styles.sectionTitle}>Injury History</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.InjuryHistory}</Text>
          <FlatList
              data={injuryOptions}
              keyExtractor={(item) => item?.id}
@@ -212,9 +213,9 @@ const AddPlayer = () => {
         {errors.injuryHistory && <Text style={[styles.redText, {
           marginTop: 5
         }]}>{errors.injuryHistory}</Text>}
-        <Text style={styles.sectionTitle}>Additional Player Details</Text>
+        <Text style={styles.sectionTitle}>{localizationStrings?.aAdditionala}</Text>
         <View style={styles.input} >
-          <TextInput placeholder="Performance Notes"
+          <TextInput placeholder={localizationStrings?.PerformanceNotes}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}
             style={styles.textInupt}
             value={notes}

@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView,   ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView,   } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
-import CustomButton from '../../../../compoent/CustomButton';
-import ScreenNameEnum from '../../../../routes/screenName.enum';
+ import ScreenNameEnum from '../../../../routes/screenName.enum';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import usePlayerDetails from './usePlayerDetails';
 import styles from './style';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 
 const PlayerDetails = () => {
@@ -60,7 +60,7 @@ const formattedDate = formatDate(item?.dob);
         <SafeAreaView style={styles.container}>
             <StatusBarComponent />
             <View style={styles.headerContainer}>
-                <CustomHeader imageSource={imageIndex.backNavs} label="Player Details" />
+                <CustomHeader imageSource={imageIndex.backNavs} label={localizationStrings?.PlayerDetails} />
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.profileContainer}>
@@ -69,7 +69,7 @@ const formattedDate = formatDate(item?.dob);
                 <View >
                     <View style={styles.detailRow}>
                         <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>Player Details</Text>
+                            <Text style={styles.detailLabel}>{localizationStrings?.PlayerDetails}</Text>
                         </View>
                         <Text style={styles.detailValue}>{item?.user_name}</Text>
                     </View>
@@ -95,7 +95,7 @@ const formattedDate = formatDate(item?.dob);
                     </View>
                 </View>
                 <View style={styles.notesContainer}>
-                    <Text style={styles.notesTitle}>Coach Notes</Text>
+                    <Text style={styles.notesTitle}>{localizationStrings?.CoachNotes}</Text>
                     <Text style={styles.notesText}>{item?.player_details}</Text>
                 </View>
               
@@ -111,7 +111,7 @@ const formattedDate = formatDate(item?.dob);
                     }]}>
                     <Text style={[styles.buttonText, {
                         color: "#A0D803"
-                    }]}>Edit</Text>
+                    }]}>{localizationStrings?.Edit}</Text>
                 </TouchableOpacity>
 
 

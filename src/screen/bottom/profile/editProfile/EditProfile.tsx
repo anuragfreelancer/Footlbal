@@ -21,6 +21,7 @@ import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import LoadingModal from "../../../../utils/Loader";
 import TextInputField from "../../../../utils/TextInputField";
 import imageIndex from "../../../../assets/imageIndex";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 const EditProfile = () => {
   const {
     imagePrfile,
@@ -52,7 +53,7 @@ const EditProfile = () => {
               <View style={{ marginHorizontal: 12, marginTop: 5 }}>
                 <CustomHeader
                   imageSource={imageIndex.backNav}
-                  label={"Edit Profile"}
+                  label={localizationStrings.Edit}
                 />
               </View>
 
@@ -112,8 +113,8 @@ const EditProfile = () => {
                     <TextInputField
                       text={fullName}
                       onChangeText={handleTextChange}
-                      lable="Full Name"
-                      placeholder="Full Name"
+                      lable={localizationStrings?.full}
+                      placeholder={localizationStrings?.full}
                       firstLogo
                       img={imageIndex.myteam}
                     />
@@ -127,8 +128,8 @@ const EditProfile = () => {
                     <TextInputField
                       text={PhoneNumber}
                       onChangeText={setPhoneNumber}
-                      lable="Mobile Number"
-                      placeholder="Mobile Number"
+                      lable={localizationStrings?.mb}
+                      placeholder={localizationStrings?.mb}
                       firstLogo
                       img={imageIndex.phone}
                       type="decimal-pad"
@@ -147,7 +148,7 @@ const EditProfile = () => {
 
               {/* Submit Button */}
               <View style={styles.buttView}>
-                <CustomButton title="Update" onPress={handleSubmit} />
+                <CustomButton title={localizationStrings.Save} onPress={handleSubmit} />
               </View>
             </View>
           </TouchableWithoutFeedback>

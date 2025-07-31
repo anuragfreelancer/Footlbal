@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import imageIndex from "../../../../assets/imageIndex";
@@ -9,7 +9,10 @@ import MenuItemsData from "./MenuItemsData";
 const { MenuItems, PlayData } = MenuItemsData;
 import useProfileScreen from "./useProfileScreen";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context"; 
+import LanguageModal from "../../../../compoent/LanguageModal";
+import localizationStrings from "../../../../compoent/Localization/Localization";
+
 const Profile = () => {
 
   const {
@@ -18,6 +21,14 @@ const Profile = () => {
     getLogin,
     isLogin
   } = useProfileScreen();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedLang, setSelectedLang] = useState('en');
+
+  const handleLanguageSelect = (lang) => {
+    setSelectedLang(lang);
+    // Yahan par language set logic add karo (e.g., i18n.changeLanguage(lang))
+  };
+
    const MenuItem = ({ title, icon, screen }: any) => {
     const navigation = useNavigation();
      return (
@@ -25,7 +36,12 @@ const Profile = () => {
         onPress={() => {
           if (title == "Logout") {
             setModal(true)
-          } else {
+          } 
+          
+          else if (screen == "Language"){
+            setModalVisible(true)
+          }
+          else {
             navigation.navigate(screen);
           }
         }}
@@ -55,7 +71,7 @@ const Profile = () => {
       backgroundColor: "white"
     }}>
       <StatusBarComponent />
-      <Text style={styles.header}>Profile</Text>
+      <Text style={styles.header}>{localizationStrings?.Profile}</Text>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.profileHeader}
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
@@ -66,7 +82,7 @@ const Profile = () => {
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
               <TouchableOpacity >
-                <Text style={styles.profileLink}>View my profile</Text>
+                <Text style={styles.profileLink}>{localizationStrings?.myprofile}</Text>
                 <Text style={styles.profileLink}>{getLogin?.userGetData?.email}</Text>
               </TouchableOpacity>
             </View>
@@ -105,6 +121,12 @@ const Profile = () => {
         <LogoutModal isVisible={modal} close={() => setModal(false)}
           onSumbit={handleLogout}
         />
+         <LanguageModal
+       
+       visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelectLanguage={handleLanguageSelect}
+      />
       </ScrollView>
     </SafeAreaView>
   );

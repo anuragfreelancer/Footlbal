@@ -17,6 +17,7 @@ import CustomButton from "../../../../compoent/CustomButton";
 import useFeedback from "./useFeedback";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 
 const Feedback = () => {
   const {
@@ -47,14 +48,14 @@ const Feedback = () => {
             contentContainerStyle={styles.contentContainer}
             keyboardShouldPersistTaps="handled"
           >
-            <Text style={styles.title}>We'd love your thoughts</Text>
+            <Text style={styles.title}>{localizationStrings?.Wed}</Text>
             <Text style={styles.subtitle}>
-              Let us know what we can improve or what you enjoyed.
+             {localizationStrings?.let}
             </Text>
 
             <View style={styles.inputBox}>
               <TextInput
-                placeholder="Write your feedback here..."
+                placeholder={localizationStrings?.Writeyour}
                 placeholderTextColor="#999"
                 style={styles.textInput}
                 multiline
@@ -71,7 +72,7 @@ const Feedback = () => {
         </TouchableWithoutFeedback>
 
         <View style={styles.buttonWrapper}>
-          <CustomButton title="Submit" onPress={SendFeedback} />
+          <CustomButton title={localizationStrings?.sumit} onPress={SendFeedback} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

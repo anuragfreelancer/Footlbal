@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Image } from "react-native";
 import imageIndex from "../assets/imageIndex";
+import localizationStrings from "./Localization/Localization";
 
 const LogoutModal = ({ isVisible, close, onSumbit }: any) => {
   return (
@@ -21,11 +22,11 @@ const LogoutModal = ({ isVisible, close, onSumbit }: any) => {
             <Image source={imageIndex.closeImg} style={{ height: 30, width: 30 }} />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Log Out?</Text>
-          <Text style={styles.subtitle}>Are you sure you want to log out?</Text>
+          <Text style={styles.title}>{localizationStrings?.LogOut}?</Text>
+          <Text style={styles.subtitle}>{localizationStrings.sure}?</Text>
 
           <TouchableOpacity style={styles.logoutButton} onPress={onSumbit}>
-            <Text style={styles.logoutText}>Log Out</Text>
+            <Text style={styles.logoutText}>{localizationStrings?.Save}</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

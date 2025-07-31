@@ -6,6 +6,7 @@ import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import useLegalinfor from './useLegalinfor';
 import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 const Legalinfor = () => {
     const {
@@ -20,7 +21,7 @@ const Legalinfor = () => {
             {isLoading ? <LoadingModal /> : null}
             <StatusBarComponent />
             <View style={{ marginHorizontal: 12, marginTop: 12 }}>
-                <CustomHeader imageSource={imageIndex.backNav} label="Legal information" />
+                <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.LegalInformation} />
             </View>
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 

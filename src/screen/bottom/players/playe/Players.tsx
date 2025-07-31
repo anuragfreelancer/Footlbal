@@ -14,6 +14,7 @@ import StartSectionModal from "../../../../compoent/StartSectionModal";
 import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 
 const Players = () => {
   const {
@@ -139,7 +140,7 @@ const [is,setIsLoading]= useState(false)
 
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
-        <Text style={styles.header}>Players</Text>
+        <Text style={styles.header}>{localizationStrings.Players}</Text>
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}
@@ -159,7 +160,7 @@ const [is,setIsLoading]= useState(false)
     onPress={handleOpenModal}
   >
     <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      Start Section ({selectedPlayerIds.length})
+     {localizationStrings?.StartSection}({selectedPlayerIds.length})
     </Text>
   </TouchableOpacity>
 
@@ -179,7 +180,7 @@ const [is,setIsLoading]= useState(false)
     }}
   >
     <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      End Section  
+    {localizationStrings?.endSection}
     </Text>
   </TouchableOpacity>
 </View>
@@ -193,7 +194,7 @@ const [is,setIsLoading]= useState(false)
             data={filterData}
             style={{ marginTop: 12 }}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<EmptyListComponent message="No players found" />}
+            ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <CommonCard

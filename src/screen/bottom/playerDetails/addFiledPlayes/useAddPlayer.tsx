@@ -5,6 +5,7 @@ import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { PlayerPostApi, PositioncCategory, Teamcategory, TrainingCategory } from '../../../../redux/Api/AuthApi';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';  
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 const useAddPlayer = () => {
   const [fullName, setFullName] = useState("");
@@ -41,65 +42,65 @@ const useAddPlayer = () => {
     let newErrors: any = {};
   
     if (!fullName.trim()) {
-      newErrors.fullName = "Full Name is required.";
+      newErrors.fullName = localizationStrings.namRequired;
       valid = false;
     }
   
     if (!injuryHistory.trim()) {
-      newErrors.injuryHistory = "Please select an injury history.";
+      newErrors.injuryHistory = localizationStrings?.selectinjury;
       valid = false;
     }
   
     if (!password.trim()) {
-      newErrors.password = "Password is required.";
+      newErrors.password = localizationStrings?.Passwordrequired;
       valid = false;
     } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long.";
+      newErrors.password = localizationStrings?.Passwordcharacters;
       valid = false;
     }
   
     // Email validation with regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = localizationStrings?.Emailrequired;
       valid = false;
     } else if (!emailRegex.test(email)) {
-      newErrors.email = "Please enter a valid email address.";
+      newErrors.email = localizationStrings?.validemail;
       valid = false;
     }
   
     if (!selectedOption) {
-      newErrors.selectedOption = "Please select a team.";
+      newErrors.selectedOption = localizationStrings?.selectteam;
       valid = false;
     }
   
     if (!selectedPosition) {
-      newErrors.selectedPosition = "Please select a position.";
+      newErrors.selectedPosition = localizationStrings?.Pleaseposition;
       valid = false;
     }
   
     if (!selectedTraining) {
-      newErrors.selectedTraining = "Please select a training type.";
+      newErrors.selectedTraining = localizationStrings?.Pleasetraining;
       valid = false;
     }
   
     if (!notes.trim()) {
-      newErrors.notes = "Performance notes are required.";
+      newErrors.notes = localizationStrings?.Performancerequired;
       valid = false;
     }
   
     if (!imagePrfile) {
-      newErrors.imagePrfile = "Profile image is required.";
+      newErrors.imagePrfile = localizationStrings?.Profilerequired;
       valid = false;
     }
   
     if (!dob) {
-      newErrors.dob = "Date of Birth is required.";
+      newErrors.dob = localizationStrings?.Daterequired;
       valid = false;
     }
   
     if (!playerId.trim()) {
-      newErrors.playerId = "Player ID is required.";
+      newErrors.playerId = localizationStrings?.Playerrequired,
       valid = false;
     }
   

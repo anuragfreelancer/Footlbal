@@ -62,7 +62,7 @@ export default function SignUp() {
                         backgroundColor: '#FFF',
                         padding: 15,
                         flex: 1,
-                        marginTop: hp(8)
+                        marginTop: hp(2)
                     }}>
                     <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
 

@@ -10,6 +10,7 @@ import ScreenNameEnum from "../../../routes/screenName.enum";
 import useHome from "./useHome";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
 
 const DashboardScreen = () => {
@@ -79,27 +80,28 @@ const DashboardScreen = () => {
 
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{getLogin?.userGetData?.user_name || ""}</Text>
-          <Text style={styles.userSubtitle}>Breach of the peace</Text>
+          <Text style={styles.userName}>{getLogin?.userGetData?.email || ""}</Text>
+          {/* <Text style={styles.userSubtitle}>Breach of the peace</Text> */}
         </View>
 
-        <TouchableOpacity style={styles.notificationIcon}
+        {/* <TouchableOpacity style={styles.notificationIcon}
           onPress={() => navigation.navigate(ScreenNameEnum.Notifications)}
         >
-          <Image source={notificationReceived ? imageIndex.Notification2 : imageIndex.Shape}
+          <Image source={imageIndex.ProfielImge}
             style={{
-              height: notificationReceived ? 44 : 22,
-              width: notificationReceived ? 44 : 22
+              height:44,
+              width:44
             }}
             resizeMode="contain"
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" />
         <FlatList
           showsVerticalScrollIndicator={false}
           data={chatMess}
-          ListEmptyComponent={<EmptyListComponent message="No chat history found" />}
+          ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
           keyExtractor={(item: any) => item.id}
           renderItem={({ item }: any) => (
             <TouchableOpacity style={styles.card}

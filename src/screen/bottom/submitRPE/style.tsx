@@ -43,7 +43,7 @@
     },
     cardWrapper: {
       marginBottom: 15,
-      borderRadius: 10,
+      borderRadius: 8,
       overflow: 'hidden',
       backgroundColor: 'white',
       shadowColor: '#000',
@@ -51,6 +51,9 @@
       shadowOffset: { width: 0, height: 2 },
       shadowRadius: 4,
       elevation: 3,
+      borderWidth:0.8,
+  
+      borderColor:"gray"
     },
     card: {
       flexDirection: 'row',

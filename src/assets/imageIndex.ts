@@ -67,7 +67,7 @@ export default {
   calenderBag: require('./images/calenderBag.png'),
   circleBak: require('./images/circleBak.png'),
   bagePng: require('./images/bagePng.png'),
-  circleleft: require('./images/circleleft.png'),
+  translatingcircleleft: require('./images/circleleft.png'),
   closeImg: require('./images/closeImg.png'),
   editLogo: require('./images/editLogo.png'),
   logut: require('./images/logut.png'),
@@ -85,5 +85,6 @@ export default {
   Shape: require('./images/Shape.png'),
   bubbleChat: require('./images/bubbleChat.png'),
   clocks: require('./images/clocks.png'),
+  translating: require('./images/translating.png'),
   // 
 }; 

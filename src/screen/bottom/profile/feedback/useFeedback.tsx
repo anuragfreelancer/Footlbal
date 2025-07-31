@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
  import { useSelector } from 'react-redux';
 import { FeedbackApicall } from '../../../../redux/Api/AuthApi';
 import { Alert } from 'react-native';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 const useFeedback = () => {
     const navigation = useNavigation();
   const [isLoading, setisLoading]   = useState(false);
@@ -11,7 +12,7 @@ const useFeedback = () => {
   const isLogin = useSelector((state: any) => state?.auth);
   const SendFeedback = async () => {
     if (!feedbackText.trim()) {
-      setErrorMessage("Please enter your feedback.");
+      setErrorMessage(localizationStrings?.feedback);
       return;
     } else {
       setErrorMessage(""); // Clear the error when input is valid

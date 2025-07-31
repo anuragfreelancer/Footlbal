@@ -5,6 +5,7 @@ import { Alert } from 'react-native';
 import ImagePicker from "react-native-image-crop-picker";
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';  
 import { GetProfile, UpdateProfile_Api } from '../../../../redux/Api/AuthApi';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 const useEdit = () => {
   const [isLoading, setisLoading] = useState()
   const dispatch = useDispatch();
@@ -46,8 +47,7 @@ const useEdit = () => {
   
       launchImageLibrary(options, (response) => {
         if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.errorCode) {
+         } else if (response.errorCode) {
           console.log('Image Picker Error: ', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const imageUri = response.assets?.[0]?.uri;
@@ -75,7 +75,7 @@ const useEdit = () => {
 
   const handleSubmit = async () => {
     if (fullName.trim() === "") {
-      setErrorMessage("Full Name is required.");
+      setErrorMessage(localizationStrings?.namRequired);
       return; // Stop execution if validation fails
     }
     try {

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { AttendanceApi, SumitRpfFrom } from '../../../redux/Api/AuthApi';
 import { Alert, Animated } from 'react-native';
 import { Platform } from 'react-native';
+import localizationStrings from '../../../compoent/Localization/Localization';
 
 const useSubmitRPE = () => {
     const navigation = useNavigation();
@@ -17,7 +18,7 @@ const useSubmitRPE = () => {
     const pan = useState(new Animated.Value(0))[0];
     const [errors, setErrors] = useState({});
     const [showTimePicker, setShowTimePicker] = useState(false);
-    const [formattedTime, setFormattedTime] = useState("Select Time");
+    const [formattedTime, setFormattedTime] = useState(localizationStrings.SelectTime);
     const [time, setTime] = useState(new Date());
     const [modalVisible, setModalVisible] = useState(true);
 
@@ -58,11 +59,11 @@ const useSubmitRPE = () => {
     const validateForm = (): boolean => {
         let formErrors: Record<string, string> = {};
 
-        if (!session.trim()) formErrors.session = "Session is required.";
-        if (!date.trim()) formErrors.date = "Date is required.";
-        if (!comments.trim()) formErrors.comments = "Comments cannot be empty.";
+        if (!session.trim()) formErrors.session = localizationStrings.Sessionrequired;
+        if (!date.trim()) formErrors.date = localizationStrings.Daterequired;
+        if (!comments.trim()) formErrors.comments =localizationStrings.Commentsbeempty;
         if (effort === undefined || effort === null || isNaN(Number(effort))) {
-            formErrors.effort = "Effort must be a valid number.";
+            formErrors.effort = localizationStrings?.Effort;
         }
 
         setErrors(formErrors);

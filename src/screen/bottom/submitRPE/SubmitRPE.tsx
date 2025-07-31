@@ -10,11 +10,12 @@ import axios from "axios";
  import { SafeAreaView } from "react-native-safe-area-context";
 import TimePickerModal from "../../../compoent/TimePickerModal";
 import AddAttendanceModal from "../../../compoent/AddAttendanceModal";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
 const SubmitRPE = () => {
     const {
         isLoading, setisLoading,
-        navigation,
+ 
         isLogin,
         handleSubmit,
         getEffortColor,
@@ -103,9 +104,9 @@ const SubmitRPE = () => {
             {isLoading ? <LoadingModal /> : null}
 
             <View style={styles.container}>
-                <Text style={styles.header}>Submit RPE</Text>
+                <Text style={styles.header}>{localizationStrings?.SubmitRPE}</Text>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Text style={styles.label}>Select Session:</Text>
+                    <Text style={styles.label}>{localizationStrings?.SelectSession}:</Text>
                     <View style={styles.radioGroup}>
                         {["Training", "Match"].map((item) => (
                             <TouchableOpacity
@@ -126,14 +127,14 @@ const SubmitRPE = () => {
                     </View>
                     {errors.session && <Text style={{ color: "red", marginTop: 10, }}>{errors.session}</Text>}
                     {/* Date Picker */}
-                    <Text style={styles.label}>Select Date:</Text>
+                    <Text style={styles.label}>{localizationStrings?.Daterequired}:</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
                         <TouchableOpacity
                             style={styles.datePicker}
                             onPress={() => setShowCalendar(true)}
                             activeOpacity={0.7}
                         >
-                            <Text>{date||"Select Date-"}</Text>
+                            <Text>{date|| localizationStrings.SelectTime}</Text>
                             <Image
                                 source={imageIndex.calender}
                                 style={{ height: 22, width: 22 ,marginLeft: 8}}
@@ -247,7 +248,7 @@ const SubmitRPE = () => {
 
                     <Text style={[styles.label, {
                         marginTop: 20
-                    }]}>Add Comments (Optional):</Text>
+                    }]}>{localizationStrings?.AddComments}</Text>
                     <View style={{
                         backgroundColor: "#F3F3F3", borderRadius: 20, padding: 10, marginTop: 20, height: 160,
                     }}>
@@ -265,7 +266,7 @@ const SubmitRPE = () => {
 
                     </View>
                     {errors.comments && <Text style={{ color: "red", marginTop: 10 }}>{errors.comments}</Text>}
-                    <Text style={{ color: "black", fontSize: 20, fontWeight: "700" }}>Training  Session </Text>
+                    <Text style={{ color: "black", fontSize: 20, fontWeight: "700" }}>{localizationStrings?.TrainingSession}</Text>
                     <FlatList
                         data={trainingData}
                         renderItem={renderItem}
@@ -283,7 +284,7 @@ const SubmitRPE = () => {
             </View>
               <View style={styles.buttView}>
                     <CustomButton
-                        title={'Submit'}
+                        title={localizationStrings.Submit}
                         onPress={() => handleSubmit()}
                     />
                 </View>

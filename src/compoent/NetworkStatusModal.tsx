@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Linking, Platform, Image } from 'react-native';
+import localizationStrings from './Localization/Localization';
 
 type Props = {
   isConnected: boolean | null;
@@ -42,7 +43,7 @@ const NetworkStatusModal: React.FC<Props> = ({
           </Text>
           {!isConnected && (
             <TouchableOpacity style={styles.button} onPress={openSettings}>
-              <Text allowFontScaling={false} style={styles.buttonText}>Go to Settings</Text>
+              <Text allowFontScaling={false} style={styles.buttonText}>{localizationStrings?.GotoSettings}</Text>
             </TouchableOpacity>
           )}
         </View>

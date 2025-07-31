@@ -4,13 +4,14 @@ import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import styles from './style';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 const Ourplatform = ({ navigation }:any) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <StatusBarComponent />
             <View style={{ marginHorizontal: 12, marginTop: 12 }}>
-                <CustomHeader imageSource={imageIndex.backNav} label="Our platform" />
+                <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings?.OurPlatform} />
             </View>
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
@@ -20,12 +21,12 @@ const Ourplatform = ({ navigation }:any) => {
                 </View>
 
                 {/* App About Details Section */}
-                <View style={styles.sectionContainer}>
+                {/* <View style={styles.sectionContainer}>
                     <Text style={styles.sectionTitle}>What is Our Platform?</Text>
                     <Text style={styles.sectionText}>
                         Our platform is a cutting-edge football management system designed for coaches, players, and teams. It provides real-time tracking, analytics, and insights to optimize training and performance.
                     </Text>
-                </View>
+                </View> */}
 
                 {/* App Usage Section */}
                 <View style={styles.sectionContainer}>

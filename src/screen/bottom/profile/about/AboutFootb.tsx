@@ -8,6 +8,7 @@ import useAboutFootb from './useAboutFootb';
 import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import localizationStrings from '../../../../compoent/Localization/Localization';
 
 const AboutFootb = () => {
 
@@ -23,7 +24,7 @@ const AboutFootb = () => {
             {isLoading ? <LoadingModal /> : null}
             <StatusBarComponent />
             <View style={{ marginHorizontal: 12,  }}>
-                <CustomHeader imageSource={imageIndex.backNav} label="About Football" />
+                <CustomHeader imageSource={imageIndex.backNav} label= {localizationStrings?.AboutFootball} />
             </View>
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 

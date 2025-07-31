@@ -81,6 +81,7 @@ import useCalendar from "./useCalendar";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import LoadingModal from "../../../utils/Loader";
 import styles from "./style";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
 const CustomCalendar = () => {
   const { players, isLoading, selectedDates, setSelectedDates } = useCalendar();
@@ -107,7 +108,7 @@ const CustomCalendar = () => {
     <SafeAreaView style={styles.container}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
-      <Text style={styles.header}>State</Text>
+      <Text style={styles.header}>{localizationStrings?.State}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <CalendarComponent onDateSelect={handleDateSelect} />
@@ -119,13 +120,13 @@ const CustomCalendar = () => {
           fontWeight: "700",
           marginTop: 15
         }}>
-          Players Attending Session
+ {localizationStrings?.PlayersAttendin}
         </Text>
         <FlatList
           style={{ marginTop: 10, padding: 15 }}
           data={filteredPlayers}
           showsVerticalScrollIndicator={false}
-          ListEmptyComponent={<EmptyListComponent message="No Players Found" />}
+          ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => (
             <CommonCard item={item} />

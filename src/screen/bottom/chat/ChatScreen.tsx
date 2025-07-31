@@ -7,6 +7,7 @@ import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import { ActivityIndicator } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
 const ChatScreen = () => {
 
@@ -67,7 +68,7 @@ const ChatScreen = () => {
                 <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={<EmptyListComponent message="No Chat found" />} // Common Empty Component
+                        ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />} // Common Empty Component
                         data={messages} renderItem={renderMessage} keyExtractor={(item) => item.id.toString()} />
 
                 </ScrollView>
@@ -75,7 +76,7 @@ const ChatScreen = () => {
                     <TextInput
                         style={styles.input}
                         placeholderTextColor="#999"
-                        placeholder="Write your message"
+                        placeholder={localizationStrings?.Write}
                         value={messageText}
                         onChangeText={setMessageText}
                     />

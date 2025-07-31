@@ -12,6 +12,7 @@ import useChange from "./useChange";
 import ErrorText from "../../../../compoent/ErrorText";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 
 
 
@@ -31,14 +32,14 @@ const ChangePassword = () => {
     <View style={{
       marginTop:11
     }}>
-      <CustomHeader imageSource={imageIndex.backNav} label="Change Password" />
+      <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.ChangePassword} />
       </View>
       <ScrollView style={styles.container}>
         <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
           <TextInputField
-            lable={"Current Password"}
+            lable={localizationStrings?.currentpass}
 
-            placeholder={'Current Password'}
+            placeholder={localizationStrings?.currentpass}
             firstLogo={true}
             text={credentials.currentPass}
             onChangeText={(value:any) => handleChange('currentPass', value)} // Ha
@@ -48,8 +49,8 @@ const ChangePassword = () => {
 
           <View style={{ marginTop: 12 }}>
             <TextInputField
-              lable={"New Password"}
-              placeholder={'New Password'}
+              lable={localizationStrings?.newpass}
+              placeholder={localizationStrings?.newpass}
               firstLogo={true}
               showEye={true}
               text={credentials.password}
@@ -60,10 +61,10 @@ const ChangePassword = () => {
           </View>
           <View style={{ marginTop: 12 }}>
             <TextInputField
-              lable={"Confirm Password"}
+              lable={localizationStrings?.confirmpass}
               onChangeText={(value:any) => handleChange('confirmPassword', value)} // Handles email input dynamically
               text={credentials.confirmPassword}
-              placeholder={'Confirm Password'}
+              placeholder={localizationStrings?.confirmpass}
               firstLogo={true}
               showEye={true}
               img={imageIndex.lock}
@@ -74,7 +75,7 @@ const ChangePassword = () => {
       </ScrollView>
       <View style={styles.butt}>
         <CustomButton
-          title={'Save'}
+          title={localizationStrings?.Save}
           onPress={() =>
             handleResetPass()
           }

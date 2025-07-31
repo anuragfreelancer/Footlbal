@@ -11,6 +11,7 @@ import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import moment from "moment";
 import LoadingModal from "../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
 
 const Messages = () => {
@@ -44,7 +45,7 @@ const Messages = () => {
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={filteredMessages}
-                    ListEmptyComponent={<EmptyListComponent message="No chat history found" />}
+                    ListEmptyComponent={<EmptyListComponent message={localizationStrings?.Nochat} />}
                     keyExtractor={(item: any) => item.id}
                     renderItem={({ item }: any) => (
                         <TouchableOpacity style={styles.messageContainer}

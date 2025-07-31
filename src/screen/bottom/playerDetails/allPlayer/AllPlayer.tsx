@@ -13,6 +13,7 @@ import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAllPlayer from "./useAllPlayer";
 import styles from "./style";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 
 const AllPlayer = () => {
   const {
@@ -69,7 +70,7 @@ const [is,setIsLoading]= useState(false)
       const response = await StartSection(params, setIsLoading);
   
       if (response?.status === '1') {
-        Alert.alert('✅ Success', 'Section started successfully!');
+        // Alert.alert('✅ Success', 'Section started successfully!');
         setSelectedPlayers([])
       }
     } catch (error) {
@@ -117,7 +118,7 @@ const [is,setIsLoading]= useState(false)
 
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
-        <Text style={styles.header}>Players</Text>
+        <Text style={styles.header}>{localizationStrings?.Players}</Text>
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}
@@ -133,7 +134,7 @@ const [is,setIsLoading]= useState(false)
             data={filterData}
             style={{ marginTop: 12 }}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<EmptyListComponent message="No players found" />}
+            ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <CommonCard

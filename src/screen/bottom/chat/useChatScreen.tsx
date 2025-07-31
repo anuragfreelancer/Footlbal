@@ -29,7 +29,7 @@ const useChatScreen = () => {
         sentByUser: true,
       },
     ]);
-    try {
+    try { 
        const response = await SendMessage(param,setisLoading);
        setMessageText(""),
          GetAbout();

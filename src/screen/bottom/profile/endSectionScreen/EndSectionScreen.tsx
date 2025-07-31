@@ -13,6 +13,7 @@ import LoadingModal from "../../../../utils/Loader";
 import usePlayers from "../../players/playe/usePlayers";
 import CustomHeader from "../../../../compoent/CustomHeader";
 import styles from "./style";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 
 const EndSectionScreen = () => {
   const {
@@ -37,7 +38,7 @@ const [is,setIsLoading]= useState(false)
   };
   const handleOpenModal = () => {
     if (selectedPlayerIds.length === 0) {
-      Alert.alert('Please select at least one player.');
+      Alert.alert(localizationStrings.pleaseS);
       return;
     }
 
@@ -47,7 +48,7 @@ const [is,setIsLoading]= useState(false)
   };
   const handleStartAPI = async ({ date, time }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert('Invalid Input', 'Date or Time is not valid.');
+      Alert.alert(localizationStrings?.date);
       return;
     }
   
@@ -137,7 +138,7 @@ const [is,setIsLoading]= useState(false)
             <StatusBarComponent />
 
             {is ? <LoadingModal /> : null}
-            <CustomHeader imageSource={imageIndex.backNav} label="My Team" />
+            <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
       <View style={[styles.container, { padding: 15 }]}>
         {/* <SearchBar
           value={searchPlaylist}
@@ -157,7 +158,7 @@ const [is,setIsLoading]= useState(false)
           onPress={handleOpenModal}
         >
           <Text style={{ fontWeight: 'bold', color: '#fff',fontSize:20 }}>
-          End Section  ({selectedPlayerIds.length})
+          {localizationStrings?.endSection}  ({selectedPlayerIds.length})
           </Text>
         </TouchableOpacity>
 
@@ -170,7 +171,7 @@ const [is,setIsLoading]= useState(false)
             data={filterData}
             style={{ marginTop: 12 }}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<EmptyListComponent message="No players found" />}
+            ListEmptyComponent={<EmptyListComponent message= {localizationStrings?.noplayers} />}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <CommonCard

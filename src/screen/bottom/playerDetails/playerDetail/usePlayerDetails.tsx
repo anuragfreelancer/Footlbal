@@ -46,7 +46,7 @@ const usePlayerDetails = () => {
       const result = await downloadResult.promise;
   
       if (result.statusCode === 200) {
-        Alert.alert('Success', 'PDF downloaded successfully!');
+        // Alert.alert('Success', 'PDF downloaded successfully!');
         console.log('Saved to:', downloadPath);
   
         // Open the downloaded PDF

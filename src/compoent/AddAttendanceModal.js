@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import localizationStrings from './Localization/Localization';
 
 const AddAttendanceModal = ({ visible, onConfirm,onClose }) => {
   return (
@@ -11,15 +12,15 @@ const AddAttendanceModal = ({ visible, onConfirm,onClose }) => {
     >
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.title}>Add Attendance</Text>
-          <Text style={styles.message}>Do you want to add attendance?</Text>
+          <Text style={styles.title}>{localizationStrings?.AddAttendance}</Text>
+          <Text style={styles.message}>{localizationStrings?.Doyou}?</Text>
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.yesButton} onPress={() => onConfirm('Yes')}>
-              <Text style={styles.buttonText}>Yes</Text>
+              <Text style={styles.buttonText}>{localizationStrings.Yes}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.noButton} onPress={onClose}>
-              <Text style={styles.buttonText}>No</Text>
+              <Text style={styles.buttonText}>{localizationStrings.No}</Text>
             </TouchableOpacity>
           </View>
         </View>
