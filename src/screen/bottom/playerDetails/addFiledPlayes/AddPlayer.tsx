@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, FlatList, Platform } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomButton from '../../../../compoent/CustomButton';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -11,6 +11,9 @@ import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
+import { Keyboard } from 'react-native';
 
 
 const AddPlayer = () => {
@@ -70,7 +73,19 @@ const AddPlayer = () => {
       }}>
         <CustomHeader imageSource={imageIndex.backNavs} label="Add Player" />
       </View>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      
+      <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 1 : 0} // Adjust offset as needed
+  >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled" // important to allow taps inside inputs
+        contentContainerStyle={{ flexGrow: 1 ,marginHorizontal:15 }}
+      >
+
         <View style={styles.profileContainer}>
           <Image
             resizeMode='cover'
@@ -209,7 +224,9 @@ const AddPlayer = () => {
         {errors?.notes && <Text style={[styles.redText, {
           marginTop: 5
         }]}>{errors?.notes}</Text>}
-      </ScrollView>
+          </ScrollView>
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
       <View style={styles.butt}>
         <CustomButton
           title={'Save'}

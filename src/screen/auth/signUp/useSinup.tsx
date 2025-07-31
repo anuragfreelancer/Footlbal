@@ -10,9 +10,9 @@ const useSignup = () => {
   const [dropOpen, setDropOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
   const [credentials, setCredentials] = useState({
-    email: 'coach12@gmail.com',
-    password: '12345678',
-    mobile: '987644',
+    email: '',
+    password: '',
+    mobile: '',
   });
   const handleChange = (field: string, value: string) => {
     setCredentials((prev: any) => ({ ...prev, [field]: value }));

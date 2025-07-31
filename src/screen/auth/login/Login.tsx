@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
+   Keyboard,
 } from 'react-native';
 import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,6 +21,10 @@ import useLogin from './useLogin';
 import LoadingModal from '../../../utils/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { KeyboardAvoidingView } from 'react-native';
+import { Platform } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login() {
   const {
@@ -53,7 +57,18 @@ export default function Login() {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarCompoent />
-      <ScrollView showsVerticalScrollIndicator={false} >
+      <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 0} // Adjust offset as needed
+  >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled" // important to allow taps inside inputs
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+
         <View
           style={{
             backgroundColor: '#FFF',
@@ -103,7 +118,7 @@ export default function Login() {
                 alignSelf: 'center',
                 marginTop: 20,
               }}>
-              <Text
+                {role === "Coach" &&   <Text
                 style={{
                   color: 'rgba(51, 75, 72, 1)',
                   fontSize: 16,
@@ -111,7 +126,8 @@ export default function Login() {
                   lineHeight: 18,
                 }}>
                 Forgot your password?
-              </Text>
+              </Text>}
+             
             </TouchableOpacity>
           </View>
           <CustomButton
@@ -119,7 +135,8 @@ export default function Login() {
             onPress={() => loginFunctiom()}
             buttonStyle={{ width: "100%", marginTop: 28 }}
           />
-          <Text style={{ lineHeight: 16, marginTop: 28, marginBottom: 12, fontSize: 16, color: "rgba(0, 0, 0, 1)", textAlign: "center", fontWeight: "500" }}>OR</Text>
+          {role === "Coach" &&           <Text style={{ lineHeight: 16, marginTop: 28, marginBottom: 12, fontSize: 16, color: "rgba(0, 0, 0, 1)", textAlign: "center", fontWeight: "500" }}>OR</Text>
+ }
           {/* <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
             <Image
               source={imageIndex.googlelogin}
@@ -153,8 +170,10 @@ export default function Login() {
             </TouchableOpacity>
           </View>
         ) : null}
-
       </ScrollView>
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 }

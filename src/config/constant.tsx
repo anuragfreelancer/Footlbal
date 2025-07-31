@@ -32,7 +32,8 @@ export const constant = {
   Getfaq:"get_faq",
   AddContact_us:"add_contact_us"
 };
-export const base_url = 'https://server-php-8-3.technorizen.com/Football/api/';
+export const base_url = 'https://kmmps.store/api/';
+// export const base_url = 'https://server-php-8-3.technorizen.com/Football/api/';
 export const image_url = 'https://server-php-8-3.technorizen.com/Football/api/';
 
 // add_coach_session

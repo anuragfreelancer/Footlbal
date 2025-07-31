@@ -3,8 +3,7 @@ import {
   Text,
   Image,
   ScrollView,
-  SafeAreaView,
-} from 'react-native';
+ } from 'react-native';
 import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
@@ -17,6 +16,11 @@ import ResponsiveSize from '../../../utils/ResponsiveSize';
 import useForgot from './useForgot';
 import ErrorText from '../../../compoent/ErrorText';
 import LoadingModal from '../../../utils/Loader';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView } from 'react-native';
+import { Platform } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Keyboard } from 'react-native';
 
 export default function PasswordReset() {
   const { credentials,
@@ -29,7 +33,17 @@ export default function PasswordReset() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <StatusBarCompoent />
-      <ScrollView showsVerticalScrollIndicator={false} >
+      <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 0} // Adjust offset as needed
+  >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled" // important to allow taps inside inputs
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         {isLoading ? <LoadingModal /> : null}
         <View style={{ marginTop: 18 }}>
           <CustomHeader imageSource={imageIndex.backorange} />
@@ -86,8 +100,16 @@ export default function PasswordReset() {
             }} />} */}
            
           </View>
-          <View style={{
-            justifyContent: 'flex-start', marginBottom: 11
+      
+
+        </View>
+        </ScrollView>
+        
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
+  <View style={{
+            justifyContent: 'flex-start', marginBottom: 11 ,
+            marginHorizontal:12
           }}>
             <CustomButton
               title={'Next'}
@@ -98,10 +120,6 @@ export default function PasswordReset() {
               buttonStyle={{ width: "100%", marginTop: 28 }}
             />
           </View>
-
-        </View>
-
-      </ScrollView>
     </SafeAreaView>
   );
 }

@@ -5,8 +5,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
-    SafeAreaView,
-} from 'react-native';
+ } from 'react-native';
 import React from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
@@ -20,6 +19,11 @@ import ScreenNameEnum from '../../../routes/screenName.enum';
 import useSignup from './useSinup';
 import LoadingModal from '../../../utils/Loader';
 import DropdownModal from '../../../compoent/DropdownModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAvoidingView } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Keyboard } from 'react-native';
+import { Platform } from 'react-native';
 
 export default function SignUp() {
     const {
@@ -46,7 +50,13 @@ export default function SignUp() {
             <StatusBarCompoent />
             {isLoading ? <LoadingModal /> : null}
 
-            <ScrollView showsVerticalScrollIndicator={false} >
+            <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+    >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                 <View
                     style={{
                         backgroundColor: '#FFF',
@@ -173,7 +183,9 @@ export default function SignUp() {
                     </TouchableOpacity>
                 </View>
 
-            </ScrollView>
+                </ScrollView>
+        </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
             <DropdownModal
                 visible={dropOpen}
                 options={options}
