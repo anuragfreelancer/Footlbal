@@ -4,9 +4,10 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: { flex: 1, marginHorizontal: 15, marginBottom: 40, },
    profileContainer: { alignItems: 'center', marginTop: 20 },
-  profileImage: { width: 70, height: 70, borderRadius: 70 },
+  profileImage: { width: 80, height: 80, borderRadius: 80 },
   sectionTitle: { fontSize: 16, fontWeight: '700', marginTop: 18, marginBottom: 10, color: "#000000" },
-  input: { borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8', },
+  input: { height:55,
+    justifyContent:"center", borderWidth: 1, borderColor: '#F7F8F8', padding: 7, borderRadius: 10, marginBottom: 10, backgroundColor: '#F7F8F8', },
   dropdownContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 10, backgroundColor: '#f8f8f8' },
   picker: { height: 50, width: '100%' },
   radioButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, },

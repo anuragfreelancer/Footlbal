@@ -6,16 +6,15 @@ import {
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
-import styles from "./style";
-import usePlayers from "./usePlayers";
-import EmptyListComponent from "../../../../compoent/EmptyListComponent";
+  import EmptyListComponent from "../../../../compoent/EmptyListComponent";
 import SearchBar from "../../../../compoent/SearchBar";
-import StartSectionModal from "../../../../compoent/StartSectionModal";
-import { StartSection } from "../../../../redux/Api/AuthApi";
+ import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useAllPlayer from "./useAllPlayer";
+import styles from "./style";
 
-const Players = () => {
+const AllPlayer = () => {
   const {
  
     isLoading,  
@@ -23,7 +22,7 @@ const Players = () => {
     isLogin,
     searchPlaylist, setSearchPlaylist,
     filterData, setFilterData
-  } = usePlayers();
+  } = useAllPlayer();
 const [is,setIsLoading]= useState(false)
    const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -90,11 +89,7 @@ const [is,setIsLoading]= useState(false)
       <TouchableOpacity
         style={[
           styles.card,
-          isSelected && {
-            borderColor: '#A0D803',
-            borderWidth: 2,
-            backgroundColor: '#F2FFE2'
-          }
+         
         ]}
         onPress={onPress}
       >
@@ -109,24 +104,7 @@ const [is,setIsLoading]= useState(false)
               <Text style={styles.position}>Forward</Text>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={onPress}
-            style={{
-              height: 22,
-              width: 22,
-              borderWidth: 2,
-              borderColor: isSelected ? '#A0D803' : '#ccc',
-              backgroundColor: isSelected ? '#A0D803' : '#fff',
-              borderRadius: 4,
-              marginRight: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {isSelected && (
-              <Text style={{ color: 'white', fontSize: 16 }}>✓</Text>
-            )}
-          </TouchableOpacity>
+          
 
         </View>
       </TouchableOpacity>
@@ -144,45 +122,7 @@ const [is,setIsLoading]= useState(false)
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}
         />
- <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: 'rgba(160, 216, 3, 1)', // greenish tone for "Start"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={handleOpenModal}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      Start Section ({selectedPlayerIds.length})
-    </Text>
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: '#F44336', // reddish tone for "End"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={()=>{
-      navigation.navigate(ScreenNameEnum.EndSectionScreen)
-    }}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-      End Section  
-    </Text>
-  </TouchableOpacity>
-</View>
+ 
 
         {isLoading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -198,28 +138,26 @@ const [is,setIsLoading]= useState(false)
             renderItem={({ item }) => (
               <CommonCard
                 item={item}
-                onPress={() => togglePlayerSelect(item.id)}
+                 onPress={() => navigation.navigate(ScreenNameEnum.PlayerDetails,{
+                    item:item
+                 })}
+
                 isSelected={selectedPlayerIds.includes(item.id)}
               />
             )}
           />
         )}
 
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={styles.fab}
           onPress={() => navigation.navigate(ScreenNameEnum.AddPlayer)}
         >
           <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-      <StartSectionModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        selectedPlayers={selectedPlayers}
-        onStart={handleStartAPI}
-      />
+      
     </SafeAreaView>
   );
 };
 
-export default Players;
+export default AllPlayer;

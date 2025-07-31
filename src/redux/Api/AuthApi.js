@@ -628,7 +628,7 @@ const PlayerPostEditApi = async (
         const formData = new FormData();
         if (param?.addImage) {
             formData.append("image", {
-                uri: param?.addImage?.path,
+                uri: param?.addImage,
                 type: 'image/jpeg',
                 name: 'image.jpg'
             });

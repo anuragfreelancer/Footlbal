@@ -2,12 +2,13 @@ import React from "react";
 import {
   View,
   ScrollView,
-  SafeAreaView,
-  TextInput,
+   TextInput,
   StyleSheet,
   Text,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -15,6 +16,7 @@ import CustomHeader from "../../../../compoent/CustomHeader";
 import CustomButton from "../../../../compoent/CustomButton";
 import useFeedback from "./useFeedback";
 import LoadingModal from "../../../../utils/Loader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Feedback = () => {
   const {
@@ -28,42 +30,47 @@ const Feedback = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {isLoading ? <LoadingModal /> : null}
+      {isLoading && <LoadingModal />}
       <StatusBarComponent />
+
       <CustomHeader
         imageSource={imageIndex.backNav}
-        label="Send your feedback"
+        label="Send Feedback"
       />
+
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          <Text style={styles.heading}>Tell us what you think</Text>
-          <Text style={styles.subheading}>
-            Help us improve by sharing your experience.
-          </Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            contentContainerStyle={styles.contentContainer}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Text style={styles.title}>We'd love your thoughts</Text>
+            <Text style={styles.subtitle}>
+              Let us know what we can improve or what you enjoyed.
+            </Text>
 
-          <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder="Write your feedback here..."
-              placeholderTextColor="#aaa"
-              style={styles.textInput}
-              multiline
-              numberOfLines={6}
-              value={feedbackText}
-              onChangeText={setfeedbackText}
-            />
-          </View>
-          {errorMessage ? (
-            <Text style={styles.errorText}>{errorMessage}</Text>
-          ) : null}
-        </ScrollView>
+            <View style={styles.inputBox}>
+              <TextInput
+                placeholder="Write your feedback here..."
+                placeholderTextColor="#999"
+                style={styles.textInput}
+                multiline
+                numberOfLines={6}
+                value={feedbackText}
+                onChangeText={setfeedbackText}
+              />
+            </View>
 
-        <View style={styles.buttonContainer}>
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
+          </ScrollView>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.buttonWrapper}>
           <CustomButton title="Submit" onPress={SendFeedback} />
         </View>
       </KeyboardAvoidingView>
@@ -74,37 +81,36 @@ const Feedback = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
   },
-  scrollViewContent: {
+  contentContainer: {
     flexGrow: 1,
-    paddingHorizontal: 15,
-    paddingTop: 24,
+    paddingHorizontal: 20,
+    paddingTop: 30,
+    paddingBottom: 10,
   },
-  heading: {
-    fontSize: 22,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 8,
-    marginTop:28
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#222",
+    marginBottom: 10,
   },
-  subheading: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 20,
+  subtitle: {
+    fontSize: 15,
+    color: "#555",
+    marginBottom: 25,
   },
-  inputWrapper: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 12,
+  inputBox: {
+    backgroundColor: "#f7f7f7",
+    borderRadius: 14,
+    padding: 14,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 3,
-    borderColor: "#ddd",
+    elevation: 2,
+    borderColor: "#ccc",
     borderWidth: 1,
-    marginTop:15
   },
   textInput: {
     fontSize: 16,
@@ -114,13 +120,15 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 13,
+    marginTop: 8,
   },
-  buttonContainer: {
+  buttonWrapper: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
-    backgroundColor: "#f9f9f9",
+    paddingVertical: 20,
+    backgroundColor: "#ffffff",
+    borderTopWidth: 0.5,
+    borderTopColor: "#eee",
   },
 });
 

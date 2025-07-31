@@ -29,15 +29,19 @@ const styles = StyleSheet.create({
     sectionContainer: {
         padding: 15,
         marginBottom: 15,
+        backgroundColor: '#A0D803',
+         textAlign: 'center',
+        borderRadius: 15,
+        height:55,
+        justifyContent:"center" ,
+        marginHorizontal:15 ,
+        alignItems:"center"
     },
     sectionTitle: {
         fontSize: 13,
         fontWeight: 'bold',
         color: 'black',
-        backgroundColor: '#A0D803',
-        padding: 4,
-        textAlign: 'center',
-        borderRadius: 20,
+   
     },
     sectionText: {
         fontSize: 14,

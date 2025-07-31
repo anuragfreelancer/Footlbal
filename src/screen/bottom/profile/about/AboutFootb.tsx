@@ -22,19 +22,22 @@ const AboutFootb = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             {isLoading ? <LoadingModal /> : null}
             <StatusBarComponent />
-            <View style={{ marginHorizontal: 12, marginTop: 12 }}>
+            <View style={{ marginHorizontal: 12,  }}>
                 <CustomHeader imageSource={imageIndex.backNav} label="About Football" />
             </View>
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
-                 <View style={styles.logoContainer}>
+                 {/* <View style={styles.logoContainer}>
                     <Image source={imageIndex.app} style={styles.logo} />
                 </View>
 
                  <View style={styles.sectionContainer}>
                     <Text style={styles.sectionTitle}>App About Details</Text>
 
-                </View>
+                </View> */}
+                <View style={{
+                    marginHorizontal:18
+                }}>
                 {AboutData &&
                     <HTML
                         source={{ html: AboutData?.description || '<p>No content available</p>' }}
@@ -42,7 +45,7 @@ const AboutFootb = () => {
                         tagsStyles={styles.htmlStyles}
                     />
                 }
-
+</View>
             </ScrollView>
         </SafeAreaView>
 

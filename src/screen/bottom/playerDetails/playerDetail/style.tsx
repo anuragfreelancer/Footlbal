@@ -3,7 +3,7 @@ import {   StyleSheet } from 'react-native';
       
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
-  headerContainer: { flexDirection: 'row', alignItems: 'center', padding: 5,marginTop:25 },
+  headerContainer: { flexDirection: 'row', alignItems: 'center', padding: 5,},
   backIcon: { width: 24, height: 24, tintColor: '#000' },
   headerTitle: { fontSize: 20, fontWeight: 'bold', marginLeft: 10, color: '#000' },
   profileContainer: { alignItems: 'center', marginVertical: 20 },

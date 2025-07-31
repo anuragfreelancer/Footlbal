@@ -28,12 +28,9 @@ const Legalinfor = () => {
                 <View style={styles.logoContainer}>
                     <Image source={imageIndex.app} style={styles.logo} />
                 </View>
-                {privacyData?.length != 0 && (
-                    <View style={styles.sectionContainer}>
-                        <Text style={styles.sectionTitle}>Policies</Text>
-
-                    </View>
-                )}
+                <View style={{
+                    marginHorizontal:18
+                }}>
  
                 {privacyData &&
                     <HTML
@@ -41,7 +38,7 @@ const Legalinfor = () => {
                         contentWidth={width}
                         tagsStyles={styles.htmlStyles}
                     />
-                }
+                }</View>
                 {/* App Usage Section */}
 
             </ScrollView>

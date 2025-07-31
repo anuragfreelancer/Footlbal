@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView,   ActivityIndicator } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import CustomButton from '../../../../compoent/CustomButton';
@@ -7,6 +7,7 @@ import ScreenNameEnum from '../../../../routes/screenName.enum';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import usePlayerDetails from './usePlayerDetails';
 import styles from './style';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const PlayerDetails = () => {
@@ -97,28 +98,7 @@ const formattedDate = formatDate(item?.dob);
                     <Text style={styles.notesTitle}>Coach Notes</Text>
                     <Text style={styles.notesText}>{item?.player_details}</Text>
                 </View>
-                {isLogin?.userData?.type === "Coach" ? (
-                      <View style={styles.butt}>  
-
-
-                      {loading  ? (
-                        <ActivityIndicator size="large" color="#0000ff" style={{
-                            marginTop: 20,
-
-                        }} />
-                      ):(
-                        <CustomButton
-                        title={'Export Report'}
-                        // onPress={downloadVideo
-                        // }
-                        // onPress={() => navigation.navigate(ScreenNameEnum.TabNavigator)
-                        // }
-                        buttonStyle={{ width: "100%", marginTop: 28 }}
-                    />
-                      )}
-                     
-                  </View>
-                ) : null}
+              
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity

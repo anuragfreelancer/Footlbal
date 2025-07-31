@@ -33,6 +33,7 @@ import Notifications from "../screen/bottom/notifications/Notifications";
  import TrainingFedBack from "../screen/bottom/trainingFedBack/TrainingFedBack";
 import StartTrainingFed from "../screen/bottom/startTrainingFed/StartTrainingFed";
 import EndSectionScreen from "../screen/bottom/profile/endSectionScreen/EndSectionScreen";
+import AllPlayer from "../screen/bottom/playerDetails/allPlayer/AllPlayer";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -103,7 +104,7 @@ const _routes = () => {
       // },
       {
         name: ScreenNameEnum.Reports,
-        Component: isLogin?.userData?.type != "Coach" ? Reports : Players,
+        Component: isLogin?.userData?.type != "Coach" ? Reports : AllPlayer,
         // Component: Reports,
         label: isLogin?.userData?.type != "Coach" ? 'Performance' : 'Reports',
         logo: imageIndex.reports,
