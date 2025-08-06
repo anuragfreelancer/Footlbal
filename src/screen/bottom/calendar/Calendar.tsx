@@ -73,7 +73,7 @@
 // export default CustomCalendar;
 
 import React, { useCallback, useMemo } from "react";
-import { View, Text, SafeAreaView, FlatList, ScrollView } from "react-native";
+import { View, Text, FlatList, ScrollView } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import CalendarComponent from "../../../compoent/CalendarComponent";
 import CommonCard from "../../../compoent/CommonCard";
@@ -82,6 +82,7 @@ import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import LoadingModal from "../../../utils/Loader";
 import styles from "./style";
 import localizationStrings from "../../../compoent/Localization/Localization";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CustomCalendar = () => {
   const { players, isLoading, selectedDates, setSelectedDates } = useCalendar();

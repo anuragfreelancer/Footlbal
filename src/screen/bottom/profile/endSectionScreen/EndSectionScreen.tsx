@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-  SafeAreaView, ActivityIndicator, Alert
+ ActivityIndicator, Alert
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -14,6 +14,7 @@ import usePlayers from "../../players/playe/usePlayers";
 import CustomHeader from "../../../../compoent/CustomHeader";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const EndSectionScreen = () => {
   const {
@@ -138,7 +139,9 @@ const [is,setIsLoading]= useState(false)
             <StatusBarComponent />
 
             {is ? <LoadingModal /> : null}
-            <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
+            <CustomHeader  mainView={{
+              left:11
+            }} imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
       <View style={[styles.container, { padding: 15 }]}>
         {/* <SearchBar
           value={searchPlaylist}
