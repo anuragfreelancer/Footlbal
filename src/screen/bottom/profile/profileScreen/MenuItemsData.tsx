@@ -41,8 +41,10 @@ const MenuItems = [
     // { title: "Our Platform", icon: imageIndex.about, screen: ScreenNameEnum.Ourplatform },
     // { title: "Help Centre", icon: imageIndex.helpp, screen: "HelpCentre" },
     { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
-    { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
+
+    { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
+
   ];
 
   const PlayData = [
@@ -51,8 +53,8 @@ const MenuItems = [
      { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
      { title:  localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
      { title:  localizationStrings.ChatMessages, icon: imageIndex.bubbleChat,  screen: ScreenNameEnum.Messages  },
-     { title:  localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
      { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
+     { title:  localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
 
   ];
 

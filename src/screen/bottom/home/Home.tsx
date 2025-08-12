@@ -20,7 +20,8 @@ const DashboardScreen = () => {
     setImgloading,
     navigation,
     chatMess,
-
+    getCoach_session,
+    getUser,
   } = useHome();
   const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
@@ -47,6 +48,33 @@ const DashboardScreen = () => {
   //       }
   //     });
   // }, []);
+
+  const renderItem = ({ item }) => {
+    const isOngoing = item.status === "Start";
+    return (
+      <View style={[styles.card, isOngoing && styles.activeCard]}>
+        <View style={styles.row}>
+          <Text style={styles.label}>Date:</Text>
+          <Text style={styles.value}>{item.session_start_date}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Start Time:</Text>
+          <Text style={styles.value}>{item.session_start_time}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>End Time:</Text>
+          <Text style={styles.value}>
+            {item.session_end_time || "Ongoing"}
+          </Text>
+        </View>
+        <View style={styles.statusRow}>
+          <Text style={[styles.status, isOngoing ? styles.activeStatus : styles.endStatus]}>
+            {isOngoing ? "🟢 Ongoing" : "🔴 Ended"}
+          </Text>
+        </View>
+      </View>
+    );
+  };
 
 
   return (
@@ -98,7 +126,7 @@ const DashboardScreen = () => {
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" />
-        <FlatList
+        {/* <FlatList
           showsVerticalScrollIndicator={false}
           data={chatMess}
           ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
@@ -122,7 +150,20 @@ const DashboardScreen = () => {
 
             </TouchableOpacity>
           )}
-        />
+        /> */}
+        <Text>{localizationStrings.StartSection}</Text>
+         <FlatList
+      data={getCoach_session}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      contentContainerStyle={{ padding: 16 }}
+    />
+         <FlatList
+      data={getUser}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      contentContainerStyle={{ padding: 16 }}
+    />
       </ScrollView>
     </SafeAreaView>
   );

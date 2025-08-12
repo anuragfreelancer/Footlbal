@@ -65,7 +65,7 @@ const MyTeam = () => {
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                console.log("item", item),
+                console.log("item --- ", item),
                 <TouchableOpacity style={styles.card}
                 //   onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen,{
                 //     item:item

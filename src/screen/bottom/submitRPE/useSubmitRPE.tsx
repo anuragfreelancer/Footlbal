@@ -25,9 +25,6 @@ const useSubmitRPE = () => {
   
 
     const handleConfirm = async (type:any) => {
-        setModalVisible(false);
-        
-
         try {
             const params = {
                 userId: isLogin?.userData?.id,
@@ -38,15 +35,21 @@ const useSubmitRPE = () => {
             };
             const response = await AttendanceApi(params, setisLoading);
             if (response) {
+                setModalVisible(false);
+
                 setSession("");
                 setDate("");
                 setComments("")
             }
         } catch (error) {
+            setModalVisible(false);
+
             console.error("API Call Failed:", error);
             // Show an error message to the user
         } finally {
             setisLoading(false); // Stop loading after API response/error
+            setModalVisible(false);
+
         }
     };
   
@@ -72,8 +75,7 @@ const useSubmitRPE = () => {
     };
 
     const handleSubmit = async () => {
-        console.log("time", time)
-        if (!validateForm()) return;
+         if (!validateForm()) return;
         if (!time || time === "Select Time") {
              Alert.alert("Validation", "Please select a time.");
              return;

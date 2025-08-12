@@ -1147,6 +1147,82 @@ const GetAllChatMessage = async (setLoading, userId) => {
         setLoading(false);
     }
 };
+const GetCoachSession = async (setLoading, userId) => {
+    try {
+      setLoading(true);
+  
+      const response = await fetch(
+        `${base_url}${constant.get_coach_session}?user_id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+  
+      const resText = await response.text();
+  
+      try {
+        const responseData = JSON.parse(resText);
+        console.log("API Response:", responseData);
+  
+        if (responseData.status == 1) {
+          return { userGetData: responseData.result };
+        } else {
+          console.error("API returned error status:", responseData);
+          return null;
+        }
+      } catch (jsonError) {
+        console.error("JSON Parsing Error:", jsonError, resText);
+        return null;
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+const Get_user_by_id = async (setLoading, userId) => {
+    try {
+      setLoading(true);
+  
+      const response = await fetch(
+        `${base_url}${constant.get_user_by_id}?user_id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+  
+      const resText = await response.text();
+  
+      try {
+        const responseData = JSON.parse(resText);
+        console.log("API Response:", responseData);
+  
+        if (responseData.status == 1) {
+          return { userGetData: responseData.result };
+        } else {
+          console.error("API returned error status:", responseData);
+          return null;
+        }
+      } catch (jsonError) {
+        console.error("JSON Parsing Error:", jsonError, resText);
+        return null;
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
 
 
@@ -1334,4 +1410,4 @@ const AttendanceApi = async (
     }
 };
 
-export { SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+export {GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
