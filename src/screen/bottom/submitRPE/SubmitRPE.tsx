@@ -95,7 +95,7 @@ const SubmitRPE = () => {
             </View>
         );
     }
-    const handlePress = (id) => {
+    const handlePress = (id:any) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpandedItemId(prevId => (prevId === id ? null : id));
     };
@@ -266,7 +266,7 @@ const SubmitRPE = () => {
 
                     </View>
                     {errors.comments && <Text style={{ color: "red", marginTop: 10 }}>{errors.comments}</Text>}
-                    <Text style={{ color: "black", fontSize: 20, fontWeight: "700" }}>{localizationStrings?.TrainingSession}</Text>
+                    {/* <Text style={{ color: "black", fontSize: 20, fontWeight: "700" }}>{localizationStrings?.TrainingSession}</Text>
                     <FlatList
                         data={trainingData}
                         renderItem={renderItem}
@@ -277,7 +277,7 @@ const SubmitRPE = () => {
                             marginHorizontal: 1
                         }}
                         showsVerticalScrollIndicator={false}
-                    />
+                    /> */}
                 </ScrollView>
               
              

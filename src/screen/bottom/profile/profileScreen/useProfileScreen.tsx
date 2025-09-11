@@ -19,7 +19,7 @@ import { successToast } from '../../../../utils/customToast';
         index: 0,
         routes: [{ name: ScreenNameEnum.SPLASH_SCREEN }],
       });
-      successToast('Logout Successful');
+      successToast('Successful');
     };
   return {
     modal, setModal ,

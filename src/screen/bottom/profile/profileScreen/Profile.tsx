@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, FlatList, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -12,6 +12,9 @@ import ScreenNameEnum from "../../../../routes/screenName.enum";
 import { SafeAreaView } from "react-native-safe-area-context"; 
 import LanguageModal from "../../../../compoent/LanguageModal";
 import localizationStrings from "../../../../compoent/Localization/Localization";
+import DeleteConfirmModal from "../../../../compoent/DeleteConfirmModal";
+import { DelliteApi, UpdateProfile_Api } from "../../../../redux/Api/AuthApi";
+import LoadingModal from "../../../../utils/Loader";
 
 const Profile = () => {
 
@@ -23,6 +26,7 @@ const Profile = () => {
   } = useProfileScreen();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedLang, setSelectedLang] = useState('en');
+  const [isLoading, setisLoading] = useState(false);
 
   const handleLanguageSelect = (lang) => {
     setSelectedLang(lang);
@@ -40,6 +44,9 @@ const Profile = () => {
           
           else if (screen == "Language"){
             setModalVisible(true)
+          } 
+          else if (screen =="delete"){
+            setShowDelete(true)
           }
           else {
             navigation.navigate(screen);
@@ -65,12 +72,42 @@ const Profile = () => {
       </TouchableOpacity>
     );
   };
+  const [showDelete, setShowDelete] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    setLoading(true);
+    handleSubmit()
+    // simulate API call
+    
+  };
+  const handleSubmit = async () => {
+     
+    try {
+      const params = {
+      
+        userId: getLogin?.userGetData.id,
+      
+         navigation: navigation
+      };
+      const response = await DelliteApi(params, setisLoading);
+      if(response){
+        setShowDelete(false)
+        handleLogout()
+      }
+
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
   return (
     <SafeAreaView style={{
       flex: 1,
       backgroundColor: "white"
     }}>
       <StatusBarComponent />
+      {isLoading ? <LoadingModal /> : null}
+
       <Text style={styles.header}>{localizationStrings?.Profile}</Text>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={styles.profileHeader}
@@ -126,6 +163,17 @@ const Profile = () => {
        visible={isModalVisible}
         onClose={() => setModalVisible(false)}
         onSelectLanguage={handleLanguageSelect}
+      />
+       <DeleteConfirmModal
+        visible={showDelete}
+        onCancel={() => setShowDelete(false)}
+        onConfirm={handleConfirmDelete}
+        title={localizationStrings?.DeleteAccount}
+        message={localizationStrings?.Are}
+        confirmText={localizationStrings?.YesDelete}
+        cancelText={localizationStrings.No}
+        // loading={loading}
+        destructive={true}
       />
       </ScrollView>
     </SafeAreaView>

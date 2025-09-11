@@ -24,9 +24,12 @@ const LoginUserApi = async (
             headers: myHeaders,
             body: formdata,
         };
+        console.log("formdata",formdata)
         const respons = await fetch(`${base_url}${constant.Login}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
+                console.log("res",res)
+
                 const response = JSON.parse(res)
                 if (response?.status == '1') {
                     setLoading(false)
@@ -295,6 +298,77 @@ const UpdateProfile_Api = async (
         );
     }
 };
+
+const DelliteApi = async (userId, setLoading) => {
+    try {
+      setLoading(true);
+      const url = `${base_url}logout?user_id=${"7"}`;
+  
+      const response = await fetch(url, {
+        method: 'GET',  // ya POST agar API accept karti hai query params ke sath
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+  
+      const resJson = await response.json();
+  console.log("resJson",resJson)
+      if (resJson.status === '1') {
+        successToast(resJson.message);
+        setLoading(false);
+        // navigation or other logic
+        return resJson;
+      } else {
+        errorToast(resJson.message || 'Something went wrong');
+        setLoading(false);
+        return resJson;
+      }
+    } catch (error) {
+      setLoading(false);
+      errorToast('Network error');
+      console.error(error);
+      return null;
+    }
+  };
+  
+// const DelliteApi = async (param, setLoading) => {
+//     try {
+//       setLoading(true);
+//       const myHeaders = new Headers();
+//       myHeaders.append('Accept', 'application/json');
+  
+//       const formData = new FormData();
+//       formData.append('user_id', param?.userId);
+  
+//       const requestOptions = {
+//         method: 'POST',
+//         headers: myHeaders,
+//         body: formData,
+//       };
+  
+//       const response = await fetch(`${base_url}${constant.updateProfile}`, requestOptions);
+  
+//       const resText = await response.text();
+//       const resJson = JSON.parse(resText);
+  
+//       if (resJson.status === '1') {
+//         successToast(resJson.message);
+//         param.navigation.goBack();
+//         setLoading(false);
+//         return resJson;
+//       } else {
+//         errorToast(resJson.message || resJson.error || 'Something went wrong');
+//         setLoading(false);
+//         return resJson;
+//       }
+//     } catch (error) {
+//       setLoading(false);
+//       errorToast('Network error');
+//       console.error('DeleteApi error:', error);
+//       return null;
+//     }
+//   };
+  
 
 const StartSection = async (
     param,
@@ -858,6 +932,7 @@ const SumitRpfFrom = async (
             headers: myHeaders,
             body: formData,
         };
+        console.log("formData",formData)
         const respons = await fetch(`${base_url}${constant.addubmitRPF}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
@@ -1410,4 +1485,4 @@ const AttendanceApi = async (
     }
 };
 
-export {GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+export {DelliteApi, GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  

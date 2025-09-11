@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, FlatList, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, FlatList, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import useChatScreen from "./useChatScreen";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
@@ -53,45 +53,61 @@ const ChatScreen = () => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 ,backgroundColor:"white"}}>
-            <StatusBarComponent />
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={imageIndex.backorange} style={styles.backIcon} />
-                    </TouchableOpacity>
-                    <Image source={{ uri: userName?.image }} style={styles.userImage} />
-                    <View>
-                        <Text style={styles.userName}>{userName?.user_name}</Text>
-                    </View>
-                </View>
-                <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />} // Common Empty Component
-                        data={messages} renderItem={renderMessage} keyExtractor={(item) => item.id.toString()} />
-
-                </ScrollView>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholderTextColor="#999"
-                        placeholder={localizationStrings?.Write}
-                        value={messageText}
-                        onChangeText={setMessageText}
-                    />
-                    {messageText ? (
-                        <TouchableOpacity onPress={sendMessage}>
-                            {isLoading ? (
-                                <ActivityIndicator size="small" color="black" />
-                            ) : (<Image source={imageIndex.sendMessage} style={styles.sendIcon} />
-                            )}
-                        </TouchableOpacity>
-                    ) : null}
-
+<SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <StatusBarComponent />
+    
+    {/* KeyboardAvoidingView handles keyboard automatically */}
+    <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined} // 'padding' works well for iOS
+        keyboardVerticalOffset={Platform.OS === "ios" ? 5 : 0} // Adjust offset depending on your header height
+    >
+        <View style={styles.container}>
+            {/* Header */}
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Image source={imageIndex.backorange} style={styles.backIcon} />
+                </TouchableOpacity>
+                <Image source={{ uri: userName?.image }} style={styles.userImage} />
+                <View>
+                    <Text style={styles.userName}>{userName?.user_name}</Text>
                 </View>
             </View>
-        </SafeAreaView>
+
+            {/* Messages */}
+            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+                    data={messages}
+                    renderItem={renderMessage}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            </ScrollView>
+
+            {/* Input */}
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#999"
+                    placeholder={localizationStrings?.Write}
+                    value={messageText}
+                    onChangeText={setMessageText}
+                />
+                {messageText ? (
+                    <TouchableOpacity onPress={sendMessage}>
+                        {isLoading ? (
+                            <ActivityIndicator size="small" color="black" />
+                        ) : (
+                            <Image source={imageIndex.sendMessage} style={styles.sendIcon} />
+                        )}
+                    </TouchableOpacity>
+                ) : null}
+            </View>
+        </View>
+    </KeyboardAvoidingView>
+</SafeAreaView>
+
     );
 };
 

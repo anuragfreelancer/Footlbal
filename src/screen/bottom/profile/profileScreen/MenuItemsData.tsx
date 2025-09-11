@@ -44,6 +44,7 @@ const MenuItems = [
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
 
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
+    { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
 
   ];
 
@@ -55,6 +56,7 @@ const MenuItems = [
      { title:  localizationStrings.ChatMessages, icon: imageIndex.bubbleChat,  screen: ScreenNameEnum.Messages  },
      { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
      { title:  localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
+     { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
 
   ];
 

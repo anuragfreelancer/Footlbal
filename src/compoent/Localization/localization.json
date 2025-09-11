@@ -17,8 +17,8 @@
       "ChatMessages": "Chat Messages",
       "myprofile":"View my profile",
       "full":"Full Name" ,
-      "confirmpass":"Confirm Password"
-
+      "confirmpass":"Confirm Password" ,
+"delete":"delete account"
 ,
 "namRequired":"Full Name is required."
 ,
@@ -95,10 +95,26 @@
 "AddAttendance" :"Add Attendance" ,
 "Doyou":"Do you want to add attendance" ,
 "Yes":"Yes" ,
-"No":"No" 
-    },
+"No":"No" ,
+"DeleteAccount":"Delete Account?" ,
+"Are":"Are you sure you want to delete this account?." ,
+"YesDelete":"Yes, Delete",
+   "SelectType":"Select Type" ,
+   "Select":"Select Questionnaire"
+},
     "French": {
+      "Select":"Questionnaire de sélection"
+,
+      "SelectType":"Sélectionnez le type"
+,
+      "YesDelete":"Oui, supprimer"
+,
+      "Are":"Êtes-vous sûr de vouloir supprimer ce compte ?."
+,
       "Doyou":"Voulez-vous ajouter une présence"
+, 
+"DeleteAccount":"Supprimer le compte ?",
+"delete":"supprimer le compte"
 ,
 "No":"Non" 
 ,
