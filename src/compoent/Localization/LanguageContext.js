@@ -7,7 +7,7 @@ import localizationStrings from './Localization';
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('English');
+  const [language, setLanguage] = useState('French');
 
   useEffect(() => {
     const loadLanguage = async () => {

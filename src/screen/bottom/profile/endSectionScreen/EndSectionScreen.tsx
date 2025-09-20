@@ -66,14 +66,13 @@ const [is,setIsLoading]= useState(false)
         navigation, // ✅ make sure to pass it if needed
       };
   
-      console.log('📤 Sending to API:', params);
-  
+   
       const response = await EndSection(params, setIsLoading);
   
       if (response?.status === '1') {
-        Alert.alert('✅ Success', 'Section started successfully!');
+         Alert.alert('✅ Success', 'Section started successfully!');
         setSelectedPlayers([])
-      }
+       }
     } catch (error) {
       console.error('StartSection error:', error);
       Alert.alert('Error', 'Something went wrong.');

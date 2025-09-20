@@ -1660,7 +1660,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDateTimePicker (8.4.4):
+  - RNDateTimePicker (8.4.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1755,7 +1755,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.15.3):
+  - RNScreens (4.16.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1776,9 +1776,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.15.3)
+    - RNScreens/common (= 4.16.0)
     - Yoga
-  - RNScreens/common (4.15.3):
+  - RNScreens/common (4.16.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1800,7 +1800,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.12.1):
+  - RNSVG (15.13.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1820,9 +1820,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.12.1)
+    - RNSVG/common (= 15.13.0)
     - Yoga
-  - RNSVG/common (15.12.1):
+  - RNSVG/common (15.13.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2175,14 +2175,14 @@ SPEC CHECKSUMS:
   ReactCommon: 269d0d36423fad044eaea49900e88684ac670a16
   ReactNativeLocalization: 79b100588f6d7a68852b982ccbe57e329e8bb5a7
   RNCAsyncStorage: 79cfba789fca205b204f3ce7948b874500129eb4
-  RNDateTimePicker: db1c5f01cfc5681ef8d776cbaf070b415ba19c47
+  RNDateTimePicker: 36df15fe31b97e43261d3e64d2640dae7d4cda0f
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 40441ef32129430d603720d61845c4e3084cc70b
   RNImageCropPicker: b0afedeefd8655254a15c34103718455fde6ce59
   RNPermissions: a2c64017c1fa2d7d15af5cb5cc4c80e68205c86f
   RNReactNativeHapticFeedback: 66c6b0cf19f5d9dae8be36b2336e1fe2a2e42566
-  RNScreens: b0358800d1ab10bdd2bb468a6e038bfbae15bc26
-  RNSVG: 8ad5c94593e5e4a6e133e6934e2188e3c688d27a
+  RNScreens: 21653ad95ea24514c81076a7af524705cd0edc21
+  RNSVG: 85cc069b70fa91c4e0992477e214e936978d7038
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: b94ff2d7559cb66837c97a3f394ddb817faad4d6

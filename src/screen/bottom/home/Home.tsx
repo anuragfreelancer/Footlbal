@@ -58,11 +58,11 @@ const DashboardScreen = () => {
           <Text style={styles.value}>{item.session_start_date}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Start Time:</Text>
+          <Text style={styles.label}>{localizationStrings?.Startq}:</Text>
           <Text style={styles.value}>{item.session_start_time}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>End Time:</Text>
+          <Text style={styles.label}>{localizationStrings?.EndTime}:</Text>
           <Text style={styles.value}>
             {item.session_end_time || "Ongoing"}
           </Text>
@@ -81,7 +81,7 @@ const DashboardScreen = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
       <View style={styles.header}>
-        <View style={{ position: 'relative' }}>
+        <View style={{ marginTop:20 }}>
           <Image
             source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex.prfEdit}
             style={{

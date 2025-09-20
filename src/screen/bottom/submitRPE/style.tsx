@@ -18,7 +18,13 @@
     closeButton: { marginTop: 10, padding: 10, backgroundColor: "#A8EB12", borderRadius: 25, alignItems: "center" },
     closeButtonText: { fontSize: 14, fontWeight: "bold", color: "white" },
     buttView: { justifyContent: 'flex-start', marginHorizontal:15,marginBottom:11  },
-    
+    dropdownItem: { padding: 14, borderBottomWidth: 1, borderBottomColor: '#eee' },
+    dropdownItemText: { fontSize: 16, color: '#333' },
+    dateTimeRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
+    selectBtn: { backgroundColor: 'gray', paddingVertical: 12, borderRadius: 8, flex: 1, alignItems: 'center', height: 48, justifyContent: 'center', margin: 5 },
+    selectText: { color: '#fff', fontSize: 15, fontWeight: '500' },
+    buttonRow: { flexDirection: 'row', marginTop: 20, justifyContent: 'space-between' },
+  
     pickerContainer: {
       backgroundColor: '#fff',
       margin: 20,

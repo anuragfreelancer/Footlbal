@@ -16,7 +16,7 @@ const StartTrainingFed = () => {
 
   const getTrainingData = async () => {
     try {
-      const response = await axios.get('https://server-php-8-3.technorizen.com/Football/api/get_training?type=before_training');
+      const response = await axios.get('https://kmmps.store/api/get_training?type=before_training');
       if (response.data.status === "1") {
         setTrainingData(response.data.result);
       }

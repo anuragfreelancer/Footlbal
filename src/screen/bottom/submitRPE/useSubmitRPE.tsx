@@ -52,7 +52,7 @@ const useSubmitRPE = () => {
 
         }
     };
-  
+ 
     const getEffortColor = (value: any) => {
         if (value <= 3) return '#A0D803'; // Light effort (Yellow)
         if (value <= 6) return '#A0D803'; // Moderate effort (Light Green)

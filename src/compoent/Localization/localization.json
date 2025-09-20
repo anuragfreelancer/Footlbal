@@ -100,9 +100,15 @@
 "Are":"Are you sure you want to delete this account?." ,
 "YesDelete":"Yes, Delete",
    "SelectType":"Select Type" ,
-   "Select":"Select Questionnaire"
+   "Select":"Select Questionnaire" ,
+   "Startq":"Start Time" ,
+   "EndTime":"End Time"
 },
-    "French": {
+    "French": { 
+      "EndTime":"Fin des temps"
+,  
+    "Startq":"Heure de début"
+,
       "Select":"Questionnaire de sélection"
 ,
       "SelectType":"Sélectionnez le type"

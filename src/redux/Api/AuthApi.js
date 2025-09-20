@@ -302,7 +302,7 @@ const UpdateProfile_Api = async (
 const DelliteApi = async (userId, setLoading) => {
     try {
       setLoading(true);
-      const url = `${base_url}logout?user_id=${"7"}`;
+      const url = `${base_url}logout?user_id=${userId}`;
   
       const response = await fetch(url, {
         method: 'GET',  // ya POST agar API accept karti hai query params ke sath
@@ -915,7 +915,7 @@ const SumitRpfFrom = async (
     param,
     setLoading,
 ) => {
-     
+     let dd ="https://server-php-8-3.technorizen.com/Football/api/"
      try {
         setLoading(true)
         const myHeaders = new Headers();
@@ -933,7 +933,7 @@ const SumitRpfFrom = async (
             body: formData,
         };
         console.log("formData",formData)
-        const respons = await fetch(`${base_url}${constant.addubmitRPF}`, requestOptions)
+        const respons = await fetch(`${dd}${constant.addubmitRPF}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
                 console.log("res", res)
