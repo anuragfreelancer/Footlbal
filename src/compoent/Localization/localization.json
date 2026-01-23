@@ -1,5 +1,6 @@
 {
     "English": {
+      "SubscriptionPlansScreen":"SubscriptionPlansScreen" ,
       "ChooseYourLanguage": "Choose Your Language",
       "English": "English",
       "French": "French",
@@ -18,6 +19,7 @@
       "myprofile":"View my profile",
       "full":"Full Name" ,
       "confirmpass":"Confirm Password" ,
+      "SubscriptionPlans":"Subscription Plans",
 "delete":"delete account"
 ,
 "namRequired":"Full Name is required."
@@ -267,7 +269,8 @@
 ,
 "Save":"Sauvegarder" ,
 "StrengthTraining":"Musculation et cardio-training",
-"Players":"Joueurs"
+"Players":"Joueurs" ,
+"SubscriptionPlans":"SubscriptionPlans"
 
     }
   }

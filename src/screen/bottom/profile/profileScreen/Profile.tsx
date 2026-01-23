@@ -50,6 +50,7 @@ const Profile = () => {
     { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
     { title: localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
     { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
+    { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
     { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
@@ -130,7 +131,7 @@ const Profile = () => {
 
         <View style={{ height: 15, backgroundColor: "rgba(237, 243, 243, 1)" }} />
 {
-  isLogin.userData.type != "Coach" ?  
+  isLogin?.userData?.type != "Coach" ?  
   <FlatList
   data={MenuItems}
   keyExtractor={(item) => item.screen}

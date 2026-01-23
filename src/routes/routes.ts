@@ -34,6 +34,7 @@ import Notifications from "../screen/bottom/notifications/Notifications";
 import StartTrainingFed from "../screen/bottom/startTrainingFed/StartTrainingFed";
 import EndSectionScreen from "../screen/bottom/profile/endSectionScreen/EndSectionScreen";
 import AllPlayer from "../screen/bottom/playerDetails/allPlayer/AllPlayer";
+import SubscriptionPlansScreen from "../screen/SubscriptionPlans/SubscriptionPlansScreen";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -70,6 +71,7 @@ const _routes = () => {
       { name: ScreenNameEnum.TrainingFedBack, Component: TrainingFedBack },
       { name: ScreenNameEnum.StartTrainingFed, Component: StartTrainingFed },
       { name: ScreenNameEnum.EndSectionScreen, Component: EndSectionScreen },
+      { name: ScreenNameEnum.SubscriptionPlansScreen, Component: SubscriptionPlansScreen },
      ],
 
     BOTTOMTAB_ROUTE: [

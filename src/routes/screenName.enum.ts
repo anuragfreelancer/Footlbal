@@ -5,6 +5,7 @@ enum ScreenNameEnum {
   ChooseRoleScreen="ChooseRoleScreen",
   ReadyScreen="ReadyScreen",
   LoginScreen="LoginScreen",
+  SubscriptionPlansScreen="SubscriptionPlansScreen",
   SignUpScreen="SignUpScreen",
   OtpScreen="OtpScreen",
   CreatePassword="CreatePassword",
