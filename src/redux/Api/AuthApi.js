@@ -869,7 +869,7 @@ const Getplayer = async (userId, setLoading) => {
         const resText = await response.text();
         const responseData = JSON.parse(resText);
         if (responseData.status === '1') {
-            successToast(responseData.message);
+            // successToast(responseData.message);
             return { userGetData: responseData.result };
         } else {
             errorToast(responseData.message);

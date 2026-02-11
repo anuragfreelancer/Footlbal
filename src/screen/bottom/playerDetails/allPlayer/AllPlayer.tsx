@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useAllPlayer from "./useAllPlayer";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
+import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
 
 const AllPlayer = () => {
   const {
@@ -115,10 +116,11 @@ const [is,setIsLoading]= useState(false)
   return (
     <SafeAreaView style={styles.container}>
             {is ? <LoadingModal /> : null}
-
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
         <Text style={styles.header}>{localizationStrings?.Players}</Text>
+          <SubscriptionCard/>
+
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}

@@ -15,6 +15,7 @@ import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
+import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
 
 const Players = () => {
   const {
@@ -71,7 +72,7 @@ const [is,setIsLoading]= useState(false)
       const response = await StartSection(params, setIsLoading);
   
       if (response?.status === '1') {
-        Alert.alert('✅ Success', 'Section started successfully!');
+        // Alert.alert('✅ Success', 'Section started successfully!');
         setSelectedPlayers([])
       }
     } catch (error) {
@@ -137,9 +138,10 @@ const [is,setIsLoading]= useState(false)
   return (
     <SafeAreaView style={styles.container}>
             {is ? <LoadingModal /> : null}
-
-      <StatusBarComponent />
+       <StatusBarComponent />
+       
       <View style={[styles.container, { padding: 15 }]}>
+           {/* <SubscriptionCard/> */}
         <Text style={styles.header}>{localizationStrings.Players}</Text>
         <SearchBar
           value={searchPlaylist}
@@ -214,10 +216,15 @@ const [is,setIsLoading]= useState(false)
         </TouchableOpacity> */}
       </View>
       <StartSectionModal
-        visible={modalVisible}
+      visible={modalVisible}
+        title={"Pre-Training Questionnaire"}
         onClose={() => setModalVisible(false)}
+        Before={"Before Training Questionnaire"}
+        Training={"Training Questionnaire"}
         selectedPlayers={selectedPlayers}
         onStart={handleStartAPI}
+                buttTitle={localizationStrings?.StartSection}
+
       />
     </SafeAreaView>
   );

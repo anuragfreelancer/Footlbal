@@ -10,6 +10,8 @@ import toastConfig from '../utils/customToast';
 import NetInfo from '@react-native-community/netinfo';
 import NetworkStatusModal from '../compoent/NetworkStatusModal';
 import { LanguageProvider } from '../compoent/Localization/LanguageContext';
+import SubscriptionCard from '../compoent/subscription/SubscriptionCard';
+import { View } from 'react-native';
 
 const AppNavigator: React.FC = () => {
   const [isConnected, setIsConnected] = useState(true);
@@ -30,6 +32,7 @@ const AppNavigator: React.FC = () => {
           <NavigationContainer>
           <NetworkStatusModal modalVisible={modalVisible} offlineText="No Internet! Please check your connection." />
           <LanguageProvider>
+             
             <RegistrationRoutes />
             </LanguageProvider>
             <Toast config={toastConfig} />

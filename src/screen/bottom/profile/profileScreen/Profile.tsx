@@ -15,14 +15,14 @@ import { DelliteApi } from "../../../../redux/Api/AuthApi";
 import styles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/feature/authSlice";
+import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
 
 const Profile = () => {
   const navigation = useNavigation();
   
       const getLogin = useSelector((state: any) => state?.feature);
     const isLogin = useSelector((state: any) => state?.auth);
-     
-  const [modal, setModal] = useState(false);
+   const [modal, setModal] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +50,7 @@ const Profile = () => {
     { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
     { title: localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
     { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
-    { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
+    // { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
     { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
@@ -108,6 +108,12 @@ const Profile = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
+    
+
+{/* {status === 'Free' && <FreeUI />}
+
+{(!isValid || status === 'Deactive') && <ExpiredUI />} */}
+
       {isLoading && <LoadingModal />}
       <Text style={styles.header}>{localizationStrings.Profile}</Text>
 
@@ -118,12 +124,12 @@ const Profile = () => {
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
-              source={getLogin.userGetData.image ? { uri: getLogin.userGetData.image } : imageIndex.ProfielImge}
+              source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
               style={styles.avatar}
             />
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin.userGetData.user_name}</Text>
-              <Text style={styles.profileLink}>{getLogin.userGetData.email}</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData.user_name}</Text>
+              <Text style={styles.profileLink}>{getLogin?.userGetData.email}</Text>
             </View>
           </View>
           <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />

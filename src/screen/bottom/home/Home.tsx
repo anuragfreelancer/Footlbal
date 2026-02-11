@@ -81,6 +81,7 @@ const DashboardScreen = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
       <View style={styles.header}>
+        
         <View style={{ marginTop:20 }}>
           <Image
             source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex.prfEdit}

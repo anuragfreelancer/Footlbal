@@ -6,8 +6,7 @@ import {
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
    import EmptyListComponent from "../../../../compoent/EmptyListComponent";
-import SearchBar from "../../../../compoent/SearchBar";
-import StartSectionModal from "../../../../compoent/StartSectionModal";
+ import StartSectionModal from "../../../../compoent/StartSectionModal";
 import { EndSection, StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import usePlayers from "../../players/playe/usePlayers";
@@ -188,10 +187,14 @@ const [is,setIsLoading]= useState(false)
         
       </View>
       <StartSectionModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        selectedPlayers={selectedPlayers}
-        onStart={handleStartAPI}
+       visible={modalVisible}
+  title={"Pre-Training Questionnaire"}
+  onClose={() => setModalVisible(false)}
+  Before={"Before Training Questionnaire"}
+  Training={"Training Questionnaire"}
+  selectedPlayers={selectedPlayers}
+  onStart={handleStartAPI}
+  buttTitle={localizationStrings?.endSection}
       />
     </SafeAreaView>
   );
