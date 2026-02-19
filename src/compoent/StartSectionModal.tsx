@@ -8,13 +8,15 @@ import {
   ActivityIndicator,
   StyleSheet,
   Image,
+  Alert,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import imageIndex from '../assets/imageIndex';
 
 interface Questionnaire {
   id: number;
-  training_title: string;
+  training_title?: string;
+  question?: string;
   description?: string;
 }
 
@@ -25,8 +27,8 @@ interface StartSectionModalProps {
     date: Date;
     time: Date;
     type: string;
-    questionnaire: number | null;
-    questionnaire1: number | null;
+    questionnaire: number[];
+    questionnaire1: number[];
   }) => Promise<void>;
   title: string;
   buttTitle: string; 
@@ -50,9 +52,9 @@ const StartSectionModal = ({
   // State for session type
   const [type, setType] = useState('TRAINING');
 
-  // State for selected questionnaires
-  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<number | null>(null);
-  const [selectedQuestionnaire1, setSelectedQuestionnaire1] = useState<number | null>(null);
+  // State for selected questionnaires (multiple allowed)
+  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<number[]>([]);
+  const [selectedQuestionnaire1, setSelectedQuestionnaire1] = useState<number[]>([]);
 
   // State for dropdown visibility
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
@@ -139,8 +141,11 @@ const StartSectionModal = ({
   }, [visible]);
 
   const handleStart = async () => {
-    if (!selectedQuestionnaire || !selectedQuestionnaire1) {
-      alert('Please select both questionnaires: one to answer before the session and one to answer after the session.');
+    if (selectedQuestionnaire.length === 0 || selectedQuestionnaire1.length === 0) {
+      Alert.alert(
+        'Select questionnaires',
+        'Please select at least one questionnaire for before the session and at least one for after the session.'
+      );
       return;
     }
 
@@ -161,21 +166,27 @@ const StartSectionModal = ({
     }
   };
 
+  const toggleQuestionnaire = (ids: number[], setIds: React.Dispatch<React.SetStateAction<number[]>>, id: number) => {
+    if (ids.includes(id)) {
+      setIds(ids.filter((x) => x !== id));
+    } else {
+      setIds([...ids, id]);
+    }
+  };
+
   const renderQuestionnaireItem = (
     item: Questionnaire,
-    selectedId: number | null,
-    onSelect: (id: number) => void,
-    onCloseDropdown: () => void
+    selectedIds: number[],
+    onToggle: (id: number) => void
   ) => {
-    const isSelected = selectedId === item.id;
+    const isSelected = selectedIds.includes(item.id);
+    const title = item.training_title ?? item.question;
 
     return (
       <TouchableOpacity
         style={styles.questionnaireCard}
-        onPress={() => {
-          onSelect(item.id);
-          onCloseDropdown();
-        }}>
+        onPress={() => onToggle(item.id)}
+        activeOpacity={0.7}>
         <View
           style={{
             flexDirection: 'row',
@@ -183,17 +194,28 @@ const StartSectionModal = ({
             alignItems: 'center',
           }}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.questionnaireTitle}>{item.training_title}</Text>
+            <Text style={styles.questionnaireTitle}>{title}</Text>
             {item.question && (
               <Text style={styles.questionnaireDesc} numberOfLines={2}>
                 {item.question}
               </Text>
             )}
           </View>
-          <Image
-            source={isSelected ? imageIndex.radioSlied : imageIndex.radio}
-            style={{ width: 22, height: 22 }}
-          />
+          <View
+            style={{
+              height: 22,
+              width: 22,
+              borderWidth: 2,
+              borderColor: isSelected ? '#A0D803' : '#ccc',
+              backgroundColor: isSelected ? '#A0D803' : '#fff',
+              borderRadius: 4,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {isSelected && (
+              <Text style={{ color: 'white', fontSize: 14, fontWeight: '700' }}>✓</Text>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -205,41 +227,61 @@ const StartSectionModal = ({
     title: string,
     data: Questionnaire[],
     loading: boolean,
-    selectedId: number | null,
-    onSelect: (id: number) => void
+    selectedIds: number[],
+    onToggle: (id: number) => void
   ) => {
-
-    console.log('Rendering dropdown with data:', data);
     return (
-       <Modal visible={visible} transparent animationType="fade">
-      <TouchableOpacity
-        style={styles.dropdownOverlay}
-        activeOpacity={1}
-        onPress={onClose}>
-        <View style={styles.dropdownListLarge}>
-          <Text style={styles.dropdownHeader}>{title}</Text>
-          {loading ? (
-            <ActivityIndicator
-              size="large"
-              color="#4C8BF5"
-              style={{ marginTop: 20 }}
-            />
-          ) : (
-            <FlatList
-              data={data}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={{ paddingVertical: 10 }}
-              renderItem={({ item }) =>
-                renderQuestionnaireItem(item, selectedId, onSelect, onClose)
-              }
-            />
-          )}
-        </View>
-      </TouchableOpacity>
-    </Modal>
-    )
-  }
+      <Modal visible={visible} transparent animationType="fade">
+        <TouchableOpacity
+          style={styles.dropdownOverlay}
+          activeOpacity={1}
+          onPress={onClose}>
+          <View style={styles.dropdownListLarge}>
+            <Text style={styles.dropdownHeader}>{title}</Text>
+            <Text style={[styles.hint, { paddingHorizontal: 16 }]}>
+              Tap to select multiple (e.g. 5–6 questions). Tap again to deselect.
+            </Text>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color="#4C8BF5"
+                style={{ marginTop: 20 }}
+              />
+            ) : (
+              <FlatList
+                data={data}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={{ paddingVertical: 10, flexGrow: 1 }}
+                renderItem={({ item }) =>
+                  renderQuestionnaireItem(item, selectedIds, onToggle)
+                }
+              />
+            )}
+            <TouchableOpacity
+              style={[styles.doneButton, { marginHorizontal: 16, marginVertical: 12 }]}
+              onPress={onClose}>
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    );
+  };
+
+  const getQuestionnaireLabel = (
+    ids: number[],
+    list: Questionnaire[],
+    fallbackTitleKey: 'training_title' | 'question'
+  ) => {
+    if (ids.length === 0) return 'Select Questionnaire --';
+    if (ids.length === 1) {
+      const q = list.find((x) => x.id === ids[0]);
+      const t = q?.training_title ?? q?.question;
+      return t ?? `ID ${ids[0]}`;
+    }
+    return `${ids.length} selected`;
+  };
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -251,10 +293,10 @@ const StartSectionModal = ({
           <View style={styles.messageBox}>
             <Text style={styles.messageTitle}>How it works</Text>
             <Text style={styles.messageText}>
-              You can answer a questionnaire <Text style={styles.messageBold}>before</Text> the training session and a questionnaire <Text style={styles.messageBold}>after</Text> the training session.
+              You can answer several questions <Text style={styles.messageBold}>before</Text> and <Text style={styles.messageBold}>after</Text> the training session (e.g. 5–6 questions each).
             </Text>
             <Text style={styles.messageSubtext}>
-              Select one for before and one for after below.
+              Select as many as you like for before and for after below.
             </Text>
           </View>
 
@@ -293,30 +335,24 @@ const StartSectionModal = ({
             </TouchableOpacity>
           </Modal>
 
-          {/* First Questionnaire - before session */}
+          {/* First Questionnaire - before session (multiple) */}
           <Text style={styles.label}>{Before}</Text>
-           <TouchableOpacity
+          <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowQuestionnaireDropdown(true)}>
             <Text style={[styles.dropdownText, { flex: 1 }]}>
-              {selectedQuestionnaire
-                ? questionnaires.find((q) => q.id === selectedQuestionnaire)
-                    ?.training_title
-                : 'Select Questionnaire --'}
+              {getQuestionnaireLabel(selectedQuestionnaire, questionnaires, 'training_title')}
             </Text>
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
 
-          {/* Second Questionnaire - after session */}
+          {/* Second Questionnaire - after session (multiple) */}
           <Text style={styles.label}>{Training}</Text>
-           <TouchableOpacity
+          <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowQuestionnaireDropdown2(true)}>
             <Text style={[styles.dropdownText, { flex: 1 }]}>
-              {selectedQuestionnaire1
-                ? questionnaires1.find((q) => q.id === selectedQuestionnaire1)
-                    ?.question
-                : 'Select Questionnaire --'}
+              {getQuestionnaireLabel(selectedQuestionnaire1, questionnaires1, 'question')}
             </Text>
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
@@ -329,7 +365,7 @@ const StartSectionModal = ({
             questionnaires,
             loadingQuestions,
             selectedQuestionnaire,
-            setSelectedQuestionnaire
+            (id) => toggleQuestionnaire(selectedQuestionnaire, setSelectedQuestionnaire, id)
           )}
 
           {renderQuestionnaireDropdown(
@@ -339,7 +375,7 @@ const StartSectionModal = ({
             questionnaires1,
             loadingQuestions1,
             selectedQuestionnaire1,
-            setSelectedQuestionnaire1
+            (id) => toggleQuestionnaire(selectedQuestionnaire1, setSelectedQuestionnaire1, id)
           )}
 
           {/* Date & Time */}
@@ -472,9 +508,10 @@ const styles = StyleSheet.create({
   },
   hint: {
     fontSize: 12,
-    color: '#777',
-    marginTop: 2,
+    color: 'black',
+    marginTop: 10,
     marginBottom: 4,
+    
   },
   label: {
     fontSize: 16,
@@ -569,5 +606,12 @@ const styles = StyleSheet.create({
     borderColor: '#eee',
   },
   questionnaireTitle: { fontSize: 15, fontWeight: '600', color: '#3c3c3cff' },
-  questionnaireDesc: { fontSize: 17, color: 'black', marginTop: 4 ,fontWeight:"600"},
+  questionnaireDesc: { fontSize: 17, color: 'black', marginTop: 4, fontWeight: '600' },
+  doneButton: {
+    backgroundColor: 'rgba(160, 216, 3, 1)',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  doneButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
