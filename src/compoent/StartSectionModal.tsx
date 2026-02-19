@@ -79,9 +79,27 @@ const StartSectionModal = ({
       
       try {
         setLoadingQuestions(true);
+        // if(after_training)
+        if(Training == "After Training Questionnaire"){
+           const res = await fetch(
+          'https://kmmps.store/api/get_training?type=after_training'
+          
+        );
+        // const res = await fetch(
+        //   'https://kmmps.store/api/get_training?type=after_training'
+        // );
+        const json = await res.json();
+        if (json?.result) {
+          setQuestionnaires(json.result);
+        }
+        return;
+        }
         const res = await fetch(
           'https://kmmps.store/api/get_training?type=before_training'
         );
+        // const res = await fetch(
+        //   'https://kmmps.store/api/get_training?type=before_training'
+        // );
         const json = await res.json();
         if (json?.result) {
           setQuestionnaires(json.result);
@@ -122,7 +140,7 @@ const StartSectionModal = ({
 
   const handleStart = async () => {
     if (!selectedQuestionnaire || !selectedQuestionnaire1) {
-      alert('Please select both questionnaires');
+      alert('Please select both questionnaires: one to answer before the session and one to answer after the session.');
       return;
     }
 
@@ -189,8 +207,11 @@ const StartSectionModal = ({
     loading: boolean,
     selectedId: number | null,
     onSelect: (id: number) => void
-  ) => (
-    <Modal visible={visible} transparent animationType="fade">
+  ) => {
+
+    console.log('Rendering dropdown with data:', data);
+    return (
+       <Modal visible={visible} transparent animationType="fade">
       <TouchableOpacity
         style={styles.dropdownOverlay}
         activeOpacity={1}
@@ -217,13 +238,25 @@ const StartSectionModal = ({
         </View>
       </TouchableOpacity>
     </Modal>
-  );
+    )
+  }
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.title}>{title || 'Plan a Training Session'}</Text>
+
+          {/* Clear message so client understands: questionnaire before AND after */}
+          <View style={styles.messageBox}>
+            <Text style={styles.messageTitle}>How it works</Text>
+            <Text style={styles.messageText}>
+              You can answer a questionnaire <Text style={styles.messageBold}>before</Text> the training session and a questionnaire <Text style={styles.messageBold}>after</Text> the training session.
+            </Text>
+            <Text style={styles.messageSubtext}>
+              Select one for before and one for after below.
+            </Text>
+          </View>
 
           {/* Session Type */}
           <Text style={styles.label}>Session Type</Text>
@@ -260,9 +293,9 @@ const StartSectionModal = ({
             </TouchableOpacity>
           </Modal>
 
-          {/* First Questionnaire */}
+          {/* First Questionnaire - before session */}
           <Text style={styles.label}>{Before}</Text>
-          <TouchableOpacity
+           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowQuestionnaireDropdown(true)}>
             <Text style={[styles.dropdownText, { flex: 1 }]}>
@@ -274,9 +307,9 @@ const StartSectionModal = ({
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
 
-          {/* Second Questionnaire */}
+          {/* Second Questionnaire - after session */}
           <Text style={styles.label}>{Training}</Text>
-          <TouchableOpacity
+           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowQuestionnaireDropdown2(true)}>
             <Text style={[styles.dropdownText, { flex: 1 }]}>
@@ -292,7 +325,7 @@ const StartSectionModal = ({
           {renderQuestionnaireDropdown(
             showQuestionnaireDropdown,
             () => setShowQuestionnaireDropdown(false),
-            'Before Training Questionnaire',
+            Before,
             questionnaires,
             loadingQuestions,
             selectedQuestionnaire,
@@ -302,7 +335,7 @@ const StartSectionModal = ({
           {renderQuestionnaireDropdown(
             showQuestionnaireDropdown2,
             () => setShowQuestionnaireDropdown2(false),
-            'Training Questionnaire',
+            Training,
             questionnaires1,
             loadingQuestions1,
             selectedQuestionnaire1,
@@ -397,9 +430,51 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 20,
+    marginBottom: 8,
     textAlign: 'center',
     color: '#222',
+  },
+  messageBox: {
+    backgroundColor: '#E8F4E8',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 18,
+    borderLeftWidth: 4,
+    borderLeftColor: 'rgba(160, 216, 3, 0.8)',
+  },
+  messageTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#222',
+    marginBottom: 6,
+  },
+  messageText: {
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 22,
+  },
+  messageBold: {
+    fontWeight: '700',
+    color: '#1a5f1a',
+  },
+  messageSubtext: {
+    fontSize: 13,
+    color: '#555',
+    marginTop: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 8,
+    lineHeight: 20,
+  },
+  hint: {
+    fontSize: 12,
+    color: '#777',
+    marginTop: 2,
+    marginBottom: 4,
   },
   label: {
     fontSize: 16,

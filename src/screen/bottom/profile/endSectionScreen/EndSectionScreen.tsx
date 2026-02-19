@@ -188,10 +188,10 @@ const [is,setIsLoading]= useState(false)
       </View>
       <StartSectionModal
        visible={modalVisible}
-  title={"Pre-Training Questionnaire"}
+  title={"Questionnaire – Before & After Training"}
   onClose={() => setModalVisible(false)}
   Before={"Before Training Questionnaire"}
-  Training={"Training Questionnaire"}
+  Training={"After Training Questionnaires"}
   selectedPlayers={selectedPlayers}
   onStart={handleStartAPI}
   buttTitle={localizationStrings?.endSection}
