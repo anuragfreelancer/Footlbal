@@ -13,51 +13,13 @@ import ScreenNameEnum from '../../routes/screenName.enum';
 const FreeWallUI = () => {
   const navigation = useNavigation();
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const floatAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+ 
 
-//   useEffect(() => {
-//     // Floating loop
-//     const floatLoop = Animated.loop(
-//       Animated.sequence([
-//         Animated.timing(floatAnim, {
-//           toValue: -6,
-//           duration: 2000,
-//           easing: Easing.inOut(Easing.ease),
-//           useNativeDriver: true,
-//         }),
-//         Animated.timing(floatAnim, {
-//           toValue: 0,
-//           duration: 2000,
-//           easing: Easing.inOut(Easing.ease),
-//           useNativeDriver: true,
-//         }),
-//       ])
-//     );
-
-//     floatLoop.start();
-
-//     // Hide after 10 seconds
-//     const timer = setTimeout(() => {
-//       Animated.timing(opacityAnim, {
-//         toValue: 0,
-//         duration: 400,
-//         useNativeDriver: true,
-//       }).start(() => {
-//         setVisible(false);
-//         floatLoop.stop();
-//       });
-//     }, 10000);
-
-//     return () => {
-//       clearTimeout(timer);
-//       floatLoop.stop();
-//     };
-//   }, []);
-
-//   if (!visible) return null;
+  if (!visible) return null;
 
   return (
     <Animated.View

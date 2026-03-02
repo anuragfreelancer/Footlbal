@@ -25,7 +25,7 @@
 "namRequired":"Full Name is required."
 ,
 "Players":"Players" ,
-"StartSection":"Start Section"
+"StartSection":"Section"
 ,
       "HelpCentre": "Help Centre",
       "OurPlatform": "Our Platform",
@@ -104,7 +104,26 @@
    "SelectType":"Select Type" ,
    "Select":"Select Questionnaire" ,
    "Startq":"Start Time" ,
-   "EndTime":"End Time"
+   "EndTime":"End Time",
+   "Last7Days": "Last 7 days",
+   "MonthlyTrend": "Monthly trend",
+   "YearlyView": "Yearly view",
+   "OverviewView": "Overview",
+   "Peak": "Peak",
+   "Avg": "Avg",
+   "SelectPeriod": "Select period",
+   "Weekly": "Weekly",
+   "Monthly": "Monthly",
+   "Yearly": "Yearly",
+   "Safe": "Safe",
+   "Ongoing": "Ongoing",
+   "Ended": "Ended",
+   "EffortLabel": "Effort",
+   "TypeHere": "Type here...",
+   "SessionTraining": "Training",
+   "SessionMatch": "Match",
+   "DateAndTime": "Date & Time",
+   "SelectDate": "Select Date"
 },
     "French": { 
       "EndTime":"Fin des temps"
@@ -212,7 +231,7 @@
       "LogOut":"Se déconnecter",
 "sure":"Êtes-vous sûr de vouloir vous déconnecter ?"
 ,
-      "StartSection":"Section de départ"
+      "StartSection":"de départ"
 ,
       "Wed":"nous aimons vos pensées"
 ,
@@ -270,8 +289,26 @@
 "Save":"Sauvegarder" ,
 "StrengthTraining":"Musculation et cardio-training",
 "Players":"Joueurs" ,
-"SubscriptionPlans":"SubscriptionPlans"
-
+"SubscriptionPlans":"Forfaits",
+      "Last7Days": "7 derniers jours",
+      "MonthlyTrend": "Tendance mensuelle",
+      "YearlyView": "Vue annuelle",
+      "OverviewView": "Aperçu",
+      "Peak": "Pic",
+      "Avg": "Moy",
+      "SelectPeriod": "Choisir la période",
+      "Weekly": "Hebdo",
+      "Monthly": "Mensuel",
+      "Yearly": "Annuel",
+      "Safe": "Sûr",
+      "Ongoing": "En cours",
+      "Ended": "Terminé",
+      "EffortLabel": "Effort",
+      "TypeHere": "Écrivez ici...",
+      "SessionTraining": "Entraînement",
+      "SessionMatch": "Match",
+      "DateAndTime": "Date et heure",
+      "SelectDate": "Choisir la date"
     }
   }
   

@@ -33,8 +33,17 @@ const userSlice = createSlice({
             state.isError = false;
             state.userGetData = action.payload.userGetData;
         },
+        profileFetchFailed(state) {
+            state.isSuccess = false;
+            state.isError = true;
+            if (state.userGetData && typeof state.userGetData === 'object') {
+                state.userGetData = { ...state.userGetData, payments_status: false };
+            } else {
+                state.userGetData = { payments_status: false };
+            }
+        },
     },
 });
 
-export const { getSuccess } = userSlice.actions;
+export const { getSuccess, profileFetchFailed } = userSlice.actions;
 export default userSlice.reducer;

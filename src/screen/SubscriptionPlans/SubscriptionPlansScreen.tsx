@@ -1,21 +1,25 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
-  StatusBar,
+   StatusBar,
   Dimensions,
   TextInput,
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../compoent/CustomHeader';
 import imageIndex from '../../assets/imageIndex';
 import localizationStrings from '../../compoent/Localization/Localization';
+import { createCheckoutSession, GetProfile } from '../../redux/Api/AuthApi';
+import { successToast } from '../../utils/customToast';
+import ScreenNameEnum from '../../routes/screenName.enum';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
@@ -57,14 +61,21 @@ const addDaysISO = (days: number) => {
 };
 
 export default function SubscriptionPlansScreen() {
-  // ✅ auth state (adjust keys as per your redux)
+  const dispatch = useDispatch();
+  const navigation = useNavigation<any>();
   const isLogin = useSelector((state: any) => state.auth);
-  const token = isLogin?.token; // if your API needs Bearer token
-  const userId = isLogin?.user?.id || isLogin?.user_id || isLogin?.id; // safe fallback
-
+  const token = isLogin?.token;
+  const userId = isLogin?.userData?.id || isLogin?.user_id || isLogin?.id;
+  const userEmail = isLogin?.userData?.email || '';
   const [teamPlayers, setTeamPlayers] = useState('20');
   const [playerInput, setPlayerInput] = useState('20');
   const [submitting, setSubmitting] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userId) GetProfile(userId, dispatch);
+    }, [userId, dispatch])
+  );
 
   const calculatePrice = (players: string) => {
     const playerCount = parseInt(players) || 0;
@@ -124,6 +135,14 @@ export default function SubscriptionPlansScreen() {
       Alert.alert('Login required', 'Please login to activate subscription.');
       return;
     }
+    if (!userEmail) {
+      Alert.alert('Email required', 'Your account email is needed for checkout.');
+      return;
+    }
+    if (!token) {
+      Alert.alert('Session expired', 'Please login again to start your free trial.');
+      return;
+    }
 
     const expiryDate = addDaysISO(plan.freeTrialDays); // ✅ free trial expiry
 
@@ -142,18 +161,30 @@ export default function SubscriptionPlansScreen() {
             try {
               setSubmitting(true);
 
-              // ✅ status Active + expiry (trial end date)
-              const payload = {
+              // ✅ Call createCheckoutSession (email, price, user_id, token for 401)
+              const checkoutPayload = {
+                email: userEmail,
+                price: totalPrice,
                 user_id: userId,
-                subscription_status: 'Active' as const,
-                subscription_expiry_date: expiryDate,
+                token: token,
               };
 
-              const apiRes = await activateSubscriptionApi(payload);
+              console.log("----",checkoutPayload)
+              const checkoutRes = await createCheckoutSession(checkoutPayload, setSubmitting);
+              if (!checkoutRes) return;
+
+              const checkoutUrl =
+                checkoutRes?.data?.url ??
+                checkoutRes?.url;
+
+              if (checkoutUrl && typeof checkoutUrl === 'string') {
+                setSubmitting(false);
+                successToast('Opening payment...');
+                navigation.navigate(ScreenNameEnum.PaymentWebViewScreen, { url: checkoutUrl });
+                return;
+              }
 
               Alert.alert('Success', 'Your subscription has been activated!');
-              // you can also dispatch redux action or navigate
-              // console.log('activate_subscription response:', apiRes);
             } catch (e: any) {
               Alert.alert('Error', e?.message || 'Something went wrong');
             } finally {

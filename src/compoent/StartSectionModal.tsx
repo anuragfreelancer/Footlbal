@@ -87,9 +87,7 @@ const StartSectionModal = ({
           'https://kmmps.store/api/get_training?type=after_training'
           
         );
-        // const res = await fetch(
-        //   'https://kmmps.store/api/get_training?type=after_training'
-        // );
+  
         const json = await res.json();
         if (json?.result) {
           setQuestionnaires(json.result);

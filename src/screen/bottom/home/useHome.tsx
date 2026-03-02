@@ -20,27 +20,14 @@ const useHome = () => {
     Get_coach_session();
     Get_sscoach_session()
   }, [])
-  const GetAbout = async () => {
-    try {
-      setisLoading(true);
-      const response = await  GetAllChatMessage(setisLoading, isLogin?.userData?.id);
-      if (response && response?.userGetData?.length > 0) {
-        setChatMess(response?.userGetData);
-       } else {
-        setChatMess([]);
-       }
-    } catch (error) {
-      setChatMess([]);
-     } finally {
-      setisLoading(false);
-    }
-  };
+ ;
   const Get_coach_session = async () => {
     try {
       setisLoading(true);
   
       const response = await GetCoachSession(setisLoading, isLogin?.userData?.id);
        if (response && response?.userGetData?.length > 0) {
+        console.log("response.userGetData",response.userGetData)
         setgetCoach_session(response.userGetData);
       } else {
         setgetCoach_session([]);
@@ -53,12 +40,12 @@ const useHome = () => {
     }
   };
   const Get_sscoach_session = async () => {
-    try {
+     try {
       setisLoading(true);
   
       const response = await Get_user_by_id(setisLoading, isLogin?.userData?.id);
-      console.log("ddd",response)
-       if (response && response?.userGetData) {
+        if (response && response?.userGetData) {
+          console.log("response?.userGetData",response?.userGetData)
         setgetUser(response.userGetData);
       } else {
         setgetUser([]);
@@ -79,7 +66,8 @@ const useHome = () => {
     setImgloading ,
     chatMess ,
     getCoach_session ,
-    getUser
+    getUser,
+    isLogin
   };
 };
 

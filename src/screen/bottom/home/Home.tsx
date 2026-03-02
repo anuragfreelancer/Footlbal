@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity,   FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import styles from "./style";
 import ChartComponent from "../../../compoent/ChartComponent";
-import ScreenNameEnum from "../../../routes/screenName.enum";
-// import messaging from '@react-native-firebase/messaging';
-// import PushNotification from 'react-native-push-notification';
 import useHome from "./useHome";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
-
+import { useLanguage } from "../../../compoent/Localization/LanguageContext";
+import SubscriptionCard from "../../../compoent/subscription/SubscriptionCard";
+import { useFocusEffect } from "@react-navigation/native";
+import { useSubscription } from "../../../compoent/subscription/useSubscription";
 
 const DashboardScreen = () => {
+  const { language } = useLanguage();
   const {
     getLogin,
     imgloading,
@@ -22,16 +23,17 @@ const DashboardScreen = () => {
     chatMess,
     getCoach_session,
     getUser,
+    isLogin
   } = useHome();
+  const { showSubscriptionCard } = useSubscription();
   const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
 
-  const screenWidth = Dimensions.get("window").width;
-  const [notificationReceived, setNotificationReceived] = useState(false);
- 
+
+
 
   // // Handle background notifications
   // useEffect(() => {
@@ -49,85 +51,77 @@ const DashboardScreen = () => {
   //     });
   // }, []);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: { item: any }) => {
     const isOngoing = item.status === "Start";
     return (
-      <View style={[styles.card, isOngoing && styles.activeCard]}>
-        <View style={styles.row}>
-          <Text style={styles.label}>Date:</Text>
-          <Text style={styles.value}>{item.session_start_date}</Text>
+      <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
+        <View style={styles.sessionCardHeader}>
+          <Text style={styles.sessionDate}>{item.session_start_date}</Text>
+          <View style={[styles.sessionBadge, isOngoing ? styles.sessionBadgeOngoing : styles.sessionBadgeEnded]}>
+            <Text style={[styles.sessionBadgeText, !isOngoing && styles.sessionBadgeTextEnded]}>{isOngoing ? localizationStrings.Ongoing : localizationStrings.Ended}</Text>
+          </View>
         </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>{localizationStrings?.Startq}:</Text>
-          <Text style={styles.value}>{item.session_start_time}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>{localizationStrings?.EndTime}:</Text>
-          <Text style={styles.value}>
-            {item.session_end_time || "Ongoing"}
-          </Text>
-        </View>
-        <View style={styles.statusRow}>
-          <Text style={[styles.status, isOngoing ? styles.activeStatus : styles.endStatus]}>
-            {isOngoing ? "🟢 Ongoing" : "🔴 Ended"}
-          </Text>
+        <View style={styles.sessionTimeRow}>
+          <View style={styles.sessionTimeBlock}>
+            <Text style={styles.sessionTimeLabel}>{localizationStrings?.Startq}</Text>
+            <Text style={styles.sessionTimeValue}>{item.session_start_time}</Text>
+          </View>
+          <Text style={styles.sessionTimeSeparator}>–</Text>
+          <View style={styles.sessionTimeBlock}>
+            <Text style={styles.sessionTimeLabel}>{localizationStrings?.EndTime}</Text>
+            <Text style={[styles.sessionTimeValue, !item.session_end_time && styles.sessionTimeOngoing]}>
+              {item.session_end_time || localizationStrings.Ongoing}
+            </Text>
+          </View>
         </View>
       </View>
     );
   };
-
-
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+ useFocusEffect(
+   useCallback(() => {
+     return () => {};
+   }, [getLogin])
+ );
+   return (
+    <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
       <View style={styles.header}>
-        
-        <View style={{ marginTop:20 }}>
+
+        <View style={{ marginTop: 12 }}>
           <Image
-            source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex.prfEdit}
-            style={{
-              height: 53,
-              width: 53,
-              borderRadius: 53,
-              borderWidth: 1,
-              borderColor: "#9DB2BF"
-            }}
+            source={getLogin?.userGetData?.image || isLogin?.userData?.image ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image } : imageIndex.prfEdit}
+            style={styles.avatar}
             onLoad={() => setImgloading(false)}
             onError={() => setImgloading(false)}
           />
           {imgloading && (
-            <View style={{
-              position: 'absolute',
-              top: '35%',
-              left: '50%',
-              transform: [{ translateX: -10 }, { translateY: -10 }],
-            }}>
-              <ActivityIndicator size="small" color="white" />
+            <View style={styles.avatarLoader}>
+              <ActivityIndicator size="small" color="#9CA3AF" />
             </View>
           )}
         </View>
 
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{getLogin?.userGetData?.user_name || ""}</Text>
-          <Text style={styles.userName}>{getLogin?.userGetData?.email || ""}</Text>
-          {/* <Text style={styles.userSubtitle}>Breach of the peace</Text> */}
-        </View>
-
-        {/* <TouchableOpacity style={styles.notificationIcon}
-          onPress={() => navigation.navigate(ScreenNameEnum.Notifications)}
-        >
-          <Image source={imageIndex.ProfielImge}
-            style={{
-              height:44,
-              width:44
-            }}
-            resizeMode="contain"
-          />
-        </TouchableOpacity> */}
+          <Text style={styles.userName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name || ""}</Text>
+          <Text style={styles.userEmail}>{getLogin?.userGetData?.email || isLogin?.userData?.email || ""}</Text>
+         </View>
+ 
       </View>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" />
-        {/* <FlatList
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+       
+       {isLogin?.userData?.type == "Coach" ?  null :         <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+ }
+       
+       {isLogin?.userData?.type == "Coach" ?  (
+<>
+           <View style={{
+            marginHorizontal:10
+           }}>
+
+          {showSubscriptionCard && <SubscriptionCard />}
+          </View>
+
+           <FlatList
           showsVerticalScrollIndicator={false}
           data={chatMess}
           ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
@@ -151,21 +145,30 @@ const DashboardScreen = () => {
 
             </TouchableOpacity>
           )}
-        /> */}
-        <Text>{localizationStrings.StartSection}</Text>
-         <FlatList
-      data={getCoach_session}
-      keyExtractor={(item) => item.id}
-      renderItem={renderItem}
-      contentContainerStyle={{ padding: 16 }}
-    />
-         <FlatList
-      data={getUser}
-      keyExtractor={(item) => item.id}
-      renderItem={renderItem}
-      contentContainerStyle={{ padding: 16 }}
-    />
-      </ScrollView>
+        />  
+
+        
+
+</>
+       ) : (
+        <>
+        
+                <View style={styles.sectionWrap}>
+          <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
+        </View>
+        <FlatList
+          data={getUser}
+
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          scrollEnabled={false}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+        />
+        </>
+       )}
+
+       </ScrollView>
     </SafeAreaView>
   );
 };

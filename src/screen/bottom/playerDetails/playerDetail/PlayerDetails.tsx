@@ -8,9 +8,11 @@ import usePlayerDetails from './usePlayerDetails';
 import styles from './style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 
 const PlayerDetails = () => {
+    useLanguage();
     const {
         navigation,
         item,

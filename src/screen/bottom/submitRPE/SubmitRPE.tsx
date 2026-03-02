@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,8 @@ import {
   Modal,
   TextInput,
   ActivityIndicator,
-  LayoutAnimation,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,13 +22,18 @@ import LoadingModal from "../../../utils/Loader";
 import TimePickerModal from "../../../compoent/TimePickerModal";
 import AddAttendanceModal from "../../../compoent/AddAttendanceModal";
 import localizationStrings from "../../../compoent/Localization/Localization";
+import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import styles from "./style";
 
+const SESSION_OPTIONS = [
+  { key: "Training", labelKey: "SessionTraining" },
+  { key: "Match", labelKey: "SessionMatch" },
+] as const;
+
 const SubmitRPE = () => {
+  useLanguage();
   const {
     isLoading,
-    setisLoading,
-    isLogin,
     handleSubmit,
     getEffortColor,
     session,
@@ -42,62 +48,38 @@ const SubmitRPE = () => {
     setEffort,
     pan,
     errors,
-    setErrors,
     showTimePicker,
     setShowTimePicker,
     formattedTime,
     setFormattedTime,
     time,
     setTime,
-    onChangeTime,
     modalVisible,
     setModalVisible,
     handleConfirm,
+    questionnaires,
+    loadingQuestionnaires,
+    SLIDER_WIDTH,
+    THUMB_STEP,
   } = useSubmitRPE();
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      let newEffort = Math.min(10, Math.max(1, Math.round(gesture.moveX / 30)));
-      setEffort(newEffort);
-      pan.setValue(newEffort * 30);
-    },
-  });
-
-  const [expandedItemId, setExpandedItemId] = useState(null);
-  const [questionnaires, setQuestionnaires] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  // Dropdown state
   const [showQuestionnaireDropdown, setShowQuestionnaireDropdown] = useState(false);
-  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<any>(null);
+  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<number | null>(null);
 
-  const fetchQuestionnaires = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("https://kmmps.store/api/get_training?type=before_training");
-      const json = await res.json();
-      if (json?.result) {
-        setQuestionnaires(json.result);
-      }
-    } catch (err) {
-      console.log("API Error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const panResponder = React.useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gesture) => {
+          const newEffort = Math.min(10, Math.max(1, Math.round(gesture.moveX / THUMB_STEP)));
+          setEffort(newEffort);
+        },
+      }),
+    [THUMB_STEP, setEffort]
+  );
 
-  useEffect(() => {
-    fetchQuestionnaires();
-  }, []);
-
-  const handlePress = (id: any) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedItemId(prevId => (prevId === id ? null : id));
-  };
-
-  if (loading) {
+  if (loadingQuestionnaires) {
     return (
       <View style={styles.loader}>
         <ActivityIndicator size="large" color="#A0D803" />
@@ -106,210 +88,164 @@ const SubmitRPE = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFC" }} edges={["top"]}>
       {isLoading && <LoadingModal />}
-      <View style={styles.container}>
-        <Text style={styles.header}>{localizationStrings?.SubmitRPE}</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Session Selection */}
-          <Text style={styles.label}>{localizationStrings?.SelectSession}:</Text>
-          <View style={styles.radioGroup}>
-            {["Training", "Match"].map(item => (
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 24}
+      >
+        <View style={styles.container}>
+          <Text style={styles.header}>{localizationStrings?.SubmitRPE}</Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            contentContainerStyle={{ paddingBottom: 120 }}
+          >
+          {/* Session type */}
+          <View style={styles.section}>
+            <Text style={styles.label}>{localizationStrings?.SelectSession}</Text>
+            <View style={styles.radioGroup}>
+              {SESSION_OPTIONS.map(({ key, labelKey }) => (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => setSession(key)}
+                  style={styles.radioItem}
+                  activeOpacity={0.7}
+                >
+                  <Image
+                    source={session === key ? imageIndex.radioSlied : imageIndex.radio}
+                    style={styles.radioIcon}
+                    resizeMode="contain"
+                    tintColor="#A0D803"
+                  />
+                  <Text style={styles.radioText}>{localizationStrings[labelKey] ?? key}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            {errors.session ? <Text style={styles.errorText}>{errors.session}</Text> : null}
+          </View>
+
+          {/* Date & time */}
+          <View style={styles.section}>
+            <Text style={styles.label}>{localizationStrings?.DateAndTime || "Date & Time"}</Text>
+            <View style={styles.dateTimeRow}>
               <TouchableOpacity
-                key={item}
-                onPress={() => setSession(item)}
-                style={styles.radioItem}
+                style={styles.datePicker}
+                onPress={() => setShowCalendar(true)}
                 activeOpacity={0.7}
               >
-                <Image
-                  source={session === item ? imageIndex.radioSlied : imageIndex.radio}
-                  style={styles.radioIcon}
-                  resizeMode="contain"
-                  tintColor={"#A0D803"}
-                />
-                <Text style={styles.radioText}>{item}</Text>
+                <Text style={styles.datePickerText} numberOfLines={1}>
+                  {date || (localizationStrings?.SelectDate ?? "Select Date")}
+                </Text>
+                <Image source={imageIndex.calender} style={{ height: 22, width: 22, marginLeft: 8 }} />
               </TouchableOpacity>
-            ))}
-          </View>
-          {errors.session && <Text style={{ color: "red", marginTop: 10 }}>{errors.session}</Text>}
-
-          {/* Date & Time */}
-          <Text style={styles.label}>{localizationStrings?.Daterequired}:</Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <TouchableOpacity
-              style={styles.datePicker}
-              onPress={() => setShowCalendar(true)}
-              activeOpacity={0.7}
-            >
-              <Text>{date || localizationStrings.SelectTime}</Text>
-              <Image source={imageIndex.calender} style={{ height: 22, width: 22, marginLeft: 8 }} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.datePicker}
-              onPress={() => setShowTimePicker(true)}
-              activeOpacity={0.7}
-            >
-              <Text>Time - {formattedTime}</Text>
-              <Image source={imageIndex.clocks} style={{ height: 22, width: 22, marginLeft: 8 }} />
-            </TouchableOpacity>
-          </View>
-          {errors?.date && <Text style={{ color: "red", marginTop: 10 }}>{errors?.date}</Text>}
-
-          {/* Calendar Modal */}
-          <Modal visible={showCalendar} transparent animationType="slide">
-            <View style={styles.modalContainer}>
-              <View style={styles.calendarContainer}>
-                <Calendar
-                  onDayPress={day => {
-                    setDate(day.dateString);
-                    setShowCalendar(false);
-                  }}
-                  hideExtraDays={true}
-                  hideDayNames={true}
-                  renderArrow={direction => (
-                    <Image
-                      source={direction === "left" ? imageIndex.circleBak : imageIndex.circleleft}
-                      style={{ height: 22, width: 22 }}
-                    />
-                  )}
-                  theme={{
-                    textMonthFontSize: 20,
-                    textMonthFontWeight: "bold",
-                    monthTextColor: "#000",
-                    arrowStyle: { alignSelf: "center" },
-                  }}
-                />
-              </View>
+              <TouchableOpacity
+                style={styles.datePicker}
+                onPress={() => setShowTimePicker(true)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.datePickerText} numberOfLines={1}>
+                  {formattedTime}
+                </Text>
+                <Image source={imageIndex.clocks} style={{ height: 22, width: 22, marginLeft: 8 }} />
+              </TouchableOpacity>
             </View>
-          </Modal>
-
-          {/* Effort Slider */}
-          <View
-            style={{
-              width: "92%",
-              height: 8,
-              backgroundColor: "#D3D3D3",
-              borderRadius: 4,
-              marginVertical: 20,
-              marginLeft: 5,
-              marginTop: 20,
-            }}
-          >
-            <Animated.View
-              style={[
-                {
-                  height: 8,
-                  borderRadius: 4,
-                  position: "absolute",
-                  left: 0,
-                  backgroundColor: getEffortColor(effort),
-                },
-                { width: pan },
-              ]}
-            />
-            <Animated.View
-              {...panResponder.panHandlers}
-              style={[
-                {
-                  width: 18,
-                  height: 18,
-                  borderRadius: 10,
-                  backgroundColor: "#000",
-                  position: "absolute",
-                  top: -6,
-                },
-                { left: pan },
-              ]}
-            />
+            {errors?.date ? <Text style={styles.errorText}>{errors.date}</Text> : null}
           </View>
-          <Text style={{ fontSize: 18, fontWeight: "bold", marginVertical: 10, color: "black" }}>
-            Effort : {effort}
-          </Text>
-          {errors.effort && <Text style={{ color: "red" }}>{errors.effort}</Text>}
+
+          {/* Effort slider */}
+          <View style={styles.section}>
+            <Text style={styles.label}>{localizationStrings?.EffortLabel}</Text>
+            <View style={[styles.sliderTrack, { width: SLIDER_WIDTH }]}>
+              <Animated.View
+                style={[
+                  styles.sliderFill,
+                  {
+                    width: pan,
+                    backgroundColor: getEffortColor(effort),
+                  },
+                ]}
+              />
+              <Animated.View
+                {...panResponder.panHandlers}
+                style={[
+                  styles.sliderThumb,
+                  {
+                    left: Animated.subtract(pan, 16),
+                  },
+                ]}
+              >
+                <Text style={styles.sliderThumbText}>{effort}</Text>
+              </Animated.View>
+            </View>
+            <Text style={styles.effortLabel}>
+              {localizationStrings?.EffortLabel}: {effort}/10
+            </Text>
+            {errors.effort ? <Text style={styles.errorText}>{errors.effort}</Text> : null}
+          </View>
 
           {/* Comments */}
-          <Text style={[styles.label, { marginTop: 20 }]}>{localizationStrings?.AddComments}</Text>
-          <View
-            style={{
-              backgroundColor: "#F3F3F3",
-              borderRadius: 20,
-              padding: 10,
-              marginTop: 20,
-              height: 160,
-            }}
-          >
+          <View style={styles.section}>
+            <Text style={styles.label}>{localizationStrings?.AddComments}</Text>
             <TextInput
-              placeholder="Type here..."
-              placeholderTextColor={"#888585"}
+              placeholder={localizationStrings?.TypeHere}
+              placeholderTextColor="#94A3B8"
               value={comments}
               onChangeText={setComments}
               multiline
-              style={{ fontSize: 14, color: "black" }}
+              style={[styles.commentsInput, styles.commentsInputText]}
             />
+            {errors.comments ? <Text style={styles.errorText}>{errors.comments}</Text> : null}
           </View>
-          {errors.comments && <Text style={{ color: "red", marginTop: 10 }}>{errors.comments}</Text>}
 
-          {/* Questionnaire Dropdown */}
-          <Text style={[styles.label, { marginTop: 20 }]}>{localizationStrings?.TrainingSession}</Text>
-          <TouchableOpacity
-            style={[
-              styles.datePicker,
-              { flexDirection: "row", height:60, justifyContent: "space-between", alignItems: "center" },
-            ]}
-            onPress={() => setShowQuestionnaireDropdown(prev => !prev)}
-          >
-            <Text>
-              {selectedQuestionnaire
-                ? questionnaires.find(q => q.id === selectedQuestionnaire)?.training_title
-                : localizationStrings?.SelectSession}
-            </Text>
-            <Image
-              source={imageIndex.arroRight}
-              style={{
-                width: 16,
-                height: 16,
-                transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
-              }}
-            />
-          </TouchableOpacity>
-
-          {showQuestionnaireDropdown && (
-            <View
-              style={{
-                maxHeight: 200,
-                borderWidth: 1,
-                borderColor: "#ddd",
-                borderRadius: 8,
-                marginTop: 5,
-                backgroundColor: "white",
-               }}
+          {/* Questionnaire */}
+          <View style={styles.section}>
+            <Text style={styles.label}>{localizationStrings?.TrainingSession}</Text>
+            <TouchableOpacity
+              style={[styles.datePicker, styles.dropdownTrigger]}
+              onPress={() => setShowQuestionnaireDropdown((prev) => !prev)}
             >
-              <ScrollView>
-                {questionnaires.map(item => (
-                  <TouchableOpacity
-                    key={item.id}
-                    style={styles.dropdownItem}
-                    onPress={() => {
-                      setSelectedQuestionnaire(item.id);
-                      setShowQuestionnaireDropdown(false);
-                    }}
-                  >
-                    <Text style={styles.dropdownItemText}>{item.training_title}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
+              <Text style={styles.datePickerText} numberOfLines={1}>
+                {selectedQuestionnaire != null
+                  ? questionnaires.find((q) => q.id === selectedQuestionnaire)?.training_title ??
+                    localizationStrings?.Select
+                  : localizationStrings?.Select}
+              </Text>
+              <Image
+                source={imageIndex.arroRight}
+                style={{
+                  width: 16,
+                  height: 16,
+                  transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
+                }}
+              />
+            </TouchableOpacity>
+            {showQuestionnaireDropdown && questionnaires.length > 0 ? (
+              <View style={styles.dropdown}>
+                <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
+                  {questionnaires.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        setSelectedQuestionnaire(item.id);
+                        setShowQuestionnaireDropdown(false);
+                      }}
+                    >
+                      <Text style={styles.dropdownItemText}>{item.training_title}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ) : null}
+          </View>
         </ScrollView>
 
-        {/* Submit Button */}
-
-
-        {/* Time Picker & Attendance Modals */}
         <TimePickerModal
           time={time}
-          setTime={t => {
+          setTime={(t: Date) => {
             setTime(t);
             setFormattedTime(t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
           }}
@@ -322,9 +258,49 @@ const SubmitRPE = () => {
           onConfirm={handleConfirm}
         />
       </View>
+
       <View style={styles.buttView}>
-          <CustomButton title={localizationStrings.Submit} onPress={() => handleSubmit()} />
+        <CustomButton
+          title={localizationStrings.Submit}
+          onPress={() => handleSubmit(selectedQuestionnaire)}
+        />
+      </View>
+      </KeyboardAvoidingView>
+
+      {/* Calendar modal */}
+      <Modal visible={showCalendar} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.calendarContainer}>
+            <Calendar
+              onDayPress={(day) => {
+                setDate(day.dateString);
+                setShowCalendar(false);
+              }}
+              hideExtraDays
+              hideDayNames
+              renderArrow={(direction) => (
+                <Image
+                  source={direction === "left" ? imageIndex.circleBak : imageIndex.translatingcircleleft}
+                  style={{ height: 22, width: 22 }}
+                />
+              )}
+              theme={{
+                textMonthFontSize: 20,
+                textMonthFontWeight: "bold",
+                monthTextColor: "#0f172a",
+                arrowStyle: { alignSelf: "center" },
+              }}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowCalendar(false)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.closeButtonText}>{localizationStrings?.Close}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+      </Modal>
     </SafeAreaView>
   );
 };

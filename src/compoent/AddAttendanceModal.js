@@ -1,8 +1,10 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import localizationStrings from './Localization/Localization';
+import { useLanguage } from './Localization/LanguageContext';
 
 const AddAttendanceModal = ({ visible, onConfirm,onClose }) => {
+  useLanguage();
   return (
     <Modal
       transparent

@@ -4,10 +4,11 @@ import {   StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "white",
-      marginHorizontal: 15,
-      marginTop:25
+      backgroundColor: "#F9FAFB",
+       marginTop: 20,
     },
+    scrollContent: { paddingBottom: 24 },
+    safeArea: { flex: 1, backgroundColor: "#F9FAFB" },
     header: {
       flexDirection: "row",
       alignItems: "center",
@@ -28,7 +29,8 @@ const styles = StyleSheet.create({
     //   elevation: 1,
     
     // },
-    avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
+    avatar: { width: 52, height: 52, borderRadius: 26, borderWidth: 1, borderColor: "#E5E7EB" },
+    avatarLoader: { position: "absolute", top: "35%", left: "50%", transform: [{ translateX: -10 }, { translateY: -10 }] },
     infoContainer: { flex: 1 },
     name: { fontSize: 12, fontWeight: "600",color:"black" },
     position: { fontSize: 12, fontWeight: "600",color:"rgba(153, 153, 153, 1)"  },
@@ -37,16 +39,37 @@ const styles = StyleSheet.create({
     // value: { fontSize: 12, fontWeight: "600",color:"rgba(153, 153, 153, 1)" },
   
     userInfo: {
-      marginLeft: 15,
+      marginLeft: 16,
       flex: 1,
+      justifyContent: "center",
     },
     userName: {
       fontSize: 18,
-      fontWeight: "bold",
+      fontWeight: "700",
+      color: "#111827",
+    },
+    userEmail: {
+      fontSize: 14,
+      color: "#6B7280",
+      marginTop: 2,
     },
     userSubtitle: {
       fontSize: 14,
       color: "gray",
+    },
+    sectionWrap: {
+      marginHorizontal: 16,
+      marginBottom: 12,
+      marginTop: 4,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: "700",
+      color: "#111827",
+    },
+    listContent: {
+      paddingHorizontal: 16,
+      paddingBottom: 24,
     },
     notificationIcon: {
       padding: 10,
@@ -55,51 +78,120 @@ const styles = StyleSheet.create({
       marginVertical: 8,
       borderRadius: 10,
     },
-    card: {
+    sessionCard: {
       backgroundColor: "#fff",
-      borderRadius: 12,
-      padding: 16,
-      marginBottom: 12,
-      shadowColor: "#000",
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
+      borderRadius: 16,
+      padding: 18,
+      marginBottom: 14,
+       shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.06,
+      shadowRadius: 8,
       elevation: 3,
+       borderColor: "#E5E7EB",
+      overflow: "hidden",
     },
-    activeCard: {
-      borderColor: "#4CAF50",
-      borderWidth: 2,
+    sessionCardActive: {
+      borderLeftWidth: 4,
+      borderLeftColor: "rgba(160, 216, 3, 1)",
+      borderColor: "rgba(160, 216, 3, 0.35)",
+    },
+    sessionCardHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 14,
+      paddingBottom: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#F3F4F6",
+    },
+    sessionDate: {
+      fontSize: 16,
+      fontWeight: "700",
+      color: "#111827",
+    },
+    sessionBadge: {
+      paddingVertical: 6,
+      paddingHorizontal: 14,
+      borderRadius: 20,
+    },
+    sessionBadgeOngoing: {
+      backgroundColor: "rgba(160, 216, 3, 0.2)",
+    },
+    sessionBadgeEnded: {
+      backgroundColor: "#FEE2E2",
+    },
+    sessionBadgeText: {
+      fontSize: 12,
+      fontWeight: "700",
+      color: "#111827",
+    },
+    sessionBadgeTextEnded: {
+      color: "#DC2626",
+    },
+    sessionTimeRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    sessionTimeBlock: {
+      flex: 1,
+    },
+    sessionTimeLabel: {
+      fontSize: 12,
+      fontWeight: "600",
+      color: "#6B7280",
+      marginBottom: 4,
+    },
+    sessionTimeValue: {
+      fontSize: 15,
+      fontWeight: "600",
+      color: "#111827",
+    },
+    sessionTimeOngoing: {
+      color: "rgba(160, 216, 3, 1)",
+     },
+    sessionTimeSeparator: {
+      fontSize: 14,
+      color: "#9CA3AF",
+      fontWeight: "500",
+      marginHorizontal: 12,
     },
     row: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: 6,
+      alignItems: "center",
+      marginBottom: 8,
     },
     label: {
+      fontSize: 14,
       fontWeight: "600",
-      color: "#555",
+      color: "#6B7280",
     },
     value: {
+      fontSize: 14,
       fontWeight: "500",
-      color: "#222",
+      color: "#111827",
     },
     statusRow: {
-      marginTop: 8,
-      alignItems: "flex-start",
+      marginTop: 12,
+      alignItems: "flex-end",
     },
     status: {
-      fontWeight: "700",
-      fontSize: 14,
-      paddingVertical: 4,
-      paddingHorizontal: 8,
-      borderRadius: 8,
+      fontWeight: "600",
+      fontSize: 13,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 20,
+      overflow: "hidden",
     },
     activeStatus: {
       color: "#fff",
-      backgroundColor: "#4CAF50",
+      backgroundColor: "rgba(160, 216, 3, 1)",
     },
     endStatus: {
       color: "#fff",
-      backgroundColor: "#E53935",
+      backgroundColor: "#DC2626",
     },
   
   });

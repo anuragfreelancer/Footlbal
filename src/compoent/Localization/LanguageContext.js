@@ -1,21 +1,22 @@
 // src/contexts/LanguageContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import localizationStrings from './Localization';
-
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('French');
+  const [language, setLanguage] = useState('English');
 
   useEffect(() => {
     const loadLanguage = async () => {
-      const storedLanguage = await AsyncStorage.getItem('Lng');
-      if (storedLanguage) {
-        setLanguage(storedLanguage);
-        localizationStrings.setLanguage(storedLanguage);
-      }
+      try {
+        const storedLanguage = await AsyncStorage.getItem('Lng');
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          localizationStrings.setLanguage(storedLanguage);
+        }
+      } catch (e) {}
     };
     loadLanguage();
   }, []);
@@ -23,7 +24,9 @@ export const LanguageProvider = ({ children }) => {
   const changeLanguage = async (newLanguage) => {
     setLanguage(newLanguage);
     localizationStrings.setLanguage(newLanguage);
-    await AsyncStorage.setItem('Lng', newLanguage);
+    try {
+      await AsyncStorage.setItem('Lng', newLanguage);
+    } catch (e) {}
   };
 
   return (
@@ -31,6 +34,13 @@ export const LanguageProvider = ({ children }) => {
       {children}
     </LanguageContext.Provider>
   );
+};
+
+/** Use in any component that uses localizationStrings so it re-renders when language changes. */
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (!context) throw new Error('useLanguage must be used within LanguageProvider');
+  return context;
 };
 
 export default LanguageContext;

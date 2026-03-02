@@ -18,8 +18,10 @@ import useFeedback from "./useFeedback";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 
 const Feedback = () => {
+  useLanguage();
   const {
     isLoading,
     navigation,

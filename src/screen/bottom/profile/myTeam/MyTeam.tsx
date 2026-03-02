@@ -8,9 +8,11 @@ import useMyTeam from "./useMyTeam";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
  import localizationStrings from "../../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
  
  
 const MyTeam = () => {
+  useLanguage();
   const {
     MyTeam,  
     isLoading, 

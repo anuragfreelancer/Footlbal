@@ -8,9 +8,10 @@ import { ActivityIndicator } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
+import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 
 const ChatScreen = () => {
-
+    useLanguage();
     const {
         isLoading,
         navigation,

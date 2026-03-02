@@ -8,23 +8,24 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import localizationStrings from './Localization/Localization';
+import { useLanguage } from './Localization/LanguageContext';
 
 const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
+  const { language, changeLanguage } = useLanguage();
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLanguage = async () => {
       const lang = await AsyncStorage.getItem('Lng');
-      setSelectedLanguage(lang || 'English'); // Default to English
+      setSelectedLanguage(lang || language || 'English');
     };
     if (visible) fetchLanguage();
-  }, [visible]);
+  }, [visible, language]);
 
   const handleLanguageSelect = async (lang: string) => {
-    localizationStrings.setLanguage(lang);
-    await AsyncStorage.setItem('Lng', lang);
+    await changeLanguage(lang);
     setSelectedLanguage(lang);
-    onSelectLanguage(lang);
+    onSelectLanguage?.(lang);
     onClose();
   };
 

@@ -89,10 +89,10 @@ const useAddPlayer = () => {
       valid = false;
     }
   
-    if (!imagePrfile) {
-      newErrors.imagePrfile = localizationStrings?.Profilerequired;
-      valid = false;
-    }
+    // if (!imagePrfile) {
+    //   newErrors.imagePrfile = localizationStrings?.Profilerequired;
+    //   valid = false;
+    // }
   
     if (!dob) {
       newErrors.dob = localizationStrings?.Daterequired;

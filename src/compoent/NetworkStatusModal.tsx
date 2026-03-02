@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, Linking, Platform, Image } from 'react-native';
 import localizationStrings from './Localization/Localization';
+import { useLanguage } from './Localization/LanguageContext';
 
 type Props = {
   isConnected: boolean | null;
@@ -17,6 +18,7 @@ const NetworkStatusModal: React.FC<Props> = ({
   offlineText,
   checkingText,
 }) => {
+  useLanguage();
   const openSettings = () => {
     if (Platform.OS === 'ios') {
       Linking.openURL('App-Prefs:root=MOBILE_DATA_SETTINGS_ID');

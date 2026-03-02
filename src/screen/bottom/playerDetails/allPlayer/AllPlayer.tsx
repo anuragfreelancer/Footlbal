@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
     ActivityIndicator, Alert
@@ -15,6 +15,8 @@ import useAllPlayer from "./useAllPlayer";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
+import { useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 
 const AllPlayer = () => {
   const {
@@ -87,6 +89,7 @@ const [is,setIsLoading]= useState(false)
   
  
   const CommonCard = React.memo(({ item, onPress, isSelected }) => {
+    console.log("item?.image",item?.image)
     return (
       <TouchableOpacity
         style={[
@@ -99,7 +102,9 @@ const [is,setIsLoading]= useState(false)
           {/* Checkbox */}
           
           {/* Player Info */}
-          <Image source={{ uri: item?.image}} style={styles.avatar} />
+
+          {item?.image  ?     <Image source={{ uri: item?.image}} style={styles.avatar} /> :    <Image source={imageIndex.user} style={styles.avatar} />}
+       
           <View style={styles.contentContainer}>
             <View style={styles.infoContainer}>
               <Text style={styles.name}>{item?.user_name}</Text>
@@ -112,15 +117,20 @@ const [is,setIsLoading]= useState(false)
       </TouchableOpacity>
     );
   });
+  const getLogin = useSelector((state: any) => state?.feature);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {};
+    }, [getLogin])
+  );
   return (
     <SafeAreaView style={styles.container}>
             {is ? <LoadingModal /> : null}
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
         <Text style={styles.header}>{localizationStrings?.Players}</Text>
-          <SubscriptionCard/>
-
+        <SubscriptionCard />
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}

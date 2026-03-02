@@ -20,6 +20,7 @@ export const constant = {
   updatePlayer:"update_player",
   addubmitRPF :"add_submit_RPF",
   add_attendance:"add_attendance",
+  get_training:"get_training",
   get_coach_session:"get_coach_session",
   getSubmit_RPF:"get_submit_RPF", 
   getConversation:"get_conversation",
@@ -32,7 +33,8 @@ export const constant = {
   getCategory:"get_category",
   Getfaq:"get_faq",
   get_user_by_id:"get_user_by_id",
-  AddContact_us:"add_contact_us"
+  AddContact_us:"add_contact_us",
+  createCheckoutSession:"createCheckoutSession"
 };
 export const base_url = 'https://kmmps.store/api/';
 // export const base_url = 'https://server-php-8-3.technorizen.com/Football/api/';

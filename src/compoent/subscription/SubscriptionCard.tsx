@@ -3,10 +3,11 @@ import PremiumUI from './PremiumUI';
 import FreeUI from './FreeUI';
 import ExpiredUI from './ExpiredUI';
 import { useSubscription } from './useSubscription';
- 
-const SubscriptionCard = () => {
-  const { isActive, isFree, isExpired, expiry } = useSubscription();
 
+const SubscriptionCard = () => {
+  const { isActive, isFree, isExpired, expiry, showSubscriptionCard } = useSubscription();
+
+  if (!showSubscriptionCard) return null;
   if (isActive) return <PremiumUI expiry={expiry} />;
   if (isFree) return <FreeUI />;
   if (isExpired) return <ExpiredUI />;

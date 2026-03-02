@@ -55,7 +55,7 @@ export default function Login() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      {isLoading ? <LoadingModal /> : null}
+      <LoadingModal  visible={isLoading} />  
       <StatusBarCompoent />
       <KeyboardAvoidingView
     style={{ flex: 1 }}

@@ -7,8 +7,10 @@ import useLegalinfor from './useLegalinfor';
 import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 const Legalinfor = () => {
+    useLanguage();
     const {
         privacyData,
         isLoading,

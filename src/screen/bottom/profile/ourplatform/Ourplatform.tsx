@@ -5,8 +5,10 @@ import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import styles from './style';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 const Ourplatform = ({ navigation }:any) => {
+    useLanguage();
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <StatusBarComponent />

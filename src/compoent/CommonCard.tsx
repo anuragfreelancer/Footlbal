@@ -6,15 +6,21 @@ interface CommonCardProps {
     image: string;
     player_name: string;
     load_type_id: string;
-    injury: string; 
-    user_name:string
+    injury: string;
+    user_name: string;
   };
-  onPress: () => void;
+  onPress?: () => void;
+  accentBorder?: boolean;
 }
 
-const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress }) => {
+const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accentBorder = false }) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.card, accentBorder && styles.cardAccent]}
+      onPress={onPress}
+      activeOpacity={onPress ? 0.7 : 1}
+      disabled={!onPress}
+    >
       <Image source={{ uri: item?.image }} style={styles.avatar} />
       <View style={styles.contentContainer}>
         <View style={styles.infoContainer}>
@@ -23,11 +29,15 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress }) => 
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.label}>Training Type</Text>
-          <Text style={styles.value}>{item.load_type_id}</Text>
+          <Text style={styles.value} numberOfLines={1} ellipsizeMode="tail">
+            {item.load_type_id}
+          </Text>
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.label}>Intensity</Text>
-          <Text style={styles.value}>{item.injury}</Text>
+          <Text style={styles.value} numberOfLines={1} ellipsizeMode="tail">
+            {item.injury}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -38,52 +48,72 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 15,
-    marginVertical: 6,
-    marginHorizontal: 1,
+    backgroundColor: "#fff",
+    padding: 14,
+    borderRadius: 16,
+    marginVertical: 0,
+    marginHorizontal: 0,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#F3F4F6",
+  },
+  cardAccent: {
+    borderLeftWidth: 4,
+    borderLeftColor: "#A0D803",
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    marginRight: 14,
+    backgroundColor: "#F3F4F6",
   },
   contentContainer: {
     flexDirection: "row",
     flex: 1,
+    minWidth: 0,
     alignItems: "center",
     justifyContent: "space-between",
   },
-  infoContainer: {},
+  infoContainer: {
+    flex: 1,
+    minWidth: 0,
+    marginRight: 8,
+  },
   name: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "600",
-    color: "black",
+    color: "#111827",
   },
   position: {
     fontSize: 12,
     fontWeight: "600",
-    color: "rgba(153, 153, 153, 1)",
+    color: "#6B7280",
+    marginTop: 2,
   },
   detailContainer: {
     alignItems: "center",
+    minWidth: 0,
+    flexShrink: 1,
+    marginHorizontal: 6,
+    maxWidth: "28%",
   },
   label: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "600",
-    color: "black",
+    color: "#6B7280",
+    marginBottom: 2,
   },
   value: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "600",
-    color: "rgba(153, 153, 153, 1)",
+    color: "#374151",
     textTransform: "uppercase",
+    textAlign: "center",
   },
 });
 

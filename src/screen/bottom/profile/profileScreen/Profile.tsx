@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import imageIndex from "../../../../assets/imageIndex";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import LogoutModal from "../../../../compoent/LogoutModal";
 import LanguageModal from "../../../../compoent/LanguageModal";
@@ -19,6 +20,7 @@ import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard
 
 const Profile = () => {
   const navigation = useNavigation();
+  const { language } = useLanguage();
   
       const getLogin = useSelector((state: any) => state?.feature);
     const isLogin = useSelector((state: any) => state?.auth);

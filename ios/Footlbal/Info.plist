@@ -55,5 +55,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kmmprpe</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>KMMP RPE</string>
+			<key>CFBundleURLRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
 </dict>
 </plist>

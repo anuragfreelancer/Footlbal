@@ -12,9 +12,11 @@ import DropdownModal from '../../../../compoent/DropdownModal';
 import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 
 const PlayerEdit = () => {
+  useLanguage();
   const {
     fullName, setFullName,
     dob, setDob,

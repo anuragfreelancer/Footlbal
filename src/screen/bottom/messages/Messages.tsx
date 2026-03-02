@@ -12,9 +12,11 @@ import moment from "moment";
 import LoadingModal from "../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
+import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 
 
 const Messages = () => {
+    useLanguage();
     const {
          isLoading,
         navigation,
@@ -28,7 +30,8 @@ const Messages = () => {
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: "white"
-        }}>      {isLoading ? <LoadingModal /> : null}
+        }}>      
+            <LoadingModal  visible={isLoading} />  
 
             <StatusBarComponent />
             <View style={{

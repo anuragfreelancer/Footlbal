@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import localizationStrings from './Localization/Localization';
+import { useLanguage } from './Localization/LanguageContext';
 
 const TimePickerModal = ({ time, setTime, visible, onClose }) => {
+  useLanguage();
   const [tempTime, setTempTime] = useState(time);
 
   const handleConfirm = () => {

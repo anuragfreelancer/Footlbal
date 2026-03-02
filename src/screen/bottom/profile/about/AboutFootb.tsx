@@ -9,9 +9,10 @@ import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 const AboutFootb = () => {
-
+    useLanguage();
     const {
         AboutData,
         isLoading,

@@ -2,7 +2,28 @@ import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import TextCompoent, { Size } from './Text';
- 
+
+const SERVER_ERROR_PATTERNS = [
+  'file_get_contents',
+  'wrapper is disabled',
+  'allow_url_fopen',
+  'Fatal error',
+  'Warning:',
+  'Parse error',
+  'server configuration',
+];
+
+function sanitizeErrorMessage(msg: string | undefined | null): string {
+  if (msg == null || typeof msg !== 'string') return 'Something went wrong. Please try again.';
+  const t = msg.trim();
+  if (!t) return 'Something went wrong. Please try again.';
+  const lower = t.toLowerCase();
+  if (SERVER_ERROR_PATTERNS.some((p) => lower.includes(p.toLowerCase()))) {
+    return 'Something went wrong. Please try again.';
+  }
+  return t;
+}
+
 const toastConfig = {
   successResponse: ({text1}:any) => (
     <View style={styles.container}>
@@ -50,9 +71,10 @@ export const successToast = (message, time = 2000) => {
 };
 
 export const errorToast = (message, time = 2000,position = 'top') => {
+  const safeMessage = sanitizeErrorMessage(message);
   Toast.show({
     type: 'errorResponse',
-    text1: message,
+    text1: safeMessage,
     position: position,
     visibilityTime: time,
     topOffset: 50,

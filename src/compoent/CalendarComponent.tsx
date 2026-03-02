@@ -182,12 +182,12 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ onDateSelect }) =
   return (
     <View style={styles.card}>
       <View style={styles.calendarHeader}>
-        <TouchableOpacity onPress={() => changeMonth("prev")} style={styles.arrowButton}>
-          <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} resizeMode="contain" />
+        <TouchableOpacity onPress={() => changeMonth("prev")} style={styles.arrowButton} activeOpacity={0.7}>
+          <Image source={imageIndex.circleBak} style={styles.arrowIcon} resizeMode="contain" />
         </TouchableOpacity>
         <Text style={styles.monthText}>{currentMonth.format("MMMM YYYY")}</Text>
-        <TouchableOpacity onPress={() => changeMonth("next")} style={styles.arrowButton}>
-          <Image source={imageIndex.circleleft} style={{ height: 24, width: 24 }} resizeMode="contain" />
+        <TouchableOpacity onPress={() => changeMonth("next")} style={styles.arrowButton} activeOpacity={0.7}>
+          <Image source={imageIndex.circleleft} style={styles.arrowIcon} resizeMode="contain" />
         </TouchableOpacity>
       </View>
       <View style={styles.weekRow}>
@@ -224,62 +224,80 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ onDateSelect }) =
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFF",
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 2,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
     alignItems: "center",
-    margin: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
   },
   calendarHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    marginTop: 11,
+    marginBottom: 16,
+    paddingHorizontal: 4,
   },
   monthText: {
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: "700",
-    color: "#0A1811",
+    color: "#111827",
+    letterSpacing: 0.2,
   },
   arrowButton: {
-    padding: 10,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: "#F3F4F6",
+  },
+  arrowIcon: {
+    height: 22,
+    width: 22,
   },
   weekRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 10,
+    width: "100%",
+    marginBottom: 12,
+    paddingHorizontal: 4,
   },
   weekDay: {
-    fontWeight: "700",
-    width: 42,
+    fontWeight: "600",
+    width: 36,
     textAlign: "center",
-    color: "#7B827E",
-    fontSize: 12,
+    color: "#9CA3AF",
+    fontSize: 11,
   },
   dayBox: {
-    width: 38,
-    height: 20,
-    margin: 4,
+    width: 36,
+    height: 36,
+    margin: 2,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   dayText: {
-    fontSize: 13,
-    color: "#0A1811",
+    fontSize: 14,
+    color: "#374151",
+    fontWeight: "500",
   },
   selectedDayText: {
-    justifyContent: "center",
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    height: 32,
+    width: 32,
+    lineHeight: 32,
     textAlign: "center",
-    color: "white",
-    height: 23,
-    width: 23,
     backgroundColor: "#A0D803",
-    borderRadius: 50,
+    borderRadius: 16,
+    overflow: "hidden",
   },
 });
 

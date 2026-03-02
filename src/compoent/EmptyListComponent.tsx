@@ -18,13 +18,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        paddingVertical: 32,
+        paddingHorizontal: 24,
+        minHeight: 120,
     },
     emptyText: {
         fontSize: 15,
-        color: 'black',
-        fontWeight:"500",
-        
+        color: '#6B7280',
+        fontWeight: '500',
+        textAlign: 'center',
     },
 });
 

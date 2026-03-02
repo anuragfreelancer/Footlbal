@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Image } from "react-native";
 import imageIndex from "../assets/imageIndex";
 import localizationStrings from "./Localization/Localization";
+import { useLanguage } from "./Localization/LanguageContext";
 
 const LogoutModal = ({ isVisible, close, onSumbit }: any) => {
+  useLanguage();
   return (
     <Modal
       transparent={true}
@@ -26,7 +28,7 @@ const LogoutModal = ({ isVisible, close, onSumbit }: any) => {
           <Text style={styles.subtitle}>{localizationStrings.sure}?</Text>
 
           <TouchableOpacity style={styles.logoutButton} onPress={onSumbit}>
-            <Text style={styles.logoutText}>{localizationStrings?.Save}</Text>
+            <Text style={styles.logoutText}>{localizationStrings?.Logout}</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

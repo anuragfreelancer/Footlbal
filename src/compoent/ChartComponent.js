@@ -1,393 +1,125 @@
-
-
-// import React, { useState } from "react";
-// import { View, Text, Dimensions, TouchableOpacity, Modal, FlatList, TouchableWithoutFeedback } from "react-native";
-// import { LineChart } from "react-native-chart-kit";
-
-// const screenWidth = Dimensions.get("window").width;
-
-// const ChartComponent = ({ data, statusText, statusColor }) => {
-//   const [selectedType, setSelectedType] = useState("weekly");
-//   const [modalVisible, setModalVisible] = useState(false);
-
-//   const types = Object.keys(data);
-//   const currentData = data[selectedType].data;
-//   const maxValue = Math.max(...currentData);
-
-//   return (
-//     <View style={{ marginTop: 15, backgroundColor: "#fff", borderRadius: 10 }}>
-//       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-//         <View style={{ width: 15, height: 15, borderRadius: 15, backgroundColor: statusColor, marginRight: 5 }} />
-//         <Text style={{ fontWeight: "700", color: "black", fontSize: 18, marginLeft: 5 }}>{statusText}</Text>
-//         <View style={{ flex: 1, alignItems: "flex-end" }}>
-//           <TouchableOpacity onPress={() => setModalVisible(true)}>
-//             <View style={{ backgroundColor: "#ED7E62", padding: 10, borderRadius: 30 }}>
-//               <Text style={{ color: "#fff", fontSize: 10, fontWeight: "500" }}>{selectedType.charAt(0).toUpperCase() + selectedType.slice(1)} ▼</Text>
-//             </View>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-
-//       <LineChart
-//         data={{
-//           labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-//           datasets: [
-//             {
-//               data: currentData,
-//               color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-//               strokeWidth: 2,
-//               withDots: false,
-//             },
-//           ],
-//         }}
-//         width={screenWidth - 40}
-//         height={220}
-//         yAxisSuffix="%"
-//         yAxisInterval={1}
-//         chartConfig={{
-//           backgroundColor: "#fff",
-//           backgroundGradientFrom: "#fff",
-//           backgroundGradientTo: "#fff",
-//           decimalPlaces: 0,
-//           color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-//           labelColor: (opacity = 1, index) =>
-//             currentData[index] === maxValue ? "red" : "#7B6F72",
-//           propsForLabels: {
-//             fontSize: 12,
-//             fontWeight: "600",
-//           },
-//           propsForDots: {
-//             r: "0",
-//           },
-//         }}
-//         bezier
-//         style={{ marginVertical: 8, borderRadius: 16 }}
-//       />
-//       <Modal visible={modalVisible} transparent animationType="slide">
-//         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-//           <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-//             <View style={{ elevation: 3, backgroundColor: "#fff", padding: 20, borderRadius: 10, width: 200 }}>
-//               <FlatList
-//                 data={types}
-//                 keyExtractor={(item) => item}
-//                 renderItem={({ item }) => (
-//                   <TouchableOpacity
-//                     onPress={() => {
-//                       setSelectedType(item);
-//                       setModalVisible(false);
-//                     }}
-//                     style={{ padding: 10, alignItems: "center", borderTopWidth: 1, borderColor: "#9DB2BF" }}
-//                   >
-//                     <Text style={{ fontWeight: "500", fontSize: 15, color: "black" }}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-//                   </TouchableOpacity>
-//                 )}
-//               />
-//             </View>
-//           </View>
-//         </TouchableWithoutFeedback>
-//       </Modal>
-//     </View>
-//   );
-// };
-
-// export default ChartComponent;
-// import React, { useState } from "react";
-// import { View, Text, Dimensions, TouchableOpacity, Modal, FlatList, TouchableWithoutFeedback, StyleSheet } from "react-native";
-// import { LineChart } from "react-native-chart-kit";
-
-// const screenWidth = Dimensions.get("window").width;
-
-// const ChartComponent = ({ data, statusText, statusColor }) => {
-//   const [selectedType, setSelectedType] = useState("weekly");
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const types = Object.keys(data);
-//   const currentData = data[selectedType].data;
-//   const maxValue = Math.max(...currentData);
-//   return (
-//     <View style={{ marginVertical: 1, marginHorizontal: 1, marginBottom: 20, marginTop: 12, backgroundColor: "#fff", borderRadius: 15, padding: 10, shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 5, elevation: 1 }}>
-//       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-//         <View style={{ width: 15, height: 15, borderRadius: 5, backgroundColor: statusColor, marginRight: 5 }} />
-//         <Text style={{ fontWeight: "700", color: "black", fontSize: 18 }}>{statusText}</Text>
-//         <View style={{ flex: 1, alignItems: "flex-end" }}>
-//           <TouchableOpacity onPress={() => setModalVisible(true)}>
-//             <View style={{ backgroundColor: "#ED7E62", paddingVertical: 5, paddingHorizontal: 15, borderRadius: 20 }}>
-//               <Text style={{ color: "#fff", fontSize: 12, fontWeight: "500" }}>{selectedType.charAt(0).toUpperCase() + selectedType.slice(1)} ▼</Text>
-//             </View>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-
-//       <LineChart
-//         data={{
-//           labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-//           datasets: [
-//             {
-//               data: currentData,
-//               color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-//               strokeWidth: 2,
-//             },
-//           ],
-//         }}
-//         width={screenWidth - 50}
-//         height={220}
-//         yAxisSuffix="%"
-//         yAxisInterval={1}
-//         chartConfig={{
-//           backgroundGradientFrom: '#ffffff',
-//           backgroundGradientTo: '#ffffff',
-//           decimalPlaces: 0,
-//           color: (opacity = 1) => `rgba(244, 113, 113, ${opacity})`, // Soft pink/red line
-//           labelColor: () => '#ccc',
-//           propsForDots: {
-//             r: '0', // No dots
-//           },
-//           propsForBackgroundLines: {
-//             stroke: '#DDDADA', // Light gray grid
-//             strokeDasharray: '10', // Solid lines
-//           },
-
-
-//           // backgroundGradientFrom: "#fff",
-//           // backgroundGradientTo: "#fff",
-//           // decimalPlaces: 0,
-//           // color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-//           // labelColor: (opacity = 1, index) => (currentData[index] === maxValue ? "red" : "#7B6F72"),
-//           // propsForLabels: {
-//           //   fontSize: 12,
-//           //   fontWeight: "600",
-//           // },
-//           // propsForDots: {
-//           //   r: "0",
-//           // },
-//         }}
-//         bezier
-//         withInnerLines={true}
-//         withOuterLines={false}
-//         // withVerticalLabels={false}
-//         withHorizontalLabels={true}
-//         withVerticalLabels={true}        // withShadow={false}
-//       // withDots={false}
-//       // fromZero={true}
-//       // withOuterLines={false}
-
-//       // fromZero={true}
-
-//       // withInnerLines={false}
-
-//       // bezier
-//       // style={{ marginVertical: 8, borderRadius: 16 }}
-//       />
-//       <Modal visible={modalVisible} transparent animationType="slide">
-//         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-//           <View style={styles.overlay}>
-//             <View style={styles.modalContainer}>
-//               <FlatList
-//                 data={types}
-//                 keyExtractor={(item, index) => index.toString()}
-//                 renderItem={({ item }) => (
-//                   <TouchableOpacity
-//                     onPress={() => {
-//                       setSelectedType(item);
-//                       setModalVisible(false);
-//                     }}
-//                     style={styles.listItem}
-//                   >
-//                     <Text style={styles.listItemText}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-//                   </TouchableOpacity>
-//                 )}
-//               />
-//             </View>
-//           </View>
-//         </TouchableWithoutFeedback>
-//       </Modal>
-//     </View>
-//   );
-// };
-// const styles = StyleSheet.create({
-//   overlay: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "rgba(0,0,0,0.5)",
-//   },
-//   modalContainer: {
-//     backgroundColor: "#fff",
-//     padding: 20,
-//     borderRadius: 10,
-//     width: 250,
-//   },
-//   listItem: {
-//     padding: 12,
-//     alignItems: "center",
-//     borderBottomWidth: 1,
-//     borderColor: "#9DB2BF",
-//   },
-//   listItemText: {
-//     fontWeight: "500",
-//     fontSize: 16,
-//     color: "black",
-//   },
-// });
-
-// export default ChartComponent;
-
-
-
-
 import React, { useState } from "react";
-import { View, Text, Dimensions, TouchableOpacity, Modal, FlatList, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { View, Text,Image, Dimensions, TouchableOpacity, Modal, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import { LineChart } from "react-native-chart-kit";
-
+import imageIndex from "../assets/imageIndex";
+ 
 const screenWidth = Dimensions.get("window").width;
+const chartWidth = screenWidth - 48;
+
+const normalizeToPercent = (arr) => {
+  if (!arr?.length) return arr;
+  const max = Math.max(...arr);
+  if (max === 0) return arr.map(() => 0);
+  return arr.map((v) => Math.round((v / max) * 100));
+};
+
+const getSubtitle = (type) => {
+  const t = type?.toLowerCase?.() || "weekly";
+  if (t === "weekly") return "Last 7 days";
+  if (t === "monthly") return "Monthly trend";
+  if (t === "yearly") return "Yearly view";
+  return type ? `${type.charAt(0).toUpperCase() + type.slice(1)} view` : "Overview";
+};
+
 const ChartComponent = ({ data, statusText, statusColor }) => {
   const [selectedType, setSelectedType] = useState("weekly");
   const [modalVisible, setModalVisible] = useState(false);
   const types = Object.keys(data);
-  const currentData = data[selectedType].data;
-  const secondData = [2800, 3000, 200, 12, 1700, 1800,2900];
+  const rawData = data[selectedType]?.data ?? [];
+  const currentData = normalizeToPercent(rawData);
+  const peak = currentData.length ? Math.max(...currentData) : 0;
+  const avg = currentData.length
+    ? Math.round(currentData.reduce((a, b) => a + b, 0) / currentData.length)
+    : 0;
+
   return (
-    <View style={{ marginVertical: 1, marginHorizontal: 1, marginBottom: 20, marginTop: 12, backgroundColor: "#fff", borderRadius: 15, padding: 10, shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 5, elevation: 1 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-        <View style={{ width: 15, height: 15, borderRadius: 15, backgroundColor: statusColor, marginRight: 5 }} />
-        <Text style={{ fontWeight: "700", color: "black", fontSize: 18 }}>{statusText}</Text>
-        <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <View style={{ backgroundColor: "#ED7E62", paddingVertical: 5, paddingHorizontal: 15, borderRadius: 20 }}>
-              <Text style={{ color: "#fff", fontSize: 12, fontWeight: "500" }}>{selectedType.charAt(0).toUpperCase() + selectedType.slice(1)} ▼</Text>
-            </View>
-          </TouchableOpacity>
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <View style={styles.titleBlock}>
+          <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
+          <View>
+            <Text style={styles.statusText}>{statusText}</Text>
+            <Text style={styles.cardSubtitle}>{getSubtitle(selectedType)}</Text>
+            <Text style={styles.statsInline}>Peak {peak}% · Avg {avg}%</Text>
+          </View>
         </View>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(true)} style={styles.selectorButton}>
+          <Text style={styles.selectorText}>{selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}</Text>
+          <Image source={imageIndex.arrowDown} 
+          style={{
+            height:15,
+            width:15 ,
+            tintColor:"white"
+          }}
+          resizeMode="contain"
+          />
+    
+        </TouchableOpacity>
       </View>
-      <LineChart
-        data={{
-          labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-          datasets: [
-            {
-              data: currentData, // First line
-              color: (opacity = 1) => `rgba(244, 113, 113, ${opacity})`, // Soft red/pink
-              strokeWidth: 2,
-            },
-            // {
-            //   data: secondData, // Second line
-            //   color: (opacity = 1) => `rgba(255, 183, 153, ${opacity})`, // Light peach/orange
-            //   strokeWidth: 2,
-            // },
-          ],
-        }}
-        width={screenWidth - 30}
-        height={220}
-        yAxisSuffix="%"
-        yAxisInterval={1}
-        chartConfig={{
-
-          backgroundGradientFrom: '#ffffff',
-          backgroundGradientTo: '#ffffff',
-          backgroundGradientToOpacity: 0.5,
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(244, 113, 113, ${opacity})`,
-          labelColor: () => '#ccc',
-          barPercentage: 0.5,
-          useShadowColorFromDataset: false,
-          propsForDots: {
-            r: '0', // No dots, just lines
-          },
-          propsForBackgroundLines: {
-            stroke: '#EEE',
-            strokeDasharray: '', // Solid horizontal lines
-            strokeWidth: 1,
-          },
-
-          propsForVerticalLabels: {
-            fill: '#7B6F72',
-            fontSize: 12,
-            fontWeight: '600',
-          },
-
-          propsForHorizontalLabels: {
-            fill: '#7B6F72',
-            fontSize: 12,
-            fontWeight: '600',
-          },
-
-          formatYLabel: (label) => `${label}%`,
-        }}
-        bezier
-        withDots={false}
-        withShadow={false}
-        withInnerLines={true}
-        withOuterLines={false}
-        withVerticalLines={false}
-        withVerticalLabels={true}
-        withHorizontalLabels={true}
-      />
-
-
-      {/* <LineChart
-    data={{
-      labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      datasets: [
-        {
-          data: currentData,
-          color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-          strokeWidth: 2,
-        },
-      ],
-    }}
-    width={screenWidth - 20}
-    height={220}
-    yAxisSuffix="%"
-    chartConfig={{
-      backgroundGradientFrom: '#ffffff',
-      backgroundGradientTo: '#ffffff',
-      decimalPlaces: 0,
-      color: (opacity = 1) => `rgba(244, 113, 113, ${opacity})`,
-      labelColor: () => '#ccc',
-      propsForDots: {
-        r: '0',
-      },
-      // propsForBackgroundLines: {
-      //   stroke: '#DDDADA',
-      //   strokeDasharray: '500',
-      //   strokeWidth: 0.5,
-      // },
-      propsForBackgroundLines: {
-        stroke: '#DDDADA',
-        strokeDasharray: '4 4', // 4 units dash, 4 units gap
-        strokeWidth: 0.5,
-      },
-      formatYLabel: (label) => `${label}%`,
-      fillShadowGradient: '#fff',  // add this
-      fillShadowGradientOpacity: 0, // add this
-      
-     }}
-    bezier
-    withInnerLines={true}
-    withOuterLines={false}
-    withVerticalLines={false}
-    withVerticalLabels={true}
-    withHorizontalLabels={true}
-  /> */}
-
-
-      <Modal visible={modalVisible} transparent animationType="slide">
+      <View style={styles.chartWrapper}>
+        <LineChart
+          data={{
+            labels: ["S", "M", "T", "W", "T", "F", "S"],
+            datasets: [
+              {
+                data: currentData.length ? currentData : [0, 0, 0, 0, 0, 0, 0],
+                color: (opacity = 1) => `rgba(72, 187, 120, ${opacity})`,
+                strokeWidth: 2.5,
+              },
+            ],
+          }}
+          width={chartWidth}
+          height={200}
+          yAxisSuffix="%"
+          fromZero
+          yAxisInterval={25}
+          chartConfig={{
+            backgroundColor: "transparent",
+            backgroundGradientFrom: "rgba(240, 253, 244, 0.5)",
+            backgroundGradientTo: "rgba(255, 255, 255, 0)",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(72, 187, 120, ${opacity})`,
+            labelColor: () => "#94A3B8",
+            barPercentage: 0.5,
+            useShadowColorFromDataset: false,
+            propsForDots: { r: 3.5, strokeWidth: 2, stroke: "#fff" },
+            propsForBackgroundLines: { stroke: "#E2E8F0", strokeWidth: 0.8 },
+            propsForVerticalLabels: { fill: "#64748B", fontSize: 10, fontWeight: "500" },
+            propsForHorizontalLabels: { fill: "#64748B", fontSize: 10, fontWeight: "500" },
+            formatYLabel: (label) => `${label}%`,
+            fillShadowGradient: "rgba(72, 187, 120, 0.2)",
+            fillShadowGradientOpacity: 1,
+          }}
+          bezier
+          withDots={true}
+          withShadow={false}
+          withInnerLines={true}
+          withOuterLines={false}
+          withVerticalLines={false}
+          withVerticalLabels={true}
+          withHorizontalLabels={true}
+          style={styles.chart}
+        />
+      </View>
+      <Modal visible={modalVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
-              <FlatList
-                data={types}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectedType(item);
-                      setModalVisible(false);
-                    }}
-                    style={styles.listItem}
-                  >
-                    <Text style={styles.listItemText}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+               {types.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  onPress={() => {
+                    setSelectedType(item);
+                    setModalVisible(false);
+                  }}
+                  style={[styles.modalItem, selectedType === item && styles.modalItemActive]}
+                >
+                  <Text style={[styles.modalItemText, selectedType === item && styles.modalItemTextActive]}>
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </Text>
+                  {selectedType === item && <Text style={styles.modalCheck}>✓</Text>}
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -396,28 +128,93 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
   );
 };
 const styles = StyleSheet.create({
+  card: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 24,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 18,
+    shadowColor: "#0f172a",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 18,
+  },
+  titleBlock: { flexDirection: "row", alignItems: "center", gap: 12 },
+  statusDot: { width: 10, height: 10, borderRadius: 5 },
+  statusText: { fontSize: 18, fontWeight: "700", color: "#0f172a" },
+  cardSubtitle: { fontSize: 13, color: "#64748B", marginTop: 2, fontWeight: "500" },
+  statsInline: { fontSize: 11, color: "#94A3B8", marginTop: 4, fontWeight: "500" },
+  selectorButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "black",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    gap: 3,
+  },
+  selectorText: { fontSize: 13, fontWeight: "600", color: "white" },
+  selectorChevron: { fontSize: 12, color: "#64748B" },
+  chartWrapper: {
+     borderRadius: 14,
+    paddingVertical: 5,
+   },
+  chart: { marginLeft: -6, borderRadius: 14 },
   overlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(15, 23, 42, 0.4)",
   },
   modalContainer: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    width: 250,
+    paddingVertical: 8,
+    borderRadius: 16,
+    width: 280,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 8,
   },
-  listItem: {
-    padding: 12,
+  modalTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#94A3B8",
+    marginBottom: 4,
+    paddingHorizontal: 16,
+    paddingTop: 4,
+  },
+  modalItem: {
+    flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderColor: "#9DB2BF",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
-  listItemText: {
-    fontWeight: "500",
+  modalItemActive: {
+   },
+  modalItemText: {
     fontSize: 16,
-    color: "black",
+    fontWeight: "500",
+    color: "#334155",
+  },
+  modalItemTextActive: {
+    color: "#166534",
+    fontWeight: "600",
+  },
+  modalCheck: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#22C55E",
   },
 });
 

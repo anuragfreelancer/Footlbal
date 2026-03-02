@@ -2,7 +2,7 @@ import { base_url, constant } from "../../config/constant";
 import ScreenNameEnum from "../../routes/screenName.enum";
 import { errorToast, successToast } from "../../utils/customToast";
 import { loginSuccess } from "../feature/authSlice";
-import { getSuccess } from "../feature/authGetSlice";
+import { getSuccess, profileFetchFailed } from "../feature/authGetSlice";
 
 
 
@@ -387,10 +387,12 @@ const StartSection = async (
             headers: myHeaders,
             body: formData,
         };
-        console.log("hshss",formData)
-        const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
-            .then((response) => response.text())
+         const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
+             
+
+        .then((response) => response.text())
             .then((res) => {
+                console.log("response",response)
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
@@ -413,9 +415,7 @@ const StartSection = async (
         return respons
     } catch (error) {
         setLoading(false)
-        errorToast(
-            'Network error',
-        );
+      
     }
 };
 const GetProfile = async (userId, dispatch) => {
@@ -432,6 +432,7 @@ const GetProfile = async (userId, dispatch) => {
         const response = await fetch(`${base_url}${constant.getrofile}`, requestOptions)
         const resText = await response.text(); // Ensure text is received before parsing
         const responseData = JSON.parse(resText);
+        console.log("responseData",responseData)
         if (responseData.status === '1') {
             dispatch(
                 getSuccess({
@@ -440,7 +441,10 @@ const GetProfile = async (userId, dispatch) => {
             );
             return { userGetData: responseData.result };
         } else {
-            errorToast(responseData.message);
+            if (responseData.status === '0' || responseData.status === 0) {
+                dispatch(profileFetchFailed());
+            }
+            errorToast(responseData.message || 'Unsuccessfully');
         }
     } catch (error) {
         errorToast('Network error');
@@ -915,7 +919,6 @@ const SumitRpfFrom = async (
     param,
     setLoading,
 ) => {
-     let dd ="https://server-php-8-3.technorizen.com/Football/api/"
      try {
         setLoading(true)
         const myHeaders = new Headers();
@@ -927,13 +930,15 @@ const SumitRpfFrom = async (
         formData.append("rate_efforts", param?.effort);
         formData.append("rpf_start_time", param?.Starttime);
         formData.append("comment", param?.comments);
+        if (param?.training_id != null && param?.training_id !== undefined && param?.training_id !== '') {
+            formData.append("training_id", param?.training_id);
+        }
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
         };
-        console.log("formData",formData)
-        const respons = await fetch(`${dd}${constant.addubmitRPF}`, requestOptions)
+        const respons = await fetch(`${base_url}${constant.addubmitRPF}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
                 console.log("res", res)
@@ -946,13 +951,7 @@ const SumitRpfFrom = async (
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
-                } else {
-                    setLoading(false)
-                    errorToast(
-                        response?.message || response?.error,
-                    );
-                    return response
-                }
+                }  
             })
             .catch((error) =>
                 console.error(error));
@@ -962,6 +961,30 @@ const SumitRpfFrom = async (
         errorToast(
             'Network error',
         );
+    }
+};
+
+const GetTraining = async (type = 'before_training') => {
+    try {
+        const response = await fetch(`${base_url}${constant.get_training}?type=${type}`);
+        const text = await response.text();
+        if (!text || typeof text !== 'string') return [];
+        const trimmed = text.trim();
+        if (/file_get_contents|wrapper is disabled|allow_url_fopen|Fatal error|Parse error|server configuration/i.test(trimmed)) {
+            console.warn('GetTraining: server returned an error response');
+            return [];
+        }
+        try {
+            const json = JSON.parse(trimmed);
+            if (json && Array.isArray(json.result)) return json.result;
+            if (json && json.result != null && !Array.isArray(json.result)) return [];
+            return [];
+        } catch (_) {
+            return [];
+        }
+    } catch (error) {
+        console.error('GetTraining error:', error);
+        return [];
     }
 };
 
@@ -976,13 +999,15 @@ const EndSection = async (
         const formData = new FormData();
         formData.append("id", param?.players);
         // formData.append("user_id", param?.players);
-        formData.append("session_end_time", param?.time);
-        formData.append("session_end_date", param?.date);
+        formData.append("session_end_time", "12:15");
+        formData.append("session_end_date", "2026 -05-03");
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
         };
+
+        console.log("ssss",formData)
          const respons = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
@@ -992,7 +1017,7 @@ const EndSection = async (
                  if (response.status == '1') {
                     setLoading(false)
                     successToast(
-                        response?.message
+                        response?.message || ""
                     );
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
@@ -1260,42 +1285,42 @@ const GetCoachSession = async (setLoading, userId) => {
     }
   };
 const Get_user_by_id = async (setLoading, userId) => {
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      `https://kmmps.store/api/get_coach_session?user_id=${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+
+    const resText = await response.text();
+
     try {
-      setLoading(true);
-  
-      const response = await fetch(
-        `${base_url}${constant.get_user_by_id}?user_id=${userId}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
-  
-      const resText = await response.text();
-  
-      try {
-        const responseData = JSON.parse(resText);
-        console.log("API Response:", responseData);
-  
-        if (responseData.status == 1) {
-          return { userGetData: responseData.result };
-        } else {
-          console.error("API returned error status:", responseData);
-          return null;
-        }
-      } catch (jsonError) {
-        console.error("JSON Parsing Error:", jsonError, resText);
+      const responseData = JSON.parse(resText);
+      console.log("API Response:", responseData);
+
+      if (responseData.status == 1) {
+        return { userGetData: responseData.result };
+      } else {
+        console.error("API returned error status:", responseData);
         return null;
       }
-    } catch (error) {
-      console.error("Network Error:", error);
+    } catch (jsonError) {
+      console.error("JSON Parsing Error:", jsonError, resText);
       return null;
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Network Error:", error);
+    return null;
+  } finally {
+    setLoading(false);
+  }
+};
   
   
 
@@ -1485,4 +1510,51 @@ const AttendanceApi = async (
     }
 };
 
-export {DelliteApi, GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi }  
+/**
+ * Create checkout session for subscription (e.g. Stripe/payment).
+ * POST FormData: email, price, user_id, access_token (backend recognises logged-in user).
+ */
+const createCheckoutSession = async (param, setLoading) => {
+    try {
+        setLoading?.(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("email", param?.email ?? "");
+        formData.append("price", String(param?.price ?? ""));
+        formData.append("user_id", String(param?.user_id ?? ""));
+        const authToken = param?.token || param?.access_token;
+        if (authToken) {
+            formData.append("access_token", authToken);
+            formData.append("token", authToken);
+        }
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const response = await fetch(`${base_url}${constant.createCheckoutSession}`, requestOptions);
+        const resText = await response.text();
+        const data = resText ? JSON.parse(resText) : {};
+        setLoading?.(false);
+        // Stripe response: { data: { url, id, ... } } or { url, status: '1', ... }
+        const session = data?.data || data;
+        const checkoutUrl = session?.url || data?.url;
+        const isSuccess = response.ok && (checkoutUrl || data?.status === '1' || data?.sessionId);
+        if (isSuccess) {
+            successToast(data?.message || 'Redirecting to payment...');
+            return { ...data, url: checkoutUrl, sessionId: session?.id || data?.sessionId };
+        }
+        if (response.status === 401) {
+            errorToast(data?.message || 'Please login again to continue');
+            return undefined;
+        }
+        errorToast(data?.message || data?.error || 'Checkout failed');
+        return undefined;
+    } catch (error) {
+        setLoading?.(false);
+        errorToast('Network error');
+    }
+};
+
+export {DelliteApi, GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession }  

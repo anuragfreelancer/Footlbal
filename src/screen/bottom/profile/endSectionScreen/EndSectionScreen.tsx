@@ -14,8 +14,10 @@ import CustomHeader from "../../../../compoent/CustomHeader";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 
 const EndSectionScreen = () => {
+  useLanguage();
   const {
  
     isLoading,  
@@ -57,9 +59,10 @@ const [is,setIsLoading]= useState(false)
   
       const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
       const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-  
+    const ids = selectedPlayers?.map(item => Number(item.id));
+
       const params = {
-        players: selectedPlayers,
+        players: ids,
         date: formattedDate,
         time: formattedTime,
         navigation, // ✅ make sure to pass it if needed

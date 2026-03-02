@@ -16,8 +16,10 @@ import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 
 const Players = () => {
+  useLanguage();
   const {
  
     isLoading,  
@@ -59,25 +61,24 @@ const [is,setIsLoading]= useState(false)
   
       const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
       const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-  
+  const ids = selectedPlayers?.map(item => Number(item.id));
+
       const params = {
-        players: selectedPlayers,
+        players: ids,
         date: formattedDate,
         time: formattedTime,
         navigation, // ✅ make sure to pass it if needed
       };
   
       console.log('📤 Sending to API:', params);
-  
+
       const response = await StartSection(params, setIsLoading);
   
       if (response?.status === '1') {
-        // Alert.alert('✅ Success', 'Section started successfully!');
-        setSelectedPlayers([])
+         setSelectedPlayers([])
       }
     } catch (error) {
-      console.error('StartSection error:', error);
-      Alert.alert('Error', 'Something went wrong.');
+       Alert.alert('Error', 'Something went wrong.');
     } finally {
       setIsLoading(false);
     }
@@ -141,7 +142,9 @@ const [is,setIsLoading]= useState(false)
        <StatusBarComponent />
        
       <View style={[styles.container, { padding: 15 }]}>
-           {/* <SubscriptionCard/> */}
+
+        
+        
         <Text style={styles.header}>{localizationStrings.Players}</Text>
         <SearchBar
           value={searchPlaylist}

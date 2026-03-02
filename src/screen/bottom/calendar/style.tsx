@@ -1,66 +1,99 @@
 
-import {   StyleSheet } from 'react-native';
-      
+import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "#F9FAFB",
   },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F9FAFB",
+  },
+  scrollContent: {
+    paddingBottom: 32,
+    flexGrow: 1,
+  },
+  header: {
+    fontSize: 24,
+    color: "#111827",
+    fontWeight: "800",
+    textAlign: "center",
+    marginTop: 12,
+    marginBottom: 8,
+    letterSpacing: 0.3,
+  },
+  calendarWrap: {
+    paddingHorizontal: 16,
+    marginBottom: 4,
+  },
+  selectedDateWrap: {
+    marginHorizontal: 16,
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ECFDF5",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#A7F3D0",
+  },
+  selectedDateLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#065F46",
+    marginRight: 8,
+  },
+  selectedDateText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#047857",
+  },
+  sectionWrap: {
+    marginHorizontal: 16,
+    marginTop: 24,
+    marginBottom: 14,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+  },
+  sectionTitle: {
+    fontSize: 19,
+    fontWeight: "700",
+    color: "#111827",
+    letterSpacing: 0.2,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    marginTop: 6,
+    fontWeight: "500",
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+  },
+  listItem: {
+    marginBottom: 14,
+  },
   calendarHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,
   },
-  arrowButton: {
-    padding: 5,
-  },
-  arrowImage: {
-    width: 20,
-    height: 20,
-    resizeMode: "contain",
-  },
-  monthText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginHorizontal: 15,
-  },
-  header: { fontSize: 24, color: "black",marginTop:30, fontWeight: "700", textAlign: "center", marginVertical: 10 },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 15,
-    marginVertical: 6,
-    marginHorizontal: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 1,
-  },
-  avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
-  infoContainer: { flex: 1 },
-  name: { fontSize: 12, fontWeight: "600", color: "black" },
-  position: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
-  detailContainer: { alignItems: "center", marginHorizontal: 10 },
-  label: { fontSize: 12, fontWeight: "600", color: "black" },
-  value: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
-  fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#7ED321",
-    borderRadius: 30,
-    width: 56,
-    height: 56,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-  },
+  arrowButton: { padding: 5 },
+  arrowImage: { width: 20, height: 20, resizeMode: "contain" },
+  monthText: { fontSize: 18, fontWeight: "bold", marginHorizontal: 15 },
+  card: {},
+  avatar: {},
+  infoContainer: {},
+  name: {},
+  position: {},
+  detailContainer: {},
+  label: {},
+  value: {},
+  fab: {},
 });
 export default styles;

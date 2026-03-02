@@ -6,6 +6,7 @@ enum ScreenNameEnum {
   ReadyScreen="ReadyScreen",
   LoginScreen="LoginScreen",
   SubscriptionPlansScreen="SubscriptionPlansScreen",
+  PaymentWebViewScreen="PaymentWebViewScreen",
   SignUpScreen="SignUpScreen",
   OtpScreen="OtpScreen",
   CreatePassword="CreatePassword",

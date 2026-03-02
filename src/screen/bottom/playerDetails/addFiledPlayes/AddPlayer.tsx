@@ -15,9 +15,11 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 import { Keyboard } from 'react-native';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 
 const AddPlayer = () => {
+  useLanguage();
   const {
     fullName, setFullName,
     dob, setDob,
@@ -66,7 +68,8 @@ const AddPlayer = () => {
   );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      {isLoading ? <LoadingModal /> : null}
+                   <LoadingModal  visible={isLoading} />  
+
       <StatusBarComponent />
       <View style={{
         marginHorizontal: 12,

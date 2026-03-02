@@ -48,7 +48,7 @@ export default function SignUp() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <StatusBarCompoent />
-            {isLoading ? <LoadingModal /> : null}
+            <LoadingModal  visible={isLoading} />  
 
             <KeyboardAvoidingView
         style={{ flex: 1 }}
