@@ -15,8 +15,8 @@ import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
-import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
-import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
+ import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
+import { errorToast } from "../../../../utils/customToast";
 
 const Players = () => {
   useLanguage();
@@ -24,9 +24,9 @@ const Players = () => {
  
     isLoading,  
     navigation,
-    isLogin,
+    
     searchPlaylist, setSearchPlaylist,
-    filterData, setFilterData
+    filterData,  
   } = usePlayers();
 const [is,setIsLoading]= useState(false)
    const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
@@ -42,15 +42,15 @@ const [is,setIsLoading]= useState(false)
   };
   const handleOpenModal = () => {
     if (selectedPlayerIds.length === 0) {
-      Alert.alert('Please select at least one player.');
-      return;
+      errorToast(localizationStrings?.Pleaseselectleastone ||"")
+       return;
     }
 
     const players = filterData.filter(p => selectedPlayerIds.includes(p.id));
     setSelectedPlayers(players);
     setModalVisible(true);
   };
-  const handleStartAPI = async ({ date, time }) => {
+  const handleStartAPI = async ({ date, time, type }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
       Alert.alert('Invalid Input', 'Date or Time is not valid.');
       return;
@@ -67,7 +67,8 @@ const [is,setIsLoading]= useState(false)
         players: ids,
         date: formattedDate,
         time: formattedTime,
-        navigation, // ✅ make sure to pass it if needed
+        session_type: type || 'TRAINING',
+        navigation,
       };
   
       console.log('📤 Sending to API:', params);

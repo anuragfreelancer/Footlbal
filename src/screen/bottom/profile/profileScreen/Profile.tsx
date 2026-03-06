@@ -125,10 +125,20 @@ const Profile = () => {
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
+           {
+            getLogin?.userGetData?.image ? 
+
+             <Image
               source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
               style={styles.avatar}
             />
+              :   <Image
+              source={imageIndex.prfEdit}
+              style={styles.avatar}
+            />
+           }
+           
+         
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData.user_name}</Text>
               <Text style={styles.profileLink}>{getLogin?.userGetData.email}</Text>

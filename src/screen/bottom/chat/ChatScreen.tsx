@@ -1,10 +1,20 @@
 import React from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, FlatList, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    FlatList,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    ActivityIndicator,
+} from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import useChatScreen from "./useChatScreen";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
- import moment from "moment";
-import { ActivityIndicator } from "react-native";
+import moment from "moment";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
@@ -54,65 +64,68 @@ const ChatScreen = () => {
     }
 
     return (
-<SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-    <StatusBarComponent />
-    
-    {/* KeyboardAvoidingView handles keyboard automatically */}
-    <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined} // 'padding' works well for iOS
-        keyboardVerticalOffset={Platform.OS === "ios" ? 5 : 0} // Adjust offset depending on your header height
-    >
-        <View style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={imageIndex.backorange} style={styles.backIcon} />
-                </TouchableOpacity>
-                <Image source={{ uri: userName?.image }} style={styles.userImage} />
-                <View>
-                    <Text style={styles.userName}>{userName?.user_name}</Text>
+        <SafeAreaView style={styles.safeArea} edges={["top"]}>
+            <StatusBarComponent />
+            <KeyboardAvoidingView
+                style={styles.keyboardView}
+                behavior={Platform.OS === "ios" ? "padding" : "padding"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Image source={imageIndex.backorange} style={styles.backIcon} />
+                    </TouchableOpacity>
+                    {userName?.image ? (
+                        <Image source={{ uri: userName?.image }} style={styles.userImage} />
+                    ) : (
+                        <Image source={imageIndex.prfEdit} style={styles.userImage} />
+                    )}
+                    <View>
+                        <Text style={styles.userName}>{userName?.user_name}</Text>
+                    </View>
                 </View>
-            </View>
 
-            {/* Messages */}
-            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 <FlatList
+                    style={styles.messageList}
+                    contentContainerStyle={styles.messageListContent}
                     showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+                    ListEmptyComponent={<EmptyListComponent message={localizationStrings?.Nochat} />}
                     data={messages}
                     renderItem={renderMessage}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
                 />
-            </ScrollView>
 
-            {/* Input */}
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#999"
-                    placeholder={localizationStrings?.Write}
-                    value={messageText}
-                    onChangeText={setMessageText}
-                />
-                {messageText ? (
-                    <TouchableOpacity onPress={sendMessage}>
-                        {isLoading ? (
-                            <ActivityIndicator size="small" color="black" />
-                        ) : (
-                            <Image source={imageIndex.sendMessage} style={styles.sendIcon} />
-                        )}
-                    </TouchableOpacity>
-                ) : null}
-            </View>
-        </View>
-    </KeyboardAvoidingView>
-</SafeAreaView>
-
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholderTextColor="#999"
+                        placeholder={localizationStrings?.Write}
+                        value={messageText}
+                        onChangeText={setMessageText}
+                    />
+                    {messageText ? (
+                        <TouchableOpacity onPress={sendMessage}>
+                            {isLoading ? (
+                                <ActivityIndicator size="small" color="#A0D803" />
+                            ) : (
+                                <Image source={imageIndex.sendMessage} style={styles.sendIcon} />
+                            )}
+                        </TouchableOpacity>
+                    ) : null}
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: "#fff",
+    },
+    keyboardView: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
@@ -121,8 +134,19 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 10,
-     },
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#E5E7EB",
+    },
+    messageList: {
+        flex: 1,
+    },
+    messageListContent: {
+        paddingHorizontal: 10,
+        paddingVertical: 12,
+        paddingBottom: 16,
+    },
     backIcon: {
         height: 30,
         width: 30,
@@ -191,9 +215,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#F3F6F6",
         borderRadius: 12,
         paddingHorizontal: 10,
-        paddingVertical: 5,
-        marginHorizontal: 5,
-        width: "100%",
+        paddingVertical: 8,
+        marginHorizontal: 10,
+        marginBottom: 10,
     },
     input: {
         flex: 1,

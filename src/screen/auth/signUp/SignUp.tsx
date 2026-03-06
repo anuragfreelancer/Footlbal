@@ -1,12 +1,16 @@
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    StyleSheet,
-    ScrollView,
- } from 'react-native';
 import React from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
 import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
@@ -20,10 +24,6 @@ import useSignup from './useSinup';
 import LoadingModal from '../../../utils/Loader';
 import DropdownModal from '../../../compoent/DropdownModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAvoidingView } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native';
-import { Keyboard } from 'react-native';
-import { Platform } from 'react-native';
 
 export default function SignUp() {
     const {
@@ -48,15 +48,20 @@ export default function SignUp() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <StatusBarCompoent />
-            <LoadingModal  visible={isLoading} />  
+            <LoadingModal visible={isLoading} />
 
             <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-    >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        keyboardDismissMode="on-drag"
+                    >
                 <View
                     style={{
                         backgroundColor: '#FFF',
@@ -169,11 +174,12 @@ export default function SignUp() {
                         flexDirection: 'row',
                         alignItems: 'center',
                         marginTop: 40,
+                        marginBottom: 24,
                         alignSelf: 'center',
-                        justifyContent: 'flex-end', // Change this to flex-end 
+                        justifyContent: 'center',
                     }}>
                     <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)' }}>
-                        Don’t have an account?{' '}
+                        Already have an account?{' '}
                     </Text>
                     <TouchableOpacity
                         onPress={() => {

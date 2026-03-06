@@ -139,11 +139,17 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from "react
 import moment from "moment";
 import imageIndex from "../assets/imageIndex";
 
+export type MarkedDateConfig = {
+  color?: string;
+  dotColor?: string;
+};
+
 interface CalendarComponentProps {
-  onDateSelect: any;
+  onDateSelect: (date: string) => void;
+  markedDates?: Record<string, MarkedDateConfig>;
 }
 
-const CalendarComponent: React.FC<CalendarComponentProps> = ({ onDateSelect }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = ({ onDateSelect, markedDates = {} }) => {
   const [currentMonth, setCurrentMonth] = useState(moment());
   const [selectedDate, setSelectedDate] = useState(moment().format("YYYY-MM-DD")); // Set today's date as default
 
@@ -200,23 +206,33 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ onDateSelect }) =
         numColumns={7} 
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.dayBox}
-            onPress={() => item && handleDateSelection(item)}
-            disabled={!item}
-          >
-            <Text
-              style={
-                item === selectedDate
-                  ? styles.selectedDayText
-                  : styles.dayText
-              }
+        renderItem={({ item }) => {
+          if (!item) return <View style={styles.dayBox} />;
+          const mark = markedDates[item];
+          const dotColor = mark?.dotColor ?? mark?.color;
+          const isSelected = item === selectedDate;
+          return (
+            <TouchableOpacity
+              style={styles.dayBox}
+              onPress={() => handleDateSelection(item)}
             >
-              {item ? moment(item).date() : ""}
-            </Text>
-          </TouchableOpacity>
-        )}
+              <View style={styles.dayContent}>
+                {dotColor ? (
+                  <View style={[styles.eventDot, { backgroundColor: dotColor }]} />
+                ) : null}
+                <Text
+                  style={
+                    isSelected
+                      ? [styles.selectedDayText, dotColor ? { borderColor: dotColor } : undefined]
+                      : styles.dayText
+                  }
+                >
+                  {moment(item).date()}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
       />
     </View>
   );
@@ -281,6 +297,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 6,
+  },
+  dayContent: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  eventDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginBottom: 3,
   },
   dayText: {
     fontSize: 14,

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TextInput, Image, StyleSheet } from "react-native";
 import imageIndex from "../assets/imageIndex";
+import localizationStrings from "./Localization/Localization";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -8,7 +9,7 @@ interface SearchBarProps {
   value?:string
  }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder = "Search", onSearchChange ,value}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder = localizationStrings.Search, onSearchChange ,value}) => {
   return (
     <View style={styles.searchBar}>
       <Image source={imageIndex.search} style={styles.icon} resizeMode="cover" />

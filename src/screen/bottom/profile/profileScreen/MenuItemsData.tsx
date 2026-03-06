@@ -46,13 +46,14 @@ const MenuItems = [
 
 
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
-    { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
+    // { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
 
   ];
 
   const PlayData = [
      { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
    //   { title: "Achieve Training", icon: imageIndex.feedback, screen: ScreenNameEnum.TrainingFedBack },
+     { title: localizationStrings.Schedule, icon: imageIndex.calendar, screen: ScreenNameEnum.Calendar },
      { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
      { title:  localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
      { title:  localizationStrings.ChatMessages, icon: imageIndex.bubbleChat,  screen: ScreenNameEnum.Messages  },
@@ -61,7 +62,7 @@ const MenuItems = [
 
      { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
      { title:  localizationStrings.Logout, icon: imageIndex.logut, screen: "Feedback" },
-     { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
+    //  { title:  localizationStrings.delete, icon: imageIndex.delete, screen: "delete" },
 
   ];
 

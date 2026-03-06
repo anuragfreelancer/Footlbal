@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -5,9 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-   Keyboard,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
 import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
@@ -21,9 +24,6 @@ import useLogin from './useLogin';
 import LoadingModal from '../../../utils/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { KeyboardAvoidingView } from 'react-native';
-import { Platform } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login() {
@@ -55,19 +55,20 @@ export default function Login() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <LoadingModal  visible={isLoading} />  
+      <LoadingModal visible={isLoading} />
       <StatusBarCompoent />
       <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 0} // Adjust offset as needed
-  >
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled" // important to allow taps inside inputs
-        contentContainerStyle={{ flexGrow: 1 }}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardDismissMode="on-drag"
+          >
 
         <View
           style={{
@@ -171,9 +172,8 @@ export default function Login() {
           </View>
         ) : null}
       </ScrollView>
-    </TouchableWithoutFeedback>
-  </KeyboardAvoidingView>
-
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

@@ -146,7 +146,7 @@ const AddPlayer = () => {
           }]}
         >
           <Text style={styles.dobText}>
-            {dob ? dob?.toDateString() : "Date of Birth"}
+            {dob ? dob?.toDateString() : localizationStrings?.dob}
           </Text>
         </TouchableOpacity>
         {errors.dob && <Text style={styles.redText}>{errors.dob}</Text>}
@@ -167,7 +167,7 @@ const AddPlayer = () => {
               <Text style={{
                 color: '#2D2D2D',
                 fontSize: 14,
-              }}>{selectedOption?.name || "Team"}
+              }}>{selectedOption?.name ||localizationStrings?.MyTeam || "Team"}
               </Text>
             </View>
           </View>
@@ -184,7 +184,7 @@ const AddPlayer = () => {
                 fontSize: 14,
                 marginLeft: 8
               }}>
-                {selectedPosition?.position_name || "Position"}
+                {selectedPosition?.position_name ||  localizationStrings?.Position ||"Position"}
               </Text>
             </View>
           </View>
@@ -233,7 +233,7 @@ const AddPlayer = () => {
   </KeyboardAvoidingView>
       <View style={styles.butt}>
         <CustomButton
-          title={'Save'}
+          title={localizationStrings.Save}
           onPress={() =>
             handleSubmit()
           }

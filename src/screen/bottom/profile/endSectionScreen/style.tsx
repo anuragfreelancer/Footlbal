@@ -17,7 +17,10 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 1,
   },
-  avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
+  avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 ,
+backgroundColor:"gray"
+    
+   },
   infoContainer: { flex: 1 },
   name: { fontSize: 12, fontWeight: "600",color:"black" },
   position: { fontSize: 12, fontWeight: "600",color:"rgba(153, 153, 153, 1)"  },

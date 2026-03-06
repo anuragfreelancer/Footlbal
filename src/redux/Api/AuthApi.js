@@ -382,6 +382,9 @@ const StartSection = async (
         formData.append("user_id", param?.players);
         formData.append("session_start_date", param?.time);
         formData.append("session_start_time", param?.date);
+        if (param?.session_type) {
+            formData.append("session_type", param?.session_type);
+        }
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
@@ -999,15 +1002,15 @@ const EndSection = async (
         const formData = new FormData();
         formData.append("id", param?.players);
         // formData.append("user_id", param?.players);
-        formData.append("session_end_time", "12:15");
-        formData.append("session_end_date", "2026 -05-03");
+        formData.append("session_end_time", param?.time);
+        formData.append("session_end_date", param?.date);
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
         };
 
-        console.log("ssss",formData)
+        console.log("dddddd---- ",formData)
          const respons = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {

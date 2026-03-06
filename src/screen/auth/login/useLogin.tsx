@@ -139,9 +139,11 @@ const useLogin = () => {
 
   //  coach13@gmail.com
   // Koml@gmail.com
+  // Kp1@gmail.com
   // 1 se 6
-    const [credentials, setCredentials] = useState({ email: 'coach13@gmail.com', password: '123456' });
-    // const [credentials, setCredentials] = useState({ email: 'coach12@gmail.com', password: '1234567' });
+    // const [credentials, setCredentials] = useState({ email: 'Kp1@gmail.com', password: '123456' });
+    // const [credentials, setCredentials] = useState({ email: 'coach13@gmail.com', password: '123456' });
+    const [credentials, setCredentials] = useState({ email: 'coach12@gmail.com', password: '1234567' });
    const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
   const navigation = useNavigation();

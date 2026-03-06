@@ -27,17 +27,10 @@ const Messages = () => {
 
 
     return (
-        <SafeAreaView style={{
-            flex: 1,
-            backgroundColor: "white"
-        }}>      
-            <LoadingModal  visible={isLoading} />  
-
+        <SafeAreaView style={styles.safeArea}>
+            <LoadingModal visible={isLoading} />
             <StatusBarComponent />
-            <View style={{
-                marginTop: 15,
-                marginHorizontal: 12
-            }}>
+            <View style={styles.headerWrap}>
                 <CustomHeader imageSource={imageIndex.backNavs} label="Message" />
             </View>
             <View style={styles.container}>
@@ -48,37 +41,45 @@ const Messages = () => {
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={filteredMessages}
+                    contentContainerStyle={styles.listContent}
                     ListEmptyComponent={<EmptyListComponent message={localizationStrings?.Nochat} />}
-                    keyExtractor={(item: any) => item.id}
+                    keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
                     renderItem={({ item }: any) => (
-                        <TouchableOpacity style={styles.messageContainer}
+                        <TouchableOpacity
+                            style={styles.messageContainer}
                             onPress={() =>
-                                navigation.navigate(ScreenNameEnum.ChatScreen, {
-                                    item: item
-                                })
+                                navigation.navigate(ScreenNameEnum.ChatScreen, { item })
                             }
+                            activeOpacity={0.7}
                         >
-                            <Image source={{
-                                uri: item.image
-                            }}
-                                style={styles.profileImage} />
+                            {item?.image ? (
+                                <Image source={{ uri: item.image }} style={styles.profileImage} />
+                            ) : (
+                                <Image source={imageIndex.prfEdit} style={styles.profileImage} />
+                            )}
                             <View style={styles.textContainer}>
-                                <Text style={styles.name}>{item.user_name}</Text>
-                                <Text style={{
-                                    color: "#797C7B",
-                                    fontSize: 12,
-                                    lineHeight: 12,
-                                }}>{item?.last_message}</Text>
+                                <Text style={styles.name} numberOfLines={1}>
+                                    {item?.user_name ?? ""}
+                                </Text>
+                                <Text style={styles.lastMessage} numberOfLines={1}>
+                                    {item?.last_message ?? ""}
+                                </Text>
                             </View>
                             <View style={styles.timeContainer}>
-                                <Text style={styles.time}>  {item?.updated_at
-                                    ? moment(item.updated_at).isBefore(moment().subtract(24, 'hours'))
-                                        ? moment(item.updated_at).format("MMMM Do YYYY")
-                                        : moment(item.updated_at).fromNow()
-                                    : "N/A"} </Text>
-                                {item.unread && <View style={styles.unreadBadge} >
-                                    <Text style={{ color: "white", fontSize: 11 }}>4</Text>
-                                </View>}
+                                <Text style={styles.time}>
+                                    {item?.updated_at
+                                        ? moment(item.updated_at).isBefore(moment().subtract(24, "hours"))
+                                            ? moment(item.updated_at).format("MMM D, YYYY")
+                                            : moment(item.updated_at).fromNow()
+                                        : ""}
+                                </Text>
+                                {(item?.unread_count > 0 || item?.unread) && (
+                                    <View style={styles.unreadBadge}>
+                                        <Text style={styles.unreadBadgeText}>
+                                            {item?.unread_count > 0 ? item.unread_count : ""}
+                                        </Text>
+                                    </View>
+                                )}
                             </View>
                         </TouchableOpacity>
                     )}

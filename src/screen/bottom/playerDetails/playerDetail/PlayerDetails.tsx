@@ -66,7 +66,11 @@ const formattedDate = formatDate(item?.dob);
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.profileContainer}>
-                    <Image source={{ uri: item.image }} style={styles.profileImage} />
+                    {item?.image ?                     <Image source={{ uri: item.image }} style={styles.profileImage} />
+ : (
+                        <Image source={imageIndex.prfEdit} style={styles.profileImage} />
+
+ )}
                 </View>
                 <View >
                     <View style={styles.detailRow}>
@@ -77,14 +81,14 @@ const formattedDate = formatDate(item?.dob);
                     </View>
                     <View style={styles.detailRow}>
                         <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>Position</Text>
+                            <Text style={styles.detailLabel}>{localizationStrings?.Position}</Text>
                         </View>
                         <Text style={styles.detailValue}>{item?.position_id}</Text>
                     </View>
 
                     <View style={styles.detailRow}>
                         <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>Team</Text>
+                            <Text style={styles.detailLabel}>{localizationStrings?.MyTeam}</Text>
                         </View>
                         <Text style={styles.detailValue}>{item?.team_id}</Text>
                     </View>
@@ -109,10 +113,13 @@ const formattedDate = formatDate(item?.dob);
                     })}
                     style={[styles.button, {
                         borderColor: '#A0D803',
-                        borderWidth: 1
+                        borderWidth: 1 ,
+                        justifyContent:"center" ,
+                        alignItems:"center"
                     }]}>
                     <Text style={[styles.buttonText, {
-                        color: "#A0D803"
+                        color: "#A0D803" ,
+                        textAlign:"center"
                     }]}>{localizationStrings?.Edit}</Text>
                 </TouchableOpacity>
 
@@ -125,7 +132,7 @@ const formattedDate = formatDate(item?.dob);
                     })}
                     // onPress={() => navigation.navigate(ScreenNameEnum.Messages)}
                 >
-                    <Text style={styles.buttonText}>Message</Text>
+                    <Text style={styles.buttonText}>{localizationStrings?.ChatMessages}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

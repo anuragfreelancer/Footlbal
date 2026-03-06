@@ -14,21 +14,58 @@ const useHome = () => {
   const [imgloading, setImgloading] = useState(true);
   const getLogin = useSelector((state: any) => state?.feature);
   const [chatMess, setChatMess] = useState<any[]>([]);
-   useEffect(() => {
-    GetProfile(isLogin?.userData?.id, dispatch);
-    // GetAbout();
-    Get_coach_session();
-    Get_sscoach_session()
-  }, [])
+  useEffect(() => {
+    const userId = isLogin?.userData?.id;
+          GetAbout();
+
+    if (userId) {
+      GetProfile(userId, dispatch);
+      GetAbout();
+      Get_coach_session();
+      Get_sscoach_session();
+    }
+  }, [isLogin?.userData?.id]);
  ;
+
+
+  const [filteredMessages, setFilteredMessages] = useState<any[]>([]);
+
+  const GetAbout = async () => {
+    const userId = isLogin?.userData?.id;
+    if (!userId) {
+      setChatMess([]);
+      setFilteredMessages([]);
+      return;
+    }
+    try {
+      setisLoading(true);
+      const response = await GetAllChatMessage(setisLoading, userId);
+      if (response && response?.userGetData) {
+        const list = Array.isArray(response.userGetData) ? response.userGetData : [];
+        setChatMess(list);
+        setFilteredMessages(list);
+      } else {
+        setChatMess([]);
+        setFilteredMessages([]);
+      }
+    } catch (error) {
+      setChatMess([]);
+      setFilteredMessages([]);
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+ 
+ 
+ 
   const Get_coach_session = async () => {
     try {
       setisLoading(true);
   
       const response = await GetCoachSession(setisLoading, isLogin?.userData?.id);
        if (response && response?.userGetData?.length > 0) {
-        console.log("response.userGetData",response.userGetData)
-        setgetCoach_session(response.userGetData);
+         setgetCoach_session(response.userGetData);
       } else {
         setgetCoach_session([]);
       }
@@ -45,8 +82,7 @@ const useHome = () => {
   
       const response = await Get_user_by_id(setisLoading, isLogin?.userData?.id);
         if (response && response?.userGetData) {
-          console.log("response?.userGetData",response?.userGetData)
-        setgetUser(response.userGetData);
+         setgetUser(response.userGetData);
       } else {
         setgetUser([]);
       }
@@ -67,7 +103,8 @@ const useHome = () => {
     chatMess ,
     getCoach_session ,
     getUser,
-    isLogin
+    isLogin ,
+    filteredMessages
   };
 };
 

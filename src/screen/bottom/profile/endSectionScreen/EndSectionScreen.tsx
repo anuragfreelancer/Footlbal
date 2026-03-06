@@ -59,18 +59,20 @@ const [is,setIsLoading]= useState(false)
   
       const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
       const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-    const ids = selectedPlayers?.map(item => Number(item.id));
-
+const coachSessionIds = selectedPlayers?.flatMap(player =>
+  player?.coach_session?.map(session => Number(session.id))
+);
+ 
       const params = {
-        players: ids,
+        players: coachSessionIds,
         date: formattedDate,
         time: formattedTime,
         navigation, // ✅ make sure to pass it if needed
       };
-  
-   
+  console.log("end section ",params)
       const response = await EndSection(params, setIsLoading);
-  
+     console.log(" ---response",response)
+
       if (response?.status === '1') {
          Alert.alert('✅ Success', 'Section started successfully!');
         setSelectedPlayers([])

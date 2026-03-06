@@ -1,28 +1,16 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
 import { Dimensions } from "react-native";
-import imageIndex from "../../../assets/imageIndex";
-import StatusBarComponent from "../../../compoent/StatusBarCompoent";
-import ChartComponent from "../../../compoent/ChartComponent";
-import useReports from "./useReports";
+ import StatusBarComponent from "../../../compoent/StatusBarCompoent";
+ import useReports from "./useReports";
 import LoadingModal from "../../../utils/Loader";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import imageIndex from "../../../assets/imageIndex";
 
-const screenWidth = Dimensions.get("window").width;
-
+ 
 const Reports = () => {
-  const chartDataScreen1 = {
-    weekly: { data: [55, 44, 22] },
-    monthly: { data: [12, 22, 2] },
-    yearly: { data: [43, 22, 19] },
-  };
-
-  const chartDataScreen2 = {
-    weekly: { data: [15, 25, 35] },
-    monthly: { data: [22, 33] },
-    yearly: { data: [33, 45, 444] },
-  };
-
+ 
+ 
   const {
     rpfData,
     isLoading,
@@ -38,12 +26,25 @@ const Reports = () => {
             <Text style={styles.lightText}>{item.rpf_session}</Text>
           </View>
           <View style={styles.scoreSection}>
+
+            {item.rate_efforts > 6  ? <Image source={imageIndex.redGrap} 
+            style={{
+              height:28,
+              width:28
+            }}
+            /> :  <Image source={imageIndex.greenGrap} 
+            
+              style={{
+              height:28,
+              width:28
+            }}
+            />}
             <Text style={styles.boldText}>RPE Score</Text>
             <Text style={styles.scoreText}>{item.rate_efforts}</Text>
           </View>
-          <View style={styles.scoreSection}>
+          {/* <View style={styles.scoreSection}>
             <Text style={{color:"green"}}>End section</Text>
-          </View>
+          </View> */}
         </TouchableOpacity>
       </View>
     );
@@ -63,11 +64,14 @@ const Reports = () => {
           <FlatList
             data={rpfData?.userGetData}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <RecentSessionCard item={item} onPress={() => {
-              navigation.navigate(ScreenNameEnum.TrainingFedBack, {
-                item: item
-              })
-            }} />}
+            renderItem={({ item }) => <RecentSessionCard item={item} 
+            // onPress={() => {
+            //   navigation.navigate(ScreenNameEnum.TrainingFedBack, {
+            //     item: item
+            //   })
+            // }} 
+            
+            />}
           />
         </View>
 

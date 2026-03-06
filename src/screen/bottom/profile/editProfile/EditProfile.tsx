@@ -67,7 +67,7 @@ const EditProfile = () => {
               {/* Profile Image */}
               <View style={styles.profileContainer}>
                 <View style={styles.iamgeView}>
-                  <Image
+                  {getLogin?.userGetData?.image ? <Image
                     resizeMode="cover"
                     source={
                       imagePrfile
@@ -82,7 +82,17 @@ const EditProfile = () => {
                       borderColor: "#9DB2BF",
                       alignSelf: "center", // center align
                     }}
-                  />
+                  /> : (
+                    <Image source={imageIndex.prfEdit} style={{
+                      height: ResponsiveSize.height(120),
+                      width: ResponsiveSize.height(120), // match height to make it perfect circle
+                      borderRadius: ResponsiveSize.height(60), // exactly half of height/width
+                      borderWidth: 2,
+                      borderColor: "#9DB2BF",
+                      alignSelf: "center", // center align
+                    }} />
+                  )}
+
 
                 </View>
 

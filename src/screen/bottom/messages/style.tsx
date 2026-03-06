@@ -1,32 +1,96 @@
 
-import {   StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 15 },
-  header: { fontSize: 24, fontWeight: "bold", marginBottom: 16 },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F9FAFB",
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  headerWrap: {
+    marginTop: 12,
+    marginHorizontal: 12,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  listContent: {
+    paddingBottom: 24,
+  },
   searchContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      backgroundColor: "#f2f2f2",
-      borderRadius: 10,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 12,
   },
   searchIcon: { marginRight: 8 },
   searchInput: { flex: 1 },
   messageContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      paddingVertical: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: "#eaeaea",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
   },
-  profileImage: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
-  textContainer: { flex: 1 },
-  name: { fontSize: 16, fontWeight: "bold" },
-  message: { color: "gray" },
-  timeContainer: { alignItems: "flex-end" },
-  time: { fontSize: 12, color: "gray" },
-  unreadBadge: { width: 21, height: 21, borderRadius: 20, backgroundColor: "red", marginTop: 4, alignItems: "center", justifyContent: "center" },
+  profileImage: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    marginRight: 14,
+    backgroundColor: "#E5E7EB",
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: "center",
+    minWidth: 0,
+    marginRight: 8,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 2,
+  },
+  lastMessage: {
+    fontSize: 13,
+    color: "#6B7280",
+    lineHeight: 18,
+  },
+  message: { color: "#6B7280" },
+  timeContainer: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  time: {
+    fontSize: 12,
+    color: "#9CA3AF",
+    marginBottom: 4,
+  },
+  unreadBadge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "rgba(160, 216, 3, 1)",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 6,
+  },
+  unreadBadgeText: {
+    color: "#fff",
+    fontSize: 11,
+    fontWeight: "700",
+  },
 });
+
 export default styles;

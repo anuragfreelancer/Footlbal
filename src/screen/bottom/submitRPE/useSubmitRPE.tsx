@@ -102,10 +102,15 @@ const useSubmitRPE = () => {
                 params.training_id = selectedTrainingId;
             }
             const response = await SumitRpfFrom(params, setisLoading);
+              setSession("");
+                setDate("");
+                setComments("");
             if (response) {
                 setSession("");
                 setDate("");
                 setComments("");
+                            setisLoading(false);
+
             }
         } catch (error) {
             console.error("API Call Failed:", error);

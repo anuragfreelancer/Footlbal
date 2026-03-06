@@ -12,12 +12,19 @@ const useMessageList = () => {
   const [searchData, setSearchData] = useState('');
   const [filteredMessages, setFilteredMessages] = useState<any[]>([]);
   const GetAbout = async () => {
+    const userId = isLogin?.userData?.id;
+    if (!userId) {
+      setChatMess([]);
+      setFilteredMessages([]);
+      return;
+    }
     try {
       setIsLoading(true);
-      const response = await GetAllChatMessage(setIsLoading, isLogin?.userData?.id);
-      if (response && response?.userGetData?.length > 0) {
-        setChatMess(response?.userGetData);
-        setFilteredMessages(response?.userGetData);
+      const response = await GetAllChatMessage(setIsLoading, userId);
+      if (response && response?.userGetData) {
+        const list = Array.isArray(response?.userGetData) ? response?.userGetData : [];
+        setChatMess(list);
+        setFilteredMessages(list);
       } else {
         setChatMess([]);
         setFilteredMessages([]);

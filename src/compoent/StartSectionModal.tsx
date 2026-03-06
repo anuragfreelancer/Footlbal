@@ -49,7 +49,7 @@ const StartSectionModal = ({
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
 
-  // State for session type
+  // State for session type: TRAINING | MATCH | BREAK
   const [type, setType] = useState('TRAINING');
 
   // State for selected questionnaires (multiple allowed)
@@ -304,7 +304,7 @@ const StartSectionModal = ({
             style={styles.dropdown}
             onPress={() => setShowTypeDropdown(true)}>
             <Text style={styles.dropdownText}>
-              {type === 'TRAINING' ? 'Training' : 'Match'}
+              {type === 'TRAINING' ? 'Training' : type === 'MATCH' ? 'Match' : 'Break'}
             </Text>
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
@@ -316,7 +316,7 @@ const StartSectionModal = ({
               activeOpacity={1}
               onPress={() => setShowTypeDropdown(false)}>
               <View style={styles.dropdownList}>
-                {['TRAINING', 'MATCH'].map((item) => (
+                {['TRAINING', 'MATCH', 'BREAK'].map((item) => (
                   <TouchableOpacity
                     key={item}
                     style={styles.dropdownItem}
@@ -325,7 +325,7 @@ const StartSectionModal = ({
                       setShowTypeDropdown(false);
                     }}>
                     <Text style={styles.dropdownItemText}>
-                      {item === 'TRAINING' ? 'Training' : 'Match'}
+                      {item === 'TRAINING' ? 'Training' : item === 'MATCH' ? 'Match' : 'Break'}
                     </Text>
                   </TouchableOpacity>
                 ))}

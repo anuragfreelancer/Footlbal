@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import localizationStrings from './Localization/Localization';
 
 interface ImagePickerModalProps {
   modalVisible: boolean;
@@ -26,7 +27,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
           <View style={styles.modalContainer}>
             <View style={styles.handleBar} />
 
-            <Text allowFontScaling={false} style={styles.title}>Choose an Option</Text>
+            <Text allowFontScaling={false} style={styles.title}>{localizationStrings?.ChooseOption}</Text>
 
             <TouchableOpacity
               onPress={() => {
@@ -35,7 +36,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               }}
               style={styles.optionButton}
             >
-              <Text allowFontScaling={false} style={styles.optionText}>📷 Pick from Gallery</Text>
+              <Text allowFontScaling={false} style={styles.optionText}>📷 {localizationStrings?.PickGallery}</Text>
             </TouchableOpacity>
 
             {/* <TouchableOpacity
@@ -52,7 +53,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({
               onPress={() => setModalVisible(false)}
               style={styles.cancelButton}
             >
-              <Text allowFontScaling={false} style={styles.cancelText}>Cancel</Text>
+              <Text allowFontScaling={false} style={styles.cancelText}>{localizationStrings?.Cancel}</Text>
             </TouchableOpacity>
           </View>
         </View>

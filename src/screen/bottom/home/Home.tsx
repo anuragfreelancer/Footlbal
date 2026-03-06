@@ -12,6 +12,9 @@ import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import SubscriptionCard from "../../../compoent/subscription/SubscriptionCard";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSubscription } from "../../../compoent/subscription/useSubscription";
+import ScreenNameEnum from "../../../routes/screenName.enum";
+import moment from "moment";
+import ChartComponent1 from "../../../compoent/ChartComponent1";
 
 const DashboardScreen = () => {
   const { language } = useLanguage();
@@ -23,16 +26,72 @@ const DashboardScreen = () => {
     chatMess,
     getCoach_session,
     getUser,
-    isLogin
+    isLogin,
+    filteredMessages
   } = useHome();
   const { showSubscriptionCard } = useSubscription();
+
+  // Build coach chart from sessions + total players (conversations)
+  const coachChartData = React.useMemo(() => {
+    const sessions: any[] = Array.isArray(getCoach_session) ? getCoach_session : [];
+    const totalPlayers = Array.isArray(filteredMessages) ? filteredMessages.length : 0;
+
+    const getDateStr = (item: any) => {
+      const d = item?.session_start_time || item?.session_start_date || "";
+      if (typeof d !== "string") return "";
+      return d.split(" ")[0] || d;
+    };
+    const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
+
+    const countByDate: Record<string, number> = {};
+    sessions.forEach((s: any) => {
+      const dateStr = getDateStr(s);
+      if (looksLikeDate(dateStr)) {
+        countByDate[dateStr] = (countByDate[dateStr] || 0) + 1;
+      }
+    });
+
+    const last7Days: number[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = moment().subtract(i, "days").format("YYYY-MM-DD");
+      last7Days.push(countByDate[d] || 0);
+    }
+    const last6Weeks: number[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const start = moment().subtract(i + 1, "weeks").startOf("week");
+      const end = moment().subtract(i, "weeks").startOf("week");
+      let count = 0;
+      Object.keys(countByDate).forEach((dateStr) => {
+        const m = moment(dateStr);
+        if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
+      });
+      last6Weeks.push(count);
+    }
+    const last12Months: number[] = [];
+    for (let i = 11; i >= 0; i--) {
+      const start = moment().subtract(i + 1, "months").startOf("month");
+      const end = moment().subtract(i, "months").startOf("month");
+      let count = 0;
+      Object.keys(countByDate).forEach((dateStr) => {
+        const m = moment(dateStr);
+        if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
+      });
+      last12Months.push(count);
+    }
+
+    return {
+      weekly: { data: last7Days },
+      monthly: { data: last6Weeks },
+      yearly: { data: last12Months },
+      totalPlayers,
+    };
+  }, [getCoach_session, filteredMessages]);
+
   const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
-
-
 
 
   // // Handle background notifications
@@ -51,49 +110,105 @@ const DashboardScreen = () => {
   //     });
   // }, []);
 
+  // API returns session_start_date as time (HH:mm:ss) and session_start_time as date (YYYY-MM-DD)
+  const getSessionDisplay = (item: any) => {
+    const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
+    const looksLikeTime = (s: string) => /^\d{1,2}:\d{2}(:\d{2})?$/.test(String(s || "").trim());
+    const dateStr = looksLikeDate(item?.session_start_time)
+      ? item.session_start_time
+      : looksLikeDate(item?.session_start_date)
+        ? item.session_start_date
+        : item?.session_start_time || item?.session_start_date || "";
+    const startTimeStr = looksLikeTime(item?.session_start_date)
+      ? item.session_start_date
+      : looksLikeTime(item?.session_start_time)
+        ? item.session_start_time
+        : item?.session_start_date || item?.session_start_time || "";
+    const endTimeStr = item?.session_end_time || "";
+    const endDateStr = item?.session_end_date || dateStr;
+
+    const formattedDate = dateStr ? moment(dateStr).format("DD MMM YYYY") : "—";
+    const formattedStartTime = startTimeStr
+      ? moment(startTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")
+      : "—";
+    const formattedEndTime = endTimeStr
+      ? moment(endTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")
+      : null;
+
+    // Full "Started at" / "Ended at" strings: date + time
+    const startedAt = dateStr && startTimeStr
+      ? `${moment(dateStr).format("DD MMM YYYY")}, ${moment(startTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")}`
+      : dateStr
+        ? moment(dateStr).format("DD MMM YYYY")
+        : "—";
+    const endedAt = endTimeStr && endDateStr
+      ? `${moment(endDateStr).format("DD MMM YYYY")}, ${moment(endTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")}`
+      : formattedEndTime === null
+        ? (localizationStrings?.Ongoing ?? "Ongoing")
+        : "—";
+
+    return {
+      formattedDate,
+      formattedStartTime,
+      formattedEndTime: formattedEndTime ?? (localizationStrings?.Ongoing ?? "Ongoing"),
+      startedAt,
+      endedAt,
+      isOngoing: !endTimeStr,
+    };
+  };
+
   const renderItem = ({ item }: { item: any }) => {
-    const isOngoing = item.status === "Start";
+    const isOngoing = item?.status === "Start";
+    const { startedAt, endedAt } = getSessionDisplay(item);
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
         <View style={styles.sessionCardHeader}>
-          <Text style={styles.sessionDate}>{item.session_start_date}</Text>
+          <Text style={styles.sessionDate}>{getSessionDisplay(item).formattedDate}</Text>
           <View style={[styles.sessionBadge, isOngoing ? styles.sessionBadgeOngoing : styles.sessionBadgeEnded]}>
-            <Text style={[styles.sessionBadgeText, !isOngoing && styles.sessionBadgeTextEnded]}>{isOngoing ? localizationStrings.Ongoing : localizationStrings.Ended}</Text>
-          </View>
-        </View>
-        <View style={styles.sessionTimeRow}>
-          <View style={styles.sessionTimeBlock}>
-            <Text style={styles.sessionTimeLabel}>{localizationStrings?.Startq}</Text>
-            <Text style={styles.sessionTimeValue}>{item.session_start_time}</Text>
-          </View>
-          <Text style={styles.sessionTimeSeparator}>–</Text>
-          <View style={styles.sessionTimeBlock}>
-            <Text style={styles.sessionTimeLabel}>{localizationStrings?.EndTime}</Text>
-            <Text style={[styles.sessionTimeValue, !item.session_end_time && styles.sessionTimeOngoing]}>
-              {item.session_end_time || localizationStrings.Ongoing}
+            <Text style={[styles.sessionBadgeText, !isOngoing && styles.sessionBadgeTextEnded]}>
+              {isOngoing ? localizationStrings?.Ongoing : localizationStrings?.Ended}
             </Text>
           </View>
+        </View>
+        <View style={(styles as any).sessionDetailRow}>
+          <Text style={(styles as any).sessionDetailLabel}>Started at</Text>
+          <Text style={(styles as any).sessionDetailValue}>{startedAt}</Text>
+        </View>
+        <View style={[(styles as any).sessionDetailRow, (styles as any).sessionDetailRowLast]}>
+          <Text style={(styles as any).sessionDetailLabel}>Ended at</Text>
+          <Text style={[(styles as any).sessionDetailValue, isOngoing && styles.sessionTimeOngoing]}>{endedAt}</Text>
         </View>
       </View>
     );
   };
- useFocusEffect(
-   useCallback(() => {
-     return () => {};
-   }, [getLogin])
- );
-   return (
+  useFocusEffect(
+    useCallback(() => {
+      return () => { };
+    }, [getLogin])
+  );
+  return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
       <View style={styles.header}>
 
         <View style={{ marginTop: 12 }}>
-          <Image
+          {getLogin?.userGetData?.image ? <Image
             source={getLogin?.userGetData?.image || isLogin?.userData?.image ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image } : imageIndex.prfEdit}
             style={styles.avatar}
             onLoad={() => setImgloading(false)}
             onError={() => setImgloading(false)}
-          />
+          /> :
+
+            (
+              <Image
+              source={imageIndex.prfEdit}
+                 style={styles.avatar}
+                onLoad={() => setImgloading(false)}
+                onError={() => setImgloading(false)}
+              />
+            )
+          }
+
           {imgloading && (
             <View style={styles.avatarLoader}>
               <ActivityIndicator size="small" color="#9CA3AF" />
@@ -104,71 +219,88 @@ const DashboardScreen = () => {
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name || ""}</Text>
           <Text style={styles.userEmail}>{getLogin?.userGetData?.email || isLogin?.userData?.email || ""}</Text>
-         </View>
- 
+        </View>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-       
-       {isLogin?.userData?.type == "Coach" ?  null :         <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
- }
-       
-       {isLogin?.userData?.type == "Coach" ?  (
-<>
-           <View style={{
-            marginHorizontal:10
-           }}>
+<ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+        {/* {isLogin?.userData?.type == "Coach" ? null : <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+        } */}
+        {/* {isLogin?.userData?.type != "Coach" ? null : (() => {
+          const coachChartProps = {
+            data: { weekly: coachChartData.weekly, monthly: coachChartData.monthly, yearly: coachChartData.yearly },
+            statusText: localizationStrings?.Safe,
+            statusColor: "rgba(160, 216, 3, 1)",
+            totalPlayers: coachChartData.totalPlayers,
+          };
+          return <ChartComponent1 {...coachChartProps} />;
+        })()} */}
 
-          {showSubscriptionCard && <SubscriptionCard />}
-          </View>
+        {isLogin?.userData?.type == "Coach" ? (
+          <>
+            <View style={{
+              marginHorizontal: 10
+            }}>
 
-           <FlatList
-          showsVerticalScrollIndicator={false}
-          data={chatMess}
-          ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
-          keyExtractor={(item: any) => item.id}
-          renderItem={({ item }: any) => (
-            <TouchableOpacity style={styles.card}
-              onPress={() =>
-                navigation.navigate(ScreenNameEnum.StartTrainingFed, {
-                  item: item
-                })
-              }
+              {showSubscriptionCard && <SubscriptionCard />}
+            </View>
+
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={filteredMessages}
+              scrollEnabled={false}
+              contentContainerStyle={styles.listContent}
+              ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={(styles as any).chatCard}
+                  onPress={() =>
+                    (navigation as any).navigate(ScreenNameEnum.ChatScreen, { item })
+                  }
+                  activeOpacity={0.7}
+                >
+                  {item?.image ? (
+                    <Image source={{ uri: item.image }} style={(styles as any).chatCardAvatar} />
+                  ) : (
+                    <Image source={imageIndex.prfEdit} style={(styles as any).chatCardAvatar} />
+                  )}
+                  <View style={(styles as any).chatCardTextContainer}>
+                    <Text style={(styles as any).chatCardName} numberOfLines={1}>
+                      {item?.user_name ?? ""}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+
+
+
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+               onPress={() => (navigation as any).navigate(ScreenNameEnum.Calendar)}
+              activeOpacity={0.7}
             >
-              <Image source={{
-                uri: item.image
-              }}
-                style={styles.avatar} />
-              <View style={styles.textContainer}>
-                <Text style={styles.name}>{item.user_name}</Text>
- 
-              </View>
-
+              <Text style={[styles.sectionTitle, { color: "#047857" }]}>{localizationStrings?.Schedule}</Text>
+              <Text style={{ fontSize: 13, color: "#065F46", marginTop: 4 }}>{localizationStrings?.SessionTraining} • {localizationStrings?.SessionMatch} • {localizationStrings?.SessionBreak}</Text>
             </TouchableOpacity>
-          )}
-        />  
 
-        
+            <View style={styles.sectionWrap}>
+              <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
+            </View>
+            <FlatList
+              data={getUser}
+              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+              renderItem={renderItem}
+              scrollEnabled={false}
+              contentContainerStyle={styles.listContent}
+              ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+            />
+          </>
+        )}
 
-</>
-       ) : (
-        <>
-        
-                <View style={styles.sectionWrap}>
-          <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
-        </View>
-        <FlatList
-          data={getUser}
-
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          scrollEnabled={false}
-          contentContainerStyle={styles.listContent}
-          ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
-        />
-        </>
-       )}
-
-       </ScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
