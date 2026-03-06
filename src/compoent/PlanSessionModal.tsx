@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import imageIndex from '../assets/imageIndex';
+import localizationStrings from '../compoent/Localization/Localization';
 
 interface Questionnaire {
   id: number;
@@ -92,21 +93,21 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
   };
 
   const getLabel = (ids: number[], list: Questionnaire[]) => {
-    if (ids.length === 0) return 'Select --';
+    if (ids.length === 0) return localizationStrings.SelectOption;
     if (ids.length === 1) {
       const q = list.find((x) => x.id === ids[0]);
       return q?.training_title ?? q?.question ?? `ID ${ids[0]}`;
     }
-    return `${ids.length} selected`;
+    return `${ids.length} ${localizationStrings.SelectedCount}`;
   };
 
   const handleSubmit = async () => {
     if (selectedPlayerIds.length === 0) {
-      Alert.alert('Select Players', 'Please select at least one player.');
+      Alert.alert(localizationStrings.SelectPlayers, localizationStrings.Pleaseselectleastone);
       return;
     }
     if (selectedQuestionnaire.length === 0 || selectedQuestionnaire1.length === 0) {
-      Alert.alert('Select Questionnaires', 'Please select at least one questionnaire for before and after.');
+      Alert.alert(localizationStrings.SelectQuestionnaires, localizationStrings.SelectQuestionnairesMessage);
       return;
     }
 
@@ -128,7 +129,7 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
         onClose();
       }
     } catch (e) {
-      Alert.alert('Error', 'Something went wrong.');
+      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
     } finally {
       setLoading(false);
     }
@@ -146,9 +147,9 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
     <Modal visible={visible} transparent animationType="slide">
       <View style={s.overlay}>
         <View style={s.container}>
-          <Text style={s.title}>Plan Session</Text>
+          <Text style={s.title}>{localizationStrings.PlanSession}</Text>
 
-          <Text style={s.label}>Select Players</Text>
+          <Text style={s.label}>{localizationStrings.SelectPlayers}</Text>
           <FlatList
             data={playerList}
             keyExtractor={(item) => String(item?.id)}
@@ -168,14 +169,14 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
                   )}
                   <Text style={s.playerName}>{item?.user_name ?? ''}</Text>
                   <View style={[s.checkbox, isSel && s.checkboxSelected]}>
-                    {isSel && <Text style={s.checkmark}>✓</Text>}
+                    {isSel && <Text style={s.checkmark}>✓</Text>} 
                   </View>
                 </TouchableOpacity>
               );
             }}
           />
 
-          <Text style={s.label}>Date & Time</Text>
+          <Text style={s.label}>{localizationStrings.DateAndTime}</Text>
           <View style={s.dateTimeRow}>
             <View style={[s.selectBtn, s.dateReadOnly]}>
               <Text style={s.selectText}>{formatDisplayDate(selectedDate)}</Text>
@@ -187,10 +188,10 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
             </TouchableOpacity>
           </View>
 
-          <Text style={s.label}>Session Type</Text>
+          <Text style={s.label}>{localizationStrings.SessionType}</Text>
           <TouchableOpacity style={s.dropdown} onPress={() => setShowTypeDropdown(true)}>
             <Text style={s.dropdownText}>
-              {type === 'TRAINING' ? 'Training' : type === 'MATCH' ? 'Match' : 'Break'}
+              {type === 'TRAINING' ? localizationStrings.SessionTraining : type === 'MATCH' ? localizationStrings.SessionMatch : localizationStrings.SessionBreak}
             </Text>
             <Image source={imageIndex.downarrow} style={s.dropdownIcon} />
           </TouchableOpacity>
@@ -216,13 +217,13 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
             </TouchableOpacity>
           </Modal>
 
-          <Text style={s.label}>Before Training</Text>
+          <Text style={s.label}>{localizationStrings.BeforeTraining}</Text>
           <TouchableOpacity style={s.dropdown} onPress={() => setShowQuestionnaireDropdown(true)}>
             <Text style={s.dropdownText}>{getLabel(selectedQuestionnaire, questionnaires)}</Text>
             <Image source={imageIndex.downarrow} style={s.dropdownIcon} />
           </TouchableOpacity>
 
-          <Text style={s.label}>After Training</Text>
+          <Text style={s.label}>{localizationStrings.AfterTraining}</Text>
           <TouchableOpacity style={s.dropdown} onPress={() => setShowQuestionnaireDropdown2(true)}>
             <Text style={s.dropdownText}>{getLabel(selectedQuestionnaire1, questionnaires1)}</Text>
             <Image source={imageIndex.downarrow} style={s.dropdownIcon} />
@@ -231,7 +232,7 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
           <Modal visible={showQuestionnaireDropdown} transparent animationType="fade">
             <TouchableOpacity style={s.dropdownOverlay} onPress={() => setShowQuestionnaireDropdown(false)}>
               <View style={s.dropdownListLarge}>
-                <Text style={s.dropdownHeader}>Before Training</Text>
+                <Text style={s.dropdownHeader}>{localizationStrings.BeforeTraining}</Text>
                 {loadingQuestions ? (
                   <ActivityIndicator size="large" color="#4C8BF5" style={{ marginTop: 20 }} />
                 ) : (
@@ -243,7 +244,9 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
                         style={s.qItem}
                         onPress={() => toggleQuestionnaire(selectedQuestionnaire, setSelectedQuestionnaire, item.id)}
                       >
-                        <Text>{item.training_title ?? item.question ?? ''}</Text>
+                        <Text style={{
+                          flex:1
+                        }}>{item.training_title ?? item.question ?? ''}</Text>
                         <View style={[s.checkbox, selectedQuestionnaire.includes(item.id) && s.checkboxSelected]}>
                           {selectedQuestionnaire.includes(item.id) && <Text style={s.checkmark}>✓</Text>}
                         </View>
@@ -252,7 +255,7 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
                   />
                 )}
                 <TouchableOpacity style={s.doneBtn} onPress={() => setShowQuestionnaireDropdown(false)}>
-                  <Text style={s.doneBtnText}>Done</Text>
+                  <Text style={s.doneBtnText}>{localizationStrings.Done}</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -261,7 +264,7 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
           <Modal visible={showQuestionnaireDropdown2} transparent animationType="fade">
             <TouchableOpacity style={s.dropdownOverlay} onPress={() => setShowQuestionnaireDropdown2(false)}>
               <View style={s.dropdownListLarge}>
-                <Text style={s.dropdownHeader}>After Training</Text>
+                <Text style={s.dropdownHeader}>{localizationStrings.AfterTraining}</Text>
                 {loadingQuestions1 ? (
                   <ActivityIndicator size="large" color="#4C8BF5" style={{ marginTop: 20 }} />
                 ) : (
@@ -282,7 +285,7 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
                   />
                 )}
                 <TouchableOpacity style={s.doneBtn} onPress={() => setShowQuestionnaireDropdown2(false)}>
-                  <Text style={s.doneBtnText}>Done</Text>
+                  <Text style={s.doneBtnText}>{localizationStrings.Done}</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -304,10 +307,10 @@ const PlanSessionModal: React.FC<PlanSessionModalProps> = ({
           ) : (
             <View style={s.buttonRow}>
               <TouchableOpacity style={[s.actionBtn, s.cancelBtn]} onPress={onClose}>
-                <Text style={s.cancelText}>Cancel</Text>
+                <Text style={s.cancelText}>{localizationStrings.Cancel}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[s.actionBtn, s.submitBtn]} onPress={handleSubmit}>
-                <Text style={s.submitText}>Plan Session</Text>
+                <Text style={s.submitText}>{localizationStrings.PlanSession}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -380,10 +383,14 @@ const s = StyleSheet.create({
   doneBtn: { backgroundColor: 'rgba(160, 216, 3, 1)', paddingVertical: 14, margin: 16, borderRadius: 12, alignItems: 'center' },
   doneBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
   buttonRow: { flexDirection: 'row', marginTop: 20, justifyContent: 'space-between' },
-  actionBtn: { flex: 1, padding: 14, borderRadius: 12, marginHorizontal: 5, alignItems: 'center' },
+  actionBtn: { flex: 1, height:55, 
+    
+    alignContent:"center",
+    justifyContent:"center",
+    borderRadius: 12, marginHorizontal: 5, alignItems: 'center' },
   cancelBtn: { backgroundColor: '#E0E0E0' },
   submitBtn: { backgroundColor: 'rgba(160, 216, 3, 1)' },
-  cancelText: { fontWeight: '600', color: '#555' },
+  cancelText: { fontWeight: '600', color: '#555' , },
   submitText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
 

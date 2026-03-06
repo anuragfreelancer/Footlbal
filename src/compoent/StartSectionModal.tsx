@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import imageIndex from '../assets/imageIndex';
+import localizationStrings from './Localization/Localization';
 
 interface Questionnaire {
   id: number;
@@ -82,7 +83,7 @@ const StartSectionModal = ({
       try {
         setLoadingQuestions(true);
         // if(after_training)
-        if(Training == "After Training Questionnaire"){
+        if(Training == localizationStrings.AfterTrainingQuestionnaire){
            const res = await fetch(
           'https://kmmps.store/api/get_training?type=after_training'
           
@@ -141,8 +142,8 @@ const StartSectionModal = ({
   const handleStart = async () => {
     if (selectedQuestionnaire.length === 0 || selectedQuestionnaire1.length === 0) {
       Alert.alert(
-        'Select questionnaires',
-        'Please select at least one questionnaire for before the session and at least one for after the session.'
+        localizationStrings.SelectQuestionnaires,
+        localizationStrings.SelectQuestionnairesMessageFull
       );
       return;
     }
@@ -237,7 +238,7 @@ const StartSectionModal = ({
           <View style={styles.dropdownListLarge}>
             <Text style={styles.dropdownHeader}>{title}</Text>
             <Text style={[styles.hint, { paddingHorizontal: 16 }]}>
-              Tap to select multiple (e.g. 5–6 questions). Tap again to deselect.
+              {localizationStrings.TapToSelectMultiple}
             </Text>
             {loading ? (
               <ActivityIndicator
@@ -259,7 +260,7 @@ const StartSectionModal = ({
             <TouchableOpacity
               style={[styles.doneButton, { marginHorizontal: 16, marginVertical: 12 }]}
               onPress={onClose}>
-              <Text style={styles.doneButtonText}>Done</Text>
+              <Text style={styles.doneButtonText}>{localizationStrings.Done}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -272,39 +273,39 @@ const StartSectionModal = ({
     list: Questionnaire[],
     fallbackTitleKey: 'training_title' | 'question'
   ) => {
-    if (ids.length === 0) return 'Select Questionnaire --';
+    if (ids.length === 0) return localizationStrings.SelectQuestionnairePlaceholder;
     if (ids.length === 1) {
       const q = list.find((x) => x.id === ids[0]);
       const t = q?.training_title ?? q?.question;
       return t ?? `ID ${ids[0]}`;
     }
-    return `${ids.length} selected`;
+    return `${ids.length} ${localizationStrings.SelectedCount}`;
   };
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
         <View style={styles.container}>
-          <Text style={styles.title}>{title || 'Plan a Training Session'}</Text>
+          <Text style={styles.title}>{title || localizationStrings.PlanTrainingSession}</Text>
 
           {/* Clear message so client understands: questionnaire before AND after */}
           <View style={styles.messageBox}>
-            <Text style={styles.messageTitle}>How it works</Text>
+            <Text style={styles.messageTitle}>{localizationStrings.HowItWorks}</Text>
             <Text style={styles.messageText}>
-              You can answer several questions <Text style={styles.messageBold}>before</Text> and <Text style={styles.messageBold}>after</Text> the training session (e.g. 5–6 questions each).
+              {localizationStrings.HowItWorksMessage}
             </Text>
             <Text style={styles.messageSubtext}>
-              Select as many as you like for before and for after below.
+              {localizationStrings.HowItWorksSubtext}
             </Text>
           </View>
 
           {/* Session Type */}
-          <Text style={styles.label}>Session Type</Text>
+          <Text style={styles.label}>{localizationStrings.SessionType}</Text>
           <TouchableOpacity
             style={styles.dropdown}
             onPress={() => setShowTypeDropdown(true)}>
             <Text style={styles.dropdownText}>
-              {type === 'TRAINING' ? 'Training' : type === 'MATCH' ? 'Match' : 'Break'}
+              {type === 'TRAINING' ? localizationStrings.SessionTraining : type === 'MATCH' ? localizationStrings.SessionMatch : localizationStrings.SessionBreak}
             </Text>
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
@@ -325,7 +326,7 @@ const StartSectionModal = ({
                       setShowTypeDropdown(false);
                     }}>
                     <Text style={styles.dropdownItemText}>
-                      {item === 'TRAINING' ? 'Training' : item === 'MATCH' ? 'Match' : 'Break'}
+                      {item === 'TRAINING' ? localizationStrings.SessionTraining : item === 'MATCH' ? localizationStrings.SessionMatch : localizationStrings.SessionBreak}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -377,7 +378,7 @@ const StartSectionModal = ({
           )}
 
           {/* Date & Time */}
-          <Text style={styles.label}>Date & Time</Text>
+          <Text style={styles.label}>{localizationStrings.DateAndTime}</Text>
           <View style={styles.dateTimeRow}>
             <TouchableOpacity
               style={styles.selectBtn}
@@ -428,7 +429,7 @@ const StartSectionModal = ({
               <TouchableOpacity
                 style={[styles.actionBtn, { backgroundColor: '#E0E0E0' }]}
                 onPress={onClose}>
-                <Text style={styles.cancelText}>Cancel</Text>
+                <Text style={styles.cancelText}>{localizationStrings.Cancel}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[

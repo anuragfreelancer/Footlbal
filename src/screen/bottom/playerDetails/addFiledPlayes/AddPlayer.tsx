@@ -118,7 +118,7 @@ const AddPlayer = () => {
         </View>
         {errors.fullName && <Text style={styles.redText}>{errors.fullName}</Text>}
         <View style={styles.input} >
-          <TextInput placeholder="Email"
+          <TextInput placeholder={localizationStrings.Email}
             value={email}
             onChangeText={setEmail}
             placeholderTextColor={"rgba(45, 45, 45, 1)"}

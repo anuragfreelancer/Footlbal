@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import CustomHeader from '../../../compoent/CustomHeader';
+import localizationStrings from '../../../compoent/Localization/Localization';
 import imageIndex from '../../../assets/imageIndex';
 import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import styles from './style';
@@ -18,7 +19,7 @@ const Notifications = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
       <View style={{ marginTop: 25 }}>
-        <CustomHeader imageSource={imageIndex.backNav} label={"Notifications"} />
+        <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.Notifications} />
       </View>
       <View style={styles.container}>
         {isLoading ? (

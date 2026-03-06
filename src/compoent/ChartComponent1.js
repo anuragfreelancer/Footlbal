@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import localizationStrings from "./Localization/Localization";
 
 const screenWidth = Dimensions.get("window").width;
 const cardPadding = 20;
@@ -22,10 +23,10 @@ const normalizeToPercent = (arr) => {
 
 const getSubtitle = (type) => {
   const t = type?.toLowerCase?.() || "weekly";
-  if (t === "weekly") return "Last 7 days";
-  if (t === "monthly") return "Last 6 weeks";
-  if (t === "yearly") return "Last 12 months";
-  return type ? `${type.charAt(0).toUpperCase() + type.slice(1)} view` : "Overview";
+  if (t === "weekly") return localizationStrings.Last7Days;
+  if (t === "monthly") return localizationStrings.Last6Weeks;
+  if (t === "yearly") return localizationStrings.Last12Months;
+  return type ? `${type.charAt(0).toUpperCase() + type.slice(1)} view` : localizationStrings.OverviewView;
 };
 
 const CHART_COLOR = "rgba(160, 216, 3, 1)";
@@ -102,7 +103,7 @@ const ChartComponent1 = ({ data, statusText, statusColor, totalPlayers }) => {
           <Text style={styles.cardTitle}>{statusText}</Text>
           <Text style={styles.cardHint}>
             {getSubtitle(selectedType)}
-            {typeof totalPlayers === "number" ? ` · ${totalPlayers} player${totalPlayers !== 1 ? "s" : ""}` : ""}
+            {typeof totalPlayers === "number" ? ` · ${totalPlayers} ${totalPlayers !== 1 ? localizationStrings.Players : localizationStrings.Player}` : ""}
           </Text>
         </View>
       </View>
@@ -115,10 +116,10 @@ const ChartComponent1 = ({ data, statusText, statusColor, totalPlayers }) => {
             onPress={() => setSelectedType(type)}
             style={[styles.tab, selectedType === type && styles.tabActive]}
           >
-            <Text
-              style={[styles.tabText, selectedType === type && styles.tabTextActive]}
+          <Text
+            style={[styles.tabText, selectedType === type && styles.tabTextActive]}
             >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              {type === "weekly" ? localizationStrings.Weekly : type === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
             </Text>
           </TouchableOpacity>
         ))}
@@ -126,11 +127,11 @@ const ChartComponent1 = ({ data, statusText, statusColor, totalPlayers }) => {
 
       <View style={styles.statsRow}>
         <View style={styles.statPill}>
-          <Text style={styles.statLabel}>Peak</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Peak}</Text>
           <Text style={styles.statValue}>{peak}%</Text>
         </View>
         <View style={styles.statPill}>
-          <Text style={styles.statLabel}>Avg</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Avg}</Text>
           <Text style={styles.statValue}>{avg}%</Text>
         </View>
       </View>
@@ -166,9 +167,9 @@ const ChartComponent1 = ({ data, statusText, statusColor, totalPlayers }) => {
           />
         ) : (
           <View style={styles.emptyChart}>
-            <Text style={styles.emptyChartText}>No session data yet</Text>
+            <Text style={styles.emptyChartText}>{localizationStrings.NoSessionDataYet}</Text>
             <Text style={styles.emptyChartSubtext}>
-              Add players and run sessions to see your activity here
+              {localizationStrings.AddPlayersRunSessions}
             </Text>
           </View>
         )}

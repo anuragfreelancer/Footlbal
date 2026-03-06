@@ -105,7 +105,7 @@ const MyTeam = () => {
         marginHorizontal: 12
       }}>
         <CustomButton
-          title={'Edit'}
+          title={localizationStrings.Edit}
           onPress={() =>
             navigation.goBack()
           }

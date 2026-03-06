@@ -83,7 +83,7 @@ const useSubmitRPE = () => {
     const handleSubmit = async (selectedTrainingId?: number | null) => {
         if (!validateForm()) return;
         if (formattedTime === localizationStrings.SelectTime || !formattedTime) {
-            Alert.alert(localizationStrings.SelectTime || "Validation", localizationStrings.SelectTime || "Please select a time.");
+            Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectTime);
             return;
         }
 

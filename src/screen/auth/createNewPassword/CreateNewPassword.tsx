@@ -18,6 +18,7 @@ import CustomButton from '../../../compoent/CustomButton';
  import CustomHeader from '../../../compoent/CustomHeader';
 import useCreateNewPassword from './useCreateNewPassword';
 import LoadingModal from '../../../utils/Loader';
+import localizationStrings from '../../../compoent/Localization/Localization';
 
 export default function CreateNewPassword() {
   const { credentials,
@@ -60,7 +61,7 @@ export default function CreateNewPassword() {
             <TextInputField
               lable={"Password"}
               text={credentials.password}
-              placeholder={'Password'}
+              placeholder={localizationStrings.Password}
               onChangeText={(value:string) => handleChange('password', value)} // Handles email input dynamically
 
               firstLogo={true}
@@ -73,7 +74,7 @@ export default function CreateNewPassword() {
                 lable={"Confirm Password"}
                 text={credentials.confirmPassword}
                 onChangeText={(value:string) => handleChange('confirmPassword', value)} // Handles email input dynamically
-                placeholder={'Confirm Password'}
+                placeholder={localizationStrings.confirmpass}
                 firstLogo={true}
                 showEye={true}
                 img={imageIndex.phone}
@@ -89,7 +90,7 @@ export default function CreateNewPassword() {
         marginHorizontal: 12
       }}>
         <CustomButton
-          title={'Save'}
+          title={localizationStrings.Save}
           onPress={handleResetPass
           }
           buttonStyle={{ width: "100%", marginTop: 28 }}

@@ -41,7 +41,7 @@ const [is,setIsLoading]= useState(false)
   };
   const handleOpenModal = () => {
     if (selectedPlayerIds.length === 0) {
-      Alert.alert('Please select at least one player.');
+      Alert.alert(localizationStrings.SelectPlayers, localizationStrings.Pleaseselectleastone);
       return;
     }
 
@@ -51,7 +51,7 @@ const [is,setIsLoading]= useState(false)
   };
   const handleStartAPI = async ({ date, time }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert('Invalid Input', 'Date or Time is not valid.');
+      Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
       return;
     }
   
@@ -78,7 +78,7 @@ const [is,setIsLoading]= useState(false)
       }
     } catch (error) {
       console.error('StartSection error:', error);
-      Alert.alert('Error', 'Something went wrong.');
+      Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
     } finally {
       setIsLoading(false);
     }

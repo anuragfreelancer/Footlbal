@@ -44,7 +44,7 @@ const CustomCalendar = () => {
     <SafeAreaView style={styles.container}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
-      <Text style={styles.header}>{localizationStrings?.State}</Text>
+      <Text style={styles.header}>{localizationStrings?.Schedule}</Text>
 
       {/* Legend: Blue = Training, Red = Match, Orange = Break */}
       <View style={styles.legendRow}>

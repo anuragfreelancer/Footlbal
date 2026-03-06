@@ -6,6 +6,7 @@ import { Dimensions } from "react-native";
 import LoadingModal from "../../../utils/Loader";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import imageIndex from "../../../assets/imageIndex";
+import localizationStrings from "../../../compoent/Localization/Localization";
 
  
 const Reports = () => {
@@ -42,9 +43,7 @@ const Reports = () => {
             <Text style={styles.boldText}>RPE Score</Text>
             <Text style={styles.scoreText}>{item.rate_efforts}</Text>
           </View>
-          {/* <View style={styles.scoreSection}>
-            <Text style={{color:"green"}}>End section</Text>
-          </View> */}
+          
         </TouchableOpacity>
       </View>
     );
@@ -60,7 +59,7 @@ const Reports = () => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.container}>
-          <Text style={styles.title}>Recent Session</Text>
+          <Text style={styles.title}>{localizationStrings?.RecentSession}</Text>
           <FlatList
             data={rpfData?.userGetData}
             keyExtractor={(item) => item.id}
@@ -75,10 +74,7 @@ const Reports = () => {
           />
         </View>
 
-        {/* <ChartComponent data={chartDataScreen1} statusText="Safe" statusColor="green" /> */}
-        {/* <ChartComponent data={chartDataScreen2} statusText="Medium" statusColor="#FFF100" />
-        <ChartComponent data={chartDataScreen2} statusText="High Risk" statusColor="#E81224" /> */}
-      </ScrollView>
+       </ScrollView>
     </SafeAreaView>
   );
 };

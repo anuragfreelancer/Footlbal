@@ -14,6 +14,7 @@ import ResponsiveSize from '../../../utils/ResponsiveSize';
  import CustomButton from '../../../compoent/CustomButton';
  import CustomHeader from '../../../compoent/CustomHeader';
 import useForgot from './useForgot';
+import localizationStrings from '../../../compoent/Localization/Localization';
 import ErrorText from '../../../compoent/ErrorText';
 import LoadingModal from '../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -73,7 +74,7 @@ export default function PasswordReset() {
               lable={"Email"}
               value={credentials.email}
               onChangeText={(value:string) => handleChange('email', value)}
-              placeholder={'Email Address '}
+              placeholder={localizationStrings.EmailAddress}
               firstLogo={true}
               img={imageIndex.emai}
             />
@@ -112,7 +113,7 @@ export default function PasswordReset() {
             marginHorizontal:12
           }}>
             <CustomButton
-              title={'Next'}
+              title={localizationStrings.Next}
                 onPress={() => handleForgot()
 
                 }

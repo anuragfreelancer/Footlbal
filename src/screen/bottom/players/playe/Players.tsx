@@ -52,7 +52,7 @@ const [is,setIsLoading]= useState(false)
   };
   const handleStartAPI = async ({ date, time, type }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert('Invalid Input', 'Date or Time is not valid.');
+      Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
       return;
     }
   
@@ -79,7 +79,7 @@ const [is,setIsLoading]= useState(false)
          setSelectedPlayers([])
       }
     } catch (error) {
-       Alert.alert('Error', 'Something went wrong.');
+       Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
     } finally {
       setIsLoading(false);
     }
@@ -221,10 +221,10 @@ const [is,setIsLoading]= useState(false)
       </View>
       <StartSectionModal
       visible={modalVisible}
-        title={"Questionnaire – Before & After Training"}
+        title={localizationStrings.QuestionnaireBeforeAfter}
         onClose={() => setModalVisible(false)}
-        Before={"Before Training Questionnaire"}
-        Training={"After Training Questionnaire"}
+        Before={localizationStrings.BeforeTrainingQuestionnaire}
+        Training={localizationStrings.AfterTrainingQuestionnaire}
         selectedPlayers={selectedPlayers}
         onStart={handleStartAPI}
                 buttTitle={localizationStrings?.StartSection}

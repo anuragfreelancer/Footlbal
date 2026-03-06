@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
  import { useSelector } from 'react-redux';
 import { ChangePasswordApi } from '../../../../redux/Api/AuthApi';
+import localizationStrings from '../../../../compoent/Localization/Localization';
  
 
 const useChange = () => {
@@ -19,30 +20,30 @@ const useChange = () => {
     setCredentials(prev => ({ ...prev, [field]: value }));
     setErrors((prev:any) => ({ ...prev, [field]: '' }));
     if (field === "password" && value.length < 6) {
-      setErrors((prev:any) => ({ ...prev, password: "Password must be at least 6 characters." }));
+      setErrors((prev:any) => ({ ...prev, password: localizationStrings.Passwordcharacters }));
     }
     if (field === "currentPass" && value.length < 6) {
-      setErrors((prev:any) => ({ ...prev, currentPass: "Password must be at least 6 characters." }));
+      setErrors((prev:any) => ({ ...prev, currentPass: localizationStrings.Passwordcharacters }));
     }
     if (field === "confirmPassword" && value !== credentials.password) {
-      setErrors((prev:any) => ({ ...prev, confirmPassword: "Passwords do not match." }));
+      setErrors((prev:any) => ({ ...prev, confirmPassword: localizationStrings.PasswordsDoNotMatch }));
     }
   };
 
   const handleResetPass = async () => {
     const { password, confirmPassword, currentPass } = credentials;
     let validationErrors:any = {};
-    if (!currentPass.trim()) validationErrors.currentPass = 'Current password is required.';
-    if (!password.trim()) validationErrors.password = 'Password is required.';
-    else if (password.length < 6) validationErrors.password = 'Password must be at least 6 characters long.';
-    if (!confirmPassword.trim()) validationErrors.confirmPassword = 'Confirm Password is required.';
-    else if (confirmPassword.length < 6) validationErrors.confirmPassword = 'Confirm Password must be at least 6 characters long.';
+    if (!currentPass.trim()) validationErrors.currentPass = localizationStrings.CurrentPasswordRequired;
+    if (!password.trim()) validationErrors.password = localizationStrings.Passwordrequired;
+    else if (password.length < 6) validationErrors.password = localizationStrings.Passwordcharacters;
+    if (!confirmPassword.trim()) validationErrors.confirmPassword = localizationStrings.ConfirmPasswordRequired;
+    else if (confirmPassword.length < 6) validationErrors.confirmPassword = localizationStrings.Passwordcharacters;
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
+      Alert.alert(localizationStrings.Error, localizationStrings.PasswordsDoNotMatch);
       return;
     }
     const params = {

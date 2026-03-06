@@ -36,6 +36,7 @@ import EndSectionScreen from "../screen/bottom/profile/endSectionScreen/EndSecti
 import AllPlayer from "../screen/bottom/playerDetails/allPlayer/AllPlayer";
 import SubscriptionPlansScreen from "../screen/SubscriptionPlans/SubscriptionPlansScreen";
 import PaymentWebViewScreen from "../screen/SubscriptionPlans/PaymentWebViewScreen";
+import localizationStrings from "../compoent/Localization/Localization";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -81,7 +82,7 @@ const _routes = () => {
       {
         name: ScreenNameEnum.HOME_SCREEN,
         Component: Home,
-        label: "Home",
+        label: localizationStrings.Home,
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
@@ -89,14 +90,14 @@ const _routes = () => {
       {
         name: ScreenNameEnum.Calendar,
         Component: Calendar,
-        label: "Calendar",
+        label: localizationStrings.Calendar,
         logo: imageIndex.calendar,
         logo1: imageIndex.calendar
       },
       {
         name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,
         Component: isLogin?.userData?.type != "Coach" ? SubmitRPE : Players,
-        label: isLogin?.userData?.type != "Coach" ? 'Submit RPE' : 'Players',
+        label: isLogin?.userData?.type != "Coach" ? localizationStrings.SubmitRPE : localizationStrings.Players,
         logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
         logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
       },
@@ -111,14 +112,14 @@ const _routes = () => {
         name: ScreenNameEnum.Reports,
         Component: isLogin?.userData?.type != "Coach" ? Reports : AllPlayer,
         // Component: Reports,
-        label: isLogin?.userData?.type != "Coach" ? 'Performance' : 'Reports',
+        label: isLogin?.userData?.type != "Coach" ? localizationStrings.Performance : localizationStrings.Reports,
         logo: imageIndex.reports,
         logo1: imageIndex.reportsActivE,
       },
       {
         name: ScreenNameEnum.Profile,
         Component: Profile,
-        label: "Profile",
+        label: localizationStrings.Profile,
         logo: imageIndex.profile,
         logo1: imageIndex.profileUser,
       },

@@ -9,6 +9,7 @@ import CustomButton from '../../../compoent/CustomButton';
 import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import CustomHeader from '../../../compoent/CustomHeader';
 import useOtp from './useOtp';
+import localizationStrings from '../../../compoent/Localization/Localization';
 
 export default function OtpScreen() {
   const { props, getCellOnLayoutHandler,
@@ -94,7 +95,7 @@ export default function OtpScreen() {
           justifyContent: 'flex-start', marginBottom: 11
         }}>
           <CustomButton
-            title={'Verify'}
+            title={localizationStrings.Verify}
             onPress={handleVerifyOTP}
 
           />

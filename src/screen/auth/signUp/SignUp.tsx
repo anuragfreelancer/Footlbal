@@ -24,6 +24,7 @@ import useSignup from './useSinup';
 import LoadingModal from '../../../utils/Loader';
 import DropdownModal from '../../../compoent/DropdownModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import localizationStrings from '../../../compoent/Localization/Localization';
 
 export default function SignUp() {
     const {
@@ -84,9 +85,9 @@ export default function SignUp() {
                     </View>
                     <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
                         <TextInputField
-                            lable={"Email"}
+                            lable={localizationStrings.Email}
                             onChangeText={(value: string) => handleChange('email', value)} // Handles email input dynamically
-                            placeholder="Email"
+                            placeholder={localizationStrings.Email}
                             text={credentials.email}
                             firstLogo={true}
                             img={imageIndex.emai}
@@ -94,10 +95,10 @@ export default function SignUp() {
                         {errors.email ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.email}</Text> : null}
                         <View style={{ marginTop: 12 }}>
                             <TextInputField
-                                lable={"Mobile No."}
+                                lable={localizationStrings.MobileNo}
                                 onChangeText={(value: string) => handleChange('mobile', value)} // Handles email input dynamically
                                 text={credentials.mobile}
-                                placeholder={'Mobile No.'}
+                                placeholder={localizationStrings.MobileNo}
                                 firstLogo={true}
                                 showEye={false}
                                 img={imageIndex.phone}
@@ -107,9 +108,9 @@ export default function SignUp() {
                         {errors.mobile ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.mobile}</Text> : null}
                         <View style={{ marginTop: 12 }}>
                             <TextInputField
-                                lable={"Password"}
+                                lable={localizationStrings.Password}
                                 onChangeText={(value: string) => handleChange('password', value)} // Handles email input dynamically
-                                placeholder="Password"
+                                placeholder={localizationStrings.Password}
                                 text={credentials.password}
                                 firstLogo={true}
                                 showEye={true}
@@ -164,7 +165,7 @@ export default function SignUp() {
                     </TouchableOpacity>
                     {errors.selectedOption ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.selectedOption}</Text> : null}
                     <CustomButton
-                        title={'Sign up'}
+                        title={localizationStrings.SignUp}
                         onPress={() => handleSignup()}
                         buttonStyle={{ width: "100%", marginTop: 28 }}
                     />

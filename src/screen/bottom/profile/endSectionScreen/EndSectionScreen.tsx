@@ -74,12 +74,12 @@ const coachSessionIds = selectedPlayers?.flatMap(player =>
      console.log(" ---response",response)
 
       if (response?.status === '1') {
-         Alert.alert('✅ Success', 'Section started successfully!');
+         Alert.alert(localizationStrings.InvalidInput || 'Success', localizationStrings.SectionStartedSuccess);
         setSelectedPlayers([])
        }
     } catch (error) {
       console.error('StartSection error:', error);
-      Alert.alert('Error', 'Something went wrong.');
+      Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
     } finally {
       setIsLoading(false);
     }
@@ -193,10 +193,10 @@ const coachSessionIds = selectedPlayers?.flatMap(player =>
       </View>
       <StartSectionModal
        visible={modalVisible}
-  title={"Questionnaire – Before & After Training"}
+  title={localizationStrings.QuestionnaireBeforeAfter}
   onClose={() => setModalVisible(false)}
-  Before={"Before Training Questionnaire"}
-  Training={"After Training Questionnaires"}
+  Before={localizationStrings.BeforeTrainingQuestionnaire}
+  Training={localizationStrings.AfterTrainingQuestionnaire}
   selectedPlayers={selectedPlayers}
   onStart={handleStartAPI}
   buttTitle={localizationStrings?.endSection}

@@ -13,6 +13,7 @@ import { Modal } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import LoadingModal from '../../../utils/Loader';
+import localizationStrings from '../../../compoent/Localization/Localization';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true); // for animation on Android
@@ -27,7 +28,7 @@ const TrainingFedBack = () => {
   const [time, setTime] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [formattedTime, setFormattedTime] = useState("Select Time");
+  const [formattedTime, setFormattedTime] = useState(localizationStrings.SelectTime);
   const [sumitLoder, setSumitLoder] = useState(false);
 
   const { item } = route.params || "";
@@ -69,12 +70,12 @@ const TrainingFedBack = () => {
   const navgation = useNavigation()
   const handleSubmit = async () => {
     // Check if date and time are selected
-    if (!date || date === "Select Date") {
-      Alert.alert("Validation", "Please select a date.");
+    if (!date || date === localizationStrings.SelectDate) {
+      Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectDate);
       return;
     }
-    if (!time || time === "Select Time") {
-      Alert.alert("Validation", "Please select a time.");
+    if (formattedTime === localizationStrings.SelectTime || !formattedTime) {
+      Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectTime);
       return;
     }
 
@@ -89,11 +90,11 @@ const TrainingFedBack = () => {
 
       const response = await EndRpfFrom(params, setSumitLoder);
       if (response) {
-        Alert.alert("Success", "Submitted successfully!");
+        Alert.alert(localizationStrings.Success || "Success", localizationStrings.SubmittedSuccess);
       }
     } catch (error) {
       console.error("API Call Failed:", error);
-      Alert.alert("Error", "Something went wrong. Please try again.");
+      Alert.alert(localizationStrings.Error || "Error", localizationStrings.SomethingWentWrongTryAgain);
     }
   };
 
@@ -137,7 +138,7 @@ const TrainingFedBack = () => {
       <View style={{
         marginTop: 30
       }}>
-        <CustomHeader imageSource={imageIndex.backNav} label="Session" />
+        <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.Session} />
       </View>
       {sumitLoder ? <LoadingModal /> : null}
       <ScrollView>
@@ -196,7 +197,7 @@ const TrainingFedBack = () => {
         marginBottom: 20,
         marginHorizontal: 15
       }}>
-        <CustomButton title={"End  Session"} onPress={() => { handleSubmit() }} />
+        <CustomButton title={localizationStrings.EndSession} onPress={() => { handleSubmit() }} />
       </View>
       <Modal visible={showCalendar} transparent animationType="slide">
         <View style={styles.modalContainer}>

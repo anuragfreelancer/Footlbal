@@ -278,13 +278,13 @@ const DashboardScreen = () => {
           </>
         ) : (
           <>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                onPress={() => (navigation as any).navigate(ScreenNameEnum.Calendar)}
               activeOpacity={0.7}
             >
               <Text style={[styles.sectionTitle, { color: "#047857" }]}>{localizationStrings?.Schedule}</Text>
               <Text style={{ fontSize: 13, color: "#065F46", marginTop: 4 }}>{localizationStrings?.SessionTraining} • {localizationStrings?.SessionMatch} • {localizationStrings?.SessionBreak}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View style={styles.sectionWrap}>
               <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>

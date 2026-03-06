@@ -22,6 +22,7 @@ import CustomButton from '../../../compoent/CustomButton';
 import ScreenNameEnum from '../../../routes/screenName.enum';
 import useLogin from './useLogin';
 import LoadingModal from '../../../utils/Loader';
+import localizationStrings from '../../../compoent/Localization/Localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -84,27 +85,27 @@ export default function Login() {
             />
           </View>
           <View style={{ marginTop: 7 }}>
-            <Text style={styles.txtHeading}>Login</Text>
+            <Text style={styles.txtHeading}>{localizationStrings.Login}</Text>
             <Text style={styles.txtsubHeading}>
               Enter your email and password
             </Text>
           </View>
           <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
             <TextInputField
-              lable={"Email"}
+              lable={localizationStrings.Email}
               text={credentials.email}
               onChangeText={(value: string) => handleChange('email', value)} // Handles email input dynamically
-              placeholder={'Email Address '}
+              placeholder={localizationStrings.EmailAddress}
               firstLogo={true}
               img={imageIndex.emai}
             />
             {errors.email ? <Text style={{ color: 'red', fontSize: 12, marginTop: 15 }}>{errors.email}</Text> : null}
             <View style={{ marginTop: 12 }}>
               <TextInputField
-                lable={"Password"}
+                lable={localizationStrings.Password}
                 text={credentials.password}
                 onChangeText={(value: string) => handleChange('password', value)} // Handles email input dynamically
-                placeholder={'Password'}
+                placeholder={localizationStrings.Password}
                 firstLogo={true}
                 showEye={true}
                 img={imageIndex.lock}
@@ -132,7 +133,7 @@ export default function Login() {
             </TouchableOpacity>
           </View>
           <CustomButton
-            title={'Login'}
+            title={localizationStrings.Login}
             onPress={() => loginFunctiom()}
             buttonStyle={{ width: "100%", marginTop: 28 }}
           />
@@ -167,7 +168,7 @@ export default function Login() {
               onPress={() => {
                 navigation.navigate(ScreenNameEnum.SignUpScreen)
               }}>
-              <Text style={Styles.text}>Sign up</Text>
+              <Text style={Styles.text}>{localizationStrings.SignUp}</Text>
             </TouchableOpacity>
           </View>
         ) : null}

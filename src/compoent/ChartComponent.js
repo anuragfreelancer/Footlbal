@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text,Image, Dimensions, TouchableOpacity, Modal, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import imageIndex from "../assets/imageIndex";
+import localizationStrings from "./Localization/Localization";
  
 const screenWidth = Dimensions.get("window").width;
 const chartWidth = screenWidth - 48;
@@ -15,10 +16,10 @@ const normalizeToPercent = (arr) => {
 
 const getSubtitle = (type) => {
   const t = type?.toLowerCase?.() || "weekly";
-  if (t === "weekly") return "Last 7 days";
-  if (t === "monthly") return "Monthly trend";
-  if (t === "yearly") return "Yearly view";
-  return type ? `${type.charAt(0).toUpperCase() + type.slice(1)} view` : "Overview";
+  if (t === "weekly") return localizationStrings.Last7Days;
+  if (t === "monthly") return localizationStrings.MonthlyTrend;
+  if (t === "yearly") return localizationStrings.YearlyView;
+  return type ? `${type.charAt(0).toUpperCase() + type.slice(1)} view` : localizationStrings.OverviewView;
 };
 
 const ChartComponent = ({ data, statusText, statusColor }) => {
@@ -40,11 +41,13 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
           <View>
             <Text style={styles.statusText}>{statusText}</Text>
             <Text style={styles.cardSubtitle}>{getSubtitle(selectedType)}</Text>
-            <Text style={styles.statsInline}>Peak {peak}% · Avg {avg}%</Text>
+            <Text style={styles.statsInline}>{localizationStrings.Peak} {peak}% · {localizationStrings.Avg} {avg}%</Text>
           </View>
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(true)} style={styles.selectorButton}>
-          <Text style={styles.selectorText}>{selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}</Text>
+          <Text style={styles.selectorText}>
+            {selectedType === "weekly" ? localizationStrings.Weekly : selectedType === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
+          </Text>
           <Image source={imageIndex.arrowDown} 
           style={{
             height:15,
@@ -115,7 +118,7 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
                   style={[styles.modalItem, selectedType === item && styles.modalItemActive]}
                 >
                   <Text style={[styles.modalItemText, selectedType === item && styles.modalItemTextActive]}>
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                    {item === "weekly" ? localizationStrings.Weekly : item === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
                   </Text>
                   {selectedType === item && <Text style={styles.modalCheck}>✓</Text>}
                 </TouchableOpacity>

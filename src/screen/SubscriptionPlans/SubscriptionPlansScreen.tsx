@@ -132,30 +132,30 @@ export default function SubscriptionPlansScreen() {
 
   const handleSubscribe = () => {
     if (!userId) {
-      Alert.alert('Login required', 'Please login to activate subscription.');
+      Alert.alert(localizationStrings.LoginRequired, localizationStrings.LoginRequiredMessage);
       return;
     }
     if (!userEmail) {
-      Alert.alert('Email required', 'Your account email is needed for checkout.');
+      Alert.alert(localizationStrings.Emailrequired, localizationStrings.EmailRequiredMessage);
       return;
     }
     if (!token) {
-      Alert.alert('Session expired', 'Please login again to start your free trial.');
+      Alert.alert(localizationStrings.SessionExpired, localizationStrings.SessionExpiredMessage);
       return;
     }
 
     const expiryDate = addDaysISO(plan.freeTrialDays); // ✅ free trial expiry
 
     Alert.alert(
-      'Confirm Subscription',
+      localizationStrings.ConfirmSubscription,
       `You're subscribing to ${plan.name} for ${playerCount} players.\n\n` +
         `Total: €${totalPrice.toFixed(2)} per month\n` +
         `${plan.freeTrialDays}-day free trial included\n\n` +
         `Trial expires on: ${expiryDate}`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: localizationStrings.Cancel, style: 'cancel' },
         {
-          text: 'Subscribe',
+          text: localizationStrings.Subscribe,
           style: 'default',
           onPress: async () => {
             try {
@@ -179,14 +179,14 @@ export default function SubscriptionPlansScreen() {
 
               if (checkoutUrl && typeof checkoutUrl === 'string') {
                 setSubmitting(false);
-                successToast('Opening payment...');
+                successToast(localizationStrings.OpeningPayment);
                 navigation.navigate(ScreenNameEnum.PaymentWebViewScreen, { url: checkoutUrl });
                 return;
               }
 
-              Alert.alert('Success', 'Your subscription has been activated!');
+              Alert.alert(localizationStrings.Success, localizationStrings.SubscriptionActivated);
             } catch (e: any) {
-              Alert.alert('Error', e?.message || 'Something went wrong');
+              Alert.alert(localizationStrings.Error, e?.message || localizationStrings.SomethingWentWrong);
             } finally {
               setSubmitting(false);
             }
