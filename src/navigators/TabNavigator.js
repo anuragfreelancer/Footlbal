@@ -2,12 +2,14 @@ import { View, Text, Image, Keyboard, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import _routes from '../routes/routes';
+import { useLanguage } from '../compoent/Localization/LanguageContext';
 
 
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+  useLanguage();
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(

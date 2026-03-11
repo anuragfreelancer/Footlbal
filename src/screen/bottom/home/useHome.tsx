@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { Get_user_by_id, GetCoachSession, GetProfile } from '../../../redux/Api/AuthApi';
+import { Get_user_by_id, Get_user_by_id2, GetCoachSession, GetProfile } from '../../../redux/Api/AuthApi';
 import { GetAllChatMessage } from '../../../redux/Api/AuthApi';
 
 const useHome = () => {
@@ -9,6 +9,7 @@ const useHome = () => {
   const [isLoading, setisLoading] = useState(false)
   const [getCoach_session, setgetCoach_session] = useState([])
   const [getUser, setgetUser] = useState([])
+  const [getUser1, setgetUser1] = useState([])
   const isLogin = useSelector((state: any) => state?.auth);
   const dispatch = useDispatch();
   const [imgloading, setImgloading] = useState(true);
@@ -23,6 +24,8 @@ const useHome = () => {
       GetAbout();
       Get_coach_session();
       Get_sscoach_session();
+          Get_Userscoach_session1()
+
     }
   }, [isLogin?.userData?.id]);
  ;
@@ -55,8 +58,7 @@ const useHome = () => {
       setisLoading(false);
     }
   };
-
- 
+  
  
  
   const Get_coach_session = async () => {
@@ -81,7 +83,7 @@ const useHome = () => {
       setisLoading(true);
   
       const response = await Get_user_by_id(setisLoading, isLogin?.userData?.id);
-        if (response && response?.userGetData) {
+         if (response && response?.userGetData) {
          setgetUser(response.userGetData);
       } else {
         setgetUser([]);
@@ -89,6 +91,25 @@ const useHome = () => {
     } catch (error) {
       console.error("Error fetching coach session:", error);
       setgetUser([]);
+    } finally {
+      setisLoading(false);
+    }
+  };
+ 
+  const Get_Userscoach_session1 = async () => {
+      try {
+      setisLoading(true);
+  
+      const response = await Get_user_by_id2(setisLoading, isLogin?.userData?.id);
+      console.log("response?.userGetData",response)
+           if (response && response?.userGetData) {
+          setgetUser1(response.userGetData);
+      } else {
+        setgetUser1([]);
+      }
+    } catch (error) {
+      console.error("Error fetching coach session:", error);
+      setgetUser1([]);
     } finally {
       setisLoading(false);
     }
@@ -104,7 +125,8 @@ const useHome = () => {
     getCoach_session ,
     getUser,
     isLogin ,
-    filteredMessages
+    filteredMessages ,
+    getUser1
   };
 };
 

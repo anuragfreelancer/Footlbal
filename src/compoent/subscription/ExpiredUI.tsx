@@ -9,8 +9,11 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ScreenNameEnum from '../../routes/screenName.enum';
+import localizationStrings from '../Localization/Localization';
+import { useLanguage } from '../Localization/LanguageContext';
 
 const FreeWallUI = () => {
+  useLanguage();
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(true);
@@ -34,12 +37,12 @@ const FreeWallUI = () => {
       <View style={styles.header}>
         <Text style={[styles.badge,{
             color:"black"
-        }]}>🎉 FREE TRIAL</Text>
-        <Text style={styles.title}>Start your 7-day free trial now.</Text>
+        }]}>🎉 {localizationStrings.FreeTrial}</Text>
+        <Text style={styles.title}>{localizationStrings.StartFreeTrialNow}</Text>
       </View>
 
       <Text style={styles.description}>
-           Subscription starts automatically after trial.
+           {localizationStrings.SubscriptionStartsAfterTrial}
       </Text>
 
       <TouchableOpacity
@@ -49,7 +52,7 @@ const FreeWallUI = () => {
           navigation.navigate(ScreenNameEnum.SubscriptionPlansScreen)
         }
       >
-        <Text style={styles.buttonText}>View Subscription Plans</Text>
+        <Text style={styles.buttonText}>{localizationStrings.ViewSubscriptionPlans}</Text>
       </TouchableOpacity>
     </Animated.View>
   );

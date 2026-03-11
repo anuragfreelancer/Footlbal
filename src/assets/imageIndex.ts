@@ -67,6 +67,7 @@ export default {
   calenderBag: require('./images/calenderBag.png'),
   circleBak: require('./images/circleBak.png'),
   bagePng: require('./images/bagePng.png'),
+  circleleft: require('./images/circleleft.png'),
   translatingcircleleft: require('./images/circleleft.png'),
   closeImg: require('./images/closeImg.png'),
   editLogo: require('./images/editLogo.png'),

@@ -118,6 +118,7 @@ const [is,setIsLoading]= useState(false)
     );
   });
   const getLogin = useSelector((state: any) => state?.feature);
+  const userGetData = useSelector((state: any) => state?.feature?.userGetData);
 
   useFocusEffect(
     useCallback(() => {
@@ -130,7 +131,7 @@ const [is,setIsLoading]= useState(false)
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
         <Text style={styles.header}>{localizationStrings?.Players}</Text>
-        <SubscriptionCard />
+{userGetData?.subscription_status == "false"   ?  <SubscriptionCard /> : null} 
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}

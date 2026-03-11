@@ -19,6 +19,7 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
    const GetplayerApi = async () => {
     try {
       const state = await Getplayer(isLogin?.userData?.id,setisLoading);
+      console.log("end. -- state",state)
       if (state) {
          setAllPlay(state?.userGetData);
          setFilterData(state?.userGetData)

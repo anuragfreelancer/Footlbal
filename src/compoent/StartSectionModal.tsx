@@ -32,9 +32,9 @@ interface StartSectionModalProps {
     questionnaire1: number[];
   }) => Promise<void>;
   title: string;
-  buttTitle: string; 
+  buttTitle: string;
   Before: string;
-  Training:string
+  Training: string
 }
 
 const StartSectionModal = ({
@@ -43,15 +43,14 @@ const StartSectionModal = ({
   onStart,
   title,
   buttTitle,
-    Before ,
-    Training
+  Before,
+  Training
 }: StartSectionModalProps) => {
   // State for date and time
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
 
   // State for session type: TRAINING | MATCH | BREAK
-  const [type, setType] = useState('TRAINING');
 
   // State for selected questionnaires (multiple allowed)
   const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<number[]>([]);
@@ -79,21 +78,22 @@ const StartSectionModal = ({
   useEffect(() => {
     const fetchQuestionnaires = async () => {
       if (!visible) return;
-      
+
       try {
         setLoadingQuestions(true);
         // if(after_training)
-        if(Training == localizationStrings.AfterTrainingQuestionnaire){
-           const res = await fetch(
-          'https://kmmps.store/api/get_training?type=after_training'
-          
-        );
-  
-        const json = await res.json();
-        if (json?.result) {
-          setQuestionnaires(json.result);
-        }
-        return;
+        if (Training == localizationStrings.AfterTrainingQuestionnaire) {
+          const res = await fetch(
+            'https://kmmps.store/api/get_training?type=after_training'
+
+          );
+
+          const json = await res.json();
+          console.log("json", json?.result)
+          if (json?.result) {
+            setQuestionnaires(json.result);
+          }
+          return;
         }
         const res = await fetch(
           'https://kmmps.store/api/get_training?type=before_training'
@@ -103,6 +103,8 @@ const StartSectionModal = ({
         // );
         const json = await res.json();
         if (json?.result) {
+          console.log("qqqjson", json?.result)
+
           setQuestionnaires(json.result);
         }
       } catch (err) {
@@ -119,7 +121,7 @@ const StartSectionModal = ({
   useEffect(() => {
     const fetchQuestionnaires1 = async () => {
       if (!visible) return;
-      
+
       try {
         setLoadingQuestions1(true);
         const res = await fetch(
@@ -164,7 +166,7 @@ const StartSectionModal = ({
       onClose();
     }
   };
-
+  const [type, setType] = useState('training');
   const toggleQuestionnaire = (ids: number[], setIds: React.Dispatch<React.SetStateAction<number[]>>, id: number) => {
     if (ids.includes(id)) {
       setIds(ids.filter((x) => x !== id));
@@ -179,8 +181,14 @@ const StartSectionModal = ({
     onToggle: (id: number) => void
   ) => {
     const isSelected = selectedIds.includes(item.id);
-    const title = item.training_title ?? item.question;
+    if (localizationStrings.Logout) {
 
+    }
+    const title =
+      localizationStrings.Logout === "Déconnexion"
+        ? (item?.training_title_french || item?.question_french)
+        : (item?.training_title || item?.question);    // const title = item.training_title_french ?? item.question;
+    // const title = item.training_title ?? item.question;
     return (
       <TouchableOpacity
         style={styles.questionnaireCard}
@@ -194,11 +202,12 @@ const StartSectionModal = ({
           }}>
           <View style={{ flex: 1 }}>
             <Text style={styles.questionnaireTitle}>{title}</Text>
-            {item.question && (
+            {/* {item.question && (
               <Text style={styles.questionnaireDesc} numberOfLines={2}>
                 {item.question}
               </Text>
-            )}
+            )} */}
+            {title}
           </View>
           <View
             style={{
@@ -281,7 +290,11 @@ const StartSectionModal = ({
     }
     return `${ids.length} ${localizationStrings.SelectedCount}`;
   };
-
+  const sessionTypes = [
+    { key: 'training', label: localizationStrings.SessionTraining },
+    { key: 'match', label: localizationStrings.SessionMatch },
+    { key: 'break', label: localizationStrings.SessionBreak },
+  ];
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.overlay}>
@@ -303,37 +316,40 @@ const StartSectionModal = ({
           <Text style={styles.label}>{localizationStrings.SessionType}</Text>
           <TouchableOpacity
             style={styles.dropdown}
-            onPress={() => setShowTypeDropdown(true)}>
+            onPress={() => setShowTypeDropdown(true)}
+          >
             <Text style={styles.dropdownText}>
-              {type === 'TRAINING' ? localizationStrings.SessionTraining : type === 'MATCH' ? localizationStrings.SessionMatch : localizationStrings.SessionBreak}
+              {sessionTypes.find(i => i.key === type)?.label || localizationStrings.SessionTraining}
             </Text>
             <Image source={imageIndex.downarrow} style={styles.dropdownIcon} />
           </TouchableOpacity>
+
 
           {/* Session Type Dropdown */}
           <Modal visible={showTypeDropdown} transparent animationType="fade">
             <TouchableOpacity
               style={styles.dropdownOverlay}
               activeOpacity={1}
-              onPress={() => setShowTypeDropdown(false)}>
+              onPress={() => setShowTypeDropdown(false)}
+            >
               <View style={styles.dropdownList}>
-                {['TRAINING', 'MATCH', 'BREAK'].map((item) => (
+                {sessionTypes.map((item) => (
                   <TouchableOpacity
-                    key={item}
+                    key={item.key}
                     style={styles.dropdownItem}
                     onPress={() => {
-                      setType(item);
+                      setType(item.key);
                       setShowTypeDropdown(false);
-                    }}>
+                    }}
+                  >
                     <Text style={styles.dropdownItemText}>
-                      {item === 'TRAINING' ? localizationStrings.SessionTraining : item === 'MATCH' ? localizationStrings.SessionMatch : localizationStrings.SessionBreak}
+                      {item.label}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </TouchableOpacity>
           </Modal>
-
           {/* First Questionnaire - before session (multiple) */}
           <Text style={styles.label}>{Before}</Text>
           <TouchableOpacity
@@ -510,7 +526,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 10,
     marginBottom: 4,
-    
+
   },
   label: {
     fontSize: 16,

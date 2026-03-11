@@ -15,40 +15,55 @@ import { useSubscription } from "../../../compoent/subscription/useSubscription"
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import moment from "moment";
 import ChartComponent1 from "../../../compoent/ChartComponent1";
+import { useSelector } from "react-redux";
 
 const DashboardScreen = () => {
-  const { language } = useLanguage();
+  useLanguage();
   const {
     getLogin,
     imgloading,
     setImgloading,
     navigation,
     chatMess,
+    getUser1 ,
     getCoach_session,
     getUser,
     isLogin,
     filteredMessages
   } = useHome();
   const { showSubscriptionCard } = useSubscription();
+  const userGetData = useSelector((state: any) => state?.feature?.userGetData);
 
-  // Build coach chart from sessions + total players (conversations)
+ 
+  // Build coach chart from players' coach_session (API returns players with coach_session array)
   const coachChartData = React.useMemo(() => {
-    const sessions: any[] = Array.isArray(getCoach_session) ? getCoach_session : [];
+    const playersList: any[] = Array.isArray(getCoach_session) ? getCoach_session : [];
     const totalPlayers = Array.isArray(filteredMessages) ? filteredMessages.length : 0;
 
-    const getDateStr = (item: any) => {
-      const d = item?.session_start_time || item?.session_start_date || "";
-      if (typeof d !== "string") return "";
-      return d.split(" ")[0] || d;
-    };
     const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
+    const getDateStr = (item: any) => {
+      const dateVal = item?.session_start_date ?? "";
+      const timeVal = item?.session_start_time ?? "";
+      const a = typeof dateVal === "string" ? dateVal.trim().split(" ")[0] : "";
+      const b = typeof timeVal === "string" ? timeVal.trim().split(" ")[0] : "";
+      if (looksLikeDate(a)) return a;
+      if (looksLikeDate(b)) return b;
+      return "";
+    };
 
     const countByDate: Record<string, number> = {};
-    sessions.forEach((s: any) => {
-      const dateStr = getDateStr(s);
-      if (looksLikeDate(dateStr)) {
-        countByDate[dateStr] = (countByDate[dateStr] || 0) + 1;
-      }
+    playersList.forEach((item: any) => {
+      const sessions = Array.isArray(item?.coach_session)
+        ? item.coach_session
+        : item?.session_start_date
+          ? [item]
+          : [];
+      sessions.forEach((s: any) => {
+        const dateStr = getDateStr(s);
+        if (looksLikeDate(dateStr)) {
+          countByDate[dateStr] = (countByDate[dateStr] || 0) + 1;
+        }
+      });
     });
 
     const last7Days: number[] = [];
@@ -58,31 +73,28 @@ const DashboardScreen = () => {
     }
     const last6Weeks: number[] = [];
     for (let i = 5; i >= 0; i--) {
-      const start = moment().subtract(i + 1, "weeks").startOf("week");
-      const end = moment().subtract(i, "weeks").startOf("week");
       let count = 0;
-      Object.keys(countByDate).forEach((dateStr) => {
-        const m = moment(dateStr);
-        if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
-      });
+      if (i === 0) {
+        const weekStart = moment().startOf("week");
+        Object.keys(countByDate).forEach((dateStr) => {
+          const m = moment(dateStr);
+          if (m.isSameOrAfter(weekStart) && m.isSameOrBefore(moment())) {
+            count += countByDate[dateStr] || 0;
+          }
+        });
+      } else {
+        const start = moment().subtract(i + 1, "weeks").startOf("week");
+        const end = moment().subtract(i, "weeks").startOf("week");
+        Object.keys(countByDate).forEach((dateStr) => {
+          const m = moment(dateStr);
+          if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
+        });
+      }
       last6Weeks.push(count);
     }
-    const last12Months: number[] = [];
-    for (let i = 11; i >= 0; i--) {
-      const start = moment().subtract(i + 1, "months").startOf("month");
-      const end = moment().subtract(i, "months").startOf("month");
-      let count = 0;
-      Object.keys(countByDate).forEach((dateStr) => {
-        const m = moment(dateStr);
-        if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
-      });
-      last12Months.push(count);
-    }
-
     return {
       weekly: { data: last7Days },
       monthly: { data: last6Weeks },
-      yearly: { data: last12Months },
       totalPlayers,
     };
   }, [getCoach_session, filteredMessages]);
@@ -186,7 +198,7 @@ const DashboardScreen = () => {
       return () => { };
     }, [getLogin])
   );
-  return (
+    return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
       <View style={styles.header}>
@@ -222,18 +234,19 @@ const DashboardScreen = () => {
         </View>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-<ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
-        {/* {isLogin?.userData?.type == "Coach" ? null : <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
-        } */}
-        {/* {isLogin?.userData?.type != "Coach" ? null : (() => {
+{/* <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" /> */}
+        {isLogin?.userData?.type == "Coach" ? null : <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+        }
+        {isLogin?.userData?.type !== "Coach" ? null : (() => {
           const coachChartProps = {
-            data: { weekly: coachChartData.weekly, monthly: coachChartData.monthly, yearly: coachChartData.yearly },
+            data: { weekly: coachChartData.weekly, monthly: coachChartData.monthly },
             statusText: localizationStrings?.Safe,
             statusColor: "rgba(160, 216, 3, 1)",
             totalPlayers: coachChartData.totalPlayers,
           };
           return <ChartComponent1 {...coachChartProps} />;
-        })()} */}
+        })()}
+        
 
         {isLogin?.userData?.type == "Coach" ? (
           <>
@@ -241,8 +254,8 @@ const DashboardScreen = () => {
               marginHorizontal: 10
             }}>
 
-              {showSubscriptionCard && <SubscriptionCard />}
-            </View>
+{userGetData?.subscription_status == "false"   ?  <SubscriptionCard /> : null} 
+     </View>
 
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -290,7 +303,7 @@ const DashboardScreen = () => {
               <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
             </View>
             <FlatList
-              data={getUser}
+              data={getUser1}
               keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
               renderItem={renderItem}
               scrollEnabled={false}

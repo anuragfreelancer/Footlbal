@@ -132,20 +132,21 @@ const useLogin = () => {
     //     });
     // }, []);
   
-    // Aman@gmail.com
-    // 123456
-  //  const [credentials, setCredentials] = useState({ email: 'player@gmail.com', password: '1234567' });
-   // const [credentials, setCredentials] = useState({ email: '', password: '' });
-
-
-  //  coach13@gmail.com
-  // Koml@gmail.com
-  // Kp1@gmail.com
-  // 1 se 6
+   
     // const [credentials, setCredentials] = useState({ email: 'Kp1@gmail.com', password: '123456' });
     // const [credentials, setCredentials] = useState({ email: 'coach13@gmail.com', password: '123456' });
-    const [credentials, setCredentials] = useState({ email: 'coach12@gmail.com', password: '1234567' });
-   const [errors, setErrors] = useState({ email: '', password: '' });
+    // const [credentials, setCredentials] = useState({ email: 'Condo@gmail.com', password: '123456' });
+    // const [credentials, setCredentials] = useState({ email: 'Testing@gmail.com', password: '123456' });
+    // const [credentials, setCredentials] = useState({ email: 'coach12@gmail.com', password: '1234567' });
+    // Testing@gmail.com
+
+
+    // Dp@gmail.com
+    // John@gmail.com
+    const [credentials, setCredentials] = useState({ email: 'L444o@gmail.com', password: '123456' }); 
+//  const [credentials, setCredentials] = useState({ email: 'test223@gmail.com', password: '123456' }); 
+ 
+    const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isLoading, setisLoading] = useState(false)

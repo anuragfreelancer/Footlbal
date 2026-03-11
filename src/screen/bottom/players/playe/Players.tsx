@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-    ActivityIndicator, Alert
+  ActivityIndicator, Alert
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -15,21 +15,21 @@ import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
- import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import { errorToast } from "../../../../utils/customToast";
 
 const Players = () => {
   useLanguage();
   const {
- 
-    isLoading,  
+    isLogin,
+    isLoading,
     navigation,
-    
+
     searchPlaylist, setSearchPlaylist,
-    filterData,  
+    filterData,
   } = usePlayers();
-const [is,setIsLoading]= useState(false)
-   const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
+  const [is, setIsLoading] = useState(false)
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
 
@@ -42,8 +42,8 @@ const [is,setIsLoading]= useState(false)
   };
   const handleOpenModal = () => {
     if (selectedPlayerIds.length === 0) {
-      errorToast(localizationStrings?.Pleaseselectleastone ||"")
-       return;
+      errorToast(localizationStrings?.Pleaseselectleastone || "")
+      return;
     }
 
     const players = filterData.filter(p => selectedPlayerIds.includes(p.id));
@@ -55,40 +55,42 @@ const [is,setIsLoading]= useState(false)
       Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
       return;
     }
-  
+
     try {
       setIsLoading(true);
-  
+
       const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
       const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-  const ids = selectedPlayers?.map(item => Number(item.id));
+      const ids = selectedPlayers?.map(item => Number(item.id));
 
       const params = {
         players: ids,
         date: formattedDate,
         time: formattedTime,
-        session_type: type || 'TRAINING',
+        // session_type: "break",
+        coach_id: isLogin?.userData?.id,
+        session_type: type,
         navigation,
       };
-  
+
       console.log('📤 Sending to API:', params);
 
       const response = await StartSection(params, setIsLoading);
-  
+
       if (response?.status === '1') {
-         setSelectedPlayers([])
+        setSelectedPlayers([])
       }
     } catch (error) {
-       Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
+      Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
     } finally {
       setIsLoading(false);
     }
   };
-  
-  
-  
-  
- 
+
+
+
+
+
   const CommonCard = React.memo(({ item, onPress, isSelected }) => {
     return (
       <TouchableOpacity
@@ -104,9 +106,9 @@ const [is,setIsLoading]= useState(false)
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {/* Checkbox */}
-          
+
           {/* Player Info */}
-          <Image source={{ uri: item?.image}} style={styles.avatar} />
+          <Image source={{ uri: item?.image }} style={styles.avatar} />
           <View style={styles.contentContainer}>
             <View style={styles.infoContainer}>
               <Text style={styles.name}>{item?.user_name}</Text>
@@ -139,57 +141,55 @@ const [is,setIsLoading]= useState(false)
 
   return (
     <SafeAreaView style={styles.container}>
-            {is ? <LoadingModal /> : null}
-       <StatusBarComponent />
-       
+      {is ? <LoadingModal /> : null}
+      <StatusBarComponent />
+
       <View style={[styles.container, { padding: 15 }]}>
 
-        
-        
         <Text style={styles.header}>{localizationStrings.Players}</Text>
         <SearchBar
           value={searchPlaylist}
           onSearchChange={setSearchPlaylist}
         />
- <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: 'rgba(160, 216, 3, 1)', // greenish tone for "Start"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={handleOpenModal}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-     {localizationStrings?.StartSection}({selectedPlayerIds.length})
-    </Text>
-  </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(160, 216, 3, 1)', // greenish tone for "Start"
+              padding: 12,
+              borderRadius: 10,
+              alignItems: 'center',
+              marginBottom: 15,
+              height: 50,
+              justifyContent: 'center',
+            }}
+            onPress={handleOpenModal}
+          >
+            <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
+              {localizationStrings?.StartSection}({selectedPlayerIds.length})
+            </Text>
+          </TouchableOpacity>
 
-  <TouchableOpacity
-    style={{
-      flex: 1,
-      backgroundColor: '#F44336', // reddish tone for "End"
-      padding: 12,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
-      height: 50,
-      justifyContent: 'center',
-    }}
-    onPress={()=>{
-      navigation.navigate(ScreenNameEnum.EndSectionScreen)
-    }}
-  >
-    <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-    {localizationStrings?.endSection}
-    </Text>
-  </TouchableOpacity>
-</View>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: '#F44336', // reddish tone for "End"
+              padding: 12,
+              borderRadius: 10,
+              alignItems: 'center',
+              marginBottom: 15,
+              height: 50,
+              justifyContent: 'center',
+            }}
+            onPress={() => {
+              navigation.navigate(ScreenNameEnum.EndSectionScreen)
+            }}
+          >
+            <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
+              {localizationStrings?.endSection}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {isLoading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -220,14 +220,14 @@ const [is,setIsLoading]= useState(false)
         </TouchableOpacity> */}
       </View>
       <StartSectionModal
-      visible={modalVisible}
+        visible={modalVisible}
         title={localizationStrings.QuestionnaireBeforeAfter}
         onClose={() => setModalVisible(false)}
         Before={localizationStrings.BeforeTrainingQuestionnaire}
         Training={localizationStrings.AfterTrainingQuestionnaire}
         selectedPlayers={selectedPlayers}
         onStart={handleStartAPI}
-                buttTitle={localizationStrings?.StartSection}
+        buttTitle={localizationStrings?.StartSection}
 
       />
     </SafeAreaView>

@@ -17,6 +17,7 @@ export const constant = {
   getLoadType:"get_load_type",
   addPlayer:"add_player",
   getPlayer:"get_player",
+  get_user_session:"get_user_session",
   updatePlayer:"update_player",
   addubmitRPF :"add_submit_RPF",
   add_attendance:"add_attendance",

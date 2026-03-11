@@ -16,6 +16,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../compoent/CustomHeader';
 import imageIndex from '../../assets/imageIndex';
 import localizationStrings from '../../compoent/Localization/Localization';
+import { useLanguage } from '../../compoent/Localization/LanguageContext';
 import { createCheckoutSession, GetProfile } from '../../redux/Api/AuthApi';
 import { successToast } from '../../utils/customToast';
 import ScreenNameEnum from '../../routes/screenName.enum';
@@ -31,20 +32,20 @@ const { width } = Dimensions.get('window');
 export const base_url = 'https://kmmps.store/api/';
 
 const plan = {
-  name: 'Team Pro Plan',
+  nameKey: 'TeamProPlan',
   basePrice: 15.99,
   freeTrialDays: 7,
   maxPlayers: 20,
   additionalPlayerPrice: 2,
-  features: [
-    'Add and manage players',
-    'Coach access with custom questionnaires',
-    'Team statistics & performance analytics',
-    'Advanced data visualization',
-    'Custom reports generation',
-    '0-10 scale rating system for questionnaires',
-    'Reusable questionnaire templates',
-    'Super admin access for team management',
+  featureKeys: [
+    'SubPlanFeature1',
+    'SubPlanFeature2',
+    'SubPlanFeature3',
+    'SubPlanFeature4',
+    'SubPlanFeature5',
+    'SubPlanFeature6',
+    'SubPlanFeature7',
+    'SubPlanFeature8',
   ],
   accentColor: '#4F46E5',
   gradientColors: ['#4F46E5', '#7C73FF'],
@@ -60,7 +61,12 @@ const addDaysISO = (days: number) => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
+const formatStr = (str: string, ...args: (string | number)[]) => {
+  return args.reduce((s, v, i) => s.replace(`{${i}}`, String(v)), str);
+};
+
 export default function SubscriptionPlansScreen() {
+  useLanguage();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const isLogin = useSelector((state: any) => state.auth);
@@ -148,10 +154,14 @@ export default function SubscriptionPlansScreen() {
 
     Alert.alert(
       localizationStrings.ConfirmSubscription,
-      `You're subscribing to ${plan.name} for ${playerCount} players.\n\n` +
-        `Total: €${totalPrice.toFixed(2)} per month\n` +
-        `${plan.freeTrialDays}-day free trial included\n\n` +
-        `Trial expires on: ${expiryDate}`,
+      formatStr(
+        localizationStrings.SubscribeConfirmMessage,
+        localizationStrings[plan.nameKey],
+        playerCount,
+        totalPrice.toFixed(2),
+        plan.freeTrialDays,
+        expiryDate
+      ),
       [
         { text: localizationStrings.Cancel, style: 'cancel' },
         {
@@ -169,7 +179,6 @@ export default function SubscriptionPlansScreen() {
                 token: token,
               };
 
-              console.log("----",checkoutPayload)
               const checkoutRes = await createCheckoutSession(checkoutPayload, setSubmitting);
               if (!checkoutRes) return;
 
@@ -177,6 +186,7 @@ export default function SubscriptionPlansScreen() {
                 checkoutRes?.data?.url ??
                 checkoutRes?.url;
 
+                console.log("asssss",checkoutUrl)
               if (checkoutUrl && typeof checkoutUrl === 'string') {
                 setSubmitting(false);
                 successToast(localizationStrings.OpeningPayment);
@@ -208,21 +218,21 @@ export default function SubscriptionPlansScreen() {
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <View style={[styles.badge, { backgroundColor: 'rgba(160, 216, 3, 1)' + '20' }]}>
-            <Text style={[styles.badgeText, { color: 'black' }]}>⭐ MOST POPULAR</Text>
+            <Text style={[styles.badgeText, { color: 'black' }]}>{localizationStrings.MostPopular}</Text>
           </View>
-          <Text style={styles.heroTitle}>Unlock Team Excellence</Text>
-          <Text style={styles.heroSubtitle}>
-            Perfect for teams wanting advanced analytics and custom questionnaires
-          </Text>
+          <Text style={styles.heroTitle}>{localizationStrings.UnlockTeamExcellence}</Text>
+          <Text style={styles.heroSubtitle}>{localizationStrings.HeroSubtitle}</Text>
         </View>
 
         {/* Plan Card */}
         <View style={styles.card}>
           <View style={styles.planHeader}>
             <View style={styles.planTitleContainer}>
-              <Text style={styles.planName}>{plan.name}</Text>
+              <Text style={styles.planName}>{localizationStrings[plan.nameKey]}</Text>
               <View style={[styles.trialBadge, { backgroundColor: plan.accentColor + '20' }]}>
-                <Text style={[styles.trialBadgeText, { color: 'black' }]}>{plan.freeTrialDays}-DAY FREE TRIAL</Text>
+                <Text style={[styles.trialBadgeText, { color: 'black' }]}>
+                  {formatStr(localizationStrings.DayFreeTrial, plan.freeTrialDays)}
+                </Text>
               </View>
             </View>
           </View>
@@ -232,26 +242,26 @@ export default function SubscriptionPlansScreen() {
             <View style={styles.priceRow}>
               <Text style={styles.currency}>€</Text>
               <Text style={styles.price}>{totalPrice.toFixed(2)}</Text>
-              <Text style={styles.pricePeriod}>/month</Text>
+              <Text style={styles.pricePeriod}>{localizationStrings.PerMonth}</Text>
             </View>
 
             <Text style={styles.priceSubtitle}>
               {hasExtraPlayers ? (
                 <Text>
-                  <Text style={styles.basePrice}>€{plan.basePrice.toFixed(2)}</Text> base + €{plan.additionalPlayerPrice}{' '}
-                  × {playerCount - plan.maxPlayers} extra players
+                  <Text style={styles.basePrice}>€{plan.basePrice.toFixed(2)}</Text>{' '}
+                  {formatStr(localizationStrings.BasePlusExtra, plan.additionalPlayerPrice, playerCount - plan.maxPlayers)}
                 </Text>
               ) : (
-                `For up to ${plan.maxPlayers} players`
+                formatStr(localizationStrings.ForUpToPlayers, plan.maxPlayers)
               )}
             </Text>
           </View>
 
           {/* Player Input */}
           <View style={styles.playerInputSection}>
-            <Text style={styles.sectionTitle}>Customize Your Team Size</Text>
+            <Text style={styles.sectionTitle}>{localizationStrings.CustomizeTeamSize}</Text>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabelText}>Number of Players</Text>
+              <Text style={styles.inputLabelText}>{localizationStrings.NumberOfPlayers}</Text>
               <TextInput
                 value={playerInput}
                 onChangeText={handlePlayerChange}
@@ -260,21 +270,29 @@ export default function SubscriptionPlansScreen() {
                 maxLength={3}
               />
               <View style={styles.inputHelper}>
-                <Text style={styles.inputHelperText}>Base: {plan.maxPlayers} players</Text>
-                <Text style={styles.inputHelperText}>Extra: €{plan.additionalPlayerPrice}/player</Text>
+                <Text style={styles.inputHelperText}>{formatStr(localizationStrings.BasePlayers, plan.maxPlayers)}</Text>
+                <Text style={styles.inputHelperText}>
+                  {formatStr(localizationStrings.ExtraPerPlayer, plan.additionalPlayerPrice)}
+                </Text>
               </View>
             </View>
 
             {hasExtraPlayers && (
               <View style={styles.priceBreakdown}>
                 <View style={styles.breakdownRow}>
-                  <Text style={styles.breakdownLabel}>Base price ({plan.maxPlayers} players)</Text>
+                  <Text style={styles.breakdownLabel}>
+                    {formatStr(localizationStrings.BasePriceLabel, plan.maxPlayers)}
+                  </Text>
                   <Text style={styles.breakdownValue}>€{plan.basePrice.toFixed(2)}</Text>
                 </View>
 
                 <View style={styles.breakdownRow}>
                   <Text style={styles.breakdownLabel}>
-                    Extra players ({playerCount - plan.maxPlayers} × €{plan.additionalPlayerPrice})
+                    {formatStr(
+                      localizationStrings.ExtraPlayersLabel,
+                      playerCount - plan.maxPlayers,
+                      plan.additionalPlayerPrice
+                    )}
                   </Text>
                   <Text style={styles.breakdownValue}>
                     €{((playerCount - plan.maxPlayers) * plan.additionalPlayerPrice).toFixed(2)}
@@ -283,7 +301,7 @@ export default function SubscriptionPlansScreen() {
 
                 <View style={styles.divider} />
                 <View style={[styles.breakdownRow, styles.totalRow]}>
-                  <Text style={styles.totalLabel}>Monthly total</Text>
+                  <Text style={styles.totalLabel}>{localizationStrings.MonthlyTotal}</Text>
                   <Text style={styles.totalValue}>€{totalPrice.toFixed(2)}</Text>
                 </View>
               </View>
@@ -292,13 +310,13 @@ export default function SubscriptionPlansScreen() {
 
           {/* Features */}
           <View style={styles.featuresSection}>
-            <Text style={styles.sectionTitle}>Everything Included</Text>
-            {plan.features.map((feature, index) => (
+            <Text style={styles.sectionTitle}>{localizationStrings.EverythingIncluded}</Text>
+            {plan.featureKeys.map((key, index) => (
               <View key={index} style={styles.featureItem}>
                 <View style={[styles.featureIcon, { backgroundColor: 'rgba(160, 216, 3, 1)' + '20' }]}>
                   <Text style={{ color: 'white', fontWeight: '700' }}>✓</Text>
                 </View>
-                <Text style={styles.featureText}>{feature}</Text>
+                <Text style={styles.featureText}>{localizationStrings[key]}</Text>
               </View>
             ))}
           </View>
@@ -313,19 +331,21 @@ export default function SubscriptionPlansScreen() {
             {submitting ? (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                 <ActivityIndicator color="#000000ff" />
-                <Text style={styles.buttonText}>Activating...</Text>
+                <Text style={styles.buttonText}>{localizationStrings.Activating}</Text>
               </View>
             ) : (
               <>
-                <Text style={styles.buttonText}>Start Free Trial</Text>
-                <Text style={styles.buttonSubtext}>Then €{totalPrice.toFixed(2)}/month • Cancel anytime</Text>
+                <Text style={styles.buttonText}>{localizationStrings.StartFreeTrial}</Text>
+                <Text style={styles.buttonSubtext}>
+                  {formatStr(localizationStrings.ThenPerMonthCancel, totalPrice.toFixed(2))}
+                </Text>
               </>
             )}
           </TouchableOpacity>
 
           {/* Guarantee */}
           <View style={styles.guarantee}>
-            <Text style={styles.guaranteeText}>30-day money-back guarantee • No credit card required for trial</Text>
+            <Text style={styles.guaranteeText}>{localizationStrings.MoneyBackGuarantee}</Text>
           </View>
         </View>
       </ScrollView>

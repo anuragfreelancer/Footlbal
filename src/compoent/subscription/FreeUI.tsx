@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import localizationStrings from '../Localization/Localization';
+import { useLanguage } from '../Localization/LanguageContext';
 
 const FreeUI = () => {
+  useLanguage();
   return (
     <View style={[styles.card, styles.free]}>
-      <Text style={styles.title}>Free Plan</Text>
+      <Text style={styles.title}>{localizationStrings.FreePlan}</Text>
       <Text style={styles.text}>
-        Upgrade to unlock all premium features
+        {localizationStrings.UpgradeToUnlock}
       </Text>
     </View>
   );

@@ -87,12 +87,19 @@ const _routes = () => {
         logo1: imageIndex.homeActive,
       },
       
-      {
-        name: ScreenNameEnum.Calendar,
-        Component: Calendar,
-        label: localizationStrings.Calendar,
-        logo: imageIndex.calendar,
-        logo1: imageIndex.calendar
+      // {
+      //   name: ScreenNameEnum.Calendar,
+      //   Component: Calendar,
+      //   label: localizationStrings.Calendar,
+      //   logo: imageIndex.calendar,
+      //   logo1: imageIndex.calendar
+      // },
+         {
+        name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.Messages : ScreenNameEnum.Calendar,
+        Component: isLogin?.userData?.type != "Coach" ? Messages : Calendar,
+        label: isLogin?.userData?.type != "Coach" ? localizationStrings.Messages : localizationStrings.Calendar,
+        logo: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar,
+        logo1: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar
       },
       {
         name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,

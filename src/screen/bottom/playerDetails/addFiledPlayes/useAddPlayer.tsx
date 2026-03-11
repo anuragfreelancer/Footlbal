@@ -181,24 +181,31 @@ const useAddPlayer = () => {
 
       }
     } catch (error) {
+      console.log("error",error)
     }
   };
   const Positionlist = async () => {
     try {
       const states = await PositioncCategory();
+      console.log("states",states)
       if (states) {
         setPostionData(states?.result)
       }
     } catch (error) {
+            console.log("PositioncCategory",error)
+
     }
   };
   const Traininglist = async () => {
     try {
       const states = await TrainingCategory();
+      console.log("states",states)
       if (states) {
         setTrainingData(states?.result)
       }
     } catch (error) {
+                  console.log("TrainingCategory",error)
+
     }
   };
 

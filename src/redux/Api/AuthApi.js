@@ -379,9 +379,12 @@ const StartSection = async (
          const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
-        formData.append("user_id", param?.players);
-        formData.append("session_start_date", param?.time);
-        formData.append("session_start_time", param?.date);
+        const playerIds = Array.isArray(param?.players) ? param.players.join(',') : param?.players;
+        formData.append("user_id", playerIds);
+        formData.append("coach_id", param?.coach_id);
+        formData.append("session_start_date", param?.date);
+        formData.append("type", param?.session_type);
+        formData.append("session_start_time", param?.time);
         if (param?.session_type) {
             formData.append("session_type", param?.session_type);
         }
@@ -872,6 +875,35 @@ const Getplayer = async (userId, setLoading) => {
             headers: myHeaders,
         };
         const response = await fetch(`${base_url}${constant.getPlayer}?user_id=${userId}`, requestOptions);
+        console.log("response.  dddd ----",response)
+        // const response = await fetch(`${base_url}${constant.getPlayer}?coach_id=${userId}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        if (responseData.status === '1') {
+            // successToast(responseData.message);
+            return { userGetData: responseData.result };
+        } else {
+            errorToast(responseData.message);
+            return null;
+        }
+    } catch (error) {
+        errorToast('Network error');
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
+const Getplayer2 = async (userId, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+        };
+        const response = await fetch(`${base_url}${constant.get_user_session}?user_id=${userId}`, requestOptions);
+        console.log("response.  dddd ----",response)
         // const response = await fetch(`${base_url}${constant.getPlayer}?coach_id=${userId}`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
@@ -1003,6 +1035,8 @@ const EndSection = async (
         formData.append("id", param?.players);
         // formData.append("user_id", param?.players);
         formData.append("session_end_time", param?.time);
+//          formData.append("coach_id", param?.coach_id);
+
         formData.append("session_end_date", param?.date);
         const requestOptions = {
             method: "POST",
@@ -1230,8 +1264,7 @@ const GetAllChatMessage = async (setLoading, userId) => {
 
         try {
             const responseData = JSON.parse(resText);
-            console.log("API Response:", responseData);
-
+ 
             // ✅ FIXED: Check for both number 1 and string "1"
             if (responseData.status == 1) {
                 return { userGetData: responseData.result };
@@ -1263,15 +1296,14 @@ const GetCoachSession = async (setLoading, userId) => {
           },
         }
       );
+      console.log("response. GetCoachSession ",response)
   
       const resText = await response.text();
-  
-      try {
+       try {
         const responseData = JSON.parse(resText);
-        console.log("API Response:", responseData);
-  
-        if (responseData.status == 1) {
-          return { userGetData: responseData.result };
+   
+        if (responseData?.status == 1) {
+          return { userGetData: responseData?.result };
         } else {
           console.error("API returned error status:", responseData);
           return null;
@@ -1285,7 +1317,7 @@ const GetCoachSession = async (setLoading, userId) => {
       return null;
     } finally {
       setLoading(false);
-    }
+}
   };
 const Get_user_by_id = async (setLoading, userId) => {
   try {
@@ -1304,9 +1336,43 @@ const Get_user_by_id = async (setLoading, userId) => {
     const resText = await response.text();
 
     try {
-      const responseData = JSON.parse(resText);
-      console.log("API Response:", responseData);
+      const responseData = JSON?.parse(resText);
+ 
+      if (responseData?.status == 1) {
+        return { userGetData: responseData?.result };
+      } else {
+         return null;
+      }
+    } catch (jsonError) {
+      console.error("JSON Parsing Error:", jsonError, resText);
+      return null;
+    }
+  } catch (error) {
+    console.error("Network Error:", error);
+    return null;
+  } finally {
+    setLoading(false);
+  }
+};
+const Get_user_by_id2 = async (setLoading, userId) => {
+  try {
+    setLoading(true);
 
+    const response = await fetch(
+      `https://kmmps.store/api/get_user_session?user_id=${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+
+    const resText = await response.text();
+
+    try {
+      const responseData = JSON.parse(resText);
+ 
       if (responseData.status == 1) {
         return { userGetData: responseData.result };
       } else {
@@ -1560,4 +1626,4 @@ const createCheckoutSession = async (param, setLoading) => {
     }
 };
 
-export {DelliteApi, GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession }  
+export {DelliteApi,Getplayer2, Get_user_by_id2,GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession }  

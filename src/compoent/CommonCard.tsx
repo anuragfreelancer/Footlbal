@@ -1,6 +1,12 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
+const SESSION_COLORS: Record<string, string> = {
+  TRAINING: "#2563EB",
+  MATCH: "#DC2626",
+  BREAK: "#F59E0B",
+};
+
 interface CommonCardProps {
   item: {
     image: string;
@@ -11,9 +17,14 @@ interface CommonCardProps {
   };
   onPress?: () => void;
   accentBorder?: boolean;
+  sessionType?: string;
 }
 
-const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accentBorder = false }) => {
+const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accentBorder = false, sessionType }) => {
+  const typeUpper = String(sessionType || "").toUpperCase();
+  const dotColor = SESSION_COLORS[typeUpper] || SESSION_COLORS.TRAINING;
+  const showDot = !!sessionType;
+
   return (
     <TouchableOpacity
       style={[styles.card, accentBorder && styles.cardAccent]}
@@ -21,7 +32,10 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accen
       activeOpacity={onPress ? 0.7 : 1}
       disabled={!onPress}
     >
-      <Image source={{ uri: item?.image }} style={styles.avatar} />
+      <View style={styles.avatarWrap}>
+        <Image source={{ uri: item?.image }} style={styles.avatar} />
+        {showDot && <View style={[styles.sessionDot, { backgroundColor: dotColor }]} />}
+      </View>
       <View style={styles.contentContainer}>
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{item.user_name}</Text>
@@ -31,7 +45,7 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accen
           <Text style={styles.label}>Training Type</Text>
           <Text style={styles.value} numberOfLines={1} ellipsizeMode="tail">
             {item.load_type_id}
-          </Text>
+           </Text>
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.label}>Intensity</Text>
@@ -65,12 +79,25 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: "#A0D803",
   },
+  avatarWrap: {
+    position: "relative",
+    marginRight: 14,
+  },
   avatar: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    marginRight: 14,
     backgroundColor: "#F3F4F6",
+  },
+  sessionDot: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: "#fff",
   },
   contentContainer: {
     flexDirection: "row",

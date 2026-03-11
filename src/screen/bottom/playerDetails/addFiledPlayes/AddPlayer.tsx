@@ -68,7 +68,7 @@ const AddPlayer = () => {
   );
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-                   <LoadingModal  visible={isLoading} />  
+                   {/* <LoadingModal  visible={isLoading} />   */}
 
       <StatusBarComponent />
       <View style={{

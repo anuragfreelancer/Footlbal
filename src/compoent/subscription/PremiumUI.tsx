@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import localizationStrings from '../Localization/Localization';
+import { useLanguage } from '../Localization/LanguageContext';
 
 const PremiumUI = ({ expiry }) => {
+  useLanguage();
   return (
     <View style={[styles.card, styles.premium]}>
-      <Text style={styles.title}>Premium Active ✅</Text>
-      <Text style={styles.text}>Valid till: {expiry}</Text>
+      <Text style={styles.title}>{localizationStrings.PremiumActive}</Text>
+      <Text style={styles.text}>{localizationStrings.ValidTill} {expiry}</Text>
     </View>
   );
 };

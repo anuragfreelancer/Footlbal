@@ -45,8 +45,9 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     navigation ,
     isLogin ,
     searchPlaylist, setSearchPlaylist ,
-    filterData, setFilterData
-  };
+    filterData, setFilterData ,
+    
+   };
 };
 
 export default usePlayers;
