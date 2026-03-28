@@ -103,8 +103,7 @@ const StartSectionModal = ({
         // );
         const json = await res.json();
         if (json?.result) {
-          console.log("qqqjson", json?.result)
-
+ 
           setQuestionnaires(json.result);
         }
       } catch (err) {
@@ -140,7 +139,7 @@ const StartSectionModal = ({
 
     fetchQuestionnaires1();
   }, [visible]);
-
+ 
   const handleStart = async () => {
     if (selectedQuestionnaire.length === 0 || selectedQuestionnaire1.length === 0) {
       Alert.alert(

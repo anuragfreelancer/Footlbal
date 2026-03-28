@@ -32,6 +32,7 @@
     const [players, setPlayers] = useState<any>({ userGetData: [] });
     
     const [sessions, setSessions] = useState<any[]>([]);
+    const [NewfilterData, setNewfilterData] = useState<any[]>([]);
     const isLogin = useSelector((state: any) => state?.auth);
 
     useEffect(() => {
@@ -102,11 +103,11 @@
           console.log("player. ----- ",players)
           const coachSessions = sessions ?? [];
           console.log("sessions",sessions)
+          setNewfilterData(sessions)
           // const coachSessions = player?.coach_session ?? [];
           return coachSessions.some((s: any) => {
             const dateStr = getSessionDateStr(s);
-            console.log("coachSessions -- ",coachSessions)
-            return looksLikeDate(dateStr) && dateStr === selectedDates;
+             return looksLikeDate(dateStr) && dateStr === selectedDates;
           });
         })
         .map((player: any) => {
@@ -161,7 +162,7 @@
       fetchData,
       isCoach,
       isLogin, 
-      
+       NewfilterData
     };
   };
 

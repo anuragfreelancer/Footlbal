@@ -33,13 +33,12 @@ const CustomCalendar = () => {
     navigation,
     isCoach,
     isLogin,
-    
+    NewfilterData ,
   } = useCalendar();
    const [planModalVisible, setPlanModalVisible] = useState(false);
   const [startSectionModalVisible, setStartSectionModalVisible] = useState(false);
   const [sessionLoading, setSessionLoading] = useState(false);
-
-  const handleStartSectionAPI = async ({
+   const handleStartSectionAPI = async ({
     date,
     time,
     type,
@@ -76,6 +75,8 @@ const CustomCalendar = () => {
         time: formattedTime,
         coach_id: isLogin?.userData?.id,
         session_type: type,
+        question_id: questionnaire1.join(","),
+        training_id: questionnaire.join(","),
         navigation,
       };
       const response = await StartSection(params, setSessionLoading);
@@ -102,7 +103,8 @@ const CustomCalendar = () => {
     [selectedDates, setSelectedDates]
   );
  
-  console.log("filteredPlayers -- ",filteredPlayers)
+  console.log("filteredPlayers -- ",filteredPlayers) 
+ 
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? <LoadingModal /> : null}
@@ -196,3 +198,4 @@ const CustomCalendar = () => {
 };
 
 export default CustomCalendar;
+ 

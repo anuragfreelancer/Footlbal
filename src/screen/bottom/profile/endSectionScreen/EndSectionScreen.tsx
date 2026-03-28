@@ -31,13 +31,12 @@ const EndSectionScreen = () => {
   const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
-console.log("filterData",filterData)
   const [data, setData] = useState([]);
 
   const getCoachSession = async () => {
     try {
       const response = await fetch(
-         `${base_url}${'get_coach_session'}?user_id=${isLogin?.userData?.id}`
+        `${base_url}${'get_coach_session'}?user_id=${isLogin?.userData?.id}`
       );
 
       const json = await response.json();
@@ -53,15 +52,15 @@ console.log("filterData",filterData)
     getCoachSession();
   }, []);
 
-const togglePlayerSelect = (id) => {
-  const playerId = String(id); // ensure string
+  const togglePlayerSelect = (id) => {
+    const playerId = String(id); // ensure string
 
-  if (selectedPlayerIds.includes(playerId)) {
-    setSelectedPlayerIds(selectedPlayerIds.filter(pid => pid !== playerId));
-  } else {
-    setSelectedPlayerIds([...selectedPlayerIds, playerId]);
-  }
-};
+    if (selectedPlayerIds.includes(playerId)) {
+      setSelectedPlayerIds(selectedPlayerIds.filter(pid => pid !== playerId));
+    } else {
+      setSelectedPlayerIds([...selectedPlayerIds, playerId]);
+    }
+  };
   const handleOpenModal = () => {
     if (selectedPlayerIds.length === 0) {
       Alert.alert(localizationStrings.pleaseS);
@@ -72,9 +71,8 @@ const togglePlayerSelect = (id) => {
     setSelectedPlayers(players);
     setModalVisible(true);
   };
-  console.log("selectedPlayerIds", selectedPlayerIds);
 
-  const handleStartAPI = async ({ date, time }) => {
+  const handleStartAPI = async ({ date, time, questionnaire, questionnaire1 }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
       Alert.alert(localizationStrings?.date);
       return;
@@ -88,12 +86,16 @@ const togglePlayerSelect = (id) => {
       const ids = selectedPlayers?.map(item => Number(item.id));
 
 
-// console.log("coachSessionIds", ids);
+      // console.log("coachSessionIds", ids);
       const params = {
-        players:selectedPlayerIds,
+        players: selectedPlayerIds,
         date: formattedDate,
         time: formattedTime,
-                coach_id: isLogin?.userData?.id,
+        coach_id: isLogin?.userData?.id,
+        question_id: questionnaire1.join(","),
+        training_id: questionnaire.join(","),
+        // training_id: questionnaire1.join(","),
+        // question_id: questionnaire.join(","),
         navigation, // ✅ make sure to pass it if needed
       };
       console.log("end section ", params)
@@ -114,56 +116,244 @@ const togglePlayerSelect = (id) => {
 
 
 
-
-
   const CommonCard = React.memo(({ item, onPress, isSelected }) => {
     return (
-      <TouchableOpacity
-        style={[
-          styles.card,
-          isSelected && {
-            borderColor: '#A0D803',
-            borderWidth: 2,
-            backgroundColor: '#F2FFE2'
-          }
-        ]}
-        onPress={onPress}
-      >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {/* Checkbox */}
+      <View style={[{
+        backgroundColor: "#fff",
+        marginVertical: 6,
+        borderRadius: 12,
 
-          {/* Player Info */}
-          <Image source={{ uri: item?.user_details?.image }} style={styles.avatar} />
-          <View style={styles.contentContainer}>
-            <View style={styles.infoContainer}>
-              <Text style={styles.name}>{item?.user_details?.user_name}</Text>
-              <Text style={styles.position}>Forward</Text>
+        // Border
+        borderWidth: 0.5,
+        borderColor: "#E0E0E0",
+
+        // Shadow (iOS)
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+
+        // Shadow (Android)
+        elevation: 3,
+      }, isSelected && {
+        borderColor: '#A0D803',
+        // borderWidth: 2,
+      }]}>
+        <TouchableOpacity
+          style={[
+            {
+              borderRadius: 10,
+              padding: 10
+
+            },
+            isSelected && {
+              borderColor: '#A0D803',
+              // borderWidth: 2,
+            }
+          ]}
+          onPress={onPress}
+        >
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+
+            {/* Player Image */}
+            <Image
+              source={{ uri: item?.user_details?.image }}
+              style={styles.avatar}
+            />
+
+            {/* Name */}
+            <View style={styles.contentContainer}>
+              <Text style={styles.name}>
+                {item?.user_details?.user_name}
+              </Text>
             </View>
-          </View>
-          <TouchableOpacity
-            onPress={onPress}
-            style={{
-              height: 22,
-              width: 22,
-              borderWidth: 2,
-              borderColor: isSelected ? '#A0D803' : '#ccc',
-              backgroundColor: isSelected ? '#A0D803' : '#fff',
-              borderRadius: 4,
-              marginRight: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {isSelected && (
-              <Text style={{ color: 'white', fontSize: 16 }}>✓</Text>
-            )}
-          </TouchableOpacity>
 
-        </View>
-      </TouchableOpacity>
+            {/* Checkbox */}
+            <View
+              style={[
+                {
+                  height: 22,
+                  width: 22,
+                  borderWidth: 2,
+                  borderColor: '#ccc',
+                  borderRadius: 4,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                },
+                isSelected && {
+                  borderColor: '#A0D803',
+                  backgroundColor: '#A0D803'
+                }
+              ]}
+            >
+              {isSelected && <Text style={{
+                color: '#fff',
+                fontSize: 14
+              }}>✓</Text>}
+            </View>
+
+          </View>
+        </TouchableOpacity>
+
+        {/* Training List */}
+        {/* {item?.training_details?.length > 0 && (
+          <View style={{
+            marginTop: 8,
+            paddingLeft: 6,
+            marginBottom: 10
+          }}>
+            {item?.training_details.map((s, index) => (
+              <Text key={index} style={styles.trainingText}>
+                {s?.training_title_french}
+              </Text>
+            ))}
+          </View>
+        )} */}
+        {/* {item?.question_details?.length > 0 &&
+          <Text style={{
+            marginLeft: 12,
+            color: "balck"
+          }}>
+            Antes del entrenamiento
+
+          </Text>
+        } */}
+
+        {/* Question List */}
+        {item?.question_details?.length > 0 && (
+          <View style={{
+            marginTop: 8,
+            paddingLeft: 6,
+            marginBottom: 5
+          }}>
+            {item?.question_details.map((s, index) => {
+              return (
+                <View style={{
+                  marginBottom:11 ,
+                  marginLeft:11
+                }}>
+
+                  <Text key={index}  style={{
+                    color: "black",
+                    fontSize: 12
+                  }}>
+                    Question:{s?.question_french || s?.question_french}
+                  </Text>
+                  <Text key={index}  
+                  
+                  style={{
+                    color: "black",
+                    fontSize: 12
+                  }}
+                  >
+                    Répondre:{s?.answer_french}
+                  </Text>
+                </View>
+              )
+            }
+
+            )}
+          </View>
+        )}
+      </View>
     );
   });
+  console.log("data", data)
+  //   const CommonCard = React.memo(({ item, onPress, isSelected }) => {
+  //     console.log("item?.training_details",item?.training_details)
+  //     return (
+  //       <View style={{
+  //          backgroundColor: '#fff',
+  //     marginVertical: 6,
+  //     borderRadius: 10,
+  //     padding: 12,
+  //     shadowColor: "#000",
+  //     shadowOpacity: 0.1,
+  //     shadowRadius: 5,
+  //     elevation: 2
+  //        }}> 
+  //       <TouchableOpacity
+  //         style={[
+  //           styles.card,
+  //           isSelected && {
+  //             borderColor: '#A0D803',
+  //             borderWidth: 2,
+  //             backgroundColor: '#F2FFE2'
+  //           }
+  //         ]}
+  //         onPress={onPress}
+  //       >
+  //         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+  //           {/* Checkbox */}
 
+  //           {/* Player Info */}
+  //           <Image source={{ uri: item?.user_details?.image }} style={styles.avatar} />
+  //           <View style={styles.contentContainer}>
+  //             <View style={styles.infoContainer}>
+  //               <Text style={styles.name}>{item?.user_details?.user_name}</Text>
+  //               <Text style={styles.position}>Forward</Text>
+  //             </View>
+  //           </View> 
+
+
+  //           <TouchableOpacity
+  //             onPress={onPress}
+  //             style={{
+  //               height: 22,
+  //               width: 22,
+  //               borderWidth: 2,
+  //               borderColor: isSelected ? '#A0D803' : '#ccc',
+  //               backgroundColor: isSelected ? '#A0D803' : '#fff',
+  //               borderRadius: 4,
+  //               marginRight: 12,
+  //               justifyContent: 'center',
+  //               alignItems: 'center',
+  //             }}
+  //           >
+  //             {isSelected && (
+  //               <Text style={{ color: 'white', fontSize: 16 }}>✓</Text>
+  //             )}
+  //           </TouchableOpacity>
+
+  //         </View>
+
+  //       </TouchableOpacity>
+  //          {item?.training_details?.map((s, index) => {
+  //   return (
+  //             <View style={{
+  //                   marginTop: 8,
+  //     paddingLeft: 6
+
+  //             }}>
+
+  //     <Text key={index}>
+  //       {s?.training_title}
+  //     </Text>
+  //     </View>
+  //   );
+  // })}
+  //          {item?.question_details?.map((s, index) => {
+  //   return (
+  //      <View style={{
+  //                   marginTop: 8,
+  //     paddingLeft: 6
+
+  //             }}>
+  //     <Text key={index}>
+  //       {s?.question_french}
+  //     </Text>
+  //     </View>
+  //   );
+  // })}
+  // </View>
+  //     );
+  //   });
+  const filteredData = data?.filter(
+    (item) => item?.session_end_date === "" && item?.session_end_time === ""
+  );
   return (
     <SafeAreaView style={styles.container}>
       <StatusBarComponent />
@@ -201,19 +391,20 @@ const togglePlayerSelect = (id) => {
           </View>
         ) : (
           <FlatList
-            data={data}
+            data={filteredData}
+            // data={data}
             style={{ marginTop: 12 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) =>  {
-              console.log("item",item)
-              return(
-                 <CommonCard
-                item={item}
-                onPress={() => togglePlayerSelect(item.id)}
-                isSelected={selectedPlayerIds.includes(item.id)}
-              />
+            renderItem={({ item }) => {
+              console.log("item", item)
+              return (
+                <CommonCard
+                  item={item}
+                  onPress={() => togglePlayerSelect(item.id)}
+                  isSelected={selectedPlayerIds.includes(item.id)}
+                />
               )
             }}
           />

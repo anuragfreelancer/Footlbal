@@ -11,9 +11,10 @@ import NetInfo from '@react-native-community/netinfo';
 import NetworkStatusModal from '../compoent/NetworkStatusModal';
 import { LanguageProvider } from '../compoent/Localization/LanguageContext';
 import PaymentDeepLinkHandler from '../utils/PaymentDeepLinkHandler';
+import UpdateModal from '../checkAppUpdate';
 
 const AppNavigator: React.FC = () => {
-  const [isConnected, setIsConnected] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const AppNavigator: React.FC = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
             <LanguageProvider>
+               <UpdateModal />  
               <PaymentDeepLinkHandler />
               <NetworkStatusModal modalVisible={modalVisible} offlineText="No Internet! Please check your connection." />
               <RegistrationRoutes />

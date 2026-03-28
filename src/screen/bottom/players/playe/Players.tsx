@@ -50,7 +50,13 @@ const Players = () => {
     setSelectedPlayers(players);
     setModalVisible(true);
   };
-  const handleStartAPI = async ({ date, time, type }) => {
+  const handleStartAPI = async ({ date, time, type, questionnaire, questionnaire1 }) => {
+
+
+    // console.log("questionnaire,questionnaire1",questionnaire,questionnaire1)
+    // console.log("questionnaire1 --- ",questionnaire1)
+
+
     if (!(time instanceof Date) || !(date instanceof Date)) {
       Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
       return;
@@ -66,11 +72,14 @@ const Players = () => {
       const params = {
         players: ids,
         date: formattedDate,
+        question_id: questionnaire1.join(","),
+        training_id: questionnaire.join(","),
+        // training_id: questionnaire1.join(","),
+        // question_id: questionnaire.join(","),
         time: formattedTime,
-        // session_type: "break",
         coach_id: isLogin?.userData?.id,
         session_type: type,
-        navigation,
+        navigation: navigation
       };
 
       console.log('📤 Sending to API:', params);
@@ -138,6 +147,7 @@ const Players = () => {
       </TouchableOpacity>
     );
   });
+
 
   return (
     <SafeAreaView style={styles.container}>

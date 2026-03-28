@@ -8,14 +8,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
-    padding: 10,
-    borderRadius: 15,
+     borderRadius: 15,
     marginVertical: 6,
     marginHorizontal:1,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 1,
+
   },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 ,
 backgroundColor:"gray"

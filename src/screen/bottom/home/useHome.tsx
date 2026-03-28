@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation , useFocusEffect } from '@react-navigation/native';
 import { Get_user_by_id, Get_user_by_id2, GetCoachSession, GetProfile } from '../../../redux/Api/AuthApi';
 import { GetAllChatMessage } from '../../../redux/Api/AuthApi';
 
@@ -60,7 +60,22 @@ const useHome = () => {
   };
   
  
- 
+ useFocusEffect(
+  useCallback(() => {
+    const userId = isLogin?.userData?.id;
+   Get_sscoach_session();
+      Get_Userscoach_session1();
+    GetAbout();
+
+    if (userId) {
+      GetProfile(userId, dispatch);
+      Get_coach_session();
+      Get_sscoach_session();
+      Get_Userscoach_session1();
+    }
+
+  }, [isLogin?.userData?.id])
+);
   const Get_coach_session = async () => {
     try {
       setisLoading(true);
@@ -101,7 +116,7 @@ const useHome = () => {
       setisLoading(true);
   
       const response = await Get_user_by_id2(setisLoading, isLogin?.userData?.id);
-      console.log("response?.userGetData",response)
+        console.log("response?.userGetData",response)
            if (response && response?.userGetData) {
           setgetUser1(response.userGetData);
       } else {

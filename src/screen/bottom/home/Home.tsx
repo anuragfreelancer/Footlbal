@@ -25,7 +25,7 @@ const DashboardScreen = () => {
     setImgloading,
     navigation,
     chatMess,
-    getUser1 ,
+    getUser1,
     getCoach_session,
     getUser,
     isLogin,
@@ -33,13 +33,10 @@ const DashboardScreen = () => {
   } = useHome();
   const { showSubscriptionCard } = useSubscription();
   const userGetData = useSelector((state: any) => state?.feature?.userGetData);
-
- 
   // Build coach chart from players' coach_session (API returns players with coach_session array)
   const coachChartData = React.useMemo(() => {
     const playersList: any[] = Array.isArray(getCoach_session) ? getCoach_session : [];
     const totalPlayers = Array.isArray(filteredMessages) ? filteredMessages.length : 0;
-
     const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
     const getDateStr = (item: any) => {
       const dateVal = item?.session_start_date ?? "";
@@ -65,7 +62,6 @@ const DashboardScreen = () => {
         }
       });
     });
-
     const last7Days: number[] = [];
     for (let i = 6; i >= 0; i--) {
       const d = moment().subtract(i, "days").format("YYYY-MM-DD");
@@ -98,14 +94,11 @@ const DashboardScreen = () => {
       totalPlayers,
     };
   }, [getCoach_session, filteredMessages]);
-
   const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
-
-
   // // Handle background notifications
   // useEffect(() => {
   //   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
@@ -138,7 +131,6 @@ const DashboardScreen = () => {
         : item?.session_start_date || item?.session_start_time || "";
     const endTimeStr = item?.session_end_time || "";
     const endDateStr = item?.session_end_date || dateStr;
-
     const formattedDate = dateStr ? moment(dateStr).format("DD MMM YYYY") : "—";
     const formattedStartTime = startTimeStr
       ? moment(startTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")
@@ -158,7 +150,6 @@ const DashboardScreen = () => {
       : formattedEndTime === null
         ? (localizationStrings?.Ongoing ?? "Ongoing")
         : "—";
-
     return {
       formattedDate,
       formattedStartTime,
@@ -170,7 +161,7 @@ const DashboardScreen = () => {
   };
 
   const renderItem = ({ item }: { item: any }) => {
-    const isOngoing = item?.status === "Start";
+     const isOngoing = item?.status === "Start";
     const { startedAt, endedAt } = getSessionDisplay(item);
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
@@ -190,6 +181,38 @@ const DashboardScreen = () => {
           <Text style={(styles as any).sessionDetailLabel}>Ended at</Text>
           <Text style={[(styles as any).sessionDetailValue, isOngoing && styles.sessionTimeOngoing]}>{endedAt}</Text>
         </View>
+        {item?.question_details?.length > 0 && (
+          <Text>Antes del entrenamiento </Text>
+
+        )}
+        {item?.question_details?.length > 0 && (
+          <View
+            style={{
+              marginTop: 8,
+              paddingLeft: 6,
+            }}
+          >
+            {item?.question_details.map((q, index) => {
+              return (
+                <View key={index}>
+                  <Text style={{
+                    color: "black",
+                    fontSize: 12
+                  }}>
+                 Question: {q?.question_french}
+                  </Text>
+
+                  <Text style={{
+                    color: "black",
+                    fontSize: 12
+                  }}>
+                    Répondre: {q?.answer_french}
+                  </Text>
+                </View>
+              )
+            })}
+          </View>
+        )}
       </View>
     );
   };
@@ -198,7 +221,8 @@ const DashboardScreen = () => {
       return () => { };
     }, [getLogin])
   );
-    return (
+  console.log("getUser1", getUser1)
+  return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
       <View style={styles.header}>
@@ -213,8 +237,8 @@ const DashboardScreen = () => {
 
             (
               <Image
-              source={imageIndex.prfEdit}
-                 style={styles.avatar}
+                source={imageIndex.prfEdit}
+                style={styles.avatar}
                 onLoad={() => setImgloading(false)}
                 onError={() => setImgloading(false)}
               />
@@ -234,7 +258,7 @@ const DashboardScreen = () => {
         </View>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-{/* <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" /> */}
+        {/* <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" /> */}
         {isLogin?.userData?.type == "Coach" ? null : <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
         }
         {isLogin?.userData?.type !== "Coach" ? null : (() => {
@@ -246,7 +270,7 @@ const DashboardScreen = () => {
           };
           return <ChartComponent1 {...coachChartProps} />;
         })()}
-        
+
 
         {isLogin?.userData?.type == "Coach" ? (
           <>
@@ -254,8 +278,8 @@ const DashboardScreen = () => {
               marginHorizontal: 10
             }}>
 
-{userGetData?.subscription_status == "false"   ?  <SubscriptionCard /> : null} 
-     </View>
+              {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
+            </View>
 
             <FlatList
               showsVerticalScrollIndicator={false}

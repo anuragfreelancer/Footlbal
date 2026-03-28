@@ -368,62 +368,114 @@ const DelliteApi = async (userId, setLoading) => {
 //       return null;
 //     }
 //   };
-  
+  const StartSection = async (param, setLoading) => {
+  try {
+    setLoading(true);
 
-const StartSection = async (
-    param,
-    setLoading,
-) => {
-    try {
-        setLoading(true)
-         const myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        const formData = new FormData();
-        const playerIds = Array.isArray(param?.players) ? param.players.join(',') : param?.players;
-        formData.append("user_id", playerIds);
-        formData.append("coach_id", param?.coach_id);
-        formData.append("session_start_date", param?.date);
-        formData.append("type", param?.session_type);
-        formData.append("session_start_time", param?.time);
-        if (param?.session_type) {
-            formData.append("session_type", param?.session_type);
-        }
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: formData,
-        };
-         const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
+    const headers = new Headers();
+    headers.append("Accept", "application/json");
+
+    const formData = new FormData();
+
+    const playerIds = Array.isArray(param?.players)
+      ? param.players.join(",")
+      : param?.players;
+
+    formData.append("user_id", playerIds);
+    formData.append("coach_id", param?.coach_id);
+    formData.append("session_start_date", param?.date);
+    formData.append("session_start_time", param?.time);
+    formData.append("training_id", param?.training_id);
+    formData.append("question_id", param?.question_id);
+    formData.append("type", param?.session_type);
+
+    console.log("📦 FormData sending...");
+
+    const response = await fetch(
+      `${base_url}${constant.add_coach_session}`,
+      {
+        method: "POST",
+        headers: headers,
+        body: formData,
+      }
+    );
+
+    const result = await response.text();
+    console.log("✅ API Response:", result);
+
+    const data = JSON.parse(result);
+
+    setLoading(false);
+
+    if (data.status == "1") {
+      successToast(data?.message);
+      param?.navigation?.goBack();
+      return data;
+    } else {
+      errorToast(data?.message || data?.error);
+      return data;
+    }
+
+  } catch (error) {
+    setLoading(false);
+    console.log("❌ API Error:", error);
+  }
+};
+
+// const StartSection = async (
+//     param,
+//     setLoading,
+// ) => {
+//     try {
+//         setLoading(true)
+//          const myHeaders = new Headers();
+//         myHeaders.append("Accept", "application/json");
+//         const formData = new FormData();
+//         const playerIds = Array.isArray(param?.players) ? param.players.join(',') : param?.players;
+//         formData.append("user_id", playerIds);
+//         formData.append("coach_id", param?.coach_id);
+//         formData.append("session_start_date", param?.date);
+//         formData.append("type", param?.session_type);
+//         formData.append("session_start_time", param?.time);
+//         if (param?.session_type) {
+//             formData.append("session_type", param?.session_type);
+//         }
+//         const requestOptions = {
+//             method: "POST",
+//             headers: myHeaders,
+//             body: formData,
+//         };
+//          const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
              
 
-        .then((response) => response.text())
-            .then((res) => {
-                console.log("response",response)
-                const response = JSON.parse(res);
-                if (response.status == '1') {
-                    setLoading(false)
-                    successToast(
-                        response?.message
-                    );
-                    param.navigation.goBack()
-                    // param.navigation.navigate(ScreenNameEnum.TabNavigator)
-                    return response
-                } else {
-                    setLoading(false)
-                    errorToast(
-                        response?.message || response?.error,
-                    );
-                    return response
-                }
-            })
-            .catch((error) =>
-                console.error(error));
-        return respons
-    } catch (error) {
-        setLoading(false)
+//         .then((response) => response.text())
+//             .then((res) => {
+//                 console.log("response",response)
+//                 const response = JSON.parse(res);
+//                 if (response.status == '1') {
+//                     setLoading(false)
+//                     successToast(
+//                         response?.message
+//                     );
+//                     param.navigation.goBack()
+//                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
+//                     return response
+//                 } else {
+//                     setLoading(false)
+//                     errorToast(
+//                         response?.message || response?.error,
+//                     );
+//                     return response
+//                 }
+//             })
+//             .catch((error) =>
+//                 console.error(error));
+//         return respons
+//     } catch (error) {
+//         setLoading(false)
       
-    }
-};
+//     }
+// };
 const GetProfile = async (userId, dispatch) => {
     try {
         const myHeaders = new Headers();
@@ -669,7 +721,7 @@ const PlayerPostApi = async (
         const respons = await fetch(`${base_url}${constant.addPlayer}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res", res);
+                console.log("res add --- ", res);
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
@@ -1035,6 +1087,9 @@ const EndSection = async (
         formData.append("id", param?.players);
         // formData.append("user_id", param?.players);
         formData.append("session_end_time", param?.time);
+        formData.append("session_end_time", param?.time);
+        formData.append("question_id", param?.question_id);
+        formData.append("training_id", param?.question_id);
 //          formData.append("coach_id", param?.coach_id);
 
         formData.append("session_end_date", param?.date);
