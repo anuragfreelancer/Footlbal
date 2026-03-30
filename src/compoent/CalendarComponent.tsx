@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 import moment from "moment";
-
-const CalendarComponent = ({ onDateSelect, markedDates = {} }) => {
+ 
+export interface MarkedDateConfig {
+  dotColor?: string;
+  color?: string;
+}
+ 
+const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (date: string) => void, markedDates: Record<string, MarkedDateConfig> }) => {
 
   const [currentMonth, setCurrentMonth] = useState(moment());
   const [selectedDate, setSelectedDate] = useState(moment().format("YYYY-MM-DD"));
@@ -11,26 +16,26 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }) => {
     onDateSelect(selectedDate);
   }, []);
 
-  const changeMonth = (direction) => {
-
+  const changeMonth = (direction: "prev" | "next") => {
+ 
     const newMonth =
       direction === "next"
         ? moment(currentMonth).add(1, "months")
         : moment(currentMonth).subtract(1, "months");
-
+ 
     setCurrentMonth(newMonth);
-
+ 
     const firstDay = newMonth.clone().startOf("month").format("YYYY-MM-DD");
-
+ 
     setSelectedDate(firstDay);
-
+ 
     onDateSelect(firstDay);
   };
-
-  const handleDateSelection = (date) => {
-
+ 
+  const handleDateSelection = (date: string) => {
+ 
     setSelectedDate(date);
-
+ 
     onDateSelect(date);
   };
 

@@ -251,7 +251,6 @@ const DashboardScreen = () => {
       </View>
     );
   };
-  console.log("ssss",getUser1)
 
   return (
     <SafeAreaView style={styles.safeArea}>

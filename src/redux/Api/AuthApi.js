@@ -1348,8 +1348,7 @@ const GetCoachSession = async (setLoading, userId) => {
                 },
             }
         );
-        console.log("response. GetCoachSession ", response)
-
+ 
         const resText = await response.text();
         try {
             const responseData = JSON.parse(resText);
