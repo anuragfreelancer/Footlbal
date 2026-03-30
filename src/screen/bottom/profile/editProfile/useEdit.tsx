@@ -17,10 +17,11 @@ const useEdit = () => {
   const getLogin = useSelector((state: any) => state?.feature);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  useEffect(() => {
-    if (getLogin?.userGetData) {
-      setFullName(getLogin?.userGetData?.user_name || "");
-      setPhoneNumber(getLogin?.userGetData?.mobile || "");
+    const isLogin = useSelector((state: any) => state?.auth);
+   useEffect(() => {
+    if (getLogin?.userGetData ||isLogin?.userData) {
+      setFullName(getLogin?.userGetData?.user_name || isLogin?.userData?.user_name || "");
+      setPhoneNumber(getLogin?.userGetData?.mobile || isLogin?.userData?.mobile || "");
     }
   }, [getLogin]);
   // const pickImageFromGallery = () => {
@@ -82,15 +83,14 @@ const useEdit = () => {
       const params = {
         name: fullName,
         images: imagePrfile,
-        userId: getLogin?.userGetData.id,
+        userId: isLogin?.userData?.id || getLogin?.userGetData.id ,
         mobile: PhoneNumber,
-        email: getLogin?.userGetData?.email,
+        email: getLogin?.userGetData?.email ||isLogin?.userData?.email ,
         navigation: navigation
       };
-      const response = await UpdateProfile_Api(params, setisLoading);
-      if (response) {
-        GetProfile(getLogin?.userGetData?.id, dispatch);
-      }
+       const response = await UpdateProfile_Api(params, setisLoading);
+         GetProfile(isLogin?.userData?.id, dispatch);
+    
     } catch (error) {
       console.error("Error updating profile:", error);
     }

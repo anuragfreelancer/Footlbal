@@ -31,8 +31,8 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     isLoading,setisLoading,
     navigation ,
     isLogin,
-    getLogin
-  };
+    getLogin ,
+   };
 };
 
 export default useMyTeam;

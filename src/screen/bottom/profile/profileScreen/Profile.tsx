@@ -46,7 +46,7 @@ const Profile = () => {
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
     // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
-
+ 
   const PlayData = [
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
     { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
@@ -106,7 +106,7 @@ const Profile = () => {
 
     navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
   };
-  return (
+    return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
 
@@ -125,10 +125,10 @@ const Profile = () => {
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             {
-              getLogin?.userGetData?.image ?
+              getLogin?.userGetData?.image  || isLogin?.userData?.image?
 
                 <Image
-                  source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
+                  source={getLogin?.userGetData?.image || isLogin?.userData?.image ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image } : imageIndex.ProfielImge}
                   style={styles.avatar}
                 />
                 : <Image
@@ -139,8 +139,8 @@ const Profile = () => {
 
 
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
-              <Text style={styles.profileLink}>{getLogin?.userGetData?.email}</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
+              <Text style={styles.profileLink}>{getLogin?.userGetData?.email || isLogin?.userData?.email}</Text>
             </View>
           </View>
           <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />

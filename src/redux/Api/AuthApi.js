@@ -268,25 +268,21 @@ const UpdateProfile_Api = async (
             headers: myHeaders,
             body: formData,
         };
+        console.log("edit formData",formData)
         const respons = await fetch(`${base_url}${constant.updateProfile}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
+                console.log("edit ",response)
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
-                    successToast(
-                        response?.message
-                    );
+                    // successToast(
+                    //     response?.message
+                    // );
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
-                } else {
-                    setLoading(false)
-                    errorToast(
-                        response?.message || response?.error,
-                    );
-                    return response
-                }
+                }  
             })
             .catch((error) =>
                 console.error(error));
@@ -477,6 +473,7 @@ const StartSection = async (param, setLoading) => {
 //     }
 // };
 const GetProfile = async (userId, dispatch) => {
+    console.log(" user id ----",userId)
     try {
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
@@ -490,7 +487,7 @@ const GetProfile = async (userId, dispatch) => {
         const response = await fetch(`${base_url}${constant.getrofile}`, requestOptions)
         const resText = await response.text(); // Ensure text is received before parsing
         const responseData = JSON.parse(resText);
-        console.log("responseData", responseData)
+        console.log("get api  --- ", responseData)
         if (responseData.status === '1') {
             dispatch(
                 getSuccess({

@@ -1,23 +1,25 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView,  Image, FlatList, ActivityIndicator } from "react-native";
- import imageIndex from "../../../../assets/imageIndex";
+import { View, Text, TouchableOpacity, ScrollView, Image, FlatList, ActivityIndicator } from "react-native";
+import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import CustomHeader from "../../../../compoent/CustomHeader";
- import styles from "./style";
+import styles from "./style";
 import useMyTeam from "./useMyTeam";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
- import localizationStrings from "../../../../compoent/Localization/Localization";
+import localizationStrings from "../../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
- 
- 
+
+
 const MyTeam = () => {
   useLanguage();
   const {
-    MyTeam,  
-    isLoading, 
+    MyTeam,
+    isLoading,
     navigation,
-    getLogin
+    getLogin ,
+        isLogin
+
   } = useMyTeam()
 
   return (
@@ -32,11 +34,24 @@ const MyTeam = () => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profileHeader}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <Image source={{ uri: getLogin?.userGetData?.image }} style={styles.avatar} />
+
+            {getLogin?.userGetData?.image  || isLogin?.userData?.image? 
+            
+            <Image source={{ uri: getLogin?.userGetData?.image  || isLogin?.userData?.image}} style={styles.avatar} />
+
+              :
+
+              <Image
+                source={imageIndex.prfEdit}
+                style={styles.avatar}
+              />
+            }
+
+
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
               <TouchableOpacity  >
-              <Text style={styles.profileLink}>{localizationStrings?.StrengthTraining}</Text>
+                <Text style={styles.profileLink}>{localizationStrings?.StrengthTraining}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -54,7 +69,7 @@ const MyTeam = () => {
         </Text>
         {
           isLoading ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' ,marginTop:40}}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
               <ActivityIndicator size={30} color="#A0D803" />
             </View>
           ) : (
@@ -63,7 +78,7 @@ const MyTeam = () => {
               style={{
                 marginTop: 15
               }}
-              ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers}/>} // Common Empty Component
+              ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />} // Common Empty Component
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
