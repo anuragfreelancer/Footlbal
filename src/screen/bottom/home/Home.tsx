@@ -231,6 +231,7 @@ const DashboardScreen = () => {
                 date: item?.session_start_time || item?.session_start_date,
                 time: formattedStartTime,
                 trainingId: item?.training_id,
+                coach_id: item?.coach_id,
               });
             }}
           >

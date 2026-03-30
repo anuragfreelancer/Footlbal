@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { AttendanceApi, SumitRpfFrom, GetTraining } from '../../../redux/Api/AuthApi';
+import { AttendanceApi, SumitRpfFrom, GetTraining, AddReviewApi } from '../../../redux/Api/AuthApi';
 import { Alert, Animated } from 'react-native';
 import { Platform } from 'react-native';
 import localizationStrings from '../../../compoent/Localization/Localization';
@@ -27,7 +27,7 @@ const useSubmitRPE = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [questionnaires, setQuestionnaires] = useState<any[]>([]);
     const [loadingQuestionnaires, setLoadingQuestionnaires] = useState(true);
-
+    const [coachId, setCoachId] = useState("");
     useEffect(() => {
         const load = async () => {
             setLoadingQuestionnaires(true);
@@ -58,6 +58,7 @@ const useSubmitRPE = () => {
             if (params.trainingId) {
                 // We'll handle selecting the questionnaire in the component or here
             }
+            if (params.coach_id) setCoachId(params.coach_id);
         }
     }, [route?.params]);
 
@@ -113,27 +114,24 @@ const useSubmitRPE = () => {
         setisLoading(true);
         try {
             const params: any = {
-                userId: isLogin?.userData?.id,
+                user_id: isLogin?.userData?.id,
                 navigation,
-                session,
+                section_type: session,
                 date,
-                comments,
-                effort,
-                Starttime: formattedTime,
+                note: comments,
+                number_rate: effort,
+                time: formattedTime,
+                coach_id: coachId,
+                rate_from: effort || 0, // Assuming "User" as default
+                training_section_question: selectedTrainingId ?? "",
             };
-            if (selectedTrainingId != null && selectedTrainingId !== undefined) {
-                params.training_id = selectedTrainingId;
-            }
-            const response = await SumitRpfFrom(params, setisLoading);
-            setSession("");
-            setDate("");
-            setComments("");
+            console.log("Rating  ---- ", params)
+            const response = await AddReviewApi(params, setisLoading);
             if (response) {
                 setSession("");
                 setDate("");
                 setComments("");
-                setisLoading(false);
-
+                setEffort(0);
             }
         } catch (error) {
             console.error("API Call Failed:", error);

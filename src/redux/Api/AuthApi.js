@@ -24,11 +24,11 @@ const LoginUserApi = async (
             headers: myHeaders,
             body: formdata,
         };
-        console.log("formdata",formdata)
+        console.log("formdata", formdata)
         const respons = await fetch(`${base_url}${constant.Login}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res",res)
+                console.log("res", res)
 
                 const response = JSON.parse(res)
                 if (response?.status == '1') {
@@ -41,7 +41,7 @@ const LoginUserApi = async (
                         index: 0,
                         routes: [{ name: ScreenNameEnum.TabNavigator }],
                     });
-                  
+
                     return response
                 } else {
                     setLoading(false)
@@ -249,7 +249,7 @@ const UpdateProfile_Api = async (
 ) => {
     try {
         setLoading(true)
-         const myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
         if (param?.images) {
@@ -301,56 +301,56 @@ const UpdateProfile_Api = async (
 
 const DelliteApi = async (userId, setLoading) => {
     try {
-      setLoading(true);
-      const url = `${base_url}logout?user_id=${userId}`;
-  
-      const response = await fetch(url, {
-        method: 'GET',  // ya POST agar API accept karti hai query params ke sath
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-  
-      const resJson = await response.json();
-  console.log("resJson",resJson)
-      if (resJson.status === '1') {
-        successToast(resJson.message);
-        setLoading(false);
-        // navigation or other logic
-        return resJson;
-      } else {
-        errorToast(resJson.message || 'Something went wrong');
-        setLoading(false);
-        return resJson;
-      }
+        setLoading(true);
+        const url = `${base_url}logout?user_id=${userId}`;
+
+        const response = await fetch(url, {
+            method: 'GET',  // ya POST agar API accept karti hai query params ke sath
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        const resJson = await response.json();
+        console.log("resJson", resJson)
+        if (resJson.status === '1') {
+            successToast(resJson.message);
+            setLoading(false);
+            // navigation or other logic
+            return resJson;
+        } else {
+            errorToast(resJson.message || 'Something went wrong');
+            setLoading(false);
+            return resJson;
+        }
     } catch (error) {
-      setLoading(false);
-      errorToast('Network error');
-      console.error(error);
-      return null;
+        setLoading(false);
+        errorToast('Network error');
+        console.error(error);
+        return null;
     }
-  };
-  
+};
+
 // const DelliteApi = async (param, setLoading) => {
 //     try {
 //       setLoading(true);
 //       const myHeaders = new Headers();
 //       myHeaders.append('Accept', 'application/json');
-  
+
 //       const formData = new FormData();
 //       formData.append('user_id', param?.userId);
-  
+
 //       const requestOptions = {
 //         method: 'POST',
 //         headers: myHeaders,
 //         body: formData,
 //       };
-  
+
 //       const response = await fetch(`${base_url}${constant.updateProfile}`, requestOptions);
-  
+
 //       const resText = await response.text();
 //       const resJson = JSON.parse(resText);
-  
+
 //       if (resJson.status === '1') {
 //         successToast(resJson.message);
 //         param.navigation.goBack();
@@ -368,58 +368,58 @@ const DelliteApi = async (userId, setLoading) => {
 //       return null;
 //     }
 //   };
-  const StartSection = async (param, setLoading) => {
-  try {
-    setLoading(true);
+const StartSection = async (param, setLoading) => {
+    try {
+        setLoading(true);
 
-    const headers = new Headers();
-    headers.append("Accept", "application/json");
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
 
-    const formData = new FormData();
+        const formData = new FormData();
 
-    const playerIds = Array.isArray(param?.players)
-      ? param.players.join(",")
-      : param?.players;
+        const playerIds = Array.isArray(param?.players)
+            ? param.players.join(",")
+            : param?.players;
 
-    formData.append("user_id", playerIds);
-    formData.append("coach_id", param?.coach_id);
-    formData.append("session_start_date", param?.date);
-    formData.append("session_start_time", param?.time);
-    formData.append("training_id", param?.training_id);
-    formData.append("question_id", param?.question_id);
-    formData.append("type", param?.session_type);
+        formData.append("user_id", playerIds);
+        formData.append("coach_id", param?.coach_id);
+        formData.append("session_start_date", param?.date);
+        formData.append("session_start_time", param?.time);
+        formData.append("training_id", param?.training_id);
+        formData.append("question_id", param?.question_id);
+        formData.append("type", param?.session_type);
 
-    console.log("📦 FormData sending...");
+        console.log("📦 FormData sending...");
 
-    const response = await fetch(
-      `${base_url}${constant.add_coach_session}`,
-      {
-        method: "POST",
-        headers: headers,
-        body: formData,
-      }
-    );
+        const response = await fetch(
+            `${base_url}${constant.add_coach_session}`,
+            {
+                method: "POST",
+                headers: headers,
+                body: formData,
+            }
+        );
 
-    const result = await response.text();
-    console.log("✅ API Response:", result);
+        const result = await response.text();
+        console.log("✅ API Response:", result);
 
-    const data = JSON.parse(result);
+        const data = JSON.parse(result);
 
-    setLoading(false);
+        setLoading(false);
 
-    if (data.status == "1") {
-      successToast(data?.message);
-      param?.navigation?.goBack();
-      return data;
-    } else {
-      errorToast(data?.message || data?.error);
-      return data;
+        if (data.status == "1") {
+            successToast(data?.message);
+            param?.navigation?.goBack();
+            return data;
+        } else {
+            errorToast(data?.message || data?.error);
+            return data;
+        }
+
+    } catch (error) {
+        setLoading(false);
+        console.log("❌ API Error:", error);
     }
-
-  } catch (error) {
-    setLoading(false);
-    console.log("❌ API Error:", error);
-  }
 };
 
 // const StartSection = async (
@@ -446,7 +446,7 @@ const DelliteApi = async (userId, setLoading) => {
 //             body: formData,
 //         };
 //          const respons = await fetch(`${base_url}${constant.add_coach_session}`, requestOptions)
-             
+
 
 //         .then((response) => response.text())
 //             .then((res) => {
@@ -473,7 +473,7 @@ const DelliteApi = async (userId, setLoading) => {
 //         return respons
 //     } catch (error) {
 //         setLoading(false)
-      
+
 //     }
 // };
 const GetProfile = async (userId, dispatch) => {
@@ -490,7 +490,7 @@ const GetProfile = async (userId, dispatch) => {
         const response = await fetch(`${base_url}${constant.getrofile}`, requestOptions)
         const resText = await response.text(); // Ensure text is received before parsing
         const responseData = JSON.parse(resText);
-        console.log("responseData",responseData)
+        console.log("responseData", responseData)
         if (responseData.status === '1') {
             dispatch(
                 getSuccess({
@@ -792,7 +792,7 @@ const PlayerPostEditApi = async (
         const respons = await fetch(`${base_url}${constant.updatePlayer}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                 const response = JSON.parse(res);
+                const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
                     successToast(
@@ -927,7 +927,7 @@ const Getplayer = async (userId, setLoading) => {
             headers: myHeaders,
         };
         const response = await fetch(`${base_url}${constant.getPlayer}?user_id=${userId}`, requestOptions);
-        console.log("response.  dddd ----",response)
+        console.log("response.  dddd ----", response)
         // const response = await fetch(`${base_url}${constant.getPlayer}?coach_id=${userId}`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
@@ -955,7 +955,7 @@ const Getplayer2 = async (userId, setLoading) => {
             headers: myHeaders,
         };
         const response = await fetch(`${base_url}${constant.get_user_session}?user_id=${userId}`, requestOptions);
-        console.log("response.  dddd ----",response)
+        console.log("response.  dddd ----", response)
         // const response = await fetch(`${base_url}${constant.getPlayer}?coach_id=${userId}`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
@@ -975,7 +975,7 @@ const Getplayer2 = async (userId, setLoading) => {
 };
 
 const GetNotifications = async (userId, setLoading) => {
-    console.log("userId",userId)
+    console.log("userId", userId)
     try {
         setLoading(true);
         const myHeaders = new Headers();
@@ -985,9 +985,9 @@ const GetNotifications = async (userId, setLoading) => {
             headers: myHeaders,
         };
         const response = await fetch(`${base_url}${constant.getNotifications}?user_id=${userId}`, requestOptions);
-          const resText = await response.text();
+        const resText = await response.text();
         const responseData = JSON.parse(resText);
-         if (responseData.status === '1') {
+        if (responseData.status === '1') {
             successToast(responseData.message);
             return { userGetData: responseData.result };
         } else {
@@ -1006,7 +1006,7 @@ const SumitRpfFrom = async (
     param,
     setLoading,
 ) => {
-     try {
+    try {
         setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
@@ -1038,7 +1038,7 @@ const SumitRpfFrom = async (
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
-                }  
+                }
             })
             .catch((error) =>
                 console.error(error));
@@ -1081,7 +1081,7 @@ const EndSection = async (
 ) => {
     try {
         setLoading(true)
-         const myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
         formData.append("id", param?.players);
@@ -1090,7 +1090,7 @@ const EndSection = async (
         formData.append("session_end_time", param?.time);
         formData.append("question_id", param?.question_id);
         formData.append("training_id", param?.question_id);
-//          formData.append("coach_id", param?.coach_id);
+        //          formData.append("coach_id", param?.coach_id);
 
         formData.append("session_end_date", param?.date);
         const requestOptions = {
@@ -1099,14 +1099,14 @@ const EndSection = async (
             body: formData,
         };
 
-        console.log("dddddd---- ",formData)
-         const respons = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions)
+        console.log("dddddd---- ", formData)
+        const respons = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
                 const response = JSON.parse(res);
-                console.log("response.status",response.status)
+                console.log("response.status", response.status)
 
-                 if (response.status == '1') {
+                if (response.status == '1') {
                     setLoading(false)
                     successToast(
                         response?.message || ""
@@ -1191,7 +1191,7 @@ const EndRpfFrom = async (param, setLoading) => {
         formData.append("submit_RPF_id", param?.userId);
         formData.append("rpf_end_time", param?.date);
         formData.append("rpf_end_date", param?.time);
-         console.log("Form Data: ", formData);
+        console.log("Form Data: ", formData);
 
         const response = await fetch("https://server-php-8-3.technorizen.com/Football/api/update_submit_RPF", {
             method: "POST",
@@ -1215,7 +1215,7 @@ const EndRpfFrom = async (param, setLoading) => {
         } catch (parseError) {
             throw new Error("Failed to parse JSON: " + parseError.message);
         }
-         if (jsonResponse.status === '1') {
+        if (jsonResponse.status === '1') {
             successToast(jsonResponse.message);
             param.navgation.goBack();
         } else {
@@ -1319,7 +1319,7 @@ const GetAllChatMessage = async (setLoading, userId) => {
 
         try {
             const responseData = JSON.parse(resText);
- 
+
             // ✅ FIXED: Check for both number 1 and string "1"
             if (responseData.status == 1) {
                 return { userGetData: responseData.result };
@@ -1340,113 +1340,113 @@ const GetAllChatMessage = async (setLoading, userId) => {
 };
 const GetCoachSession = async (setLoading, userId) => {
     try {
-      setLoading(true);
-  
-      const response = await fetch(
-        `${base_url}${constant.get_coach_session}?user_id=${userId}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
+        setLoading(true);
+
+        const response = await fetch(
+            `${base_url}${constant.get_coach_session}?user_id=${userId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+        console.log("response. GetCoachSession ", response)
+
+        const resText = await response.text();
+        try {
+            const responseData = JSON.parse(resText);
+
+            if (responseData?.status == 1) {
+                return { userGetData: responseData?.result };
+            } else {
+                console.error("API returned error status:", responseData);
+                return null;
+            }
+        } catch (jsonError) {
+            console.error("JSON Parsing Error:", jsonError, resText);
+            return null;
         }
-      );
-      console.log("response. GetCoachSession ",response)
-  
-      const resText = await response.text();
-       try {
-        const responseData = JSON.parse(resText);
-   
-        if (responseData?.status == 1) {
-          return { userGetData: responseData?.result };
-        } else {
-          console.error("API returned error status:", responseData);
-          return null;
-        }
-      } catch (jsonError) {
-        console.error("JSON Parsing Error:", jsonError, resText);
-        return null;
-      }
     } catch (error) {
-      console.error("Network Error:", error);
-      return null;
+        console.error("Network Error:", error);
+        return null;
     } finally {
-      setLoading(false);
-}
-  };
-const Get_user_by_id = async (setLoading, userId) => {
-  try {
-    setLoading(true);
-
-    const response = await fetch(
-      `https://kmmps.store/api/get_coach_session?user_id=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-
-    const resText = await response.text();
-
-    try {
-      const responseData = JSON?.parse(resText);
- 
-      if (responseData?.status == 1) {
-        return { userGetData: responseData?.result };
-      } else {
-         return null;
-      }
-    } catch (jsonError) {
-      console.error("JSON Parsing Error:", jsonError, resText);
-      return null;
+        setLoading(false);
     }
-  } catch (error) {
-    console.error("Network Error:", error);
-    return null;
-  } finally {
-    setLoading(false);
-  }
+};
+const Get_user_by_id = async (setLoading, userId) => {
+    try {
+        setLoading(true);
+
+        const response = await fetch(
+            `https://kmmps.store/api/get_coach_session?user_id=${userId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+
+        const resText = await response.text();
+
+        try {
+            const responseData = JSON?.parse(resText);
+
+            if (responseData?.status == 1) {
+                return { userGetData: responseData?.result };
+            } else {
+                return null;
+            }
+        } catch (jsonError) {
+            console.error("JSON Parsing Error:", jsonError, resText);
+            return null;
+        }
+    } catch (error) {
+        console.error("Network Error:", error);
+        return null;
+    } finally {
+        setLoading(false);
+    }
 };
 const Get_user_by_id2 = async (setLoading, userId) => {
-  try {
-    setLoading(true);
-
-    const response = await fetch(
-      `https://kmmps.store/api/get_user_session?user_id=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-
-    const resText = await response.text();
-
     try {
-      const responseData = JSON.parse(resText);
- 
-      if (responseData.status == 1) {
-        return { userGetData: responseData.result };
-      } else {
-        console.error("API returned error status:", responseData);
+        setLoading(true);
+
+        const response = await fetch(
+            `https://kmmps.store/api/get_user_session?user_id=${userId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+
+        const resText = await response.text();
+
+        try {
+            const responseData = JSON.parse(resText);
+
+            if (responseData.status == 1) {
+                return { userGetData: responseData.result };
+            } else {
+                console.error("API returned error status:", responseData);
+                return null;
+            }
+        } catch (jsonError) {
+            console.error("JSON Parsing Error:", jsonError, resText);
+            return null;
+        }
+    } catch (error) {
+        console.error("Network Error:", error);
         return null;
-      }
-    } catch (jsonError) {
-      console.error("JSON Parsing Error:", jsonError, resText);
-      return null;
+    } finally {
+        setLoading(false);
     }
-  } catch (error) {
-    console.error("Network Error:", error);
-    return null;
-  } finally {
-    setLoading(false);
-  }
 };
-  
-  
+
+
 
 
 
@@ -1470,11 +1470,11 @@ const SendMessage = async (
         const respons = await fetch(`${base_url}${constant.sendChat}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                 const response = JSON.parse(res);
+                const response = JSON.parse(res);
                 if (response.result.chat_message) {
                     setLoading(false)
-                   
-                    
+
+
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
                 } else {
@@ -1590,31 +1590,31 @@ const AttendanceApi = async (
     param,
     setLoading,
 ) => {
-     
-     try {
+
+    try {
         setLoading(true)
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
         formData.append("user_id", param?.userId);
         formData.append("attendance", param?.type);
-       
+
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
         };
-        const respons = await fetch(`${base_url}${constant.add_attendance}`, requestOptions)
+        const respons = await fetch(`${base_url}${constant.add_review}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res", res)
+                console.log("res add ", res)
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
                     successToast(
                         response?.message
                     );
-                      return response
+                    return response
                 } else {
                     setLoading(false)
                     errorToast(
@@ -1681,4 +1681,45 @@ const createCheckoutSession = async (param, setLoading) => {
     }
 };
 
-export {DelliteApi,Getplayer2, Get_user_by_id2,GetCoachSession,Get_user_by_id, SendMessage,EndSection,StartSection,AttendanceApi,GetNotifications,EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession }  
+const AddReviewApi = async (param, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("user_id", param?.user_id);
+        formData.append("rate_from", param?.rate_from);
+        formData.append("coach_id", param?.coach_id);
+        formData.append("section_type", param?.section_type);
+        formData.append("date", param?.date);
+        formData.append("time", param?.time);
+        formData.append("number_rate", param?.number_rate);
+        formData.append("note", param?.note);
+        formData.append("training_section_question", param?.training_section_question);
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const response = await fetch(`${base_url}${constant.add_review}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        if (responseData.status == "1") {
+            setLoading(false);
+            successToast(responseData?.message);
+            param.navigation.goBack();
+            return responseData;
+        } else {
+            setLoading(false);
+            errorToast(responseData?.message || responseData?.error);
+            return responseData;
+        }
+    } catch (error) {
+        setLoading(false);
+        errorToast("Network error");
+        console.error("AddReviewApi error:", error);
+    }
+};
+
+export { DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi }  
