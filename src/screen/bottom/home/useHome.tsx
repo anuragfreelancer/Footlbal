@@ -74,7 +74,7 @@ const useHome = () => {
       Get_Userscoach_session1();
     }
 
-  }, [isLogin?.userData?.id])
+  }, [])
 );
   const Get_coach_session = async () => {
     try {
@@ -116,8 +116,7 @@ const useHome = () => {
       setisLoading(true);
   
       const response = await Get_user_by_id2(setisLoading, isLogin?.userData?.id);
-        console.log("response?.userGetData",response)
-           if (response && response?.userGetData) {
+            if (response && response?.userGetData) {
           setgetUser1(response.userGetData);
       } else {
         setgetUser1([]);

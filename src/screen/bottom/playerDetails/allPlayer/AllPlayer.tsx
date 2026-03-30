@@ -13,8 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useAllPlayer from "./useAllPlayer";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
-import { useSelector } from "react-redux";
-
+ 
 interface CommonCardProps {
   item: any;
   onPress: () => void;
@@ -58,12 +57,17 @@ const ReviewCard = React.memo(({ item }: ReviewCardProps) => {
 
   return (
     <View style={styles.reviewCard}>
+      {/* Header with Avatar and Score */}
       <View style={styles.reviewHeader}>
+      
         <Image 
           source={userDetails?.image ? { uri: userDetails.image } : imageIndex.user} 
           style={styles.reviewAvatar} 
         />
         <View style={styles.reviewTextContainer}>
+            <Text style={styles.reviewDate}>  
+                  Source de l'évaluation : Joueur
+             </Text>
           <Text style={styles.reviewerName}>{userDetails?.user_name || "Unknown Player"}</Text>
           <Text style={styles.reviewDate}>{item?.date || "No date"}</Text>
         </View>
@@ -73,26 +77,39 @@ const ReviewCard = React.memo(({ item }: ReviewCardProps) => {
         </View>
       </View>
       
+      {/* Dynamic Progress Bar */}
       <View style={styles.progressBarContainer}>
         <View style={styles.progressBarTrack}>
           <View style={[styles.progressBarFill, { width: `${(ratingValue / 10) * 100}%`, backgroundColor: ratingColor }]} />
         </View>
       </View>
 
-      <Text style={styles.reviewNote} numberOfLines={5}>
-        {item?.note || "No comments provided."}
+      {/* Focus Area (Proper display of training_section_question) */}
+      {item?.training_section_question && (
+        <View style={styles.reviewFocusContainer}>
+          <Text style={styles.reviewFocusLabel}>Objectif de la séance :</Text>
+          <Text style={styles.reviewFocusValue} numberOfLines={2}>
+            {item.training_section_question}
+           </Text>
+        </View>
+      )}
+
+      {/* Player Note Section */}
+      <Text  style={[styles.reviewFocusLabel,{
+        marginBottom:11 ,
+        left:1
+      }]} >
+     commentaire :  {item?.note ? item?.note : "No comments provided."}
       </Text>
 
+      {/* Footer Badges */}
       <View style={styles.reviewFooter}>
         <View style={styles.reviewBadge}>
-          <Text style={[styles.reviewBadgeText, { color: ratingColor }]}>
+          <Text style={[styles.reviewBadgeText, { color: "black" }]}>
             {item?.section_type ? item.section_type.toUpperCase() : "GENERAL"}
           </Text>
         </View>
-        <View style={{ alignItems: 'flex-end' }}>
-          <Text style={styles.footerText}>Rating Source: Player</Text>
-          {item?.time && <Text style={[styles.footerText, { fontSize: 9 }]}>{item.time}</Text>}
-        </View>
+      
       </View>
     </View>
   );
@@ -134,7 +151,8 @@ const AllPlayer = () => {
             activeOpacity={0.7}
           >
             <Text style={[styles.tabText, viewType === 'Rate' && styles.activeTabText]}>
-              {(localizationStrings as any).Rate || "Rate"}
+              {/* {(localizationStrings as any).Rate || "Raaa ate"} */}
+            Évaluations des utilisateurs
             </Text>
           </TouchableOpacity>
         </View>

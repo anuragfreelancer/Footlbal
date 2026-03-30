@@ -51,13 +51,7 @@ const ChatScreen = () => {
                     <Text style={[styles.messageText, !isCurrentUser ? styles.sentText : styles.receivedText]}>
                         {item.chat_message}
                     </Text>
-                    <Text style={[styles.timeText, {
-                        color: "black"
-                    }]}> {item?.date
-                        ? moment(item?.date).isBefore(moment().subtract(24, 'hours'))
-                            ? moment(item?.date).format("MMMM Do YYYY")
-                            : moment(item?.date).fromNow()
-                        : "N/A"}</Text>
+                   
                 </View>
             </View>
         )

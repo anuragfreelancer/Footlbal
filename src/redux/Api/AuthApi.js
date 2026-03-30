@@ -1691,10 +1691,10 @@ const AddReviewApi = async (param, setLoading) => {
         formData.append("date", param?.date);
         formData.append("time", param?.time);
         formData.append("number_rate", param?.number_rate);
+        formData.append("coach_session_id", param?.coach_session_id);
         formData.append("note", param?.note);
         formData.append("training_section_question", param?.training_section_question);
-
-        const requestOptions = {
+         const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,

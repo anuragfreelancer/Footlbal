@@ -39,6 +39,8 @@ const useSubmitRPE = () => {
     }, []);
 
     const route = useRoute() as any;
+            const params1 = route?.params;
+
     useEffect(() => {
         const params = route?.params;
         if (params) {
@@ -104,7 +106,7 @@ const useSubmitRPE = () => {
         return Object.keys(formErrors).length === 0;
     };
 
-    const handleSubmit = async (selectedTrainingId?: number | null) => {
+    const handleSubmit = async (selectedTrainingTitle?: string) => {
         if (!validateForm()) return;
         if (formattedTime === localizationStrings.SelectTime || !formattedTime) {
             Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectTime);
@@ -123,7 +125,8 @@ const useSubmitRPE = () => {
                 time: formattedTime,
                 coach_id: coachId,
                 rate_from: effort || 0, // Assuming "User" as default
-                training_section_question: selectedTrainingId ?? "",
+                training_section_question: selectedTrainingTitle || "",
+                coach_session_id: params1.coach_session_id
             };
             console.log("Rating  ---- ", params)
             const response = await AddReviewApi(params, setisLoading);

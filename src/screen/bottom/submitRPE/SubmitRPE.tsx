@@ -65,7 +65,7 @@ const SubmitRPE = () => {
   } = useSubmitRPE();
 
   const [showQuestionnaireDropdown, setShowQuestionnaireDropdown] = useState(false);
-  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<number | null>(null);
+  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<string | null>(null);
 
   const panResponder = React.useMemo(
     () =>
@@ -114,7 +114,7 @@ const SubmitRPE = () => {
             <View style={styles.section}>
               <Text style={styles.label}>{localizationStrings?.SelectSession}</Text>
               <View style={styles.radioGroup}>
-                {SESSION_OPTIONS.map(({ key, labelKey }) => (
+                {SESSION_OPTIONS?.map(({ key, labelKey }) => (
                   <TouchableOpacity
                     key={key}
                     onPress={() => setSession(key)}
@@ -222,7 +222,7 @@ const SubmitRPE = () => {
               >
                 <Text style={styles.datePickerText} numberOfLines={1}>
                   {selectedQuestionnaire != null
-                    ? questionnaires.find((q) => q.id === selectedQuestionnaire)?.training_title ??
+                    ? questionnaires.find((q) => (q.training_title_french === selectedQuestionnaire || q.training_title === selectedQuestionnaire))?.training_title ??
                     localizationStrings?.Select
                     : localizationStrings?.Select}
                 </Text>
@@ -243,11 +243,11 @@ const SubmitRPE = () => {
                         key={item.id}
                         style={styles.dropdownItem}
                         onPress={() => {
-                          setSelectedQuestionnaire(item.id);
+                          setSelectedQuestionnaire(item.training_title_french || item.training_title);
                           setShowQuestionnaireDropdown(false);
                         }}
                       >
-                        <Text style={styles.dropdownItemText}>{item.training_title}</Text>
+                        <Text style={styles.dropdownItemText}>{item?.training_title_french}</Text>
                       </TouchableOpacity>
                     ))}
                   </ScrollView>
@@ -275,7 +275,7 @@ const SubmitRPE = () => {
         <View style={styles.buttView}>
           <CustomButton
             title={localizationStrings.Submit}
-            onPress={() => handleSubmit(selectedQuestionnaire)}
+            onPress={() => handleSubmit(selectedQuestionnaire || undefined)}
           />
         </View>
       </KeyboardAvoidingView>

@@ -356,6 +356,19 @@ const styles = StyleSheet.create({
       fontWeight: "700",
       color: "#0f172a",
     },
-  
+    ratingGivenBadge: {
+      marginTop: 12,
+      backgroundColor: "#F1F5F9",
+      paddingVertical: 10,
+      borderRadius: 12,
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: "#E2E8F0",
+    },
+    ratingGivenText: {
+      fontSize: 14,
+      fontWeight: "700",
+      color: "#64748B",
+    },
   });
 export default styles;

@@ -162,8 +162,9 @@ const DashboardScreen = () => {
 
   const renderItem = ({ item }: { item: any }) => {
     const isOngoing = item?.status === "Start";
+    const reviews_status = item?.reviews_status === true;
     const { startedAt, endedAt, formattedDate } = getSessionDisplay(item);
-
+    console.log("start --- coach_session_id", item?.id)
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
         <View style={styles.sessionCardHeader}>
@@ -221,34 +222,36 @@ const DashboardScreen = () => {
         </View>
 
         {!isOngoing && (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={(styles as any).rateButton}
-            onPress={() => {
-              const { formattedStartTime } = getSessionDisplay(item);
-              (navigation as any).navigate(ScreenNameEnum.SubmitRPE, {
-                session: item?.type || "Training",
-                date: item?.session_start_time || item?.session_start_date,
-                time: formattedStartTime,
-                trainingId: item?.training_id,
-                coach_id: item?.coach_id,
-              });
-            }}
-          >
-            <Text style={(styles as any).rateButtonText}>
-              {localizationStrings?.RateDifficulty || "Rate Difficulty"}
-            </Text>
-          </TouchableOpacity>
+          (item?.reviews_status === true || item?.reviews_status === "true") ? (
+            <View style={(styles as any).ratingGivenBadge}>
+              <Text style={(styles as any).ratingGivenText}>Évaluation envoyée</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={(styles as any).rateButton}
+              onPress={() => {
+                const { formattedStartTime } = getSessionDisplay(item);
+                (navigation as any).navigate(ScreenNameEnum.SubmitRPE, {
+                  session: item?.type || "Training",
+                  date: item?.session_start_time || item?.session_start_date,
+                  time: formattedStartTime,
+                  trainingId: item?.training_id,
+                  coach_id: item?.coach_id,
+                  coach_session_id: item?.id
+                });
+              }}
+            >
+              <Text style={(styles as any).rateButtonText}>
+                {localizationStrings?.RateDifficulty || "Rate Difficulty"}
+              </Text>
+            </TouchableOpacity>
+          )
         )}
       </View>
     );
   };
-  useFocusEffect(
-    useCallback(() => {
-      return () => { };
-    }, [getLogin])
-  );
-  console.log("getUser1", getUser1)
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
