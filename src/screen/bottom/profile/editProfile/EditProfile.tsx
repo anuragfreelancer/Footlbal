@@ -67,7 +67,9 @@ const EditProfile = () => {
               {/* Profile Image */}
               <View style={styles.profileContainer}>
                 <View style={styles.iamgeView}>
-                  {getLogin?.userGetData?.image ? <Image
+                  {getLogin?.userGetData?.image ?
+                  
+                  <Image
                     resizeMode="cover"
                     source={
                       imagePrfile

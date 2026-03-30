@@ -191,14 +191,13 @@ const AllPlayer = () => {
           />
         )}
 
-        {viewType === 'Players' && (
-          <TouchableOpacity
+           <TouchableOpacity
             style={styles.fab}
             onPress={() => (navigation as any).navigate(ScreenNameEnum.AddPlayer)}
           >
             <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />
           </TouchableOpacity>
-        )}
+       
       </View>
     </SafeAreaView>
   );

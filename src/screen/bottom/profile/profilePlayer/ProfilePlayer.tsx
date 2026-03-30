@@ -16,24 +16,24 @@ import { DelliteApi } from "../../../../redux/Api/AuthApi";
 import styles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/feature/authSlice";
- 
+
 const ProfilePlayer = () => {
   const navigation = useNavigation();
   const { language } = useLanguage();
-  
-      const getLogin = useSelector((state: any) => state?.feature);
-    const isLogin = useSelector((state: any) => state?.auth);
-   const [modal, setModal] = useState(false);
+
+  const getLogin = useSelector((state: any) => state?.feature);
+  const isLogin = useSelector((state: any) => state?.auth);
+  const [modal, setModal] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLang, setSelectedLang] = useState("en");
 
   // mock login/profile data, replace with your actual hook or redux data
- 
- 
 
-  
+
+
+
 
   const PlayData = [
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
@@ -93,14 +93,14 @@ const ProfilePlayer = () => {
     dispatch(logout());
     // Optionally: clear AsyncStorage, navigate, etc.
     // e.g., AsyncStorage.removeItem('token');
-     navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
+    navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
-    
 
-{/* {status === 'Free' && <FreeUI />}
+
+      {/* {status === 'Free' && <FreeUI />}
 
 {(!isValid || status === 'Deactive') && <ExpiredUI />} */}
 
@@ -113,49 +113,49 @@ const ProfilePlayer = () => {
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-           {
-            getLogin?.userGetData?.image ? 
+            {
+              getLogin?.userGetData?.image ?
 
-             <Image
-              source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
-              style={styles.avatar}
-            />
-              :   <Image
-              source={imageIndex.prfEdit}
-              style={styles.avatar}
-            />
-           }
-           
-         
+                <Image
+                  source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData?.image } : imageIndex.ProfielImge}
+                  style={styles.avatar}
+                />
+                : <Image
+                  source={imageIndex.prfEdit}
+                  style={styles.avatar}
+                />
+            }
+
+
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData.user_name}</Text>
-              <Text style={styles.profileLink}>{getLogin?.userGetData.email}</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
+              <Text style={styles.profileLink}>{getLogin?.userGetData?.email}</Text>
             </View>
           </View>
           <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />
         </TouchableOpacity>
 
         <View style={{ height: 15, backgroundColor: "rgba(237, 243, 243, 1)" }} />
-{
-  isLogin?.userData?.type != "Coach" ?  
-  <FlatList
-  data={PlayData}
-  keyExtractor={(item) => item.screen}
-  renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
-/> : 
+        {
+          isLogin?.userData?.type != "Coach" ?
+            <FlatList
+              data={PlayData}
+              keyExtractor={(item) => item.screen}
+              renderItem={({ item }) => <MenuItem title={item?.title} icon={item.icon} screen={item?.screen} />}
+            /> :
 
-<FlatList
-data={PlayData}
-keyExtractor={(item) => item.screen}
-renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
-/>
-}
-      
+            <FlatList
+              data={PlayData}
+              keyExtractor={(item) => item.screen}
+              renderItem={({ item }) => <MenuItem title={item?.title} icon={item?.icon} screen={item.screen} />}
+            />
+        }
 
-        <LogoutModal isVisible={modal} close={() => setModal(false)}   onSumbit={() => {
-        handleLogout();
-        setModal(false);
-      }}  />
+
+        <LogoutModal isVisible={modal} close={() => setModal(false)} onSumbit={() => {
+          handleLogout();
+          setModal(false);
+        }} />
         <LanguageModal visible={isModalVisible} onClose={() => setModalVisible(false)} onSelectLanguage={handleLanguageSelect} />
         <DeleteConfirmModal
           visible={showDelete}
