@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import localizationStrings from "./Localization/Localization";
 import {
   View,
   Text,
@@ -49,9 +50,9 @@ const buildRPEChartData = (sessions) => {
 
 const getSubtitle = (type) => {
   const t = type?.toLowerCase?.() || "weekly";
-  if (t === "weekly") return "Last 7 sessions";
-  if (t === "monthly") return "Last 6 sessions";
-  if (t === "yearly") return "Last 12 sessions";
+  if (t === "weekly") return localizationStrings.Last7Sessions || "Last 7 sessions";
+  if (t === "monthly") return localizationStrings.Last6Sessions || "Last 6 sessions";
+  if (t === "yearly") return localizationStrings.Last12Sessions || "Last 12 sessions";
   return `${type?.charAt(0)?.toUpperCase() + type?.slice(1)} view`;
 };
 
@@ -103,8 +104,8 @@ const RPEChartComponent = ({ sessions }) => {
     <View style={[styles.card, hasData && styles.cardWithData]}>
       <View style={styles.cardHeader}>
         <View>
-          <Text style={styles.cardTitle}>RPE Score Trend</Text>
-          <Text style={styles.cardHint}>Scale 1–10 · Rate of Perceived Exertion</Text>
+          <Text style={styles.cardTitle}>{localizationStrings.RPETrend || "RPE Score Trend"}</Text>
+          <Text style={styles.cardHint}>{localizationStrings.RPEScaleHint || "Scale 1–10 · Rate of Perceived Exertion"}</Text>
         </View>
       </View>
 
@@ -125,7 +126,7 @@ const RPEChartComponent = ({ sessions }) => {
                 selectedType === type && styles.tabTextActive,
               ]}
             >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              {type === "weekly" ? localizationStrings.Weekly : type === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
             </Text>
           </TouchableOpacity>
         ))}
@@ -133,11 +134,11 @@ const RPEChartComponent = ({ sessions }) => {
 
       <View style={styles.statsRow}>
         <View style={styles.statPill}>
-          <Text style={styles.statLabel}>Peak</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Peak || "Peak"}</Text>
           <Text style={styles.statValue}>{peak}</Text>
         </View>
         <View style={styles.statPill}>
-          <Text style={styles.statLabel}>Avg</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Avg || "Avg"}</Text>
           <Text style={styles.statValue}>{avg}</Text>
         </View>
         <Text style={styles.rangeLabel} numberOfLines={1}>{getSubtitle(selectedType)}</Text>
@@ -174,9 +175,9 @@ const RPEChartComponent = ({ sessions }) => {
         ) : (
           <View style={styles.emptyChart}>
             <View style={styles.emptyChartInner}>
-              <Text style={styles.emptyChartText}>No RPE data yet</Text>
+              <Text style={styles.emptyChartText}>{localizationStrings.NoRPEData || "No RPE data yet"}</Text>
               <Text style={styles.emptyChartSubtext}>
-                Complete sessions and submit RPE to see your effort trend
+                {localizationStrings.CompleteSessionsHint || "Complete sessions and submit RPE to see your effort trend"}
               </Text>
             </View>
           </View>

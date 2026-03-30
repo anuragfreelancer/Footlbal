@@ -31,13 +31,25 @@ import {  GetSubmitRPF } from '../../../redux/Api/AuthApi';
   };
  
   
+  const sessions = rpfData?.userGetData || [];
+  const totalSessions = sessions.length;
+  const avgIntensity = totalSessions > 0
+    ? Math.round((sessions.reduce((acc: number, item: any) => acc + (Number(item.rate_efforts) || 0), 0) / totalSessions) * 10) / 10
+    : 0;
+  const peakIntensity = totalSessions > 0
+    ? Math.max(...sessions.map((item: any) => Number(item.rate_efforts) || 0))
+    : 0;
+
   return {
     rpfData, setRpfData,
     isLoading,setisLoading,
     navigation,
     isLogin,
     playerName,
-    playerUserId
+    playerUserId,
+    totalSessions,
+    avgIntensity,
+    peakIntensity
   };
 };
 

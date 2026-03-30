@@ -48,8 +48,8 @@ const ReviewCard = React.memo(({ item }: ReviewCardProps) => {
   const ratingValue = Number(item?.number_rate) || 0;
   
   const getRatingColor = (value: number) => {
-    if (value <= 3) return '#EF4444'; // Vibrant Red
-    if (value <= 7) return 'rgba(160, 216, 3, 1)'; // Vibrant Orange
+    if (value <= 3) return '#EF4444'; // Red
+    if (value <= 7) return '#F59E0B'; // Orange
     return 'rgba(160, 216, 3, 1)'; // Theme Green
   };
 
@@ -57,20 +57,20 @@ const ReviewCard = React.memo(({ item }: ReviewCardProps) => {
 
   return (
     <View style={styles.reviewCard}>
-      {/* Header with Avatar and Score */}
+      {/* Header with Source and Basic Info */}
       <View style={styles.reviewHeader}>
-      
         <Image 
           source={userDetails?.image ? { uri: userDetails.image } : imageIndex.user} 
           style={styles.reviewAvatar} 
         />
         <View style={styles.reviewTextContainer}>
-            <Text style={styles.reviewDate}>  
-                  Source de l'évaluation : Joueur
-             </Text>
-          <Text style={styles.reviewerName}>{userDetails?.user_name || "Unknown Player"}</Text>
+          <View style={styles.reviewSourceBadge}>
+            <Text style={styles.reviewSourceText}>{localizationStrings.AssessmentSource || "Source : Joueur"}</Text>
+          </View>
+          <Text style={styles.reviewerName} numberOfLines={1}>{userDetails?.user_name || "Unknown Player"}</Text>
           <Text style={styles.reviewDate}>{item?.date || "No date"}</Text>
         </View>
+        
         <View style={styles.ratingWrapper}>
           <Text style={[styles.ratingValueText, { color: ratingColor }]}>{ratingValue}</Text>
           <Text style={styles.ratingMaxText}>0/10 Score</Text>
@@ -84,32 +84,40 @@ const ReviewCard = React.memo(({ item }: ReviewCardProps) => {
         </View>
       </View>
 
-      {/* Focus Area (Proper display of training_section_question) */}
-      {item?.training_section_question && (
-        <View style={styles.reviewFocusContainer}>
-          <Text style={styles.reviewFocusLabel}>Objectif de la séance :</Text>
-          <Text style={styles.reviewFocusValue} numberOfLines={2}>
-            {item.training_section_question}
-           </Text>
-        </View>
-      )}
+      {/* Structured Content Area */}
+      <View style={styles.reviewInnerContent}>
+        {/* Objective Section */}
+        {item?.training_section_question && (
+          <View>
+            <View style={styles.reviewLabelGroup}>
+              <Image source={imageIndex.document} style={styles.reviewLabelIcon} resizeMode="contain" />
+              <Text style={styles.reviewFocusLabel}>{localizationStrings.SessionObjective || "Objectif de la séance"}</Text>
+            </View>
+            <Text style={styles.reviewFocusValue} numberOfLines={3}>
+              {item.training_section_question}
+            </Text>
+          </View>
+        )}
 
-      {/* Player Note Section */}
-      <Text  style={[styles.reviewFocusLabel,{
-        marginBottom:11 ,
-        left:1
-      }]} >
-     commentaire :  {item?.note ? item?.note : "No comments provided."}
-      </Text>
-
-      {/* Footer Badges */}
-      <View style={styles.reviewFooter}>
-        <View style={styles.reviewBadge}>
-          <Text style={[styles.reviewBadgeText, { color: "black" }]}>
-            {item?.section_type ? item.section_type.toUpperCase() : "GENERAL"}
+        {/* Note/Comment Section */}
+        <View style={[styles.reviewNoteBubble, !item?.training_section_question && { borderTopWidth: 0, marginTop: 0, paddingTop: 0 }]}>
+            <View style={styles.reviewLabelGroup}>
+              <Image source={imageIndex.bubbleChat} style={styles.reviewLabelIcon} resizeMode="contain" />
+              <Text style={styles.reviewFocusLabel}>{localizationStrings.CommentLabel || "Commentaire"}</Text>
+            </View>
+          <Text style={styles.reviewNoteValue}>
+            {item?.note ? `"${item.note}"` : (localizationStrings.NoComments || "Aucun commentaire fourni.")}
           </Text>
         </View>
-      
+      </View>
+
+      {/* Footer Info */}
+      <View style={styles.reviewFooter}>
+        <View style={styles.reviewBadge}>
+          <Text style={styles.reviewBadgeText}>
+            {item?.section_type || "Général"}
+          </Text>
+        </View>
       </View>
     </View>
   );

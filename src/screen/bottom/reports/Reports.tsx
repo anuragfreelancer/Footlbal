@@ -8,6 +8,7 @@ import ScreenNameEnum from "../../../routes/screenName.enum";
 import imageIndex from "../../../assets/imageIndex";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import ChartComponent from "../../../compoent/ChartComponent";
+import useHome from "../home/useHome";
 
 
 const Reports = () => {
@@ -55,15 +56,22 @@ const Reports = () => {
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
+    const {
+    getLogin,
+    imgloading,
+    setImgloading,
+     chatMess,
+    getUser1,
+    getCoach_session,
+    getUser,
+     filteredMessages
+  } = useHome();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? <LoadingModal /> : null}
-
       <StatusBarComponent />
       <View style={styles.headerRow}>
-        {/* <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} />
-        </TouchableOpacity> */}
+        
         <Text style={styles.header}>
           {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
         </Text>

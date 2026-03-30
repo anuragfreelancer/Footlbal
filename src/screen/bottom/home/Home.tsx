@@ -181,7 +181,7 @@ const DashboardScreen = () => {
           <View style={(styles as any).sessionInfoRow}>
             <Image source={imageIndex.calender} style={(styles as any).sessionIcon} resizeMode="contain" />
             <View style={(styles as any).sessionInfoContent}>
-              <Text style={(styles as any).sessionInfoLabel}>Started at</Text>
+              <Text style={(styles as any).sessionInfoLabel}>Commencé à</Text>
               <Text style={(styles as any).sessionInfoValue}>{startedAt}</Text>
             </View>
           </View>
@@ -190,7 +190,7 @@ const DashboardScreen = () => {
           <View style={(styles as any).sessionInfoRow}>
             <Image source={imageIndex.clocks} style={(styles as any).sessionIcon} resizeMode="contain" />
             <View style={(styles as any).sessionInfoContent}>
-              <Text style={(styles as any).sessionInfoLabel}>Ended at</Text>
+              <Text style={(styles as any).sessionInfoLabel}>Terminé à</Text>
               <Text style={[
                 (styles as any).sessionInfoValue,
                 isOngoing && (styles as any).sessionTimeOngoing
@@ -242,7 +242,9 @@ const DashboardScreen = () => {
                 });
               }}
             >
-              <Text style={(styles as any).rateButtonText}>
+              <Text style={[styles.rateButtonText,{
+                color:"white"
+              }]}>
                 {localizationStrings?.RateDifficulty || "Rate Difficulty"}
               </Text>
             </TouchableOpacity>
@@ -306,7 +308,7 @@ const DashboardScreen = () => {
               data={filteredMessages}
               scrollEnabled={false}
               contentContainerStyle={styles.listContent}
-              ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
+              // ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
               keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
               renderItem={({ item }: any) => (
                 <TouchableOpacity
@@ -352,8 +354,7 @@ const DashboardScreen = () => {
               renderItem={renderItem}
               scrollEnabled={false}
               contentContainerStyle={styles.listContent}
-              ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
-            />
+              ListEmptyComponent={<EmptyListComponent message={"Aucune section disponible pour l'instant."} />} />
           </>
         )}
 
