@@ -215,41 +215,54 @@ const SubmitRPE = () => {
 
             {/* Questionnaire */}
             <View style={styles.section}>
-              <Text style={styles.label}>{localizationStrings?.TrainingSession}</Text>
+              <Text style={styles.label}>{localizationStrings?.TrainingSession || "Questionnaire"}</Text>
               <TouchableOpacity
-                style={[styles.datePicker, styles.dropdownTrigger]}
+                style={styles.dropdownTrigger}
                 onPress={() => setShowQuestionnaireDropdown((prev) => !prev)}
+                activeOpacity={0.8}
               >
-                <Text style={styles.datePickerText} numberOfLines={1}>
-                  {selectedQuestionnaire != null
-                    ? questionnaires.find((q) => (q.training_title_french === selectedQuestionnaire || q.training_title === selectedQuestionnaire))?.training_title ??
-                    localizationStrings?.Select
-                    : localizationStrings?.Select}
+                <Text style={[styles.datePickerText, { fontSize: 16, color: selectedQuestionnaire ? '#0f172a' : '#94A3B8' }]} numberOfLines={1}>
+                  {selectedQuestionnaire ?? localizationStrings?.Select ?? "Select"}
                 </Text>
                 <Image
                   source={imageIndex.arroRight}
                   style={{
-                    width: 16,
-                    height: 16,
+                    width: 18,
+                    height: 18,
+                    tintColor: '#64748B',
                     transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
                   }}
                 />
               </TouchableOpacity>
+              
               {showQuestionnaireDropdown && questionnaires.length > 0 ? (
                 <View style={styles.dropdown}>
                   <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
-                    {questionnaires.map((item) => (
-                      <TouchableOpacity
-                        key={item.id}
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setSelectedQuestionnaire(item.training_title_french || item.training_title);
-                          setShowQuestionnaireDropdown(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>{item?.training_title_french}</Text>
-                      </TouchableOpacity>
-                    ))}
+                    {questionnaires.map((item) => {
+                      const title = item.training_title_french || item.training_title;
+                      const isSelected = selectedQuestionnaire === title;
+                      return (
+                        <TouchableOpacity
+                          key={item.id}
+                          style={[styles.dropdownItem, isSelected && styles.selectedDropdownItem]}
+                          onPress={() => {
+                            setSelectedQuestionnaire(title);
+                            setShowQuestionnaireDropdown(false);
+                          }}
+                        >
+                          <Text style={[styles.dropdownItemText, isSelected && { color: '#A0D803', fontWeight: '700' }]}>
+                            {title}
+                          </Text>
+                          {isSelected && (
+                             <Image 
+                               source={imageIndex.radioSlied} 
+                               style={{ width: 18, height: 18 }} 
+                               tintColor="#A0D803" 
+                             />
+                          )}
+                        </TouchableOpacity>
+                      );
+                    })}
                   </ScrollView>
                 </View>
               ) : null}

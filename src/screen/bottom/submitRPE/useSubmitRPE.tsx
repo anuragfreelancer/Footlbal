@@ -39,7 +39,7 @@ const useSubmitRPE = () => {
     }, []);
 
     const route = useRoute() as any;
-            const params1 = route?.params;
+    const params1 = route?.params;
 
     useEffect(() => {
         const params = route?.params;
@@ -89,8 +89,8 @@ const useSubmitRPE = () => {
 
     const getEffortColor = (value: number) => {
         if (value <= 3) return '#10B981'; // Green
-        if (value <= 6) return '#F59E0B'; // Yellow/Orange
-        if (value <= 9) return '#EF4444'; // Red
+        if (value <= 6) return '#000000'; // Yellow/Orange
+        if (value <= 9) return '#000000'; // Red
         return '#000000'; // Black for 10
     };
 
