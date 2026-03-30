@@ -163,7 +163,7 @@ const DashboardScreen = () => {
   const renderItem = ({ item }: { item: any }) => {
     const isOngoing = item?.status === "Start";
     const { startedAt, endedAt, formattedDate } = getSessionDisplay(item);
-    
+
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
         <View style={styles.sessionCardHeader}>
@@ -191,7 +191,7 @@ const DashboardScreen = () => {
             <View style={(styles as any).sessionInfoContent}>
               <Text style={(styles as any).sessionInfoLabel}>Ended at</Text>
               <Text style={[
-                (styles as any).sessionInfoValue, 
+                (styles as any).sessionInfoValue,
                 isOngoing && (styles as any).sessionTimeOngoing
               ]}>
                 {endedAt}
@@ -206,12 +206,12 @@ const DashboardScreen = () => {
                 <Image source={imageIndex.document} style={[(styles as any).sessionIcon, { tintColor: '#111827' }]} resizeMode="contain" />
                 <Text style={{ fontSize: 14, fontWeight: '700', color: '#111827' }}>Session Details</Text>
               </View>
-              
+
               {item.question_details.map((q: any, index: number) => (
                 <View key={index} style={(styles as any).questionItemHome}>
                   <Text style={(styles as any).questionLabelHome}>Question</Text>
                   <Text style={(styles as any).questionTextHome}>{q?.question_french || q?.question}</Text>
-                  
+
                   <Text style={(styles as any).answerLabelHome}>Response</Text>
                   <Text style={(styles as any).answerTextHome}>{q?.answer_french || q?.answer}</Text>
                 </View>
@@ -285,7 +285,7 @@ const DashboardScreen = () => {
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" /> */}
-        
+
 
 
         {isLogin?.userData?.type == "Coach" ? (

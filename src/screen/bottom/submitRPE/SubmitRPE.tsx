@@ -97,187 +97,187 @@ const SubmitRPE = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 24}
       >
-         <View style={{ marginHorizontal: 12, marginTop: 5 }}>
-              <CustomHeader
-                imageSource={imageIndex.backNav}
-                label= {localizationStrings?.SubmitRPE}
-              />
-            </View>
+        <View style={{ marginHorizontal: 12, marginTop: 5 }}>
+          <CustomHeader
+            imageSource={imageIndex.backNav}
+            label={localizationStrings?.SubmitRPE}
+          />
+        </View>
         <View style={styles.container}>
-           <ScrollView
+          <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
             contentContainerStyle={{ paddingBottom: 120 }}
           >
-          {/* Session type */}
-          <View style={styles.section}>
-            <Text style={styles.label}>{localizationStrings?.SelectSession}</Text>
-            <View style={styles.radioGroup}>
-              {SESSION_OPTIONS.map(({ key, labelKey }) => (
+            {/* Session type */}
+            <View style={styles.section}>
+              <Text style={styles.label}>{localizationStrings?.SelectSession}</Text>
+              <View style={styles.radioGroup}>
+                {SESSION_OPTIONS.map(({ key, labelKey }) => (
+                  <TouchableOpacity
+                    key={key}
+                    onPress={() => setSession(key)}
+                    style={styles.radioItem}
+                    activeOpacity={0.7}
+                  >
+                    <Image
+                      source={session === key ? imageIndex.radioSlied : imageIndex.radio}
+                      style={styles.radioIcon}
+                      resizeMode="contain"
+                      tintColor="#A0D803"
+                    />
+                    <Text style={styles.radioText}>{localizationStrings[labelKey] ?? key}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {errors.session ? <Text style={styles.errorText}>{errors.session}</Text> : null}
+            </View>
+
+            {/* Date & time */}
+            <View style={styles.section}>
+              <Text style={styles.label}>{localizationStrings?.DateAndTime || "Date & Time"}</Text>
+              <View style={styles.dateTimeRow}>
                 <TouchableOpacity
-                  key={key}
-                  onPress={() => setSession(key)}
-                  style={styles.radioItem}
+                  style={styles.datePicker}
+                  onPress={() => setShowCalendar(true)}
                   activeOpacity={0.7}
                 >
-                  <Image
-                    source={session === key ? imageIndex.radioSlied : imageIndex.radio}
-                    style={styles.radioIcon}
-                    resizeMode="contain"
-                    tintColor="#A0D803"
-                  />
-                  <Text style={styles.radioText}>{localizationStrings[labelKey] ?? key}</Text>
+                  <Text style={styles.datePickerText} numberOfLines={1}>
+                    {date || (localizationStrings?.SelectDate ?? "Select Date")}
+                  </Text>
+                  <Image source={imageIndex.calender} style={{ height: 22, width: 22, marginLeft: 8 }} />
                 </TouchableOpacity>
-              ))}
-            </View>
-            {errors.session ? <Text style={styles.errorText}>{errors.session}</Text> : null}
-          </View>
-
-          {/* Date & time */}
-          <View style={styles.section}>
-            <Text style={styles.label}>{localizationStrings?.DateAndTime || "Date & Time"}</Text>
-            <View style={styles.dateTimeRow}>
-              <TouchableOpacity
-                style={styles.datePicker}
-                onPress={() => setShowCalendar(true)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.datePickerText} numberOfLines={1}>
-                  {date || (localizationStrings?.SelectDate ?? "Select Date")}
-                </Text>
-                <Image source={imageIndex.calender} style={{ height: 22, width: 22, marginLeft: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.datePicker}
-                onPress={() => setShowTimePicker(true)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.datePickerText} numberOfLines={1}>
-                  {formattedTime}
-                </Text>
-                <Image source={imageIndex.clocks} style={{ height: 22, width: 22, marginLeft: 8 }} />
-              </TouchableOpacity>
-            </View>
-            {errors?.date ? <Text style={styles.errorText}>{errors.date}</Text> : null}
-          </View>
-
-          {/* Effort slider */}
-          <View style={styles.section}>
-            <Text style={[styles.label, { fontSize: 18, color: '#0f172a', marginBottom: 16 }]}>
-              {localizationStrings?.DifficultyQuestion || "What was the perceived difficulty of the training session?"}
-            </Text>
-            <View style={[styles.sliderTrack, { width: SLIDER_WIDTH }]}>
-              <Animated.View
-                style={[
-                  styles.sliderFill,
-                  {
-                    width: pan,
-                    backgroundColor: getEffortColor(effort),
-                  },
-                ]}
-              />
-              <Animated.View
-                {...panResponder.panHandlers}
-                style={[
-                  styles.sliderThumb,
-                  {
-                    left: Animated.subtract(pan, 16),
-                  },
-                ]}
-              >
-                <Text style={styles.sliderThumbText}>{effort}</Text>
-              </Animated.View>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-              <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort0 || "0 - Rest"}</Text>
-              <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort10 || "10 - Maximal"}</Text>
-            </View>
-            <Text style={[styles.effortLabel, { color: getEffortColor(effort), textAlign: 'center', fontSize: 24, fontWeight: '900' }]}>
-              {effort}
-            </Text>
-            {errors.effort ? <Text style={styles.errorText}>{errors.effort}</Text> : null}
-          </View>
-
-          {/* Comments */}
-          <View style={styles.section}>
-            <Text style={styles.label}>{localizationStrings?.AddComments}</Text>
-            <TextInput
-              placeholder={localizationStrings?.TypeHere}
-              placeholderTextColor="#94A3B8"
-              value={comments}
-              onChangeText={setComments}
-              multiline
-              style={[styles.commentsInput, styles.commentsInputText]}
-            />
-            {errors.comments ? <Text style={styles.errorText}>{errors.comments}</Text> : null}
-          </View>
-
-          {/* Questionnaire */}
-          <View style={styles.section}>
-            <Text style={styles.label}>{localizationStrings?.TrainingSession}</Text>
-            <TouchableOpacity
-              style={[styles.datePicker, styles.dropdownTrigger]}
-              onPress={() => setShowQuestionnaireDropdown((prev) => !prev)}
-            >
-              <Text style={styles.datePickerText} numberOfLines={1}>
-                {selectedQuestionnaire != null
-                  ? questionnaires.find((q) => q.id === selectedQuestionnaire)?.training_title ??
-                    localizationStrings?.Select
-                  : localizationStrings?.Select}
-              </Text>
-              <Image
-                source={imageIndex.arroRight}
-                style={{
-                  width: 16,
-                  height: 16,
-                  transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
-                }}
-              />
-            </TouchableOpacity>
-            {showQuestionnaireDropdown && questionnaires.length > 0 ? (
-              <View style={styles.dropdown}>
-                <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
-                  {questionnaires.map((item) => (
-                    <TouchableOpacity
-                      key={item.id}
-                      style={styles.dropdownItem}
-                      onPress={() => {
-                        setSelectedQuestionnaire(item.id);
-                        setShowQuestionnaireDropdown(false);
-                      }}
-                    >
-                      <Text style={styles.dropdownItemText}>{item.training_title}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
+                <TouchableOpacity
+                  style={styles.datePicker}
+                  onPress={() => setShowTimePicker(true)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.datePickerText} numberOfLines={1}>
+                    {formattedTime}
+                  </Text>
+                  <Image source={imageIndex.clocks} style={{ height: 22, width: 22, marginLeft: 8 }} />
+                </TouchableOpacity>
               </View>
-            ) : null}
-          </View>
-        </ScrollView>
+              {errors?.date ? <Text style={styles.errorText}>{errors.date}</Text> : null}
+            </View>
 
-        <TimePickerModal
-          time={time}
-          setTime={(t: Date) => {
-            setTime(t);
-            setFormattedTime(t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-          }}
-          visible={showTimePicker}
-          onClose={() => setShowTimePicker(false)}
-        />
-        <AddAttendanceModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          onConfirm={handleConfirm}
-        />
-      </View>
+            {/* Effort slider */}
+            <View style={styles.section}>
+              <Text style={[styles.label, { fontSize: 18, color: '#0f172a', marginBottom: 16 }]}>
+                {localizationStrings?.DifficultyQuestion || "What was the perceived difficulty of the training session?"}
+              </Text>
+              <View style={[styles.sliderTrack, { width: SLIDER_WIDTH }]}>
+                <Animated.View
+                  style={[
+                    styles.sliderFill,
+                    {
+                      width: pan,
+                      backgroundColor: getEffortColor(effort),
+                    },
+                  ]}
+                />
+                <Animated.View
+                  {...panResponder.panHandlers}
+                  style={[
+                    styles.sliderThumb,
+                    {
+                      left: Animated.subtract(pan, 16),
+                    },
+                  ]}
+                >
+                  <Text style={styles.sliderThumbText}>{effort}</Text>
+                </Animated.View>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+                <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort0 || "0 - Rest"}</Text>
+                <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort10 || "10 - Maximal"}</Text>
+              </View>
+              <Text style={[styles.effortLabel, { color: getEffortColor(effort), textAlign: 'center', fontSize: 24, fontWeight: '900' }]}>
+                {effort}
+              </Text>
+              {errors.effort ? <Text style={styles.errorText}>{errors.effort}</Text> : null}
+            </View>
 
-      <View style={styles.buttView}>
-        <CustomButton
-          title={localizationStrings.Submit}
-          onPress={() => handleSubmit(selectedQuestionnaire)}
-        />
-      </View>
+            {/* Comments */}
+            <View style={styles.section}>
+              <Text style={styles.label}>{localizationStrings?.AddComments}</Text>
+              <TextInput
+                placeholder={localizationStrings?.TypeHere}
+                placeholderTextColor="#94A3B8"
+                value={comments}
+                onChangeText={setComments}
+                multiline
+                style={[styles.commentsInput, styles.commentsInputText]}
+              />
+              {errors.comments ? <Text style={styles.errorText}>{errors.comments}</Text> : null}
+            </View>
+
+            {/* Questionnaire */}
+            <View style={styles.section}>
+              <Text style={styles.label}>{localizationStrings?.TrainingSession}</Text>
+              <TouchableOpacity
+                style={[styles.datePicker, styles.dropdownTrigger]}
+                onPress={() => setShowQuestionnaireDropdown((prev) => !prev)}
+              >
+                <Text style={styles.datePickerText} numberOfLines={1}>
+                  {selectedQuestionnaire != null
+                    ? questionnaires.find((q) => q.id === selectedQuestionnaire)?.training_title ??
+                    localizationStrings?.Select
+                    : localizationStrings?.Select}
+                </Text>
+                <Image
+                  source={imageIndex.arroRight}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
+                  }}
+                />
+              </TouchableOpacity>
+              {showQuestionnaireDropdown && questionnaires.length > 0 ? (
+                <View style={styles.dropdown}>
+                  <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
+                    {questionnaires.map((item) => (
+                      <TouchableOpacity
+                        key={item.id}
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setSelectedQuestionnaire(item.id);
+                          setShowQuestionnaireDropdown(false);
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>{item.training_title}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ) : null}
+            </View>
+          </ScrollView>
+
+          <TimePickerModal
+            time={time}
+            setTime={(t: Date) => {
+              setTime(t);
+              setFormattedTime(t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+            }}
+            visible={showTimePicker}
+            onClose={() => setShowTimePicker(false)}
+          />
+          <AddAttendanceModal
+            visible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onConfirm={handleConfirm}
+          />
+        </View>
+
+        <View style={styles.buttView}>
+          <CustomButton
+            title={localizationStrings.Submit}
+            onPress={() => handleSubmit(selectedQuestionnaire)}
+          />
+        </View>
       </KeyboardAvoidingView>
 
       {/* Calendar modal */}

@@ -235,8 +235,8 @@
             "MoneyBackGuarantee": "30-day money-back guarantee • No credit card required for trial",
             "SubscribeConfirmMessage": "You're subscribing to {0} for {1} players.\n\nTotal: €{2} per month\n{3}-day free trial included\n\nTrial expires on: {4}",
             "DifficultyQuestion": "What was the perceived difficulty of the training session?",
-            "Effort0": "0 - Rest",
-            "Effort10": "10 - Maximal",
+            "Effort0": "0 - Zero Difficulty",
+            "Effort10": "10 - Extremely Difficult",
             "RateDifficulty": "Rate Difficulty"
       },
       "French": {
@@ -478,8 +478,8 @@
             "MoneyBackGuarantee": "Garantie satisfait ou remboursé 30 jours • Pas de carte requise pour l'essai",
             "SubscribeConfirmMessage": "Vous vous abonnez à {0} pour {1} joueurs.\n\nTotal : €{2} par mois\n{3} jours d'essai gratuit inclus\n\nL'essai expire le : {4}",
             "DifficultyQuestion": "Quelle a été la difficulté ressentie de la séance d'entraînement ?",
-            "Effort0": "0 - Repos",
-            "Effort10": "10 - Maximal",
+            "Effort0": "0 - Difficulté nulle",
+            "Effort10": "10 - Extrêmement difficile",
             "RateDifficulty": "Évaluer la difficulté"
       }
 }

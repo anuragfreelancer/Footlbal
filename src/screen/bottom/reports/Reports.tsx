@@ -1,17 +1,17 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
 import { Dimensions } from "react-native";
- import StatusBarComponent from "../../../compoent/StatusBarCompoent";
- import useReports from "./useReports";
+import StatusBarComponent from "../../../compoent/StatusBarCompoent";
+import useReports from "./useReports";
 import LoadingModal from "../../../utils/Loader";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import imageIndex from "../../../assets/imageIndex";
 import localizationStrings from "../../../compoent/Localization/Localization";
 
- 
+
 const Reports = () => {
- 
- 
+
+
   const {
     rpfData,
     isLoading,
@@ -29,22 +29,22 @@ const Reports = () => {
           </View>
           <View style={styles.scoreSection}>
 
-            {item.rate_efforts > 6  ? <Image source={imageIndex.redGrap} 
-            style={{
-              height:28,
-              width:28
-            }}
-            /> :  <Image source={imageIndex.greenGrap} 
-            
+            {item.rate_efforts > 6 ? <Image source={imageIndex.redGrap}
               style={{
-              height:28,
-              width:28
-            }}
+                height: 28,
+                width: 28
+              }}
+            /> : <Image source={imageIndex.greenGrap}
+
+              style={{
+                height: 28,
+                width: 28
+              }}
             />}
             <Text style={styles.boldText}>RPE Score</Text>
             <Text style={styles.scoreText}>{item.rate_efforts}</Text>
           </View>
-          
+
         </TouchableOpacity>
       </View>
     );
@@ -56,14 +56,14 @@ const Reports = () => {
       <StatusBarComponent />
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-             <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} />
+          <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} />
         </TouchableOpacity>
         <Text style={styles.header}>
-            {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
+          {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
         </Text>
-        <View style={{ width: 40 }} /> 
+        <View style={{ width: 40 }} />
       </View>
-      
+
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.container}>
@@ -71,18 +71,18 @@ const Reports = () => {
           <FlatList
             data={rpfData?.userGetData}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <RecentSessionCard item={item} 
+            renderItem={({ item }) => <RecentSessionCard item={item}
             // onPress={() => {
             //   navigation.navigate(ScreenNameEnum.TrainingFedBack, {
             //     item: item
             //   })
             // }} 
-            
+
             />}
           />
         </View>
 
-       </ScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
