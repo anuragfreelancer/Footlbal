@@ -96,9 +96,34 @@ const formattedDate = formatDate(item?.dob);
                         <View style={styles.buttCol}>
                             <Text style={styles.detailLabel}>Dob</Text>
                         </View>
-                        {/* <Text style={styles.detailValue}>{item?.dob}</Text> */}
                         <Text style={styles.detailValue}>{formattedDate}</Text>
                     </View>
+
+                    {isLogin?.userData?.type === "Coach" && (
+                        <View style={styles.detailRow}>
+                            <View style={styles.buttCol}>
+                                <Text style={styles.detailLabel}>{localizationStrings?.Performance || "Performance"}</Text>
+                            </View>
+                            <TouchableOpacity 
+                                onPress={() => navigation.navigate(ScreenNameEnum.Reports, {
+                                    playerUserId: item?.id,
+                                    playerName: item?.user_name
+                                })}
+                                style={{
+                                    backgroundColor: '#F2FFE2',
+                                    paddingHorizontal: 12,
+                                    paddingVertical: 6,
+                                    borderRadius: 8,
+                                    borderWidth: 1,
+                                    borderColor: '#A0D803'
+                                }}
+                            >
+                                <Text style={{ color: '#047857', fontWeight: '700' }}>
+                                    {localizationStrings?.PerformanceReports || "View Reports"}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
                 <View style={styles.notesContainer}>
                     <Text style={styles.notesTitle}>{localizationStrings?.CoachNotes}</Text>

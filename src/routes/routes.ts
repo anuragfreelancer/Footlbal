@@ -37,6 +37,7 @@ import AllPlayer from "../screen/bottom/playerDetails/allPlayer/AllPlayer";
 import SubscriptionPlansScreen from "../screen/SubscriptionPlans/SubscriptionPlansScreen";
 import PaymentWebViewScreen from "../screen/SubscriptionPlans/PaymentWebViewScreen";
 import localizationStrings from "../compoent/Localization/Localization";
+import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -78,7 +79,43 @@ const _routes = () => {
       { name: ScreenNameEnum.PaymentWebViewScreen, Component: PaymentWebViewScreen },
      ],
 
-    BOTTOMTAB_ROUTE: [
+    BOTTOMTAB_ROUTE: isLogin?.userData?.type === "Coach" ? [
+      // {
+      //   name: ScreenNameEnum.HOME_SCREEN,
+      //   Component: Home,
+      //   label: localizationStrings.Home,
+      //   logo: imageIndex.home,
+      //   logo1: imageIndex.homeActive,
+      // },
+      {
+        name: ScreenNameEnum.Calendar,
+        Component: Calendar,
+        label: localizationStrings.Calendar,
+        logo: imageIndex.calendar,
+        logo1: imageIndex.calendar
+      },
+      {
+        name: ScreenNameEnum.Players,
+        Component: Players,
+        label: localizationStrings.Players,
+        logo: imageIndex.players,
+        logo1: imageIndex.playersActive
+      },
+      {
+        name: ScreenNameEnum.Reports,
+        Component: AllPlayer,
+        label: localizationStrings.Reports,
+        logo: imageIndex.reports,
+        logo1: imageIndex.reportsActivE,
+      },
+      {
+        name: ScreenNameEnum.Profile,
+        Component: Profile,
+        label: localizationStrings.Profile,
+        logo: imageIndex.profile,
+        logo1: imageIndex.profileUser,
+      },
+    ] : [
       {
         name: ScreenNameEnum.HOME_SCREEN,
         Component: Home,
@@ -86,46 +123,24 @@ const _routes = () => {
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
-      
-      // {
-      //   name: ScreenNameEnum.Calendar,
-      //   Component: Calendar,
-      //   label: localizationStrings.Calendar,
-      //   logo: imageIndex.calendar,
-      //   logo1: imageIndex.calendar
-      // },
-         {
-        name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.Messages : ScreenNameEnum.Calendar,
-        Component: isLogin?.userData?.type != "Coach" ? Messages : Calendar,
-        label: isLogin?.userData?.type != "Coach" ? localizationStrings.Messages : localizationStrings.Calendar,
-        logo: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar,
-        logo1: isLogin?.userData?.type != "Coach" ? imageIndex.bubbleChat : imageIndex.calendar
-      },
       {
-        name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,
-        Component: isLogin?.userData?.type != "Coach" ? SubmitRPE : Players,
-        label: isLogin?.userData?.type != "Coach" ? localizationStrings.SubmitRPE : localizationStrings.Players,
-        logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
-        logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
+        name: ScreenNameEnum.Messages,
+        Component: Messages,
+        label: localizationStrings.Messages,
+        logo: imageIndex.bubbleChat,
+        logo1: imageIndex.bubbleChat
       },
-      // {
-      //   name: isLogin?.userData?.type != "Coach" ? ScreenNameEnum.SubmitRPE : ScreenNameEnum.Players,
-      //   Component: isLogin?.userData?.type != "Coach" ? SubmitRPE : Players,
-      //   label: isLogin?.userData?.type != "Coach" ? 'Submit RPE' : 'Players',
-      //   logo: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.players,
-      //   logo1: isLogin?.userData?.type != "Coach" ? imageIndex.solaruploadbold : imageIndex.playersActive
-      // },
+   
       {
         name: ScreenNameEnum.Reports,
-        Component: isLogin?.userData?.type != "Coach" ? Reports : AllPlayer,
-        // Component: Reports,
-        label: isLogin?.userData?.type != "Coach" ? localizationStrings.Performance : localizationStrings.Reports,
+        Component: Reports,
+        label: localizationStrings.Performance,
         logo: imageIndex.reports,
         logo1: imageIndex.reportsActivE,
       },
       {
         name: ScreenNameEnum.Profile,
-        Component: Profile,
+        Component: ProfilePlayer,
         label: localizationStrings.Profile,
         logo: imageIndex.profile,
         logo1: imageIndex.profileUser,

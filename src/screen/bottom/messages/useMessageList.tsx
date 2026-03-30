@@ -1,7 +1,7 @@
  
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { GetAllChatMessage } from '../../../redux/Api/AuthApi';
+import { GetAllChatMessage, GetCoachSession } from '../../../redux/Api/AuthApi';
 import { useSelector } from 'react-redux';
 
 const useMessageList = () => {
@@ -10,6 +10,8 @@ const useMessageList = () => {
   const [chatMess, setChatMess] = useState<any[]>([]);
   const isLogin = useSelector((state: any) => state?.auth);
   const [searchData, setSearchData] = useState('');
+    const [getCoach_session, setgetCoach_session] = useState([])
+
   const [filteredMessages, setFilteredMessages] = useState<any[]>([]);
   const GetAbout = async () => {
     const userId = isLogin?.userData?.id;
@@ -36,7 +38,24 @@ const useMessageList = () => {
       setIsLoading(false);
     }
   };
-
+  useEffect(()=>{
+    Get_coach_session()
+  },[])
+  const Get_coach_session = async () => {
+    try {
+   
+      const response = await GetCoachSession(setIsLoading, isLogin?.userData?.id);
+       if (response && response?.userGetData?.length > 0) {
+         setgetCoach_session(response.userGetData);
+      } else {
+        setgetCoach_session([]);
+      }
+    } catch (error) {
+      console.error("Error fetching coach session:", error);
+      setgetCoach_session([]);
+    } finally {
+     }
+  };
   useEffect(() => {
     GetAbout();
   }, []);
@@ -55,12 +74,14 @@ const useMessageList = () => {
   return {
     chatMess,
     setChatMess,
+    getCoach_session,
     isLoading,
     navigation,
     filteredMessages,
     setFilteredMessages,
     searchData,
     setSearchData,
+    isLogin
   };
 };
 

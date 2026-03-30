@@ -16,9 +16,10 @@ const Reports = () => {
     rpfData,
     isLoading,
     navigation,
-    isLogin
+    isLogin,
+    playerName
   } = useReports();
-  const RecentSessionCard = ({ item, onPress }) => {
+  const RecentSessionCard = ({ item, onPress }: { item: any, onPress?: () => void }) => {
     return (
       <View style={styles.card}>
         <TouchableOpacity style={styles.row} onPress={onPress}>
@@ -53,9 +54,16 @@ const Reports = () => {
       {isLoading ? <LoadingModal /> : null}
 
       <StatusBarComponent />
-      <Text style={styles.header}>
-        {isLogin?.userData?.type === "Coach" ? "Reports" : "Performance"}
-      </Text>
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+             <Image source={imageIndex.circleBak} style={{ height: 24, width: 24 }} />
+        </TouchableOpacity>
+        <Text style={styles.header}>
+            {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
+        </Text>
+        <View style={{ width: 40 }} /> 
+      </View>
+      
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.container}>
@@ -123,7 +131,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginVertical: 10, marginTop: 30 },
+  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", flex: 1 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15, marginTop: 40, marginBottom: 10 },
+  backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default Reports;

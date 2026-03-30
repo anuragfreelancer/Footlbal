@@ -24,6 +24,7 @@ import AddAttendanceModal from "../../../compoent/AddAttendanceModal";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import styles from "./style";
+import CustomHeader from "../../../compoent/CustomHeader";
 
 const SESSION_OPTIONS = [
   { key: "Training", labelKey: "SessionTraining" },
@@ -72,7 +73,8 @@ const SubmitRPE = () => {
         onStartShouldSetPanResponder: () => true,
         onMoveShouldSetPanResponder: () => true,
         onPanResponderMove: (_, gesture) => {
-          const newEffort = Math.min(10, Math.max(1, Math.round(gesture.moveX / THUMB_STEP)));
+          // Adjust for 20px horizontal padding to get accurate 0-10 range
+          const newEffort = Math.min(10, Math.max(0, Math.round((gesture.moveX - 20) / THUMB_STEP)));
           setEffort(newEffort);
         },
       }),
@@ -95,9 +97,14 @@ const SubmitRPE = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 24}
       >
+         <View style={{ marginHorizontal: 12, marginTop: 5 }}>
+              <CustomHeader
+                imageSource={imageIndex.backNav}
+                label= {localizationStrings?.SubmitRPE}
+              />
+            </View>
         <View style={styles.container}>
-          <Text style={styles.header}>{localizationStrings?.SubmitRPE}</Text>
-          <ScrollView
+           <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
@@ -157,7 +164,9 @@ const SubmitRPE = () => {
 
           {/* Effort slider */}
           <View style={styles.section}>
-            <Text style={styles.label}>{localizationStrings?.EffortLabel}</Text>
+            <Text style={[styles.label, { fontSize: 18, color: '#0f172a', marginBottom: 16 }]}>
+              {localizationStrings?.DifficultyQuestion || "What was the perceived difficulty of the training session?"}
+            </Text>
             <View style={[styles.sliderTrack, { width: SLIDER_WIDTH }]}>
               <Animated.View
                 style={[
@@ -180,8 +189,12 @@ const SubmitRPE = () => {
                 <Text style={styles.sliderThumbText}>{effort}</Text>
               </Animated.View>
             </View>
-            <Text style={styles.effortLabel}>
-              {localizationStrings?.EffortLabel}: {effort}/10
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+              <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort0 || "0 - Rest"}</Text>
+              <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort10 || "10 - Maximal"}</Text>
+            </View>
+            <Text style={[styles.effortLabel, { color: getEffortColor(effort), textAlign: 'center', fontSize: 24, fontWeight: '900' }]}>
+              {effort}
             </Text>
             {errors.effort ? <Text style={styles.errorText}>{errors.effort}</Text> : null}
           </View>

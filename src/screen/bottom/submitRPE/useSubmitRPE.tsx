@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { AttendanceApi, SumitRpfFrom, GetTraining } from '../../../redux/Api/AuthApi';
 import { Alert, Animated } from 'react-native';
@@ -18,8 +18,8 @@ const useSubmitRPE = () => {
     const [date, setDate] = useState("");
     const [comments, setComments] = useState("");
     const [showCalendar, setShowCalendar] = useState(false);
-    const [effort, setEffort] = useState(1);
-    const [pan] = useState(() => new Animated.Value(THUMB_STEP * 1));
+    const [effort, setEffort] = useState(0);
+    const [pan] = useState(() => new Animated.Value(0));
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [formattedTime, setFormattedTime] = useState(localizationStrings.SelectTime);
@@ -37,6 +37,29 @@ const useSubmitRPE = () => {
         };
         load();
     }, []);
+
+    const route = useRoute() as any;
+    useEffect(() => {
+        const params = route?.params;
+        if (params) {
+            if (params.session) setSession(params.session);
+            if (params.date) setDate(params.date);
+            if (params.time) {
+                setFormattedTime(params.time);
+                // Attempt to parse time if it's a valid date string or just HH:mm
+                const t = new Date();
+                const [hours, minutes] = params.time.split(/[:\s]/);
+                if (hours && minutes) {
+                    t.setHours(parseInt(hours, 10));
+                    t.setMinutes(parseInt(minutes, 10));
+                    setTime(t);
+                }
+            }
+            if (params.trainingId) {
+                // We'll handle selecting the questionnaire in the component or here
+            }
+        }
+    }, [route?.params]);
 
     const handleConfirm = async (type: string) => {
         try {
@@ -62,10 +85,10 @@ const useSubmitRPE = () => {
     };
 
     const getEffortColor = (value: number) => {
-        if (value <= 3) return '#A0D803';
-        if (value <= 6) return '#A0D803';
-        if (value <= 9) return '#A0D803';
-        return '#A0D803';
+        if (value <= 3) return '#10B981'; // Green
+        if (value <= 6) return '#F59E0B'; // Yellow/Orange
+        if (value <= 9) return '#EF4444'; // Red
+        return '#000000'; // Black for 10
     };
 
     const validateForm = (): boolean => {
@@ -73,7 +96,7 @@ const useSubmitRPE = () => {
         if (!session.trim()) formErrors.session = localizationStrings.Sessionrequired;
         if (!date.trim()) formErrors.date = localizationStrings.Daterequired;
         if (!comments.trim()) formErrors.comments = localizationStrings.Commentsbeempty;
-        if (effort === undefined || effort === null || isNaN(Number(effort)) || effort < 1 || effort > 10) {
+        if (effort === undefined || effort === null || isNaN(Number(effort)) || effort < 0 || effort > 10) {
             formErrors.effort = localizationStrings?.Effort;
         }
         setErrors(formErrors);
@@ -128,7 +151,7 @@ const useSubmitRPE = () => {
     };
 
     const setEffortAndPan = (value: number) => {
-        const v = Math.min(SLIDER_MAX, Math.max(1, Math.round(value)));
+        const v = Math.min(SLIDER_MAX, Math.max(0, Math.round(value)));
         setEffort(v);
         pan.setValue(v * THUMB_STEP);
     };

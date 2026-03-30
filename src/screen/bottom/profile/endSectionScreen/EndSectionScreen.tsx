@@ -28,23 +28,25 @@ const EndSectionScreen = () => {
     filterData, setFilterData
   } = usePlayers();
   const [is, setIsLoading] = useState(false)
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
-  const [data, setData] = useState([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
 
   const getCoachSession = async () => {
     try {
+      setIsLoading(true); // Using 'is' state for both list fetch and submit
       const response = await fetch(
         `${base_url}${'get_coach_session'}?user_id=${isLogin?.userData?.id}`
       );
 
       const json = await response.json();
       console.log('API Response:', json);
-
-      setData(json.result); // change according to API key
+      setData(json.result || []);
     } catch (error) {
       console.log('API Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,7 +54,7 @@ const EndSectionScreen = () => {
     getCoachSession();
   }, []);
 
-  const togglePlayerSelect = (id) => {
+  const togglePlayerSelect = (id: any) => {
     const playerId = String(id); // ensure string
 
     if (selectedPlayerIds.includes(playerId)) {
@@ -67,12 +69,12 @@ const EndSectionScreen = () => {
       return;
     }
 
-    const players = filterData.filter(p => selectedPlayerIds.includes(p.id));
+    const players = filterData.filter((p: any) => selectedPlayerIds.includes(p.id));
     setSelectedPlayers(players);
     setModalVisible(true);
   };
 
-  const handleStartAPI = async ({ date, time, questionnaire, questionnaire1 }) => {
+  const handleStartAPI = async ({ date, time, questionnaire, questionnaire1 }: any) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
       Alert.alert(localizationStrings?.date);
       return;
@@ -116,244 +118,50 @@ const EndSectionScreen = () => {
 
 
 
-  const CommonCard = React.memo(({ item, onPress, isSelected }) => {
+  const CommonCard = React.memo(({ item, onPress, isSelected }: any) => {
     return (
-      <View style={[{
-        backgroundColor: "#fff",
-        marginVertical: 6,
-        borderRadius: 12,
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onPress}
+        style={styles.card}
+      >
+        <View style={styles.contentContainer}>
+          <Image
+            source={item?.user_details?.image ? { uri: item?.user_details?.image } : imageIndex.prfEdit}
+            style={styles.avatar}
+          />
 
-        // Border
-        borderWidth: 0.5,
-        borderColor: "#E0E0E0",
-
-        // Shadow (iOS)
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-
-        // Shadow (Android)
-        elevation: 3,
-      }, isSelected && {
-        borderColor: '#A0D803',
-        // borderWidth: 2,
-      }]}>
-        <TouchableOpacity
-          style={[
-            {
-              borderRadius: 10,
-              padding: 10
-
-            },
-            isSelected && {
-              borderColor: '#A0D803',
-              // borderWidth: 2,
-            }
-          ]}
-          onPress={onPress}
-        >
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}>
-
-            {/* Player Image */}
-            <Image
-              source={{ uri: item?.user_details?.image }}
-              style={styles.avatar}
-            />
-
-            {/* Name */}
-            <View style={styles.contentContainer}>
-              <Text style={styles.name}>
-                {item?.user_details?.user_name}
-              </Text>
-            </View>
-
-            {/* Checkbox */}
-            <View
-              style={[
-                {
-                  height: 22,
-                  width: 22,
-                  borderWidth: 2,
-                  borderColor: '#ccc',
-                  borderRadius: 4,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                },
-                isSelected && {
-                  borderColor: '#A0D803',
-                  backgroundColor: '#A0D803'
-                }
-              ]}
-            >
-              {isSelected && <Text style={{
-                color: '#fff',
-                fontSize: 14
-              }}>✓</Text>}
-            </View>
-
+          <View style={styles.infoContainer}>
+            <Text style={styles.name}>{item?.user_details?.user_name || "Unknown Player"}</Text>
+            <Text style={styles.position}>{item?.type || "Training Session"}</Text>
           </View>
-        </TouchableOpacity>
 
-        {/* Training List */}
-        {/* {item?.training_details?.length > 0 && (
-          <View style={{
-            marginTop: 8,
-            paddingLeft: 6,
-            marginBottom: 10
-          }}>
-            {item?.training_details.map((s, index) => (
-              <Text key={index} style={styles.trainingText}>
-                {s?.training_title_french}
-              </Text>
+          <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+            {isSelected && <Text style={{ color: '#fff', fontSize: 14 }}>✓</Text>}
+          </View>
+        </View>
+
+        {item?.question_details?.length > 0 && (
+          <View style={styles.questionSection}>
+            <Text style={[styles.questionLabel, { marginBottom: 8 }]}>Questionnaire Responses</Text>
+            {item?.question_details.map((s: any, index: number) => (
+              <View key={index} style={styles.questionItem}>
+                <Text style={styles.questionLabel}>Question</Text>
+                <Text style={styles.questionText}>{s?.question_french}</Text>
+                <Text style={[styles.questionLabel, { marginTop: 6 }]}>Answer</Text>
+                <Text style={styles.answerText}>{s?.answer_french}</Text>
+              </View>
             ))}
           </View>
-        )} */}
-        {/* {item?.question_details?.length > 0 &&
-          <Text style={{
-            marginLeft: 12,
-            color: "balck"
-          }}>
-            Antes del entrenamiento
-
-          </Text>
-        } */}
-
-        {/* Question List */}
-        {item?.question_details?.length > 0 && (
-          <View style={{
-            marginTop: 8,
-            paddingLeft: 6,
-            marginBottom: 5
-          }}>
-            {item?.question_details.map((s, index) => {
-              return (
-                <View style={{
-                  marginBottom:11 ,
-                  marginLeft:11
-                }}>
-
-                  <Text key={index}  style={{
-                    color: "black",
-                    fontSize: 12
-                  }}>
-                    Question:{s?.question_french || s?.question_french}
-                  </Text>
-                  <Text key={index}  
-                  
-                  style={{
-                    color: "black",
-                    fontSize: 12
-                  }}
-                  >
-                    Répondre:{s?.answer_french}
-                  </Text>
-                </View>
-              )
-            }
-
-            )}
-          </View>
         )}
-      </View>
+      </TouchableOpacity>
     );
   });
-  console.log("data", data)
-  //   const CommonCard = React.memo(({ item, onPress, isSelected }) => {
-  //     console.log("item?.training_details",item?.training_details)
-  //     return (
-  //       <View style={{
-  //          backgroundColor: '#fff',
-  //     marginVertical: 6,
-  //     borderRadius: 10,
-  //     padding: 12,
-  //     shadowColor: "#000",
-  //     shadowOpacity: 0.1,
-  //     shadowRadius: 5,
-  //     elevation: 2
-  //        }}> 
-  //       <TouchableOpacity
-  //         style={[
-  //           styles.card,
-  //           isSelected && {
-  //             borderColor: '#A0D803',
-  //             borderWidth: 2,
-  //             backgroundColor: '#F2FFE2'
-  //           }
-  //         ]}
-  //         onPress={onPress}
-  //       >
-  //         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-  //           {/* Checkbox */}
 
-  //           {/* Player Info */}
-  //           <Image source={{ uri: item?.user_details?.image }} style={styles.avatar} />
-  //           <View style={styles.contentContainer}>
-  //             <View style={styles.infoContainer}>
-  //               <Text style={styles.name}>{item?.user_details?.user_name}</Text>
-  //               <Text style={styles.position}>Forward</Text>
-  //             </View>
-  //           </View> 
-
-
-  //           <TouchableOpacity
-  //             onPress={onPress}
-  //             style={{
-  //               height: 22,
-  //               width: 22,
-  //               borderWidth: 2,
-  //               borderColor: isSelected ? '#A0D803' : '#ccc',
-  //               backgroundColor: isSelected ? '#A0D803' : '#fff',
-  //               borderRadius: 4,
-  //               marginRight: 12,
-  //               justifyContent: 'center',
-  //               alignItems: 'center',
-  //             }}
-  //           >
-  //             {isSelected && (
-  //               <Text style={{ color: 'white', fontSize: 16 }}>✓</Text>
-  //             )}
-  //           </TouchableOpacity>
-
-  //         </View>
-
-  //       </TouchableOpacity>
-  //          {item?.training_details?.map((s, index) => {
-  //   return (
-  //             <View style={{
-  //                   marginTop: 8,
-  //     paddingLeft: 6
-
-  //             }}>
-
-  //     <Text key={index}>
-  //       {s?.training_title}
-  //     </Text>
-  //     </View>
-  //   );
-  // })}
-  //          {item?.question_details?.map((s, index) => {
-  //   return (
-  //      <View style={{
-  //                   marginTop: 8,
-  //     paddingLeft: 6
-
-  //             }}>
-  //     <Text key={index}>
-  //       {s?.question_french}
-  //     </Text>
-  //     </View>
-  //   );
-  // })}
-  // </View>
-  //     );
-  //   });
   const filteredData = data?.filter(
     (item) => item?.session_end_date === "" && item?.session_end_time === ""
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBarComponent />
@@ -362,55 +170,39 @@ const EndSectionScreen = () => {
       <CustomHeader mainView={{
         left: 11
       }} imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
-      <View style={[styles.container, { padding: 15 }]}>
-        {/* <SearchBar
-          value={searchPlaylist}
-          onSearchChange={setSearchPlaylist}
-        /> */}
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'gray',
-            padding: 12,
-            borderRadius: 10,
-            alignItems: 'center',
-            marginBottom: 15,
-            height: 55,
-            justifyContent: "center",
-            marginTop: 15
-          }}
-          onPress={handleOpenModal}
-        >
-          <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 20 }}>
-            {localizationStrings?.endSection}  ({selectedPlayerIds.length})
-          </Text>
-        </TouchableOpacity>
-
-        {isLoading ? (
+      <View style={{ flex: 1, paddingHorizontal: 16 }}>
+        {is && data.length === 0 ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size={30} color="#A0D803" />
+            <ActivityIndicator size={30} color="#EF4444" />
           </View>
         ) : (
           <FlatList
             data={filteredData}
-            // data={data}
             style={{ marginTop: 12 }}
+            contentContainerStyle={{ paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => {
-              console.log("item", item)
-              return (
-                <CommonCard
-                  item={item}
-                  onPress={() => togglePlayerSelect(item.id)}
-                  isSelected={selectedPlayerIds.includes(item.id)}
-                />
-              )
-            }}
+            keyExtractor={(item) => item?.id?.toString() || Math.random().toString()}
+            renderItem={({ item }) => (
+              <CommonCard
+                item={item}
+                onPress={() => togglePlayerSelect(item.id)}
+                isSelected={selectedPlayerIds.includes(String(item.id))}
+              />
+            )}
           />
         )}
-
-
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity
+          disabled={selectedPlayerIds.length === 0}
+          style={[styles.endButton, selectedPlayerIds.length === 0 && { backgroundColor: '#E5E7EB', shadowOpacity: 0 }]}
+          onPress={handleOpenModal}
+        >
+          <Text style={[styles.endButtonText, selectedPlayerIds.length === 0 && { color: '#9CA3AF' }]}>
+            {localizationStrings?.endSection} ({selectedPlayerIds.length})
+          </Text>
+        </TouchableOpacity>
       </View>
       <StartSectionModal
         visible={modalVisible}
@@ -418,7 +210,6 @@ const EndSectionScreen = () => {
         onClose={() => setModalVisible(false)}
         Before={localizationStrings.BeforeTrainingQuestionnaire}
         Training={localizationStrings.AfterTrainingQuestionnaire}
-        selectedPlayers={selectedPlayers}
         onStart={handleStartAPI}
         buttTitle={localizationStrings?.endSection}
       />

@@ -16,9 +16,8 @@ import { DelliteApi } from "../../../../redux/Api/AuthApi";
 import styles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/feature/authSlice";
-import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
-
-const Profile = () => {
+ 
+const ProfilePlayer = () => {
   const navigation = useNavigation();
   const { language } = useLanguage();
   
@@ -34,18 +33,7 @@ const Profile = () => {
  
  
 
-  // menu data
-  const MenuItems = [
-    { title: localizationStrings.MyTeam, icon: imageIndex.myteam, screen: ScreenNameEnum.MyTeam },
-    { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
-    { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
-    { title: localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
-    { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
-    // { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
-    { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
-    { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
-    // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
-  ];
+  
 
   const PlayData = [
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
@@ -147,13 +135,21 @@ const Profile = () => {
           <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />
         </TouchableOpacity>
 
- 
+        <View style={{ height: 15, backgroundColor: "rgba(237, 243, 243, 1)" }} />
+{
+  isLogin?.userData?.type != "Coach" ?  
+  <FlatList
+  data={PlayData}
+  keyExtractor={(item) => item.screen}
+  renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
+/> : 
+
 <FlatList
-data={MenuItems}
+data={PlayData}
 keyExtractor={(item) => item.screen}
 renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
 />
- 
+}
       
 
         <LogoutModal isVisible={modal} close={() => setModal(false)}   onSumbit={() => {
@@ -176,4 +172,4 @@ renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={
   );
 };
 
-export default Profile;
+export default ProfilePlayer;
