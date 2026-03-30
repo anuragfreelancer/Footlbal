@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {   useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Getplayer } from '../../../../redux/Api/AuthApi';
+import { Getplayer, GetReviewsByCoachIdApi } from '../../../../redux/Api/AuthApi';
  const useAllPlayer = () => {
   const navigation = useNavigation();
   const [isLoading, setisLoading] = useState(false)
@@ -10,6 +10,8 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     const [allPlay, setAllPlay] = useState<any>([]);
     const [searchPlaylist, setSearchPlaylist] = useState<string>("");
     const [filterData, setFilterData] = useState<any>("");
+    const [viewType, setViewType] = useState<"Players" | "Rate">("Players");
+    const [reviews, setReviews] = useState<any[]>([]);
     useFocusEffect(
       useCallback(() => {
         GetplayerApi();
@@ -27,6 +29,21 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     } catch (error) {
     }
   };
+
+  const fetchReviewsApi = async () => {
+    try {
+      const data = await GetReviewsByCoachIdApi(isLogin?.userData?.id, setisLoading);
+      setReviews(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("fetchReviewsApi error:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (viewType === "Rate") {
+      fetchReviewsApi();
+    }
+  }, [viewType]);
   useEffect(() => {
     if (searchPlaylist?.trim() === '') {
       setFilterData(allPlay);
@@ -45,7 +62,10 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     navigation ,
     isLogin ,
     searchPlaylist, setSearchPlaylist ,
-    filterData, setFilterData
+    filterData, setFilterData,
+    viewType, setViewType,
+    reviews, setReviews,
+    fetchReviewsApi
   };
 };
 

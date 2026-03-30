@@ -237,7 +237,9 @@
             "DifficultyQuestion": "What was the perceived difficulty of the training session?",
             "Effort0": "0 - Zero Difficulty",
             "Effort10": "10 - Extremely Difficult",
-            "RateDifficulty": "Rate Difficulty"
+            "RateDifficulty": "Rate Difficulty",
+            "AllPlayer": "All Player",
+            "Rate": "Rate"
       },
       "French": {
             "EndTime": "Heure de fin",
@@ -480,6 +482,8 @@
             "DifficultyQuestion": "Quelle a été la difficulté ressentie de la séance d'entraînement ?",
             "Effort0": "0 - Difficulté nulle",
             "Effort10": "10 - Extrêmement difficile",
-            "RateDifficulty": "Évaluer la difficulté"
+            "RateDifficulty": "Évaluer la difficulté",
+            "AllPlayer": "Tout Joueur",
+            "Rate": "Note"
       }
 }

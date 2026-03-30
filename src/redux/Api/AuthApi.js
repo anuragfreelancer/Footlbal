@@ -1722,4 +1722,38 @@ const AddReviewApi = async (param, setLoading) => {
     }
 };
 
-export { DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi }  
+const GetReviewsByCoachIdApi = async (coachId, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+        };
+
+        const response = await fetch(`${base_url}${constant.get_reviews_by_coach_id}?coach_id=${coachId}`, requestOptions);
+
+        console.log("GetReviewsByCoachIdApi response status:", response.status);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        setLoading(false);
+        console.log("GetReviewsByCoachIdApi result:", responseData);
+        if (responseData.status == "1") {
+            return responseData.result;
+        } else {
+            // errorToast(responseData?.message || responseData?.error);
+            return [];
+        }
+    } catch (error) {
+        console.log("error ", error)
+
+        setLoading(false);
+        errorToast("Network error");
+        console.error("GetReviewsByCoachIdApi error:", error);
+        return [];
+    }
+};
+
+export { DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi, GetReviewsByCoachIdApi }  

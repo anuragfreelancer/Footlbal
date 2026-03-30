@@ -45,5 +45,128 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  tabContainer: {
+    flexDirection: "row",
+    backgroundColor: "#F1F5F9",
+    borderRadius: 30,
+    padding: 6,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activeTabButton: {
+    backgroundColor: "rgba(160, 216, 3, 1)",
+    shadowColor: "rgba(160, 216, 3, 0.4)",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#94A3B8",
+  },
+  activeTabText: {
+    color: "white",
+  },
+  reviewCard: {
+    backgroundColor: "white",
+    padding: 16,
+    borderRadius: 20,
+    marginVertical: 10,
+  
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
+  },
+  reviewHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  reviewAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 12,
+  },
+  reviewTextContainer: {
+    flex: 1,
+  },
+  reviewerName: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#1E293B",
+  },
+  reviewDate: {
+    fontSize: 11,
+    color: "#94A3B8",
+    marginTop: 2,
+  },
+  ratingWrapper: {
+    alignItems: 'flex-end',
+  },
+  ratingValueText: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "rgba(160, 216, 3, 1)",
+  },
+  ratingMaxText: {
+    fontSize: 11,
+    color: "#94A3B8",
+    fontWeight: "600",
+  },
+  progressBarContainer: {
+    marginVertical: 14,
+  },
+  progressBarTrack: {
+    height: 8,
+    backgroundColor: "#F1F5F9",
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: "rgba(160, 216, 3, 1)",
+    borderRadius: 4,
+  },
+  reviewNote: {
+    fontSize: 14,
+    color: "#475569",
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  reviewFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#F8FAFC',
+  },
+  reviewBadge: {
+    backgroundColor: 'rgba(160, 216, 3, 0.1)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  reviewBadgeText: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: "rgba(160, 216, 3, 1)",
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  footerText: {
+    fontSize: 10,
+    color: "#94A3B8",
+    fontWeight: "600",
+  },
 });
 export default styles;

@@ -21,18 +21,18 @@ import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard
 const Profile = () => {
   const navigation = useNavigation();
   const { language } = useLanguage();
-  
-      const getLogin = useSelector((state: any) => state?.feature);
-    const isLogin = useSelector((state: any) => state?.auth);
-   const [modal, setModal] = useState(false);
+
+  const getLogin = useSelector((state: any) => state?.feature);
+  const isLogin = useSelector((state: any) => state?.auth);
+  const [modal, setModal] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLang, setSelectedLang] = useState("en");
 
   // mock login/profile data, replace with your actual hook or redux data
- 
- 
+
+
 
   // menu data
   const MenuItems = [
@@ -58,7 +58,7 @@ const Profile = () => {
     { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
 
-  const handleLanguageSelect = (lang) => {
+  const handleLanguageSelect = (lang: string) => {
     setSelectedLang(lang);
     // add your i18n language change logic here
   };
@@ -67,7 +67,7 @@ const Profile = () => {
     setIsLoading(true);
     try {
       const params = {
-        userId: getLogin.userGetData.id,
+        userId: getLogin?.userGetData?.id,
         navigation
       };
       const response = await DelliteApi(params, setIsLoading);
@@ -82,7 +82,7 @@ const Profile = () => {
     }
   };
 
-  const MenuItem = ({ title, icon, screen }) => (
+  const MenuItem = ({ title, icon, screen }: any) => (
     <TouchableOpacity
       style={styles.menuItem}
       onPress={() => {
@@ -103,16 +103,15 @@ const Profile = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    // Optionally: clear AsyncStorage, navigate, etc.
-    // e.g., AsyncStorage.removeItem('token');
-     navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
+
+    navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
-    
 
-{/* {status === 'Free' && <FreeUI />}
+
+      {/* {status === 'Free' && <FreeUI />}
 
 {(!isValid || status === 'Deactive') && <ExpiredUI />} */}
 
@@ -125,41 +124,41 @@ const Profile = () => {
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-           {
-            getLogin?.userGetData?.image ? 
+            {
+              getLogin?.userGetData?.image ?
 
-             <Image
-              source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
-              style={styles.avatar}
-            />
-              :   <Image
-              source={imageIndex.prfEdit}
-              style={styles.avatar}
-            />
-           }
-           
-         
+                <Image
+                  source={getLogin?.userGetData?.image ? { uri: getLogin?.userGetData.image } : imageIndex.ProfielImge}
+                  style={styles.avatar}
+                />
+                : <Image
+                  source={imageIndex.prfEdit}
+                  style={styles.avatar}
+                />
+            }
+
+
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData.user_name}</Text>
-              <Text style={styles.profileLink}>{getLogin?.userGetData.email}</Text>
+              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name}</Text>
+              <Text style={styles.profileLink}>{getLogin?.userGetData?.email}</Text>
             </View>
           </View>
           <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />
         </TouchableOpacity>
 
- 
-<FlatList
-data={MenuItems}
-keyExtractor={(item) => item.screen}
-renderItem={({ item }) => <MenuItem title={item.title} icon={item.icon} screen={item.screen} />}
-/>
- 
-      
 
-        <LogoutModal isVisible={modal} close={() => setModal(false)}   onSumbit={() => {
-        handleLogout();
-        setModal(false);
-      }}  />
+        <FlatList
+          data={MenuItems}
+          keyExtractor={(item) => item?.screen}
+          renderItem={({ item }) => <MenuItem title={item?.title} icon={item?.icon} screen={item?.screen} />}
+        />
+
+
+
+        <LogoutModal isVisible={modal} close={() => setModal(false)} onSumbit={() => {
+          handleLogout();
+          setModal(false);
+        }} />
         <LanguageModal visible={isModalVisible} onClose={() => setModalVisible(false)} onSelectLanguage={handleLanguageSelect} />
         <DeleteConfirmModal
           visible={showDelete}
