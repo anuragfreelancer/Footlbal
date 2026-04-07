@@ -159,8 +159,7 @@ const AllPlayer = () => {
             activeOpacity={0.7}
           >
             <Text style={[styles.tabText, viewType === 'Rate' && styles.activeTabText]}>
-              {/* {(localizationStrings as any).Rate || "Raaa ate"} */}
-            Évaluations des utilisateurs
+             Évaluations des utilisateurs
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
   ScrollView,
-  Animated,
   PanResponder,
   Modal,
   TextInput,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  GestureResponderEvent,
+  LayoutChangeEvent,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,12 +32,186 @@ const SESSION_OPTIONS = [
   { key: "Match", labelKey: "SessionMatch" },
 ] as const;
 
+// Gradient colors for each segment (10 segments for 0–10)
+const SEGMENT_COLORS = [
+  '#22C55E', // 0–1 green
+  '#4ADE80', // 1–2 lighter green
+  '#84CC16', // 2–3 lime
+  '#BEF264', // 3–4 yellow-lime
+  '#FACC15', // 4–5 yellow
+  '#F59E0B', // 5–6 amber
+  '#F97316', // 6–7 orange
+  '#EF4444', // 7–8 red
+  '#DC2626', // 8–9 dark red
+  '#B91C1C', // 9–10 deep red
+];
+
+// Accent marker positions (as 0–10 values) to mimic the vertical colored lines
+const ACCENT_POSITIONS = [
+  { value: 5, color: '#F97316' },  // Orange marker at 5
+  { value: 7, color: '#EF4444' },  // Red marker at 7
+];
+
+// ─── Question Slider Card ──────────────────────────────────────────────────────
+interface QuestionSliderCardProps {
+  questionId: string;
+  title: string;
+  score: number;
+  text: string;
+  onScoreChange: (id: string, score: number) => void;
+  onTextChange: (id: string, text: string) => void;
+}
+
+const QuestionSliderCard: React.FC<QuestionSliderCardProps> = React.memo(({
+  questionId,
+  title,
+  score,
+  text,
+  onScoreChange,
+  onTextChange,
+}) => {
+  const [showTextInput, setShowTextInput] = useState(false);
+  const trackRef = useRef<View>(null);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [trackX, setTrackX] = useState(0);
+
+  const onTrackLayout = useCallback((e: LayoutChangeEvent) => {
+    const { width } = e.nativeEvent.layout;
+    setTrackWidth(width);
+    // Measure absolute position for gesture handling
+    trackRef.current?.measureInWindow((x) => {
+      setTrackX(x);
+    });
+  }, []);
+
+  const getScoreFromX = useCallback((pageX: number): number => {
+    if (trackWidth === 0) return score;
+    const relativeX = pageX - trackX;
+    const ratio = relativeX / trackWidth;
+    const rawScore = ratio * 10;
+    return Math.min(10, Math.max(0, Math.round(rawScore)));
+  }, [trackWidth, trackX, score]);
+
+  const panResponder = React.useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (evt) => {
+          const newScore = getScoreFromX(evt.nativeEvent.pageX);
+          onScoreChange(questionId, newScore);
+        },
+        onPanResponderMove: (evt) => {
+          const newScore = getScoreFromX(evt.nativeEvent.pageX);
+          onScoreChange(questionId, newScore);
+        },
+      }),
+    [getScoreFromX, questionId, onScoreChange]
+  );
+
+  const thumbLeft = trackWidth > 0 ? (score / 10) * trackWidth - 14 : -14;
+
+  const getScoreColor = (val: number) => {
+    if (val <= 2) return '#22C55E';
+    if (val <= 4) return '#84CC16';
+    if (val <= 6) return '#F59E0B';
+    if (val <= 8) return '#EF4444';
+    return '#DC2626';
+  };
+
+  return (
+    <View style={styles.questionCard}>
+      {/* Question Title */}
+      <Text style={styles.questionTitle}>{title}</Text>
+
+      {/* Score Value */}
+      <Text style={[styles.scoreValue, { color: getScoreColor(score) }]}>{score}</Text>
+
+      {/* Slider */}
+      <View
+        style={styles.sliderContainer}
+        {...panResponder.panHandlers}
+      >
+        {/* Gradient Track */}
+        <View
+          ref={trackRef}
+          style={styles.sliderTrackBase}
+          onLayout={onTrackLayout}
+        >
+          {SEGMENT_COLORS.map((color, i) => (
+            <View
+              key={i}
+              style={[styles.sliderSegment, { backgroundColor: color }]}
+            />
+          ))}
+        </View>
+
+        {/* Accent vertical markers */}
+        {trackWidth > 0 && ACCENT_POSITIONS.map((marker, i) => (
+          <View
+            key={`marker-${i}`}
+            style={[
+              styles.accentMarker,
+              {
+                backgroundColor: marker.color,
+                left: (marker.value / 10) * trackWidth - 1.5,
+              },
+            ]}
+          />
+        ))}
+
+        {/* Thumb */}
+        {trackWidth > 0 && (
+          <View style={[styles.sliderThumbOuter, { left: Math.max(-4, Math.min(thumbLeft, trackWidth - 24)) }]}>
+            <View style={styles.sliderThumbInner} />
+          </View>
+        )}
+      </View>
+
+      {/* Tick Labels: 0.0, 1.0, ... 10.0 */}
+      <View style={styles.tickContainer}>
+        {Array.from({ length: 11 }, (_, i) => (
+          <Text key={i} style={styles.tickLabel}>
+            {i.toFixed(1)}
+          </Text>
+        ))}
+      </View>
+
+      {/* Text Toggle */}
+      <TouchableOpacity
+        style={styles.textToggleBtn}
+        onPress={() => setShowTextInput(!showTextInput)}
+        activeOpacity={0.7}
+      >
+        <Text style={{ fontSize: 14 }}>✎</Text>
+        <Text style={styles.textToggleBtnText}>
+          {showTextInput
+            ? (localizationStrings?.HideComment || "Hide comment")
+            : (localizationStrings?.AddComment || "Add comment")}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Text Input (collapsed by default) */}
+      {showTextInput && (
+        <TextInput
+          style={styles.questionTextInput}
+          placeholder={localizationStrings?.TypeHere || "Type here..."}
+          placeholderTextColor="#94A3B8"
+          value={text}
+          onChangeText={(t) => onTextChange(questionId, t)}
+          multiline
+        />
+      )}
+    </View>
+  );
+});
+
+// ─── Main SubmitRPE Screen ──────────────────────────────────────────────────────
 const SubmitRPE = () => {
   useLanguage();
   const {
     isLoading,
     handleSubmit,
-    getEffortColor,
     session,
     setSession,
     date,
@@ -45,9 +220,6 @@ const SubmitRPE = () => {
     setComments,
     showCalendar,
     setShowCalendar,
-    effort,
-    setEffort,
-    pan,
     errors,
     showTimePicker,
     setShowTimePicker,
@@ -60,26 +232,10 @@ const SubmitRPE = () => {
     handleConfirm,
     questionnaires,
     loadingQuestionnaires,
-    SLIDER_WIDTH,
-    THUMB_STEP,
+    questionAnswers,
+    setQuestionScore,
+    setQuestionText,
   } = useSubmitRPE();
-
-  const [showQuestionnaireDropdown, setShowQuestionnaireDropdown] = useState(false);
-  const [selectedQuestionnaire, setSelectedQuestionnaire] = useState<string | null>(null);
-
-  const panResponder = React.useMemo(
-    () =>
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: (_, gesture) => {
-          // Adjust for 20px horizontal padding to get accurate 0-10 range
-          const newEffort = Math.min(10, Math.max(0, Math.round((gesture.moveX - 20) / THUMB_STEP)));
-          setEffort(newEffort);
-        },
-      }),
-    [THUMB_STEP, setEffort]
-  );
 
   if (loadingQuestionnaires) {
     return (
@@ -100,7 +256,7 @@ const SubmitRPE = () => {
         <View style={{ marginHorizontal: 12, marginTop: 5 }}>
           <CustomHeader
             imageSource={imageIndex.backNav}
-            label={localizationStrings?.SubmitRPE}
+            label={"HMMP RPE"}
           />
         </View>
         <View style={styles.container}>
@@ -110,163 +266,34 @@ const SubmitRPE = () => {
             keyboardDismissMode="on-drag"
             contentContainerStyle={{ paddingBottom: 120 }}
           >
-            {/* Session type */}
-            <View style={styles.section}>
-              <Text style={styles.label}>{localizationStrings?.SelectSession}</Text>
-              <View style={styles.radioGroup}>
-                {SESSION_OPTIONS?.map(({ key, labelKey }) => (
-                  <TouchableOpacity
-                    key={key}
-                    onPress={() => setSession(key)}
-                    style={styles.radioItem}
-                    activeOpacity={0.7}
-                  >
-                    <Image
-                      source={session === key ? imageIndex.radioSlied : imageIndex.radio}
-                      style={styles.radioIcon}
-                      resizeMode="contain"
-                      tintColor="#A0D803"
-                    />
-                    <Text style={styles.radioText}>{localizationStrings[labelKey] ?? key}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              {errors.session ? <Text style={styles.errorText}>{errors.session}</Text> : null}
-            </View>
-
-            {/* Date & time */}
-            <View style={styles.section}>
-              <Text style={styles.label}>{localizationStrings?.DateAndTime || "Date & Time"}</Text>
-              <View style={styles.dateTimeRow}>
-                <TouchableOpacity
-                  style={styles.datePicker}
-                  onPress={() => setShowCalendar(true)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.datePickerText} numberOfLines={1}>
-                    {date || (localizationStrings?.SelectDate ?? "Select Date")}
-                  </Text>
-                  <Image source={imageIndex.calender} style={{ height: 22, width: 22, marginLeft: 8 }} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.datePicker}
-                  onPress={() => setShowTimePicker(true)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.datePickerText} numberOfLines={1}>
-                    {formattedTime}
-                  </Text>
-                  <Image source={imageIndex.clocks} style={{ height: 22, width: 22, marginLeft: 8 }} />
-                </TouchableOpacity>
-              </View>
-              {errors?.date ? <Text style={styles.errorText}>{errors.date}</Text> : null}
-            </View>
-
-            {/* Effort slider */}
-            <View style={styles.section}>
-              <Text style={[styles.label, { fontSize: 18, color: '#0f172a', marginBottom: 16 }]}>
-                {localizationStrings?.DifficultyQuestion || "What was the perceived difficulty of the training session?"}
-              </Text>
-              <View style={[styles.sliderTrack, { width: SLIDER_WIDTH }]}>
-                <Animated.View
-                  style={[
-                    styles.sliderFill,
-                    {
-                      width: pan,
-                      backgroundColor: getEffortColor(effort),
-                    },
-                  ]}
-                />
-                <Animated.View
-                  {...panResponder.panHandlers}
-                  style={[
-                    styles.sliderThumb,
-                    {
-                      left: Animated.subtract(pan, 16),
-                    },
-                  ]}
-                >
-                  <Text style={styles.sliderThumbText}>{effort}</Text>
-                </Animated.View>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-                <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort0 || "0 - Rest"}</Text>
-                <Text style={{ fontSize: 12, color: '#64748B' }}>{localizationStrings?.Effort10 || "10 - Maximal"}</Text>
-              </View>
-              <Text style={[styles.effortLabel, { color: getEffortColor(effort), textAlign: 'center', fontSize: 24, fontWeight: '900' }]}>
-                {effort}
-              </Text>
-              {errors.effort ? <Text style={styles.errorText}>{errors.effort}</Text> : null}
-            </View>
-
-            {/* Comments */}
-            <View style={styles.section}>
-              <Text style={styles.label}>{localizationStrings?.AddComments}</Text>
-              <TextInput
-                placeholder={localizationStrings?.TypeHere}
-                placeholderTextColor="#94A3B8"
-                value={comments}
-                onChangeText={setComments}
-                multiline
-                style={[styles.commentsInput, styles.commentsInputText]}
-              />
-              {errors.comments ? <Text style={styles.errorText}>{errors.comments}</Text> : null}
-            </View>
-
-            {/* Questionnaire */}
-            <View style={styles.section}>
-              <Text style={styles.label}>{localizationStrings?.TrainingSession || "Questionnaire"}</Text>
-              <TouchableOpacity
-                style={styles.dropdownTrigger}
-                onPress={() => setShowQuestionnaireDropdown((prev) => !prev)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.datePickerText, { fontSize: 16, color: selectedQuestionnaire ? '#0f172a' : '#94A3B8' }]} numberOfLines={1}>
-                  {selectedQuestionnaire ?? localizationStrings?.Select ?? "Select"}
+ 
+            {/* ─── Per-Question Sliders ───────────────────────────── */}
+            {questionnaires.length > 0 && (
+              <View style={{ marginTop: 4 }}>
+                <Text style={styles.questionnaireSectionHeader}>
+                  Session Feedback
                 </Text>
-                <Image
-                  source={imageIndex.arroRight}
-                  style={{
-                    width: 18,
-                    height: 18,
-                    tintColor: '#64748B',
-                    transform: [{ rotate: showQuestionnaireDropdown ? "90deg" : "0deg" }],
-                  }}
-                />
-              </TouchableOpacity>
-              
-              {showQuestionnaireDropdown && questionnaires.length > 0 ? (
-                <View style={styles.dropdown}>
-                  <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
-                    {questionnaires.map((item) => {
-                      const title = item.training_title_french || item.training_title;
-                      const isSelected = selectedQuestionnaire === title;
-                      return (
-                        <TouchableOpacity
-                          key={item.id}
-                          style={[styles.dropdownItem, isSelected && styles.selectedDropdownItem]}
-                          onPress={() => {
-                            setSelectedQuestionnaire(title);
-                            setShowQuestionnaireDropdown(false);
-                          }}
-                        >
-                          <Text style={[styles.dropdownItemText, isSelected && { color: '#A0D803', fontWeight: '700' }]}>
-                            {title}
-                          </Text>
-                          {isSelected && (
-                             <Image 
-                               source={imageIndex.radioSlied} 
-                               style={{ width: 18, height: 18 }} 
-                               tintColor="#A0D803" 
-                             />
-                          )}
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                </View>
-              ) : null}
-            </View>
+                {questionnaires.map((item) => {
+                   const qId = String(item.id);
+                  const qTitle = item.question || item.training_title || "Question";
+                  const answer = questionAnswers[qId] || { score: 5, text: '' };
+                  return (
+                    <QuestionSliderCard
+                      key={qId}
+                      questionId={qId}
+                      title={item.question_french}
+                      score={answer.score}
+                      text={item.answer_french}
+                      onScoreChange={setQuestionScore}
+                      onTextChange={setQuestionText}
+                    />
+                  );
+                })}
+              </View>
+            )}
+
+            {/* General Comments */}
+           
           </ScrollView>
 
           <TimePickerModal
@@ -287,8 +314,8 @@ const SubmitRPE = () => {
 
         <View style={styles.buttView}>
           <CustomButton
-            title={localizationStrings.Submit}
-            onPress={() => handleSubmit(selectedQuestionnaire || undefined)}
+            title={"Submit Feedback"}
+            onPress={() => handleSubmit()}
           />
         </View>
       </KeyboardAvoidingView>

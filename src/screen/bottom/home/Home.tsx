@@ -349,8 +349,9 @@ const DashboardScreen = () => {
               <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
             </View>
             <FlatList
-              data={getUser1}
-              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+data={[...getUser1].reverse()}   
+
+keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
               renderItem={renderItem}
               scrollEnabled={false}
               contentContainerStyle={styles.listContent}

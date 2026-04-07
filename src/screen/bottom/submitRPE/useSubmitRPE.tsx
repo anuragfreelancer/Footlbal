@@ -1,14 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { AttendanceApi, SumitRpfFrom, GetTraining, AddReviewApi } from '../../../redux/Api/AuthApi';
-import { Alert, Animated } from 'react-native';
+import { Alert, Dimensions } from 'react-native';
 import { Platform } from 'react-native';
 import localizationStrings from '../../../compoent/Localization/Localization';
 
+const { width: screenWidth } = Dimensions.get('window');
+const SLIDER_HORIZONTAL_PADDING = 20;
 const SLIDER_MAX = 10;
-const SLIDER_WIDTH = 300;
+const SLIDER_WIDTH = screenWidth - (SLIDER_HORIZONTAL_PADDING * 2) - 36; // account for card padding
 const THUMB_STEP = SLIDER_WIDTH / SLIDER_MAX;
+
+export interface QuestionAnswer {
+    score: number;
+    text: string;
+}
 
 const useSubmitRPE = () => {
     const navigation = useNavigation();
@@ -18,8 +25,6 @@ const useSubmitRPE = () => {
     const [date, setDate] = useState("");
     const [comments, setComments] = useState("");
     const [showCalendar, setShowCalendar] = useState(false);
-    const [effort, setEffort] = useState(0);
-    const [pan] = useState(() => new Animated.Value(0));
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [formattedTime, setFormattedTime] = useState(localizationStrings.SelectTime);
@@ -28,15 +33,40 @@ const useSubmitRPE = () => {
     const [questionnaires, setQuestionnaires] = useState<any[]>([]);
     const [loadingQuestionnaires, setLoadingQuestionnaires] = useState(true);
     const [coachId, setCoachId] = useState("");
-    useEffect(() => {
-        const load = async () => {
-            setLoadingQuestionnaires(true);
-            const result = await GetTraining('before_training');
-            setQuestionnaires(Array.isArray(result) ? result : []);
-            setLoadingQuestionnaires(false);
-        };
-        load();
-    }, []);
+
+    // Per-question answers: { [questionId]: { score, text } }
+    const [questionAnswers, setQuestionAnswers] = useState<Record<string, QuestionAnswer>>({});
+useEffect(() => {
+  const load = async () => {
+    try {
+      setLoadingQuestionnaires(true);
+
+      const response = await fetch("https://kmmps.store/api/get_question");
+      const json = await response.json();
+
+      if (json?.status === "1" && Array.isArray(json?.result)) {
+        const items = json.result;
+
+        // Set questions list
+        setQuestionnaires(items);
+
+      
+      } else {
+        setQuestionnaires([]);
+        setQuestionAnswers({});
+      }
+
+    } catch (error) {
+      console.log("API Error:", error);
+      setQuestionnaires([]);
+      setQuestionAnswers({});
+    } finally {
+      setLoadingQuestionnaires(false);
+    }
+  };
+
+  load();
+}, []);
 
     const route = useRoute() as any;
     const params1 = route?.params;
@@ -48,7 +78,6 @@ const useSubmitRPE = () => {
             if (params.date) setDate(params.date);
             if (params.time) {
                 setFormattedTime(params.time);
-                // Attempt to parse time if it's a valid date string or just HH:mm
                 const t = new Date();
                 const [hours, minutes] = params.time.split(/[:\s]/);
                 if (hours && minutes) {
@@ -57,12 +86,23 @@ const useSubmitRPE = () => {
                     setTime(t);
                 }
             }
-            if (params.trainingId) {
-                // We'll handle selecting the questionnaire in the component or here
-            }
             if (params.coach_id) setCoachId(params.coach_id);
         }
     }, [route?.params]);
+
+    const setQuestionScore = useCallback((questionId: string, score: number) => {
+        setQuestionAnswers(prev => ({
+            ...prev,
+            [questionId]: { ...prev[questionId], score },
+        }));
+    }, []);
+
+    const setQuestionText = useCallback((questionId: string, text: string) => {
+        setQuestionAnswers(prev => ({
+            ...prev,
+            [questionId]: { ...prev[questionId], text },
+        }));
+    }, []);
 
     const handleConfirm = async (type: string) => {
         try {
@@ -88,30 +128,57 @@ const useSubmitRPE = () => {
     };
 
     const getEffortColor = (value: number) => {
-        if (value <= 3) return '#10B981'; // Green
-        if (value <= 6) return '#000000'; // Yellow/Orange
-        if (value <= 9) return '#000000'; // Red
-        return '#000000'; // Black for 10
+        if (value <= 2) return '#22C55E';   // Green
+        if (value <= 4) return '#84CC16';   // Lime
+        if (value <= 6) return '#F59E0B';   // Amber/Orange
+        if (value <= 8) return '#EF4444';   // Red
+        return '#DC2626';                    // Dark Red
     };
+
+    const getTrackGradientColors = () => [
+        '#22C55E', // 0-1 green
+        '#22C55E', // 1-2 green
+        '#84CC16', // 2-3 lime
+        '#84CC16', // 3-4 lime
+        '#F59E0B', // 4-5 amber
+        '#F59E0B', // 5-6 amber
+        '#EF4444', // 6-7 red
+        '#EF4444', // 7-8 red
+        '#DC2626', // 8-9 dark red
+        '#DC2626', // 9-10 dark red
+    ];
 
     const validateForm = (): boolean => {
         const formErrors: Record<string, string> = {};
         if (!session.trim()) formErrors.session = localizationStrings.Sessionrequired;
         if (!date.trim()) formErrors.date = localizationStrings.Daterequired;
-        if (!comments.trim()) formErrors.comments = localizationStrings.Commentsbeempty;
-        if (effort === undefined || effort === null || isNaN(Number(effort)) || effort < 0 || effort > 10) {
-            formErrors.effort = localizationStrings?.Effort;
-        }
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
     };
 
-    const handleSubmit = async (selectedTrainingTitle?: string) => {
+    const handleSubmit = async () => {
         if (!validateForm()) return;
         if (formattedTime === localizationStrings.SelectTime || !formattedTime) {
             Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectTime);
             return;
         }
+
+        // Calculate average score across all questions
+        const answerEntries = Object.entries(questionAnswers);
+        const avgScore = answerEntries.length > 0
+            ? Math.round(answerEntries.reduce((sum, [, a]) => sum + a.score, 0) / answerEntries.length)
+            : 0;
+
+        // Build per-question data for the API
+        const questionsData = questionnaires.map(q => {
+            const answer = questionAnswers[String(q.id)] || { score: 0, text: '' };
+            return {
+                question_id: q.id,
+                title: q.training_title_french || q.training_title,
+                score: answer.score,
+                comment: answer.text,
+            };
+        });
 
         setisLoading(true);
         try {
@@ -120,21 +187,27 @@ const useSubmitRPE = () => {
                 navigation,
                 section_type: session,
                 date,
-                note: comments,
-                number_rate: effort,
+                note: comments || JSON.stringify(questionsData),
+                number_rate: avgScore,
                 time: formattedTime,
                 coach_id: coachId,
-                rate_from: effort || 0, // Assuming "User" as default
-                training_section_question: selectedTrainingTitle || "",
-                coach_session_id: params1.coach_session_id
+                rate_from: avgScore,
+                training_section_question: questionsData.map(q => q.title).join(', '),
+                coach_session_id: params1?.coach_session_id,
+                questions_answers: JSON.stringify(questionsData),
             };
-            console.log("Rating  ---- ", params)
+            console.log("Rating  ---- ", params);
             const response = await AddReviewApi(params, setisLoading);
             if (response) {
                 setSession("");
                 setDate("");
                 setComments("");
-                setEffort(0);
+                // Reset all question answers
+                const reset: Record<string, QuestionAnswer> = {};
+                questionnaires.forEach((q: any) => {
+                    reset[String(q.id)] = { score: 5, text: '' };
+                });
+                setQuestionAnswers(reset);
             }
         } catch (error) {
             console.error("API Call Failed:", error);
@@ -151,12 +224,6 @@ const useSubmitRPE = () => {
         }
     };
 
-    const setEffortAndPan = (value: number) => {
-        const v = Math.min(SLIDER_MAX, Math.max(0, Math.round(value)));
-        setEffort(v);
-        pan.setValue(v * THUMB_STEP);
-    };
-
     return {
         isLoading,
         setisLoading,
@@ -164,6 +231,7 @@ const useSubmitRPE = () => {
         isLogin,
         handleSubmit,
         getEffortColor,
+        getTrackGradientColors,
         session,
         setSession,
         date,
@@ -172,9 +240,6 @@ const useSubmitRPE = () => {
         setComments,
         showCalendar,
         setShowCalendar,
-        effort,
-        setEffort: setEffortAndPan,
-        pan,
         errors,
         setErrors,
         showTimePicker,
@@ -189,8 +254,12 @@ const useSubmitRPE = () => {
         handleConfirm,
         questionnaires,
         loadingQuestionnaires,
+        questionAnswers,
+        setQuestionScore,
+        setQuestionText,
         SLIDER_WIDTH,
         THUMB_STEP,
+        SLIDER_MAX,
     };
 };
 
