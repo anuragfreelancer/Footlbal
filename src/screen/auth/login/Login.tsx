@@ -87,7 +87,7 @@ export default function Login() {
               <View style={{ marginTop: 7 }}>
                 <Text style={styles.txtHeading}>{localizationStrings.Login}</Text>
                 <Text style={styles.txtsubHeading}>
-                  Enter your email and password
+                  {localizationStrings.EnterEmailPass || "Enter your email and password"}
                 </Text>
               </View>
               <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
@@ -132,7 +132,7 @@ export default function Login() {
                       fontWeight: '400',
                       lineHeight: 18,
                     }}>
-                    Forgot your password?
+                    {localizationStrings.ForgotPass || "Forgot your password?"}
                   </Text>}
 
                 </TouchableOpacity>
@@ -142,7 +142,7 @@ export default function Login() {
                 onPress={() => loginFunctiom()}
                 buttonStyle={{ width: "100%", marginTop: 28 }}
               />
-              {role === "Coach" && <Text style={{ lineHeight: 16, marginTop: 28, marginBottom: 12, fontSize: 16, color: "rgba(0, 0, 0, 1)", textAlign: "center", fontWeight: "500" }}>OR</Text>
+              {role === "Coach" && <Text style={{ lineHeight: 16, marginTop: 28, marginBottom: 12, fontSize: 16, color: "rgba(0, 0, 0, 1)", textAlign: "center", fontWeight: "500" }}>{localizationStrings.OR || "OR"}</Text>
               }
               {/* <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
             <Image
@@ -166,7 +166,7 @@ export default function Login() {
                   justifyContent: 'center',
                 }}>
                 <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)', }}>
-                  Don’t have an account?{' '}
+                  {localizationStrings.Donthaveaccount || "Don’t have an account?"}{' '}
                 </Text>
                 <TouchableOpacity
                   style={{}}

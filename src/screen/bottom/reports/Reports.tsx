@@ -7,6 +7,7 @@ import imageIndex from "../../../assets/imageIndex";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import ChartComponent from "../../../compoent/ChartComponent";
 import useHome from "../home/useHome";
+import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 
 
 const Reports = () => {
@@ -19,12 +20,13 @@ const Reports = () => {
     isLogin,
     playerName
   } = useReports();
+  useLanguage();
   const RecentSessionCard = ({ item, onPress }: { item: any, onPress?: () => void }) => {
     return (
       <View style={styles.card}>
         <TouchableOpacity style={styles.row} onPress={onPress}>
           <View>
-            <Text style={styles.boldText}>Date - {item?.rpf_date}</Text>
+            <Text style={styles.boldText}>{localizationStrings.DateLabel || "Date"} - {item?.rpf_date}</Text>
             <Text style={styles.lightText}>{item.rpf_session}</Text>
           </View>
           <View style={styles.scoreSection}>
@@ -41,7 +43,7 @@ const Reports = () => {
                 width: 28
               }}
             />}
-            <Text style={styles.boldText}>RPE Score</Text>
+            <Text style={styles.boldText}>{localizationStrings.RPEScore || "RPE Score"}</Text>
             <Text style={styles.scoreText}>{item.rate_efforts}</Text>
           </View>
 
@@ -67,6 +69,14 @@ const Reports = () => {
           {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
         </Text>
         <View style={{ width: 40 }} />
+      </View>
+
+      <View style={styles.subHeaderContainer}>
+        <Text style={styles.subHeader}>
+          {isLogin?.userData?.type === "Coach" 
+            ? (localizationStrings.CoachMonitoringHeader || "Coach Monitoring: Detailed Player Activity & Statistics")
+            : (localizationStrings.PerformanceOverviewHeader || "Performance Overview: Shared Insights for Coach & Player")}
+        </Text>
       </View>
       <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
 
@@ -138,7 +148,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", flex: 1 },
-  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15, marginTop: 40, marginBottom: 10 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 15, marginTop: 40, marginBottom: 5 },
+  subHeaderContainer: {
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  },
+  subHeader: {
+    fontSize: 13,
+    color: "#64748B",
+    fontWeight: "600",
+    textAlign: 'center',
+    lineHeight: 18,
+  },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
 });
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
@@ -7,10 +7,8 @@ import useHome from "./useHome";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
-import SubscriptionCard from "../../../compoent/subscription/SubscriptionCard";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import moment from "moment";
-// Teisng124@gmail.com
 const DashboardScreen = () => {
   useLanguage();
   const {
@@ -18,9 +16,7 @@ const DashboardScreen = () => {
     imgloading,
     setImgloading,
     navigation,
-
     getUser1,
-
     isLogin,
     showEndModal,
     setShowEndModal,
@@ -52,8 +48,6 @@ const DashboardScreen = () => {
     const formattedEndTime = endTimeStr
       ? moment(endTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")
       : null;
-
-    // Full "Started at" / "Ended at" strings: date + time
     const startedAt = dateStr && startTimeStr
       ? `${moment(dateStr).format("DD MMM YYYY")}, ${moment(startTimeStr, ["HH:mm:ss", "H:mm:ss"]).format("h:mm A")}`
       : dateStr
@@ -95,7 +89,7 @@ const DashboardScreen = () => {
           <View style={(styles as any).sessionInfoRow}>
             <Image source={imageIndex.calender} style={(styles as any).sessionIcon} resizeMode="contain" />
             <View style={(styles as any).sessionInfoContent}>
-              <Text style={(styles as any).sessionInfoLabel}>Commencé à</Text>
+              <Text style={(styles as any).sessionInfoLabel}>{localizationStrings.StartedAt || "Started at"}</Text>
               <Text style={(styles as any).sessionInfoValue}>{startedAt}</Text>
             </View>
           </View>
@@ -104,7 +98,7 @@ const DashboardScreen = () => {
           <View style={(styles as any).sessionInfoRow}>
             <Image source={imageIndex.clocks} style={(styles as any).sessionIcon} resizeMode="contain" />
             <View style={(styles as any).sessionInfoContent}>
-              <Text style={(styles as any).sessionInfoLabel}>Terminé à</Text>
+              <Text style={(styles as any).sessionInfoLabel}>{localizationStrings.EndedAt || "Ended at"}</Text>
               <Text style={[
                 (styles as any).sessionInfoValue,
                 isOngoing && (styles as any).sessionTimeOngoing
@@ -118,7 +112,7 @@ const DashboardScreen = () => {
           {item?.question_details?.length > 0 && (
             <View style={(styles as any).questionSectionHome}>
               <View style={(styles as any).questionHeaderHome}>
-                <Text style={{ fontSize: 13, fontWeight: '800', color: '#111827', textTransform: 'uppercase', letterSpacing: 0.5 }}>Détails de la séance</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: '#111827', textTransform: 'uppercase', letterSpacing: 0.5 }}>{localizationStrings.SessionDetails || "Session Details"}</Text>
               </View>
 
               {item?.question_details?.map((q: any, index: number) => {
@@ -138,18 +132,34 @@ const DashboardScreen = () => {
                       />
 
                       <View style={{ flex: 1 }}>
-                        <Text style={styles.questionLabelHome}>Question</Text>
+                        <Text style={styles.questionLabelHome}>{localizationStrings.Question || "Question"}</Text>
 
                         <Text style={styles.questionTextHome}>
                           {q?.question_french || q?.question}
                         </Text>
-                        {q?.answers?.map((s: any, i: number) => {
-                          return (
+                        {q?.answers && q.answers.length > 0 ? (
+                          q.answers.map((s: any, i: number) => (
                             <Text key={i} style={styles.answerTextHome}>
-                              Answer :   {s?.answer}
+                              {localizationStrings.Answer || "Answer"} :   {s?.answer}
                             </Text>
-                          );
-                        })}
+                          ))
+                        ) : (
+                          item?.status == "Start" && isLogin?.userData?.type === "Player" && (
+                            <TouchableOpacity
+                              activeOpacity={0.8}
+                              style={styles.rateButton}
+                              onPress={() => {
+                                (navigation as any).navigate(ScreenNameEnum.SubmitRPE, {
+                                  item: item
+                                });
+                              }}
+                            >
+                              <Text style={[styles.rateButtonText, { color: "white" }]}>
+                                {localizationStrings?.RateDifficulty || "Rate Difficulty"}
+                              </Text>
+                            </TouchableOpacity>
+                          )
+                        )}
                       </View>
                     </View>
                   </View>
@@ -157,42 +167,7 @@ const DashboardScreen = () => {
               })}
             </View>
           )}
-
-
-          {/* <TouchableOpacity
-            activeOpacity={0.8}
-            style={styles.endButton}
-            onPress={() => {
-              setSelectedSession(item);
-              setShowEndModal(true);
-            }}
-          >
-            <Text style={styles.endButtonText}>
-              {localizationStrings?.endSection || ""}
-            </Text>
-          </TouchableOpacity> */}
         </View>
-
-
-        item?.status === "Start" ? (
-        isLogin?.userData?.type === "Coach" && (
-
-        )
-        ) : (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.rateButton}
-          onPress={() => {
-            navigation.navigate(ScreenNameEnum.SubmitRPE, {
-              item: item
-            });
-          }}
-        >
-          <Text style={[styles.rateButtonText, { color: "white" }]}>
-            {localizationStrings?.RateDifficulty || "Rate Difficulty"}
-          </Text>
-        </TouchableOpacity>
-        )
 
 
       </View>

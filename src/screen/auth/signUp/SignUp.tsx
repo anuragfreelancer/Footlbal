@@ -78,9 +78,9 @@ export default function SignUp() {
                                 />
                             </View>
                             <View style={{ marginTop: 7 }}>
-                                <Text style={styles.txtHeading}>Sign Up</Text>
+                                <Text style={styles.txtHeading}>{localizationStrings.SignUp || "Sign Up"}</Text>
                                 <Text style={styles.txtsubHeading}>
-                                    Enter your email and password
+                                    {localizationStrings.EnterEmailPass || "Enter your email and password"}
                                 </Text>
                             </View>
                             <View style={{ marginTop: ResponsiveSize.marginTop(30), paddingVertical: hp(2), }}>
@@ -159,7 +159,7 @@ export default function SignUp() {
                                             color: 'black',
                                             fontSize: 14,
                                             marginLeft: 18
-                                        }}>{selectedOption?.team_name ?? "Account Type"}
+                                        }}>{selectedOption?.team_name ?? (localizationStrings.AccountType || "Account Type")}
                                         </Text>
                                     </View>
 
@@ -186,13 +186,13 @@ export default function SignUp() {
                                 justifyContent: 'center',
                             }}>
                             <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)' }}>
-                                Already have an account?{' '}
+                                {localizationStrings.Alreadyhaveaccount || "Already have an account?"}{' '}
                             </Text>
                             <TouchableOpacity
                                 onPress={() => {
                                     navigation.navigate(ScreenNameEnum.LoginScreen);
                                 }}>
-                                <Text style={Styles.text}>Login</Text>
+                                <Text style={Styles.text}>{localizationStrings.Login}</Text>
                             </TouchableOpacity>
                         </View>
 

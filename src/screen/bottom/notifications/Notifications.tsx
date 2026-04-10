@@ -31,7 +31,7 @@ const Notifications = () => {
             style={{ marginTop: 18 }}
             data={notifications}
             keyExtractor={(_, index) => index.toString()}
-            ListEmptyComponent={<EmptyListComponent message="No Notifications available" />} // Common Empty Component
+            ListEmptyComponent={<EmptyListComponent message={localizationStrings.NoNotifications || "No Notifications available"} />} // Common Empty Component
             renderItem={({ item }) =>  {
               const formattedDate = moment(item?.created_at).format("h:mm A");
               return(

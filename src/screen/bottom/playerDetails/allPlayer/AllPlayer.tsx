@@ -15,6 +15,7 @@ import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
 import { useSelector } from "react-redux";
+import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 
 interface CommonCardProps {
   item: any;
@@ -75,9 +76,10 @@ const StaticScoreSlider = ({ score }: { score: number }) => {
 };
 
 const SessionDetailCard = React.memo(({ item }: { item: any }) => {
+  useLanguage();
   const userDetails = item?.user_details;
-  const sessionType = item?.type || "General";
-  const sessionStatus = item?.status || "Unknown";
+  const sessionType = item?.type || (localizationStrings.General || "General");
+  const sessionStatus = item?.status || (localizationStrings.Unknown || "Unknown");
   const questions = item?.question_details || [];
 
   const getStatusStyle = (status: string) => {
@@ -119,9 +121,9 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
           style={styles.playerAvatar}
         />
         <View style={{ flex: 1 }}>
-          <Text style={styles.playerName}>{userDetails?.user_name || "Unknown Player"}</Text>
+          <Text style={styles.playerName}>{userDetails?.user_name || (localizationStrings.UnknownPlayer || "Unknown Player")}</Text>
           <Text style={styles.playerSubText}>
-            {userDetails?.position_id ? `Pos: ${userDetails.position_id}` : "Player"} • {userDetails?.team_id ? `Team ${userDetails.team_id}` : ""}
+            {userDetails?.position_id ? `${localizationStrings.Position || "Pos"}: ${userDetails.position_id}` : (localizationStrings.Player || "Player")} • {userDetails?.team_id ? `${localizationStrings.MyTeam || "Team"} ${userDetails.team_id}` : ""}
           </Text>
         </View>
       </View>
@@ -146,13 +148,13 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
 
                 {q.answers && q.answers.length > 0 ? (
                   <View style={styles.answerContainer}>
-                    <Text style={styles.answerLabel}>Response</Text>
+                    <Text style={styles.answerLabel}>{localizationStrings.Response || "Response"}</Text>
                     <Text style={styles.answerText}>{q.answers[0].answer}</Text>
-                    <Text style={styles.answeredByText}>Answered by {q.answers[0].user_name || "Unknown"}</Text>
+                    <Text style={styles.answeredByText}>{localizationStrings.AnsweredBy || "Answered by"} {q.answers[0].user_name || (localizationStrings.Unknown || "Unknown")}</Text>
                   </View>
                 ) : (
                   <View style={{ marginTop: 8 }}>
-                    <Text style={[styles.answerText, { fontStyle: 'italic', color: '#94A3B8' }]}>No answer provided</Text>
+                    <Text style={[styles.answerText, { fontStyle: 'italic', color: '#94A3B8' }]}>{localizationStrings.NoAnswerProvided || "No answer provided"}</Text>
                   </View>
                 )}
               </View>
@@ -161,7 +163,7 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
         </View>
       ) : (
         <View style={[styles.reviewInnerContent, { alignItems: 'center', paddingVertical: 20 }]}>
-          <Text style={{ color: '#94A3B8', fontSize: 13, fontWeight: '600' }}>No questionnaire data available</Text>
+          <Text style={{ color: '#94A3B8', fontSize: 13, fontWeight: '600' }}>{localizationStrings.NoQuestionnaireData || "No questionnaire data available"}</Text>
         </View>
       )}
 
@@ -185,6 +187,7 @@ const AllPlayer = () => {
     viewType,
     allPlay
   } = useAllPlayer();
+  useLanguage();
   const [is] = useState(false);
   const userGetData = useSelector((state: any) => state?.feature?.userGetData);
   console.log("allPlay", allPlay)
@@ -205,7 +208,7 @@ const AllPlayer = () => {
           <FlatList
             data={allPlay}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<EmptyListComponent message={viewType === 'Players' ? localizationStrings?.noplayers : "No reviews found"} />}
+            ListEmptyComponent={<EmptyListComponent message={viewType === 'Players' ? (localizationStrings?.noplayers || "No players found") : (localizationStrings?.NoReviewsFound || "No reviews found")} />}
             keyExtractor={(item, index) => (item.id || item.user_id || index).toString()}
             renderItem={({ item }) => (
 

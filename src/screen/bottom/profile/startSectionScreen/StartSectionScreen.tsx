@@ -21,12 +21,13 @@ import localizationStrings from '../../../../compoent/Localization/Localization'
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import { StartSection, EndSection, GetQuestionByCoachApi, AddQuestionApi } from '../../../../redux/Api/AuthApi';
 import CustomHeader from '../../../../compoent/CustomHeader';
+import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
 
 
 
 const StartSectionScreen = ({ route, navigation }: any) => {
-
+  useLanguage();
   const { Before, Training, playerIds, coachId, mode } = route.params || {};
 
   const [date, setDate] = useState(new Date());
@@ -78,7 +79,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   const handleAddNewQuestion = async () => {
     if (!newQText.trim()) return;
     if (!coachId) {
-      Alert.alert(localizationStrings.StartSectionScreen_Error || "Error", localizationStrings.StartSectionScreen_CoachIdMissing || "Coach ID represents required data but is not available.");
+      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
       return;
     }
 
@@ -93,7 +94,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
       const response = await AddQuestionApi(params, setLoading);
       if (response && response.status === '1') {
-        Alert.alert(localizationStrings.StartSectionScreen_Success || "Success", localizationStrings.StartSectionScreen_QuestionAddedSuccess || "Question added successfully!");
+        Alert.alert(localizationStrings.Success, localizationStrings.SubmittedSuccess);
         setNewQText('');
         setShowAddQModal(false);
         fetchQuestions(); // Refresh list from backend
@@ -157,16 +158,16 @@ const StartSectionScreen = ({ route, navigation }: any) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert(localizationStrings.StartSectionScreen_Error || 'Error', localizationStrings.StartSectionScreen_AnErrorOccurred || "An error occurred");
+      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
     } finally {
       setLoading(false);
     }
   };
 
   const sessionTypes = [
-    { key: 'training', label: localizationStrings.StartSectionScreen_TrainingSession || "Training", icon: '🏃' },
-    { key: 'match', label: localizationStrings.StartSectionScreen_MatchSession || "Match", icon: '⚽' },
-    { key: 'break', label: localizationStrings.StartSectionScreen_BreakSession || "Break", icon: '🧘' },
+    { key: 'training', label: localizationStrings.TrainingSession || "Training", icon: '🏃' },
+    { key: 'match', label: localizationStrings.MatchSession || "Match", icon: '⚽' },
+    { key: 'break', label: localizationStrings.BreakSession || "Break", icon: '🧘' },
   ];
 
   const renderAllQuestions = (allList: any[], isBefore: boolean) => {
@@ -214,7 +215,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
       <View style={{ marginHorizontal: 12, marginTop: 5 }}>
         <CustomHeader
           imageSource={imageIndex.backNav}
-          label={localizationStrings.StartSectionScreen_AddQuestionStartSession || "Add Question / Start Session"}
+          label={localizationStrings.AddNewQuestion || "Add Question / Start Session"}
         />
       </View>
 
@@ -248,7 +249,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                 <>
                   <View style={styles.sectionCard}>
                     <View style={styles.sectionHeaderRow}>
-                      <Text style={styles.sectionLabel}>{Before || localizationStrings.StartSectionScreen_BeforeSession || "BEFORE SESSION"}</Text>
+                      <Text style={styles.sectionLabel}>{Before || (localizationStrings.BeforeSessionHeader || "BEFORE SESSION")}</Text>
                       <View style={styles.countBadge}><Text style={styles.countText}>{selectedBefore.length} / {availableBefore.length}</Text></View>
                     </View>
                     {renderAllQuestions(availableBefore, true)}
@@ -256,7 +257,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
                   <View style={styles.sectionCard}>
                     <View style={styles.sectionHeaderRow}>
-                      <Text style={styles.sectionLabel}>{Training || localizationStrings.StartSectionScreen_AfterSession || "AFTER SESSION"}</Text>
+                      <Text style={styles.sectionLabel}>{Training || (localizationStrings.AfterSessionHeader || "AFTER SESSION")}</Text>
                       <View style={[styles.countBadge, { backgroundColor: '#FEF3C7' }]}><Text style={[styles.countText, { color: '#B45309' }]}>{selectedAfter.length} / {availableAfter.length}</Text></View>
                     </View>
                     {renderAllQuestions(availableAfter, false)}
@@ -266,7 +267,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
               {/* ADD QUESTION BTN */}
               <TouchableOpacity style={styles.addBtn} onPress={() => setShowAddQModal(true)}>
-                <Text style={styles.addBtnTxt}>{localizationStrings.StartSectionScreen_AddCustomQuestion || "+ Add Custom Question"}</Text>
+                <Text style={styles.addBtnTxt}>{localizationStrings.AddCustomQuestionBtn || "+ Add Custom Question"}</Text>
               </TouchableOpacity>
 
               {/* SCHEDULE */}
@@ -276,7 +277,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                   <TouchableOpacity style={styles.pickBox} onPress={() => setDatePickerVisibility(true)}>
                     <View style={styles.pickIconBox}><Image source={imageIndex.calendar} style={styles.pickIcon} /></View>
                     <View>
-                      <Text style={styles.pickLabel}>{localizationStrings.StartSectionScreen_Date || "DATE"}</Text>
+                      <Text style={styles.pickLabel}>{localizationStrings.DateLabel || "DATE"}</Text>
                       <Text style={styles.pickValue}>{date.toLocaleDateString()}</Text>
                     </View>
                   </TouchableOpacity>
@@ -284,7 +285,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                   <TouchableOpacity style={styles.pickBox} onPress={() => setTimePickerVisibility(true)}>
                     <View style={styles.pickIconBox}><Image source={imageIndex.clocks} style={styles.pickIcon} /></View>
                     <View>
-                      <Text style={styles.pickLabel}>{localizationStrings.StartSectionScreen_Time || "TIME"}</Text>
+                      <Text style={styles.pickLabel}>{localizationStrings.Time || "TIME"}</Text>
                       <Text style={styles.pickValue}>{time?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
                     </View>
                   </TouchableOpacity>
@@ -297,7 +298,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
           {/* FOOTER */}
           <View style={styles.footer}>
             <TouchableOpacity style={styles.mainBtn} onPress={handleStart} disabled={loading}>
-              {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.mainBtnTxt}>{localizationStrings.StartSectionScreen_StartSection || "Start section"}</Text>}
+              {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.mainBtnTxt}>{localizationStrings.StartSection || "Start section"}</Text>}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -310,24 +311,24 @@ const StartSectionScreen = ({ route, navigation }: any) => {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { height: '55%' }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{localizationStrings.StartSectionScreen_AddNewQuestion || "Add New Question"}</Text>
+              <Text style={styles.modalTitle}>{localizationStrings.AddNewQuestion || "Add New Question"}</Text>
               <TouchableOpacity onPress={() => setShowAddQModal(false)}><Image source={imageIndex.close} style={styles.closeIcon} /></TouchableOpacity>
             </View>
 
             <View style={styles.pillContainer}>
-              <Text style={styles.inputLabel}>{localizationStrings.StartSectionScreen_SelectSection || "Select Section"}</Text>
+              <Text style={styles.inputLabel}>{localizationStrings.SelectSection || "Select Section"}</Text>
               <View style={styles.pillBg}>
                 <TouchableOpacity style={[styles.pillItem, newQType === 'before' && styles.pillActive]} onPress={() => setNewQType('before')}>
-                  <Text style={[styles.pillTxt, newQType === 'before' && styles.pillTxtActive]}>{localizationStrings.StartSectionScreen_BeforeSessionLabel || "Before Session"}</Text>
+                  <Text style={[styles.pillTxt, newQType === 'before' && styles.pillTxtActive]}>{localizationStrings.BeforeSessionHeader || "Before Session"}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.pillItem, newQType === 'after' && styles.pillActive]} onPress={() => setNewQType('after')}>
-                  <Text style={[styles.pillTxt, newQType === 'after' && styles.pillTxtActive]}>{localizationStrings.StartSectionScreen_AfterSessionLabel || "After Session"}</Text>
+                  <Text style={[styles.pillTxt, newQType === 'after' && styles.pillTxtActive]}>{localizationStrings.AfterSessionHeader || "After Session"}</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>{localizationStrings.StartSectionScreen_QuestionTextLabel || "Question Text"}</Text>
+              <Text style={styles.inputLabel}>{localizationStrings.QuestionTextLabel || "Question Text"}</Text>
               <TextInput
                 style={styles.largeInput}
                 placeholder={localizationStrings.StartSectionScreen_ExHowHeavy || "Ex: How heavy were your legs today?"}
@@ -343,7 +344,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
               onPress={handleAddNewQuestion}
               disabled={!newQText.trim()}
             >
-              <Text style={styles.doneBtnTxt}>{localizationStrings.StartSectionScreen_AddQuestionBtn || "Add Question"}</Text>
+              <Text style={styles.doneBtnTxt}>{localizationStrings.AddQuestion || "Add Question"}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   typeGrid: { flexDirection: 'row', justifyContent: 'space-between' },
   typeBox: { flex: 1, backgroundColor: '#F1F5F9', borderRadius: 10, paddingVertical: 12, marginHorizontal: 4, alignItems: 'center' },
   typeBoxActive: { backgroundColor: '#A0D803' },
-  typeTxt: { fontSize: 13, fontWeight: '600', color: '#64748B' },
+  typeTxt: { fontSize: 13, fontWeight: '600', color: '#64748B', textAlign: "center" },
   typeTxtActive: { color: '#FFF' },
 
   sectionHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },

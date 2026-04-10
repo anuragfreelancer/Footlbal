@@ -243,7 +243,7 @@ const SubmitRPE = () => {
         <View style={{ marginHorizontal: 12, marginTop: 5 }}>
           <CustomHeader
             imageSource={imageIndex.backNav}
-            label={"HMMP RPE"}
+            label={localizationStrings.RPEHeader || "HMMP RPE"}
           />
         </View>
         <View style={styles.container}>
@@ -258,7 +258,7 @@ const SubmitRPE = () => {
             {questionnaires.length > 0 && (
               <View style={{ marginTop: 4 }}>
                 <Text style={styles.questionnaireSectionHeader}>
-                  Détails de la séance
+                  {localizationStrings.SessionDetails || "Session Details"}
                 </Text>
                 {questionnaires.map((item) => {
                   const qId = String(item.id);
@@ -301,7 +301,7 @@ const SubmitRPE = () => {
 
         <View style={styles.buttView}>
           <CustomButton
-            title={"Submit Feedback"}
+            title={localizationStrings.SubmitFeedback || "Submit Feedback"}
             onPress={() => handleSubmit()}
           />
         </View>

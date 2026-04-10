@@ -102,10 +102,10 @@ const MyTeam = () => {
 
                   <View style={styles.infoContainer}>
                     <Text style={styles.name}>{item?.user_name}</Text>
-                    <Text style={styles.position}>Forward</Text>
+                    <Text style={styles.position}>{localizationStrings.ForwardPosition || "Forward"}</Text>
                   </View>
                   <View style={styles.detailContainer}>
-                    <Text style={styles.label}>Intensity</Text>
+                    <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
                     <Text style={styles.value}>{item?.injury}</Text>
                   </View>
                 </TouchableOpacity>

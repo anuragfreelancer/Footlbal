@@ -70,14 +70,14 @@ const EndSectionScreen = () => {
 
     Alert.alert(
       localizationStrings?.endSection,
-      "Are you sure you want to end the selected sessions?",
+      localizationStrings.AreYouSureEndSelected || "Are you sure you want to end the selected sessions?",
       [
         {
-          text: "Cancel",
+          text: localizationStrings.Cancel || "Cancel",
           style: "cancel"
         },
         {
-          text: "End",
+          text: localizationStrings.End || "End",
           onPress: async () => {
             try {
               setIsLoading(true);
@@ -126,8 +126,8 @@ const EndSectionScreen = () => {
           />
 
           <View style={styles.infoContainer}>
-            <Text style={styles.name}>{item?.user_details?.user_name || "Unknown Player"}</Text>
-            <Text style={styles.position}>{item?.type || "Training Session"}</Text>
+            <Text style={styles.name}>{item?.user_details?.user_name || (localizationStrings.UnknownPlayer || "Unknown Player")}</Text>
+            <Text style={styles.position}>{item?.type || (localizationStrings.TrainingSession || "Training Session")}</Text>
           </View>
 
           <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
@@ -139,14 +139,14 @@ const EndSectionScreen = () => {
           <View style={styles.questionSection}>
 
             <Text style={[styles.questionLabel, { marginBottom: 10 }]}>
-              Questionnaire Responses
+              {localizationStrings.QuestionnaireResponses || "Questionnaire Responses"}
             </Text>
 
             {item?.question_details.map((questionItem: any, index: number) => (
               <View key={index} style={styles.questionItem}>
 
                 {/* Question */}
-                <Text style={styles.questionLabel}>Question</Text>
+                <Text style={styles.questionLabel}>{localizationStrings.Question || "Question"}</Text>
                 <Text style={styles.questionText}>
                   {questionItem?.question_french || "N/A"}
                 </Text>
@@ -163,7 +163,7 @@ const EndSectionScreen = () => {
                           lineHeight: 18,
                         }}
                       >
-                        Answer: {answerItem?.answer || "No Answer"}
+                        {localizationStrings.Answer || "Answer"}: {answerItem?.answer || (localizationStrings.NoAnswerProvided || "No Answer")}
                       </Text>
 
                       {/* Optional: show user name */}
@@ -173,7 +173,7 @@ const EndSectionScreen = () => {
                           color: "#9CA3AF",
                         }}
                       >
-                        By: {answerItem?.user_name || "Unknown"}
+                        {localizationStrings.ByLabel || "By: "}{answerItem?.user_name || (localizationStrings.Unknown || "Unknown")}
                       </Text>
                     </View>
                   ))
@@ -185,7 +185,7 @@ const EndSectionScreen = () => {
                       marginTop: 5,
                     }}
                   >
-                    No Answers Available
+                    {localizationStrings.NoAnswersAvailable || "No Answers Available"}
                   </Text>
                 )}
               </View>

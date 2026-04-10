@@ -119,13 +119,13 @@ const _routes = () => {
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
-      {
-        name: ScreenNameEnum.Messages,
-        Component: Messages,
-        label: localizationStrings.Messages,
-        logo: imageIndex.bubbleChat,
-        logo1: imageIndex.bubbleChat
-      },
+      // {
+      //   name: ScreenNameEnum.Messages,
+      //   Component: Messages,
+      //   label: localizationStrings.Messages,
+      //   logo: imageIndex.bubbleChat,
+      //   logo1: imageIndex.bubbleChat
+      // },
 
       {
         name: ScreenNameEnum.Reports,
