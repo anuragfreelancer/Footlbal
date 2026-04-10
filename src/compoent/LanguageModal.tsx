@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import localizationStrings from './Localization/Localization';
@@ -33,45 +34,68 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
     <Modal
       visible={visible}
       transparent
-      animationType="fade"
+      animationType="slide"
       onRequestClose={onClose}
     >
-      <TouchableOpacity 
-            onPress={onClose}
-      style={styles.overlay}>
-        <TouchableOpacity  
-        
-  
-        style={styles.modalContainer}>
-          <Text style={styles.title}>{localizationStrings.ChooseYourLanguage}</Text>
+      <View style={styles.overlay}>
+        <TouchableOpacity 
+          style={styles.blurOverlay} 
+          activeOpacity={1} 
+          onPress={onClose} 
+        />
+        <View style={styles.modalContentPremium}>
+          <View style={styles.modalHandle} />
+          <Text style={styles.titlePremium}>{localizationStrings.ChooseYourLanguage}</Text>
 
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedLanguage === 'English' && styles.selectedOption,
-            ]}
-            onPress={() => handleLanguageSelect('English')}
-          >
-            <Text style={styles.flag}>🇬🇧</Text>
-            <Text style={styles.optionText}>{localizationStrings.English}</Text>
-          </TouchableOpacity>
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={[
+                styles.optionItem,
+                selectedLanguage === 'English' && styles.optionSelected,
+              ]}
+              onPress={() => handleLanguageSelect('English')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.optionInner}>
+                <View style={styles.flagWrapper}>
+                  <Text style={styles.flagIcon}>🇬🇧</Text>
+                </View>
+                <Text style={[styles.optionLabel, selectedLanguage === 'English' && styles.optionLabelActive]}>
+                  {localizationStrings.English}
+                </Text>
+              </View>
+              <View style={[styles.radioOuter, selectedLanguage === 'English' && styles.radioOuterActive]}>
+                {selectedLanguage === 'English' && <View style={styles.radioInner} />}
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedLanguage === 'French' && styles.selectedOption,
-            ]}
-            onPress={() => handleLanguageSelect('French')}
-          >
-            <Text style={styles.flag}>🇫🇷</Text>
-            <Text style={styles.optionText}>{localizationStrings.French}</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionItem,
+                selectedLanguage === 'French' && styles.optionSelected,
+              ]}
+              onPress={() => handleLanguageSelect('French')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.optionInner}>
+                <View style={styles.flagWrapper}>
+                  <Text style={styles.flagIcon}>🇫🇷</Text>
+                </View>
+                <Text style={[styles.optionLabel, selectedLanguage === 'French' && styles.optionLabelActive]}>
+                  {localizationStrings.French}
+                </Text>
+              </View>
+              <View style={[styles.radioOuter, selectedLanguage === 'French' && styles.radioOuterActive]}>
+                {selectedLanguage === 'French' && <View style={styles.radioInner} />}
+              </View>
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-            <Text style={styles.cancelText}>{localizationStrings.Cancel}</Text>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtnPremium} activeOpacity={0.8}>
+            <Text style={styles.closeBtnTextPremium}>{localizationStrings.Cancel}</Text>
           </TouchableOpacity>
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </View>
+      </View>
     </Modal>
 
   );
@@ -86,64 +110,116 @@ const TEXT_COLOR = '#2C2C2C';        // Dark gray for text
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    justifyContent: 'flex-end',
+  },
+  blurOverlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  modalContentPremium: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    padding: 24,
+    paddingTop: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 20,
+  },
+  modalHandle: {
+    width: 40,
+    height: 5,
+    backgroundColor: '#E2E8F0',
+    borderRadius: 3,
+    alignSelf: 'center',
+    marginBottom: 24,
+    marginTop: 8,
+  },
+  titlePremium: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  optionsContainer: {
+    marginBottom: 24,
+  },
+  optionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F8FAFC',
+    padding: 16,
+    borderRadius: 20,
+    marginVertical: 6,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+  },
+  optionSelected: {
+    borderColor: '#A0D803',
+    backgroundColor: '#F0FDF4',
+  },
+  optionInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  flagWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  flagIcon: {
+    fontSize: 20,
+  },
+  optionLabel: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '600',
+  },
+  optionLabelActive: {
+    color: '#0F172A',
+    fontWeight: '700',
+  },
+  radioOuter: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: '#CBD5E1',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContainer: {
-    width: '85%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 25,
-    paddingHorizontal: 20,
+  radioOuterActive: {
+    borderColor: '#A0D803',
+  },
+  radioInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#A0D803',
+  },
+  closeBtnPremium: {
+    backgroundColor: '#F1F5F9',
+    borderRadius: 16,
+    paddingVertical: 16,
     alignItems: 'center',
-    elevation: 5,
+    marginBottom: Platform.OS === 'ios' ? 20 : 0,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: '600',
-    marginBottom: 20,
-    color: TEXT_COLOR,
-  },
-  optionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    width: '100%',
-    marginVertical: 8,
-    borderWidth: 2,
-    borderColor: '#FAFAFA',
-  },
-  selectedOption: {
-    borderColor: PRIMARY_COLOR,
-    backgroundColor: BACKGROUND_LIGHT,
-  },
-  flag: {
-    fontSize: 20,
-    marginRight: 10,
-  },
-  optionText: {
+  closeBtnTextPremium: {
+    color: '#64748B',
     fontSize: 16,
-    color: TEXT_COLOR,
-    fontWeight: '500',
-  },
-  cancelButton: {
-    marginTop: 20,
-    backgroundColor: '#FFF2F2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#FFCCCC',
-  },
-  cancelText: {
-    color: '#FF4D4D',
-    fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '700',
   },
 });

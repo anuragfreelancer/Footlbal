@@ -35,6 +35,7 @@ enum ScreenNameEnum {
   TrainingFedBack="TrainingFedBack" ,
   StartTrainingFed="StartTrainingFed",
   StartSectionScreen="StartSectionScreen",
+  AddQuestion="AddQuestion",
  }
 
 export default ScreenNameEnum;

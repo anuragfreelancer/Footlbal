@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   calendarContainer: { backgroundColor: "#fff", padding: 20, borderRadius: 16, width: 320 },
   closeButton: { marginTop: 16, padding: 14, backgroundColor: "#A0D803", borderRadius: 12, alignItems: "center" },
   closeButtonText: { fontSize: 15, fontWeight: "600", color: "#0f172a" },
-  buttView: { position: "absolute", bottom: 0, left: 0, right: 0, paddingHorizontal: 20, paddingVertical: 16, backgroundColor: "#fff", borderTopWidth: 1, borderTopColor: "#E2E8F0" },
+  buttView: { paddingHorizontal: 20, paddingVertical: 16, marginBottom: 20 },
   loader: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F8FAFC" },
 
   // ─── Question Slider Card ─────────────────────────────────────────

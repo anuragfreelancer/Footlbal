@@ -13,13 +13,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
-  Modal,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import imageIndex from '../../../../assets/imageIndex';
 import localizationStrings from '../../../../compoent/Localization/Localization';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
-import { StartSection, EndSection, GetQuestionByCoachApi, AddQuestionApi } from '../../../../redux/Api/AuthApi';
+import { StartSection, EndSection, GetQuestionByCoachApi } from '../../../../redux/Api/AuthApi';
+import ScreenNameEnum from '../../../../routes/screenName.enum';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 
@@ -42,13 +42,6 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   const [selectedBefore, setSelectedBefore] = useState<any[]>([]);
   const [selectedAfter, setSelectedAfter] = useState<any[]>([]);
 
-  // Modals Visibility
-  const [showAddQModal, setShowAddQModal] = useState(false);
-
-  // New Question Form State
-  const [newQText, setNewQText] = useState('');
-  const [newQType, setNewQType] = useState<'before' | 'after'>('before');
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [fetchingQuestions, setFetchingQuestions] = useState(false);
@@ -63,6 +56,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
     setFetchingQuestions(true);
     try {
       const allQs = await GetQuestionByCoachApi(coachId);
+      console.log("sss", allQs)
       if (allQs && Array.isArray(allQs)) {
         const before = allQs.filter((q: any) => q.question_type === 'before_training');
         const after = allQs.filter((q: any) => q.question_type === 'after_training');
@@ -73,36 +67,6 @@ const StartSectionScreen = ({ route, navigation }: any) => {
       console.error('Error fetching/loading questions:', error);
     } finally {
       setFetchingQuestions(false);
-    }
-  };
-
-  const handleAddNewQuestion = async () => {
-    if (!newQText.trim()) return;
-    if (!coachId) {
-      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const params = {
-        coach_id: coachId,
-        session_id: '0',
-        question: newQText.trim(),
-        question_type: newQType === 'before' ? 'before_training' : 'after_training'
-      };
-
-      const response = await AddQuestionApi(params, setLoading);
-      if (response && response.status === '1') {
-        Alert.alert(localizationStrings.Success, localizationStrings.SubmittedSuccess);
-        setNewQText('');
-        setShowAddQModal(false);
-        fetchQuestions(); // Refresh list from backend
-      }
-    } catch (error) {
-      console.error('Error adding custom question:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -183,7 +147,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
     return (
       <View style={styles.questionContainer}>
-        {allList.map((q, index) => {
+        {allList?.map((q, index) => {
           const isSelected = selectedList.some(item => item.id === q.id);
           return (
             <TouchableOpacity
@@ -193,7 +157,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
             >
               <View style={styles.flex}>
                 <Text style={[styles.liText, isSelected && styles.liTextActive]}>
-                  {q.question || q.title || ''}
+                  {q?.question || q?.title || ''}
                 </Text>
               </View>
               <View style={styles.liActionRow}>
@@ -215,7 +179,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
       <View style={{ marginHorizontal: 12, marginTop: 5 }}>
         <CustomHeader
           imageSource={imageIndex.backNav}
-          label={localizationStrings.AddNewQuestion || "Add Question / Start Session"}
+          label={"Début de section"}
         />
       </View>
 
@@ -266,7 +230,10 @@ const StartSectionScreen = ({ route, navigation }: any) => {
               )}
 
               {/* ADD QUESTION BTN */}
-              <TouchableOpacity style={styles.addBtn} onPress={() => setShowAddQModal(true)}>
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => navigation.navigate(ScreenNameEnum.AddQuestion, { onSuccess: fetchQuestions, coachId: coachId })}
+              >
                 <Text style={styles.addBtnTxt}>{localizationStrings.AddCustomQuestionBtn || "+ Add Custom Question"}</Text>
               </TouchableOpacity>
 
@@ -301,54 +268,10 @@ const StartSectionScreen = ({ route, navigation }: any) => {
               {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.mainBtnTxt}>{localizationStrings.StartSection || "Start section"}</Text>}
             </TouchableOpacity>
           </View>
+
         </KeyboardAvoidingView>
+
       </TouchableWithoutFeedback>
-
-
-
-      {/* MODAL 2: ADD NEW QUESTION */}
-      <Modal visible={showAddQModal} animationType="slide" transparent onRequestClose={() => setShowAddQModal(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { height: '55%' }]}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{localizationStrings.AddNewQuestion || "Add New Question"}</Text>
-              <TouchableOpacity onPress={() => setShowAddQModal(false)}><Image source={imageIndex.close} style={styles.closeIcon} /></TouchableOpacity>
-            </View>
-
-            <View style={styles.pillContainer}>
-              <Text style={styles.inputLabel}>{localizationStrings.SelectSection || "Select Section"}</Text>
-              <View style={styles.pillBg}>
-                <TouchableOpacity style={[styles.pillItem, newQType === 'before' && styles.pillActive]} onPress={() => setNewQType('before')}>
-                  <Text style={[styles.pillTxt, newQType === 'before' && styles.pillTxtActive]}>{localizationStrings.BeforeSessionHeader || "Before Session"}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.pillItem, newQType === 'after' && styles.pillActive]} onPress={() => setNewQType('after')}>
-                  <Text style={[styles.pillTxt, newQType === 'after' && styles.pillTxtActive]}>{localizationStrings.AfterSessionHeader || "After Session"}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>{localizationStrings.QuestionTextLabel || "Question Text"}</Text>
-              <TextInput
-                style={styles.largeInput}
-                placeholder={localizationStrings.StartSectionScreen_ExHowHeavy || "Ex: How heavy were your legs today?"}
-                placeholderTextColor="#94A3B8"
-                multiline
-                value={newQText}
-                onChangeText={setNewQText}
-              />
-            </View>
-
-            <TouchableOpacity
-              style={[styles.doneBtn, !newQText.trim() && { backgroundColor: '#E2E8F0' }]}
-              onPress={handleAddNewQuestion}
-              disabled={!newQText.trim()}
-            >
-              <Text style={styles.doneBtnTxt}>{localizationStrings.AddQuestion || "Add Question"}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
       <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }} onCancel={() => setDatePickerVisibility(false)} />
       <DateTimePickerModal isVisible={isTimePickerVisible} mode="time" onConfirm={(t) => { setTime(t); setTimePickerVisibility(false); }} onCancel={() => setTimePickerVisibility(false)} />

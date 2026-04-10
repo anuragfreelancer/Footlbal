@@ -302,6 +302,10 @@
             "QuestionTextLabel": "Question Text",
             "AddNewQuestion": "Add New Question",
             "AddQuestion": "Add Question",
+            "ExHowHeavy": "Ex: How heavy were your legs today?",
+            "StartSectionTitle": "Start of Section",
+            "PleaseEnterQuestion": "Please enter a question.",
+            "QuestionAddedSuccess": "Question added successfully!",
             "End": "End",
             "StrengthTraining": "Strength & Conditioning"
       },
@@ -607,6 +611,10 @@
             "QuestionTextLabel": "Texte de la question",
             "AddNewQuestion": "Ajouter une nouvelle question",
             "AddQuestion": "Ajouter une question",
+            "ExHowHeavy": "Ex : Quelle est la lourdeur de vos jambes aujourd'hui ?",
+            "StartSectionTitle": "Début de section",
+            "PleaseEnterQuestion": "Veuillez saisir une question.",
+            "QuestionAddedSuccess": "Question ajoutée avec succès !",
             "End": "Fin"
       }
 }

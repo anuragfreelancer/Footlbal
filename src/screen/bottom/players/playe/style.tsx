@@ -1,8 +1,7 @@
-
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white", },
+  container: { flex: 1, backgroundColor: "white" },
   header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginTop: 11 },
   card: {
     flexDirection: "row",
@@ -33,15 +32,15 @@ const styles = StyleSheet.create({
   value: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
   fab: {
     position: "absolute",
-    bottom: 20,
+    bottom: 1,
     right: 20,
-    backgroundColor: "#7ED321",
-    borderRadius: 30,
-    width: 56,
-    height: 56,
+    backgroundColor: "rgba(160, 216, 3, 1)",
+    borderRadius: 10,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
+    height: 55
 
   },
   contentContainer: {

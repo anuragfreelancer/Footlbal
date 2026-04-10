@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { AttendanceApi, SumitRpfFrom, GetTraining, AddReviewApi, AddQuestionAnsApi } from '../../../redux/Api/AuthApi';
+import { AttendanceApi, AddQuestionAnsApi } from '../../../redux/Api/AuthApi';
 import { Alert, Dimensions } from 'react-native';
 import { Platform } from 'react-native';
 import localizationStrings from '../../../compoent/Localization/Localization';
@@ -138,28 +138,29 @@ const useSubmitRPE = () => {
                         user_id: isLogin?.userData?.id,
                         question_id: q.id,
                         question_ans_point: avgScore,
-                        answer: answer.text || ""
+                        answer: answer.text || "",
+                        navigat: navigation
                     });
                 }
             }
 
             // 2. Submit Main Review
-            const reviewParams: any = {
-                user_id: isLogin?.userData?.id,
-                section_type: session || params1?.item?.type || "Training",
-                date: date || params1?.item?.session_start_date,
-                note: comments || "Session Feedback",
-                number_rate: avgScore,
-                time: formattedTime === localizationStrings.SelectTime ? (params1?.item?.session_start_time || "00:00") : formattedTime,
-                coach_id: coachId || params1?.item?.coach_id,
-                rate_from: avgScore,
-                coach_session_id: params1?.item?.id,
-            };
+            // const reviewParams: any = {
+            //     user_id: isLogin?.userData?.id,
+            //     section_type: session || params1?.item?.type || "Training",
+            //     date: date || params1?.item?.session_start_date,
+            //     note: comments || "Session Feedback",
+            //     number_rate: avgScore,
+            //     time: formattedTime === localizationStrings.SelectTime ? (params1?.item?.session_start_time || "00:00") : formattedTime,
+            //     coach_id: coachId || params1?.item?.coach_id,
+            //     rate_from: avgScore,
+            //     coach_session_id: params1?.item?.id,
+            // };
 
-            const response = await AddReviewApi(reviewParams, setisLoading);
-            if (response) {
-                navigation.goBack();
-            }
+            // const response = await AddReviewApi(reviewParams, setisLoading);
+
+
+
         } catch (error) {
             console.error("API Call Failed:", error);
         } finally {

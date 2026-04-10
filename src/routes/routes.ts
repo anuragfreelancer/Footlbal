@@ -39,6 +39,7 @@ import PaymentWebViewScreen from "../screen/SubscriptionPlans/PaymentWebViewScre
 import localizationStrings from "../compoent/Localization/Localization";
 import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer";
 import StartSectionScreen from "../screen/bottom/profile/startSectionScreen/StartSectionScreen";
+import AddQuestion from "../screen/bottom/profile/addQuestion/AddQuestion";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -79,6 +80,7 @@ const _routes = () => {
       { name: ScreenNameEnum.SubscriptionPlansScreen, Component: SubscriptionPlansScreen },
       { name: ScreenNameEnum.PaymentWebViewScreen, Component: PaymentWebViewScreen },
       { name: ScreenNameEnum.StartSectionScreen, Component: StartSectionScreen },
+      { name: ScreenNameEnum.AddQuestion, Component: AddQuestion },
     ],
 
     BOTTOMTAB_ROUTE: isLogin?.userData?.type === "Coach" ? [

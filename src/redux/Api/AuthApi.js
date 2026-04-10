@@ -268,11 +268,11 @@ const UpdateProfile_Api = async (
             headers: myHeaders,
             body: formData,
         };
-        console.log("edit formData",formData)
+        console.log("edit formData", formData)
         const respons = await fetch(`${base_url}${constant.updateProfile}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("edit ",response)
+                console.log("edit ", response)
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)
@@ -282,7 +282,7 @@ const UpdateProfile_Api = async (
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return response
-                }  
+                }
             })
             .catch((error) =>
                 console.error(error));
@@ -473,7 +473,7 @@ const StartSection = async (param, setLoading) => {
 //     }
 // };
 const GetProfile = async (userId, dispatch) => {
-    console.log(" user id ----",userId)
+    console.log(" user id ----", userId)
     try {
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
@@ -1348,7 +1348,7 @@ const GetCoachSession = async (setLoading, userId) => {
                 },
             }
         );
- 
+
         const resText = await response.text();
         try {
             const responseData = JSON.parse(resText);
@@ -1693,7 +1693,7 @@ const AddReviewApi = async (param, setLoading) => {
         formData.append("coach_session_id", param?.coach_session_id);
         formData.append("note", param?.note);
         formData.append("training_section_question", param?.training_section_question);
-         const requestOptions = {
+        const requestOptions = {
             method: "POST",
             headers: myHeaders,
             body: formData,
@@ -1770,6 +1770,7 @@ const AddQuestionApi = async (param, setLoading) => {
             headers: myHeaders,
             body: formData,
         };
+        console.log(" add formData", formData)
         const response = await fetch(`${base_url}${constant.add_question}`, requestOptions);
         const resText = await response.text();
         const responseData = JSON.parse(resText);
@@ -1827,6 +1828,8 @@ const AddQuestionAnsApi = async (param) => {
             body: formData,
         };
         const response = await fetch(`${base_url}add_question_ans`, requestOptions);
+        param?.navigat.goBack()
+
         const resText = await response.text();
         const responseData = JSON.parse(resText);
         return responseData;

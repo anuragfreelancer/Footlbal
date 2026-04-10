@@ -370,61 +370,37 @@ const styles = StyleSheet.create({
       color: "#64748B",
     },
     // Modal Styles
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 20
+    // Modal Styles Premium
+    modalOverlay: { flex: 1, backgroundColor: 'rgba(15, 23, 42, 0.6)', justifyContent: 'flex-end' },
+    modalOverlayDismiss: { ...StyleSheet.absoluteFillObject },
+    modalContentPremium: {
+      backgroundColor: '#FFF',
+      borderTopLeftRadius: 32,
+      borderTopRightRadius: 32,
+      padding: 24,
+      paddingTop: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: -10 },
+      shadowOpacity: 0.1,
+      shadowRadius: 20,
+      elevation: 20,
     },
-    modalContent: {
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 24,
-        width: '100%',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.1,
-        shadowRadius: 20,
-        elevation: 10,
+    modalHandle: {
+      width: 40,
+      height: 5,
+      backgroundColor: '#E2E8F0',
+      borderRadius: 3,
+      alignSelf: 'center',
+      marginBottom: 24,
+      marginTop: 8,
     },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: '800',
-        color: '#111827',
-        marginBottom: 12,
-        textAlign: 'center'
-    },
-    modalMessage: {
-        fontSize: 15,
-        color: '#6B7280',
-        textAlign: 'center',
-        lineHeight: 22,
-        marginBottom: 24
-    },
-    modalButtons: {
-        flexDirection: 'row',
-        width: '100%',
-        gap: 12
-    },
-    modalButton: {
-        flex: 1,
-        paddingVertical: 14,
-        borderRadius: 12,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    cancelBtn: {
-        backgroundColor: '#F3F4F6'
-    },
-    endBtn: {
-        backgroundColor: '#EF4444'
-    },
-    buttonText: {
-        fontSize: 15,
-        fontWeight: '700'
-    },
+    modalTitlePremium: { fontSize: 22, fontWeight: '800', color: '#0F172A', marginBottom: 8, textAlign: 'center' },
+    modalMessagePremium: { fontSize: 15, color: '#64748B', fontWeight: '500', textAlign: 'center', lineHeight: 22, marginBottom: 32 },
+    modalButtonsPremium: { flexDirection: 'row', gap: 12 },
+    modalButtonPremium: { flex: 1, paddingVertical: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+    cancelBtnPremium: { backgroundColor: '#F1F5F9' },
+    endBtnPremium: { backgroundColor: '#EF4444' },
+    buttonTextPremium: { fontSize: 16, fontWeight: '700' },
     endButton: {
       marginTop: 12,
       backgroundColor: "#EF4444",

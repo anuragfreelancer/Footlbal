@@ -12,6 +12,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   LayoutChangeEvent,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -235,80 +237,84 @@ const SubmitRPE = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFC" }} edges={["top"]}>
       {isLoading && <LoadingModal />}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 24}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
-        <View style={{ marginHorizontal: 12, marginTop: 5 }}>
-          <CustomHeader
-            imageSource={imageIndex.backNav}
-            label={localizationStrings.RPEHeader || "HMMP RPE"}
-          />
-        </View>
-        <View style={styles.container}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="on-drag"
-            contentContainerStyle={{ paddingBottom: 120 }}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
           >
+            <View style={{ marginHorizontal: 12, marginTop: 5 }}>
+              <CustomHeader
+                imageSource={imageIndex.backNav}
+                label={localizationStrings.RPEHeader || "HMMP RPE"}
+              />
+            </View>
 
-            {/* ─── Per-Question Sliders ───────────────────────────── */}
-            {questionnaires.length > 0 && (
-              <View style={{ marginTop: 4 }}>
-                <Text style={styles.questionnaireSectionHeader}>
-                  {localizationStrings.SessionDetails || "Session Details"}
-                </Text>
-                {questionnaires.map((item) => {
-                  const qId = String(item.id);
-                  const qTitle = item.question_french || item.question || "Question";
-                  const answer = questionAnswers[qId] || { score: 5, text: '' };
-                  return (
-                    <QuestionSliderCard
-                      key={qId}
-                      questionId={qId}
-                      title={qTitle}
-                      score={answer.score}
-                      text={answer.text}
-                      onScoreChange={setQuestionScore}
-                      onTextChange={setQuestionText}
-                    />
-                  );
-                })}
-              </View>
-            )}
+            <View style={[styles.container, { flex: 1 }]}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
+                contentContainerStyle={{ paddingBottom: 100 }}
+              >
+                {/* ─── Per-Question Sliders ───────────────────────────── */}
+                {questionnaires.length > 0 && (
+                  <View style={{ marginTop: 4 }}>
+                    <Text style={styles.questionnaireSectionHeader}>
+                      {localizationStrings.SessionDetails || "Session Details"}
+                    </Text>
+                    {questionnaires.map((item) => {
+                      const qId = String(item.id);
+                      const qTitle = item.question_french || item.question || "Question";
+                      const answer = questionAnswers[qId] || { score: 5, text: '' };
+                      return (
+                        <QuestionSliderCard
+                          key={qId}
+                          questionId={qId}
+                          title={qTitle}
+                          score={answer.score}
+                          text={answer.text}
+                          onScoreChange={setQuestionScore}
+                          onTextChange={setQuestionText}
+                        />
+                      );
+                    })}
+                  </View>
+                )}
+              </ScrollView>
 
-            {/* General Comments */}
 
-          </ScrollView>
+            </View>
 
-          <TimePickerModal
-            time={time}
-            setTime={(t: Date) => {
-              setTime(t);
-              setFormattedTime(t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-            }}
-            visible={showTimePicker}
-            onClose={() => setShowTimePicker(false)}
-          />
-          <AddAttendanceModal
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            onConfirm={handleConfirm}
-          />
-        </View>
-
-        <View style={styles.buttView}>
-          <CustomButton
-            title={localizationStrings.SubmitFeedback || "Submit Feedback"}
-            onPress={() => handleSubmit()}
-          />
-        </View>
-      </KeyboardAvoidingView>
-
-      {/* Calendar modal */}
-
+            <TimePickerModal
+              time={time}
+              setTime={(t: Date) => {
+                setTime(t);
+                setFormattedTime(t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+              }}
+              visible={showTimePicker}
+              onClose={() => setShowTimePicker(false)}
+            />
+            <AddAttendanceModal
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              onConfirm={handleConfirm}
+            />
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+      <View style={styles.buttView}>
+        <CustomButton
+          title={localizationStrings.SubmitFeedback || "Submit Feedback"}
+          onPress={() => handleSubmit()}
+        />
+      </View>
     </SafeAreaView>
   );
 };

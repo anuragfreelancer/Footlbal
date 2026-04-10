@@ -199,11 +199,7 @@ const Players = () => {
               });
             }}
           >
-            <Image
-              source={imageIndex.arroRight}
-              style={{ height: 25, width: 25 }}
-              resizeMode="contain"
-            />
+            <Text style={{ color: '#fff', fontSize: 16 }}>{localizationStrings.StartSection}  </Text>
           </TouchableOpacity>
         )}
 

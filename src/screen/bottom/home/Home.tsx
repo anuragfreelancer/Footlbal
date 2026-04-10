@@ -224,29 +224,35 @@ const DashboardScreen = () => {
       <Modal
         visible={showEndModal}
         transparent
-        animationType="fade"
+        animationType="slide"
         onRequestClose={() => setShowEndModal(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{localizationStrings?.Confirmation || "Confirmation"}</Text>
-            <Text style={styles.modalMessage}>
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity 
+            style={styles.modalOverlayDismiss} 
+            activeOpacity={1} 
+            onPress={() => setShowEndModal(false)} 
+          />
+          <View style={styles.modalContentPremium}>
+            <View style={styles.modalHandle} />
+            <Text style={styles.modalTitlePremium}>{localizationStrings?.Confirmation || "Confirmation"}</Text>
+            <Text style={styles.modalMessagePremium}>
               {localizationStrings?.AreYouSureEndSession || "Are you sure you want to end this session now?"}
             </Text>
 
-            <View style={styles.modalButtons}>
+            <View style={styles.modalButtonsPremium}>
               <TouchableOpacity
-                style={[styles.modalButton, styles.cancelBtn]}
+                style={[styles.modalButtonPremium, styles.cancelBtnPremium]}
                 onPress={() => setShowEndModal(false)}
               >
-                <Text style={[styles.buttonText, { color: '#6B7280' }]}>{localizationStrings?.Cancel || "Cancel"}</Text>
+                <Text style={[styles.buttonTextPremium, { color: '#6B7280' }]}>{localizationStrings?.Cancel || "Cancel"}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.modalButton, styles.endBtn]}
+                style={[styles.modalButtonPremium, styles.endBtnPremium]}
                 onPress={handleEndSession}
               >
-                <Text style={[styles.buttonText, { color: '#fff' }]}>{localizationStrings?.Confirm || "Confirm"}</Text>
+                <Text style={[styles.buttonTextPremium, { color: '#fff' }]}>{localizationStrings?.Confirm || "Confirm"}</Text>
               </TouchableOpacity>
             </View>
           </View>

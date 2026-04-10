@@ -80,8 +80,8 @@ const AddPlayer = () => {
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 1 : 0} // Adjust offset as needed
+        behavior={Platform.OS === 'ios' ? 'height' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 55 : 0} // Adjust offset as needed
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
@@ -132,7 +132,7 @@ const AddPlayer = () => {
             <View style={styles.input} >
               <TextInput placeholder={localizationStrings.newpass}
                 value={password}
-                 onChangeText={(text) =>
+                onChangeText={(text) =>
                   setPassword(text.replace(/\s/g, ""))
                 }
                 // onChangeText={setPassword}
