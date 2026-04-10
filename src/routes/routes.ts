@@ -30,7 +30,7 @@ import { useSelector } from "react-redux";
 import imageIndex from "../assets/imageIndex";
 import ChooseRoleScreen from "../screen/auth/ChooseRoleScreen";
 import Notifications from "../screen/bottom/notifications/Notifications";
- import TrainingFedBack from "../screen/bottom/trainingFedBack/TrainingFedBack";
+import TrainingFedBack from "../screen/bottom/trainingFedBack/TrainingFedBack";
 import StartTrainingFed from "../screen/bottom/startTrainingFed/StartTrainingFed";
 import EndSectionScreen from "../screen/bottom/profile/endSectionScreen/EndSectionScreen";
 import AllPlayer from "../screen/bottom/playerDetails/allPlayer/AllPlayer";
@@ -38,6 +38,7 @@ import SubscriptionPlansScreen from "../screen/SubscriptionPlans/SubscriptionPla
 import PaymentWebViewScreen from "../screen/SubscriptionPlans/PaymentWebViewScreen";
 import localizationStrings from "../compoent/Localization/Localization";
 import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer";
+import StartSectionScreen from "../screen/bottom/profile/startSectionScreen/StartSectionScreen";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -77,16 +78,11 @@ const _routes = () => {
       { name: ScreenNameEnum.EndSectionScreen, Component: EndSectionScreen },
       { name: ScreenNameEnum.SubscriptionPlansScreen, Component: SubscriptionPlansScreen },
       { name: ScreenNameEnum.PaymentWebViewScreen, Component: PaymentWebViewScreen },
-     ],
+      { name: ScreenNameEnum.StartSectionScreen, Component: StartSectionScreen },
+    ],
 
     BOTTOMTAB_ROUTE: isLogin?.userData?.type === "Coach" ? [
-      // {
-      //   name: ScreenNameEnum.HOME_SCREEN,
-      //   Component: Home,
-      //   label: localizationStrings.Home,
-      //   logo: imageIndex.home,
-      //   logo1: imageIndex.homeActive,
-      // },
+
       {
         name: ScreenNameEnum.Calendar,
         Component: Calendar,
@@ -130,7 +126,7 @@ const _routes = () => {
         logo: imageIndex.bubbleChat,
         logo1: imageIndex.bubbleChat
       },
-   
+
       {
         name: ScreenNameEnum.Reports,
         Component: Reports,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { AttendanceApi, SumitRpfFrom, GetTraining, AddReviewApi } from '../../../redux/Api/AuthApi';
+import { AttendanceApi, SumitRpfFrom, GetTraining, AddReviewApi, AddQuestionAnsApi } from '../../../redux/Api/AuthApi';
 import { Alert, Dimensions } from 'react-native';
 import { Platform } from 'react-native';
 import localizationStrings from '../../../compoent/Localization/Localization';
@@ -36,59 +36,31 @@ const useSubmitRPE = () => {
 
     // Per-question answers: { [questionId]: { score, text } }
     const [questionAnswers, setQuestionAnswers] = useState<Record<string, QuestionAnswer>>({});
-useEffect(() => {
-  const load = async () => {
-    try {
-      setLoadingQuestionnaires(true);
-
-      const response = await fetch("https://kmmps.store/api/get_question");
-      const json = await response.json();
-
-      if (json?.status === "1" && Array.isArray(json?.result)) {
-        const items = json.result;
-
-        // Set questions list
-        setQuestionnaires(items);
-
-      
-      } else {
-        setQuestionnaires([]);
-        setQuestionAnswers({});
-      }
-
-    } catch (error) {
-      console.log("API Error:", error);
-      setQuestionnaires([]);
-      setQuestionAnswers({});
-    } finally {
-      setLoadingQuestionnaires(false);
-    }
-  };
-
-  load();
-}, []);
-
     const route = useRoute() as any;
     const params1 = route?.params;
 
     useEffect(() => {
-        const params = route?.params;
-        if (params) {
-            if (params.session) setSession(params.session);
-            if (params.date) setDate(params.date);
-            if (params.time) {
-                setFormattedTime(params.time);
-                const t = new Date();
-                const [hours, minutes] = params.time.split(/[:\s]/);
-                if (hours && minutes) {
-                    t.setHours(parseInt(hours, 10));
-                    t.setMinutes(parseInt(minutes, 10));
-                    setTime(t);
-                }
+        const item = params1?.item;
+        if (item) {
+            if (item.type) setSession(item.type);
+            if (item.session_start_date) setDate(item.session_start_date);
+            if (item.session_start_time) setFormattedTime(item.session_start_time);
+            if (item.coach_id) setCoachId(item.coach_id);
+
+            if (item.question_details && Array.isArray(item.question_details)) {
+                setQuestionnaires(item.question_details);
+                // Initialize question answers
+                const initialAnswers: Record<string, QuestionAnswer> = {};
+                item.question_details.forEach((q: any) => {
+                    initialAnswers[String(q.id)] = { score: 5, text: '' };
+                });
+                setQuestionAnswers(initialAnswers);
             }
-            if (params.coach_id) setCoachId(params.coach_id);
+            setLoadingQuestionnaires(false);
+        } else {
+            setLoadingQuestionnaires(false);
         }
-    }, [route?.params]);
+    }, [params1]);
 
     const setQuestionScore = useCallback((questionId: string, score: number) => {
         setQuestionAnswers(prev => ({
@@ -148,66 +120,45 @@ useEffect(() => {
         '#DC2626', // 9-10 dark red
     ];
 
-    const validateForm = (): boolean => {
-        const formErrors: Record<string, string> = {};
-        if (!session.trim()) formErrors.session = localizationStrings.Sessionrequired;
-        if (!date.trim()) formErrors.date = localizationStrings.Daterequired;
-        setErrors(formErrors);
-        return Object.keys(formErrors).length === 0;
-    };
+
 
     const handleSubmit = async () => {
-        if (!validateForm()) return;
-        if (formattedTime === localizationStrings.SelectTime || !formattedTime) {
-            Alert.alert(localizationStrings.Validation, localizationStrings.PleaseSelectTime);
-            return;
-        }
-
-        // Calculate average score across all questions
         const answerEntries = Object.entries(questionAnswers);
         const avgScore = answerEntries.length > 0
             ? Math.round(answerEntries.reduce((sum, [, a]) => sum + a.score, 0) / answerEntries.length)
             : 0;
 
-        // Build per-question data for the API
-        const questionsData = questionnaires.map(q => {
-            const answer = questionAnswers[String(q.id)] || { score: 0, text: '' };
-            return {
-                question_id: q.id,
-                title: q.training_title_french || q.training_title,
-                score: answer.score,
-                comment: answer.text,
-            };
-        });
-
         setisLoading(true);
         try {
-            const params: any = {
+            // 1. Submit Question Answers
+            for (const q of questionnaires) {
+                const answer = questionAnswers[String(q.id)];
+                if (answer) {
+                    await AddQuestionAnsApi({
+                        user_id: isLogin?.userData?.id,
+                        question_id: q.id,
+                        question_ans_point: avgScore,
+                        answer: answer.text || ""
+                    });
+                }
+            }
+
+            // 2. Submit Main Review
+            const reviewParams: any = {
                 user_id: isLogin?.userData?.id,
-                navigation,
-                section_type: session,
-                date,
-                note: comments || JSON.stringify(questionsData),
+                section_type: session || params1?.item?.type || "Training",
+                date: date || params1?.item?.session_start_date,
+                note: comments || "Session Feedback",
                 number_rate: avgScore,
-                time: formattedTime,
-                coach_id: coachId,
+                time: formattedTime === localizationStrings.SelectTime ? (params1?.item?.session_start_time || "00:00") : formattedTime,
+                coach_id: coachId || params1?.item?.coach_id,
                 rate_from: avgScore,
-                training_section_question: questionsData.map(q => q.title).join(', '),
-                coach_session_id: params1?.coach_session_id,
-                questions_answers: JSON.stringify(questionsData),
+                coach_session_id: params1?.item?.id,
             };
-            console.log("Rating  ---- ", params);
-            const response = await AddReviewApi(params, setisLoading);
+
+            const response = await AddReviewApi(reviewParams, setisLoading);
             if (response) {
-                setSession("");
-                setDate("");
-                setComments("");
-                // Reset all question answers
-                const reset: Record<string, QuestionAnswer> = {};
-                questionnaires.forEach((q: any) => {
-                    reset[String(q.id)] = { score: 5, text: '' };
-                });
-                setQuestionAnswers(reset);
+                navigation.goBack();
             }
         } catch (error) {
             console.error("API Call Failed:", error);

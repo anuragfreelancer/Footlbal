@@ -1,10 +1,8 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
-import { Dimensions } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import useReports from "./useReports";
 import LoadingModal from "../../../utils/Loader";
-import ScreenNameEnum from "../../../routes/screenName.enum";
 import imageIndex from "../../../assets/imageIndex";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import ChartComponent from "../../../compoent/ChartComponent";
@@ -51,33 +49,26 @@ const Reports = () => {
       </View>
     );
   };
-    const chartDataScreen1 = {
+  const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
-    const {
-    getLogin,
-    imgloading,
-    setImgloading,
-     chatMess,
-    getUser1,
-    getCoach_session,
-    getUser,
-     filteredMessages
+  const {
+
   } = useHome();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
       <View style={styles.headerRow}>
-        
+
         <Text style={styles.header}>
           {playerName ? `${playerName}'s ${localizationStrings?.Reports || "Reports"}` : (isLogin?.userData?.type === "Coach" ? localizationStrings?.Reports || "Reports" : localizationStrings?.Performance || "Performance")}
         </Text>
         <View style={{ width: 40 }} />
       </View>
-        <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+      <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
 
       {/* <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 

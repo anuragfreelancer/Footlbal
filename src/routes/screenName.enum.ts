@@ -33,8 +33,8 @@ enum ScreenNameEnum {
   SubmitRPE="SubmitRPE",
   Notifications ="Notifications" ,
   TrainingFedBack="TrainingFedBack" ,
-  StartTrainingFed="StartTrainingFed"
-   
+  StartTrainingFed="StartTrainingFed",
+  StartSectionScreen="StartSectionScreen",
  }
 
 export default ScreenNameEnum;

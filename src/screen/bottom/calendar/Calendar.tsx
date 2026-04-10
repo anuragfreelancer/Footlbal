@@ -7,7 +7,6 @@ import useCalendar from "./useCalendar";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import LoadingModal from "../../../utils/Loader";
 import PlanSessionModal from "../../../compoent/PlanSessionModal";
-import StartSectionModal from "../../../compoent/StartSectionModal";
 import { StartSection } from "../../../redux/Api/AuthApi";
 import styles from "./style";
 import localizationStrings from "../../../compoent/Localization/Localization";
@@ -33,12 +32,12 @@ const CustomCalendar = () => {
     navigation,
     isCoach,
     isLogin,
-    NewfilterData ,
+    NewfilterData,
   } = useCalendar();
-   const [planModalVisible, setPlanModalVisible] = useState(false);
+  const [planModalVisible, setPlanModalVisible] = useState(false);
   const [startSectionModalVisible, setStartSectionModalVisible] = useState(false);
   const [sessionLoading, setSessionLoading] = useState(false);
-   const handleStartSectionAPI = async ({
+  const handleStartSectionAPI = async ({
     date,
     time,
     type,
@@ -50,7 +49,7 @@ const CustomCalendar = () => {
     type: string;
     questionnaire: number[];
     questionnaire1: number[];
-    
+
   }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
       Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
@@ -102,9 +101,9 @@ const CustomCalendar = () => {
     },
     [selectedDates, setSelectedDates]
   );
- 
-  console.log("filteredPlayers -- ",filteredPlayers) 
- 
+
+  console.log("filteredPlayers -- ", filteredPlayers)
+
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? <LoadingModal /> : null}
@@ -135,7 +134,7 @@ const CustomCalendar = () => {
           />
         </View>
 
-      
+
         {isCoach && (
           <>
             <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
@@ -151,7 +150,7 @@ const CustomCalendar = () => {
                 isCoach ? (
                   <TouchableOpacity
                     style={styles.emptyStateCard}
-                    onPress={()=>{
+                    onPress={() => {
                       navigation.navigate(ScreenNameEnum.Players)
                     }}
                     // onPress={() => setStartSectionModalVisible(true)}
@@ -181,21 +180,10 @@ const CustomCalendar = () => {
           />
         )}
 
-        {isCoach && (
-          <StartSectionModal
-            visible={startSectionModalVisible}
-            title={localizationStrings?.QuestionnaireBeforeAfter}
-            onClose={() => setStartSectionModalVisible(false)}
-            Before={localizationStrings?.BeforeTrainingQuestionnaire}
-            Training={localizationStrings?.AfterTrainingQuestionnaire}
-            onStart={handleStartSectionAPI}
-            buttTitle={localizationStrings?.StartSection}
-          />
-        )}
+
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 export default CustomCalendar;
- 

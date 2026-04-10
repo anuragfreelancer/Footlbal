@@ -10,7 +10,6 @@ import styles from "./style";
 import usePlayers from "./usePlayers";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
 import SearchBar from "../../../../compoent/SearchBar";
-import StartSectionModal from "../../../../compoent/StartSectionModal";
 import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,8 +29,6 @@ const Players = () => {
   } = usePlayers();
   const [is, setIsLoading] = useState(false)
   const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
 
   const togglePlayerSelect = (id) => {
     if (selectedPlayerIds.includes(id)) {
@@ -46,56 +43,19 @@ const Players = () => {
       return;
     }
 
-    const players = filterData.filter(p => selectedPlayerIds.includes(p.id));
-    setSelectedPlayers(players);
-    setModalVisible(true);
-  };
-  const handleStartAPI = async ({ date, time, type, questionnaire, questionnaire1 }) => {
-
-
-    // console.log("questionnaire,questionnaire1",questionnaire,questionnaire1)
-    // console.log("questionnaire1 --- ",questionnaire1)
-
-
-    if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-
-      const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
-      const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-      const ids = selectedPlayers?.map(item => Number(item.id));
-
-      const params = {
-        players: ids,
-        date: formattedDate,
-        question_id: questionnaire1.join(","),
-        training_id: questionnaire.join(","),
-        // training_id: questionnaire1.join(","),
-        // question_id: questionnaire.join(","),
-        time: formattedTime,
-        coach_id: isLogin?.userData?.id,
-        session_type: type,
-        navigation: navigation
-      };
-
-      console.log('📤 Sending to API:', params);
-
-      const response = await StartSection(params, setIsLoading);
-
-      if (response?.status === '1') {
-        setSelectedPlayers([])
+    navigation.navigate(ScreenNameEnum.StartSectionScreen, {
+      title: localizationStrings.QuestionnaireBeforeAfter,
+      Before: localizationStrings.BeforeTrainingQuestionnaire,
+      Training: localizationStrings.AfterTrainingQuestionnaire,
+      buttTitle: localizationStrings?.StartSection,
+      playerIds: selectedPlayerIds,
+      coachId: isLogin?.userData?.id,
+      mode: 'start',
+      onSuccess: () => {
+        setSelectedPlayerIds([]);
       }
-    } catch (error) {
-      Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
-
 
 
 
@@ -221,25 +181,33 @@ const Players = () => {
             )}
           />
         )}
+        {selectedPlayerIds?.length > 0 && (
+          <TouchableOpacity
+            style={styles.fab}
+            onPress={() => {
+              navigation.navigate(ScreenNameEnum.StartSectionScreen, {
+                title: localizationStrings.QuestionnaireBeforeAfter,
+                Before: localizationStrings.BeforeTrainingQuestionnaire,
+                Training: localizationStrings.AfterTrainingQuestionnaire,
+                buttTitle: localizationStrings?.StartSection,
+                playerIds: selectedPlayerIds,
+                coachId: isLogin?.userData?.id,
+                mode: 'start',
+                onSuccess: () => {
+                  setSelectedPlayerIds([]);
+                },
+              });
+            }}
+          >
+            <Image
+              source={imageIndex.arroRight}
+              style={{ height: 25, width: 25 }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        )}
 
-        {/* <TouchableOpacity
-          style={styles.fab}
-          onPress={() => navigation.navigate(ScreenNameEnum.AddPlayer)}
-        >
-          <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />
-        </TouchableOpacity> */}
       </View>
-      <StartSectionModal
-        visible={modalVisible}
-        title={localizationStrings.QuestionnaireBeforeAfter}
-        onClose={() => setModalVisible(false)}
-        Before={localizationStrings.BeforeTrainingQuestionnaire}
-        Training={localizationStrings.AfterTrainingQuestionnaire}
-        selectedPlayers={selectedPlayers}
-        onStart={handleStartAPI}
-        buttTitle={localizationStrings?.StartSection}
-
-      />
     </SafeAreaView>
   );
 };

@@ -369,5 +369,78 @@ const styles = StyleSheet.create({
       fontWeight: "700",
       color: "#64748B",
     },
+    // Modal Styles
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: 20
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        padding: 24,
+        width: '100%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+        elevation: 10,
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: '800',
+        color: '#111827',
+        marginBottom: 12,
+        textAlign: 'center'
+    },
+    modalMessage: {
+        fontSize: 15,
+        color: '#6B7280',
+        textAlign: 'center',
+        lineHeight: 22,
+        marginBottom: 24
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        width: '100%',
+        gap: 12
+    },
+    modalButton: {
+        flex: 1,
+        paddingVertical: 14,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    cancelBtn: {
+        backgroundColor: '#F3F4F6'
+    },
+    endBtn: {
+        backgroundColor: '#EF4444'
+    },
+    buttonText: {
+        fontSize: 15,
+        fontWeight: '700'
+    },
+    endButton: {
+      marginTop: 12,
+      backgroundColor: "#EF4444",
+      paddingVertical: 10,
+      borderRadius: 12,
+      alignItems: "center",
+      shadowColor: "rgba(239, 68, 68, 0.4)",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 8,
+      elevation: 4,
+    },
+    endButtonText: {
+      fontSize: 14,
+      fontWeight: '700',
+      color: '#fff',
+    },
   });
 export default styles;

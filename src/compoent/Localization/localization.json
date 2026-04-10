@@ -257,7 +257,9 @@
             "AssessmentSource": "Source: Player",
             "SessionObjective": "Session Objective",
             "CommentLabel": "Comment",
-            "NoComments": "No comments provided."
+            "NoComments": "No comments provided.",
+            "HideComment": "Hide comment",
+            "AddComment": "Add comment"
       },
       "French": {
             "EndTime": "Heure de fin",
@@ -520,6 +522,8 @@
             "AssessmentSource": "Source : Joueur",
             "SessionObjective": "Objectif de la séance",
             "CommentLabel": "Commentaire",
-            "NoComments": "Aucun commentaire fourni."
+            "NoComments": "Aucun commentaire fourni.",
+            "HideComment": "Masquer le commentaire",
+            "AddComment": "Ajouter un commentaire"
       }
 }

@@ -1,22 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator, Dimensions, Alert, Modal } from "react-native";
 import imageIndex from "../../../assets/imageIndex";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import styles from "./style";
-import ChartComponent from "../../../compoent/ChartComponent";
 import useHome from "./useHome";
-import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import SubscriptionCard from "../../../compoent/subscription/SubscriptionCard";
-import { useFocusEffect } from "@react-navigation/native";
-import { useSubscription } from "../../../compoent/subscription/useSubscription";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import moment from "moment";
-import ChartComponent1 from "../../../compoent/ChartComponent1";
-import { useSelector } from "react-redux";
-
+// Teisng124@gmail.com
 const DashboardScreen = () => {
   useLanguage();
   const {
@@ -24,98 +18,18 @@ const DashboardScreen = () => {
     imgloading,
     setImgloading,
     navigation,
-    chatMess,
+
     getUser1,
-    getCoach_session,
-    getUser,
+
     isLogin,
-    filteredMessages
+    showEndModal,
+    setShowEndModal,
+    setSelectedSession,
+    handleEndSession
   } = useHome();
-  const { showSubscriptionCard } = useSubscription();
-  const userGetData = useSelector((state: any) => state?.feature?.userGetData);
-  // Build coach chart from players' coach_session (API returns players with coach_session array)
-  const coachChartData = React.useMemo(() => {
-    const playersList: any[] = Array.isArray(getCoach_session) ? getCoach_session : [];
-    const totalPlayers = Array.isArray(filteredMessages) ? filteredMessages.length : 0;
-    const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
-    const getDateStr = (item: any) => {
-      const dateVal = item?.session_start_date ?? "";
-      const timeVal = item?.session_start_time ?? "";
-      const a = typeof dateVal === "string" ? dateVal.trim().split(" ")[0] : "";
-      const b = typeof timeVal === "string" ? timeVal.trim().split(" ")[0] : "";
-      if (looksLikeDate(a)) return a;
-      if (looksLikeDate(b)) return b;
-      return "";
-    };
 
-    const countByDate: Record<string, number> = {};
-    playersList.forEach((item: any) => {
-      const sessions = Array.isArray(item?.coach_session)
-        ? item.coach_session
-        : item?.session_start_date
-          ? [item]
-          : [];
-      sessions.forEach((s: any) => {
-        const dateStr = getDateStr(s);
-        if (looksLikeDate(dateStr)) {
-          countByDate[dateStr] = (countByDate[dateStr] || 0) + 1;
-        }
-      });
-    });
-    const last7Days: number[] = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = moment().subtract(i, "days").format("YYYY-MM-DD");
-      last7Days.push(countByDate[d] || 0);
-    }
-    const last6Weeks: number[] = [];
-    for (let i = 5; i >= 0; i--) {
-      let count = 0;
-      if (i === 0) {
-        const weekStart = moment().startOf("week");
-        Object.keys(countByDate).forEach((dateStr) => {
-          const m = moment(dateStr);
-          if (m.isSameOrAfter(weekStart) && m.isSameOrBefore(moment())) {
-            count += countByDate[dateStr] || 0;
-          }
-        });
-      } else {
-        const start = moment().subtract(i + 1, "weeks").startOf("week");
-        const end = moment().subtract(i, "weeks").startOf("week");
-        Object.keys(countByDate).forEach((dateStr) => {
-          const m = moment(dateStr);
-          if (m.isSameOrAfter(start) && m.isBefore(end)) count += countByDate[dateStr] || 0;
-        });
-      }
-      last6Weeks.push(count);
-    }
-    return {
-      weekly: { data: last7Days },
-      monthly: { data: last6Weeks },
-      totalPlayers,
-    };
-  }, [getCoach_session, filteredMessages]);
-  const chartDataScreen1 = {
-    weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
-    monthly: { data: [70, 200, 150] },
-    yearly: { data: [180, 222, 111] },
-  };
-  // // Handle background notifications
-  // useEffect(() => {
-  //   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  //     navigateToNotification();
-  //   });
 
-  //   // Handle initial notification when the app is opened from a notification
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then((remoteMessage) => {
-  //       if (remoteMessage) {
-  //         navigateToNotification();
-  //       }
-  //     });
-  // }, []);
 
-  // API returns session_start_date as time (HH:mm:ss) and session_start_time as date (YYYY-MM-DD)
   const getSessionDisplay = (item: any) => {
     const looksLikeDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || "").trim());
     const looksLikeTime = (s: string) => /^\d{1,2}:\d{2}(:\d{2})?$/.test(String(s || "").trim());
@@ -162,9 +76,9 @@ const DashboardScreen = () => {
 
   const renderItem = ({ item }: { item: any }) => {
     const isOngoing = item?.status === "Start";
-    const reviews_status = item?.reviews_status === true;
     const { startedAt, endedAt, formattedDate } = getSessionDisplay(item);
-    console.log("start --- coach_session_id", item?.id)
+
+
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
         <View style={styles.sessionCardHeader}>
@@ -204,52 +118,83 @@ const DashboardScreen = () => {
           {item?.question_details?.length > 0 && (
             <View style={(styles as any).questionSectionHome}>
               <View style={(styles as any).questionHeaderHome}>
-                <Image source={imageIndex.document} style={[(styles as any).sessionIcon, { tintColor: '#111827' }]} resizeMode="contain" />
-                <Text style={{ fontSize: 14, fontWeight: '700', color: '#111827' }}>Session Details</Text>
+                <Text style={{ fontSize: 13, fontWeight: '800', color: '#111827', textTransform: 'uppercase', letterSpacing: 0.5 }}>Détails de la séance</Text>
               </View>
 
-              {item.question_details.map((q: any, index: number) => (
-                <View key={index} style={(styles as any).questionItemHome}>
-                  <Text style={(styles as any).questionLabelHome}>Question</Text>
-                  <Text style={(styles as any).questionTextHome}>{q?.question_french || q?.question}</Text>
+              {item?.question_details?.map((q: any, index: number) => {
+                return (
+                  <View key={index} style={styles.questionItemHome}>
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
 
-                  <Text style={(styles as any).answerLabelHome}>Response</Text>
-                  <Text style={(styles as any).answerTextHome}>{q?.answer_french || q?.answer}</Text>
-                </View>
-              ))}
+                      <View
+                        style={{
+                          width: 4,
+                          height: 16,
+                          backgroundColor: 'rgba(160, 216, 3, 1)',
+                          borderRadius: 2,
+                          marginRight: 8,
+                          marginTop: 2,
+                        }}
+                      />
+
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.questionLabelHome}>Question</Text>
+
+                        <Text style={styles.questionTextHome}>
+                          {q?.question_french || q?.question}
+                        </Text>
+                        {q?.answers?.map((s: any, i: number) => {
+                          return (
+                            <Text key={i} style={styles.answerTextHome}>
+                              Answer :   {s?.answer}
+                            </Text>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
             </View>
           )}
+
+
+          {/* <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.endButton}
+            onPress={() => {
+              setSelectedSession(item);
+              setShowEndModal(true);
+            }}
+          >
+            <Text style={styles.endButtonText}>
+              {localizationStrings?.endSection || ""}
+            </Text>
+          </TouchableOpacity> */}
         </View>
 
-        {!isOngoing && (
-          (item?.reviews_status === true || item?.reviews_status === "true") ? (
-            <View style={(styles as any).ratingGivenBadge}>
-              <Text style={(styles as any).ratingGivenText}>Évaluation envoyée</Text>
-            </View>
-          ) : (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={(styles as any).rateButton}
-              onPress={() => {
-                const { formattedStartTime } = getSessionDisplay(item);
-                (navigation as any).navigate(ScreenNameEnum.SubmitRPE, {
-                  session: item?.type || "Training",
-                  date: item?.session_start_time || item?.session_start_date,
-                  time: formattedStartTime,
-                  trainingId: item?.training_id,
-                  coach_id: item?.coach_id,
-                  coach_session_id: item?.id
-                });
-              }}
-            >
-              <Text style={[styles.rateButtonText,{
-                color:"white"
-              }]}>
-                {localizationStrings?.RateDifficulty || "Rate Difficulty"}
-              </Text>
-            </TouchableOpacity>
-          )
-        )}
+
+        item?.status === "Start" ? (
+        isLogin?.userData?.type === "Coach" && (
+
+        )
+        ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.rateButton}
+          onPress={() => {
+            navigation.navigate(ScreenNameEnum.SubmitRPE, {
+              item: item
+            });
+          }}
+        >
+          <Text style={[styles.rateButtonText, { color: "white" }]}>
+            {localizationStrings?.RateDifficulty || "Rate Difficulty"}
+          </Text>
+        </TouchableOpacity>
+        )
+
+
       </View>
     );
   };
@@ -292,74 +237,46 @@ const DashboardScreen = () => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" /> */}
 
+        <FlatList
+          data={[...getUser1].reverse()}
 
-
-        {isLogin?.userData?.type == "Coach" ? (
-          <>
-            <View style={{
-              marginHorizontal: 10
-            }}>
-
-              {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
-            </View>
-
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={filteredMessages}
-              scrollEnabled={false}
-              contentContainerStyle={styles.listContent}
-              // ListEmptyComponent={<EmptyListComponent message={localizationStrings.Nochat} />}
-              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
-              renderItem={({ item }: any) => (
-                <TouchableOpacity
-                  style={(styles as any).chatCard}
-                  onPress={() =>
-                    (navigation as any).navigate(ScreenNameEnum.ChatScreen, { item })
-                  }
-                  activeOpacity={0.7}
-                >
-                  {item?.image ? (
-                    <Image source={{ uri: item.image }} style={(styles as any).chatCardAvatar} />
-                  ) : (
-                    <Image source={imageIndex.prfEdit} style={(styles as any).chatCardAvatar} />
-                  )}
-                  <View style={(styles as any).chatCardTextContainer}>
-                    <Text style={(styles as any).chatCardName} numberOfLines={1}>
-                      {item?.user_name ?? ""}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-
-
-
-          </>
-        ) : (
-          <>
-            {/* <TouchableOpacity
-               onPress={() => (navigation as any).navigate(ScreenNameEnum.Calendar)}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.sectionTitle, { color: "#047857" }]}>{localizationStrings?.Schedule}</Text>
-              <Text style={{ fontSize: 13, color: "#065F46", marginTop: 4 }}>{localizationStrings?.SessionTraining} • {localizationStrings?.SessionMatch} • {localizationStrings?.SessionBreak}</Text>
-            </TouchableOpacity> */}
-
-            <View style={styles.sectionWrap}>
-              <Text style={styles.sectionTitle}>{localizationStrings.StartSection}</Text>
-            </View>
-            <FlatList
-data={[...getUser1].reverse()}   
-
-keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
-              renderItem={renderItem}
-              scrollEnabled={false}
-              contentContainerStyle={styles.listContent}
-              ListEmptyComponent={<EmptyListComponent message={"Aucune section disponible pour l'instant."} />} />
-          </>
-        )}
+          keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+          renderItem={renderItem}
+          scrollEnabled={false}
+          contentContainerStyle={styles.listContent} />
 
       </ScrollView>
+      <Modal
+        visible={showEndModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowEndModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{localizationStrings?.Confirmation || "Confirmation"}</Text>
+            <Text style={styles.modalMessage}>
+              {localizationStrings?.AreYouSureEndSession || "Are you sure you want to end this session now?"}
+            </Text>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelBtn]}
+                onPress={() => setShowEndModal(false)}
+              >
+                <Text style={[styles.buttonText, { color: '#6B7280' }]}>{localizationStrings?.Cancel || "Cancel"}</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, styles.endBtn]}
+                onPress={handleEndSession}
+              >
+                <Text style={[styles.buttonText, { color: '#fff' }]}>{localizationStrings?.Confirm || "Confirm"}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

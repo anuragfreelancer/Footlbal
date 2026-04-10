@@ -11,7 +11,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  GestureResponderEvent,
   LayoutChangeEvent,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
@@ -27,10 +26,7 @@ import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import styles from "./style";
 import CustomHeader from "../../../compoent/CustomHeader";
 
-const SESSION_OPTIONS = [
-  { key: "Training", labelKey: "SessionTraining" },
-  { key: "Match", labelKey: "SessionMatch" },
-] as const;
+
 
 // Gradient colors for each segment (10 segments for 0–10)
 const SEGMENT_COLORS = [
@@ -212,18 +208,9 @@ const SubmitRPE = () => {
   const {
     isLoading,
     handleSubmit,
-    session,
-    setSession,
-    date,
-    setDate,
-    comments,
-    setComments,
-    showCalendar,
-    setShowCalendar,
-    errors,
+
     showTimePicker,
     setShowTimePicker,
-    formattedTime,
     setFormattedTime,
     time,
     setTime,
@@ -266,24 +253,24 @@ const SubmitRPE = () => {
             keyboardDismissMode="on-drag"
             contentContainerStyle={{ paddingBottom: 120 }}
           >
- 
+
             {/* ─── Per-Question Sliders ───────────────────────────── */}
             {questionnaires.length > 0 && (
               <View style={{ marginTop: 4 }}>
                 <Text style={styles.questionnaireSectionHeader}>
-                  Session Feedback
+                  Détails de la séance
                 </Text>
                 {questionnaires.map((item) => {
-                   const qId = String(item.id);
-                  const qTitle = item.question || item.training_title || "Question";
+                  const qId = String(item.id);
+                  const qTitle = item.question_french || item.question || "Question";
                   const answer = questionAnswers[qId] || { score: 5, text: '' };
                   return (
                     <QuestionSliderCard
                       key={qId}
                       questionId={qId}
-                      title={item.question_french}
+                      title={qTitle}
                       score={answer.score}
-                      text={item.answer_french}
+                      text={answer.text}
                       onScoreChange={setQuestionScore}
                       onTextChange={setQuestionText}
                     />
@@ -293,7 +280,7 @@ const SubmitRPE = () => {
             )}
 
             {/* General Comments */}
-           
+
           </ScrollView>
 
           <TimePickerModal
@@ -321,39 +308,7 @@ const SubmitRPE = () => {
       </KeyboardAvoidingView>
 
       {/* Calendar modal */}
-      <Modal visible={showCalendar} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.calendarContainer}>
-            <Calendar
-              onDayPress={(day) => {
-                setDate(day.dateString);
-                setShowCalendar(false);
-              }}
-              hideExtraDays
-              hideDayNames
-              renderArrow={(direction) => (
-                <Image
-                  source={direction === "left" ? imageIndex.circleBak : imageIndex.translatingcircleleft}
-                  style={{ height: 22, width: 22 }}
-                />
-              )}
-              theme={{
-                textMonthFontSize: 20,
-                textMonthFontWeight: "bold",
-                monthTextColor: "#0f172a",
-                arrowStyle: { alignSelf: "center" },
-              }}
-            />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowCalendar(false)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.closeButtonText}>{localizationStrings?.Close}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+
     </SafeAreaView>
   );
 };

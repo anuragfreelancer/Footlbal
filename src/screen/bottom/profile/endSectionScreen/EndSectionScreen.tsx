@@ -6,8 +6,6 @@ import {
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
-import StartSectionModal from "../../../../compoent/StartSectionModal";
-import { EndSection, StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import usePlayers from "../../players/playe/usePlayers";
 import CustomHeader from "../../../../compoent/CustomHeader";
@@ -16,6 +14,8 @@ import localizationStrings from "../../../../compoent/Localization/Localization"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import { base_url } from "../../../SubscriptionPlans/SubscriptionPlansScreen";
+import ScreenNameEnum from "../../../../routes/screenName.enum";
+import { EndSection } from "../../../../redux/Api/AuthApi";
 
 const EndSectionScreen = () => {
   useLanguage();
@@ -29,7 +29,6 @@ const EndSectionScreen = () => {
   } = usePlayers();
   const [is, setIsLoading] = useState(false)
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
 
@@ -63,62 +62,57 @@ const EndSectionScreen = () => {
       setSelectedPlayerIds([...selectedPlayerIds, playerId]);
     }
   };
-  const handleOpenModal = () => {
+  const handleEndSection = () => {
     if (selectedPlayerIds.length === 0) {
       Alert.alert(localizationStrings.pleaseS);
       return;
     }
 
-    const players = filterData.filter((p: any) => selectedPlayerIds.includes(p.id));
-    setSelectedPlayers(players);
-    setModalVisible(true);
+    Alert.alert(
+      localizationStrings?.endSection,
+      "Are you sure you want to end the selected sessions?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "End",
+          onPress: async () => {
+            try {
+              setIsLoading(true);
+              const now = new Date();
+              const formattedDate = now.toISOString().split('T')[0];
+              const formattedTime = now.toTimeString().split(' ')[0];
+
+              const params = {
+                players: selectedPlayerIds.join(','),
+                date: formattedDate,
+                time: formattedTime,
+                navigation: navigation,
+                question_id: '0'
+              };
+
+              const response = await EndSection(params, setIsLoading);
+              if (response?.status === '1') {
+                setSelectedPlayerIds([]);
+                getCoachSession();
+              }
+            } catch (error) {
+              console.log('End Section Error:', error);
+            } finally {
+              setIsLoading(false);
+            }
+          }
+        }
+      ]
+    );
   };
-
-  const handleStartAPI = async ({ date, time, questionnaire, questionnaire1 }: any) => {
-    if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert(localizationStrings?.date);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-
-      const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
-      const formattedTime = time.toTimeString().split(' ')[0]; // HH:mm:ss
-      const ids = selectedPlayers?.map(item => Number(item.id));
-
-
-      // console.log("coachSessionIds", ids);
-      const params = {
-        players: selectedPlayerIds,
-        date: formattedDate,
-        time: formattedTime,
-        coach_id: isLogin?.userData?.id,
-        question_id: questionnaire1.join(","),
-        training_id: questionnaire.join(","),
-        // training_id: questionnaire1.join(","),
-        // question_id: questionnaire.join(","),
-        navigation, // ✅ make sure to pass it if needed
-      };
-      console.log("end section ", params)
-      const response = await EndSection(params, setIsLoading);
-      console.log(" ---response", response)
-
-      if (response?.status === '1') {
-        Alert.alert(localizationStrings.InvalidInput || 'Success', localizationStrings.SectionStartedSuccess);
-        setSelectedPlayers([])
-      }
-    } catch (error) {
-      console.error('StartSection error:', error);
-      Alert.alert(localizationStrings.InvalidInput || 'Error', localizationStrings.SomethingWentWrong);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
 
 
   const CommonCard = React.memo(({ item, onPress, isSelected }: any) => {
+
+    console.log("item", item)
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -143,13 +137,57 @@ const EndSectionScreen = () => {
 
         {item?.question_details?.length > 0 && (
           <View style={styles.questionSection}>
-            <Text style={[styles.questionLabel, { marginBottom: 8 }]}>Questionnaire Responses</Text>
-            {item?.question_details.map((s: any, index: number) => (
+
+            <Text style={[styles.questionLabel, { marginBottom: 10 }]}>
+              Questionnaire Responses
+            </Text>
+
+            {item?.question_details.map((questionItem: any, index: number) => (
               <View key={index} style={styles.questionItem}>
+
+                {/* Question */}
                 <Text style={styles.questionLabel}>Question</Text>
-                <Text style={styles.questionText}>{s?.question_french}</Text>
-                <Text style={[styles.questionLabel, { marginTop: 6 }]}>Answer</Text>
-                <Text style={styles.answerText}>{s?.answer_french}</Text>
+                <Text style={styles.questionText}>
+                  {questionItem?.question_french || "N/A"}
+                </Text>
+
+                {/* Answers */}
+                {questionItem?.answers?.length > 0 ? (
+                  questionItem.answers.map((answerItem: any, i: number) => (
+                    <View key={i} style={{ marginTop: 6 }}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: "500",
+                          color: "#4B5563",
+                          lineHeight: 18,
+                        }}
+                      >
+                        Answer: {answerItem?.answer || "No Answer"}
+                      </Text>
+
+                      {/* Optional: show user name */}
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: "#9CA3AF",
+                        }}
+                      >
+                        By: {answerItem?.user_name || "Unknown"}
+                      </Text>
+                    </View>
+                  ))
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: "#9CA3AF",
+                      marginTop: 5,
+                    }}
+                  >
+                    No Answers Available
+                  </Text>
+                )}
               </View>
             ))}
           </View>
@@ -161,7 +199,7 @@ const EndSectionScreen = () => {
   const filteredData = data?.filter(
     (item) => item?.session_end_date === "" && item?.session_end_time === ""
   );
-
+  console.log("filteredData", filteredData)
   return (
     <SafeAreaView style={styles.container}>
       <StatusBarComponent />
@@ -197,22 +235,13 @@ const EndSectionScreen = () => {
         <TouchableOpacity
           disabled={selectedPlayerIds.length === 0}
           style={[styles.endButton, selectedPlayerIds.length === 0 && { backgroundColor: '#E5E7EB', shadowOpacity: 0 }]}
-          onPress={handleOpenModal}
+          onPress={handleEndSection}
         >
           <Text style={[styles.endButtonText, selectedPlayerIds.length === 0 && { color: '#9CA3AF' }]}>
             {localizationStrings?.endSection} ({selectedPlayerIds.length})
           </Text>
         </TouchableOpacity>
       </View>
-      <StartSectionModal
-        visible={modalVisible}
-        title={localizationStrings.QuestionnaireBeforeAfter}
-        onClose={() => setModalVisible(false)}
-        Before={localizationStrings.BeforeTrainingQuestionnaire}
-        Training={localizationStrings.AfterTrainingQuestionnaire}
-        onStart={handleStartAPI}
-        buttTitle={localizationStrings?.endSection}
-      />
     </SafeAreaView>
   );
 };

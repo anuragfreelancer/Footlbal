@@ -9,6 +9,7 @@ import EmptyListComponent from "../../../../compoent/EmptyListComponent";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
+import ScreenNameEnum from "../../../../routes/screenName.enum";
 
 
 const MyTeam = () => {
@@ -17,8 +18,8 @@ const MyTeam = () => {
     MyTeam,
     isLoading,
     navigation,
-    getLogin ,
-        isLogin
+    getLogin,
+    isLogin
 
   } = useMyTeam()
 
@@ -35,9 +36,9 @@ const MyTeam = () => {
         <View style={styles.profileHeader}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
 
-            {getLogin?.userGetData?.image  || isLogin?.userData?.image? 
-            
-            <Image source={{ uri: getLogin?.userGetData?.image  || isLogin?.userData?.image}} style={styles.avatar} />
+            {getLogin?.userGetData?.image || isLogin?.userData?.image ?
+
+              <Image source={{ uri: getLogin?.userGetData?.image || isLogin?.userData?.image }} style={styles.avatar} />
 
               :
 
@@ -84,9 +85,9 @@ const MyTeam = () => {
               renderItem={({ item }) => (
                 console.log("item --- ", item),
                 <TouchableOpacity style={styles.card}
-                //   onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen,{
-                //     item:item
-                // })}
+                  onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
+                    item: item
+                  })}
                 >
                   <Image
                     source={{ uri: item?.image }}

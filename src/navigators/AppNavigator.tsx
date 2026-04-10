@@ -18,8 +18,8 @@ const AppNavigator: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state:any) => {
-       setIsConnected(state.isConnected);
+    const unsubscribe = NetInfo.addEventListener((state: any) => {
+      setIsConnected(state.isConnected);
       setModalVisible(!state.isConnected); // Agar internet off ho to modal show kare, on ho to hide kare
     });
 
@@ -31,7 +31,7 @@ const AppNavigator: React.FC = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
             <LanguageProvider>
-               <UpdateModal />  
+              <UpdateModal />
               <PaymentDeepLinkHandler />
               <NetworkStatusModal modalVisible={modalVisible} offlineText="No Internet! Please check your connection." />
               <RegistrationRoutes />

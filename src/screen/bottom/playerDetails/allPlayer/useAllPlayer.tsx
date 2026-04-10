@@ -1,29 +1,45 @@
- 
+
 import { useCallback, useEffect, useState } from 'react';
-import {   useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Getplayer, GetReviewsByCoachIdApi } from '../../../../redux/Api/AuthApi';
- const useAllPlayer = () => {
+import { base_url } from '../../../SubscriptionPlans/SubscriptionPlansScreen';
+const useAllPlayer = () => {
   const navigation = useNavigation();
   const [isLoading, setisLoading] = useState(false)
   const isLogin = useSelector((state: any) => state?.auth);
-    const [allPlay, setAllPlay] = useState<any>([]);
-    const [searchPlaylist, setSearchPlaylist] = useState<string>("");
-    const [filterData, setFilterData] = useState<any>("");
-    const [viewType, setViewType] = useState<"Players" | "Rate">("Players");
-    const [reviews, setReviews] = useState<any[]>([]);
-    useFocusEffect(
-      useCallback(() => {
-        GetplayerApi();
-      }, [])
-    );
-    
-   const GetplayerApi = async () => {
+  const [allPlay, setAllPlay] = useState<any>([]);
+  const [searchPlaylist, setSearchPlaylist] = useState<string>("");
+  const [filterData, setFilterData] = useState<any>("");
+  const [viewType, setViewType] = useState<"Players" | "Rate">("Players");
+  const [reviews, setReviews] = useState<any[]>([]);
+  useFocusEffect(
+    useCallback(() => {
+      getCoachSession();
+    }, [])
+  );
+  const getCoachSession = async () => {
     try {
-      const state = await Getplayer(isLogin?.userData?.id,setisLoading);
+      const response = await fetch(
+        `${base_url}${'get_coach_session'}?user_id=${isLogin?.userData?.id}`
+      );
+
+      const json = await response.json();
+      console.log('API Response:', json);
+      setAllPlay(json.result);
+      setFilterData(json.result)
+    } catch (error) {
+      console.log('API Error:', error);
+    } finally {
+
+    }
+  };
+  const GetplayerApi = async () => {
+    try {
+      const state = await Getplayer(isLogin?.userData?.id, setisLoading);
       if (state) {
-         setAllPlay(state?.userGetData);
-         setFilterData(state?.userGetData)
+        console.log("state?.userGetData", state?.userGetData)
+
 
       }
     } catch (error) {
@@ -48,20 +64,20 @@ import { Getplayer, GetReviewsByCoachIdApi } from '../../../../redux/Api/AuthApi
     if (searchPlaylist?.trim() === '') {
       setFilterData(allPlay);
     } else {
-      const filtered = allPlay?.filter((msg:any) =>
+      const filtered = allPlay?.filter((msg: any) =>
         msg?.user_name?.toLowerCase()?.includes(searchPlaylist?.toLowerCase())
       );
       setFilterData(filtered);
     }
   }, [searchPlaylist, allPlay]);
-  
-  
+
+
   return {
     allPlay, setAllPlay,
-    isLoading,setisLoading,
-    navigation ,
-    isLogin ,
-    searchPlaylist, setSearchPlaylist ,
+    isLoading, setisLoading,
+    navigation,
+    isLogin,
+    searchPlaylist, setSearchPlaylist,
     filterData, setFilterData,
     viewType, setViewType,
     reviews, setReviews,

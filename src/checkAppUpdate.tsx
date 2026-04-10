@@ -41,8 +41,7 @@ const UpdateModal = () => {
         country: "in",
       });
 
-      console.log("[UpdateModal] Current:", current);
-      console.log("[UpdateModal] Update info:", updateInfo);
+
 
       if (updateInfo?.isNeeded && isMounted.current) {
         setLatestVersion(updateInfo.latestVersion || "");

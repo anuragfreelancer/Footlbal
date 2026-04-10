@@ -38,6 +38,8 @@ export const constant = {
   createCheckoutSession:"createCheckoutSession",
   add_review: "add_review",
   get_reviews_by_coach_id: "get_reviews_by_coach_id",
+  add_question: "add_question",
+  get_question_by_coach: "get_question_by_coach",
 };
 export const base_url = 'https://kmmps.store/api/';
 // export const base_url = 'https://server-php-8-3.technorizen.com/Football/api/';

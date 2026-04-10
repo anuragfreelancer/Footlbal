@@ -1752,4 +1752,122 @@ const GetReviewsByCoachIdApi = async (coachId, setLoading) => {
     }
 };
 
-export { DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi, GetReviewsByCoachIdApi }  
+const AddQuestionApi = async (param, setLoading) => {
+    try {
+        setLoading && setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("coach_id", param?.coach_id);
+        if (param?.session_id) {
+            formData.append("session_id", param?.session_id);
+        }
+        formData.append("question", param?.question);
+        formData.append("question_type", param?.question_type);
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const response = await fetch(`${base_url}${constant.add_question}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        setLoading && setLoading(false);
+        if (responseData.status == "1") {
+            successToast(responseData?.message);
+            return responseData;
+        } else {
+            errorToast(responseData?.message || responseData?.error);
+            return responseData;
+        }
+    } catch (error) {
+        setLoading && setLoading(false);
+        errorToast("Network error");
+        console.error("AddQuestionApi error:", error);
+        return null;
+    }
+};
+
+const GetQuestionByCoachApi = async (coachId) => {
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+        };
+        const response = await fetch(`${base_url}${constant.get_question_by_coach}?coach_id=${coachId}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        if (responseData.status == "1") {
+            return responseData.result || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("GetQuestionByCoachApi error:", error);
+        return [];
+    }
+};
+
+const AddQuestionAnsApi = async (param) => {
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("user_id", param?.user_id);
+        formData.append("question_id", param?.question_id);
+        formData.append("question_ans_point", param?.question_ans_point);
+        formData.append("answer", param?.answer);
+        console.log("formData", formData)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+        const response = await fetch(`${base_url}add_question_ans`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        return responseData;
+    } catch (error) {
+        console.error("AddQuestionAnsApi error:", error);
+        return null;
+    }
+};
+
+const UpdateCoachSessionApi = async (param, setLoading) => {
+    try {
+        setLoading(true);
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formData = new FormData();
+        formData.append("id", param?.id);
+        formData.append("session_end_date", param?.session_end_date);
+        formData.append("session_end_time", param?.session_end_time);
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+        };
+
+        const response = await fetch(`${base_url}${constant.update_coach_session}`, requestOptions);
+        const resText = await response.text();
+        const responseData = JSON.parse(resText);
+        setLoading(false);
+        if (responseData.status == "1") {
+            successToast(responseData?.message);
+            return responseData;
+        } else {
+            errorToast(responseData?.message || responseData?.error);
+            return responseData;
+        }
+    } catch (error) {
+        setLoading(false);
+        console.error("UpdateCoachSessionApi error:", error);
+        return null;
+    }
+};
+
+export { UpdateCoachSessionApi, AddQuestionAnsApi, DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi, GetReviewsByCoachIdApi, AddQuestionApi, GetQuestionByCoachApi }  
