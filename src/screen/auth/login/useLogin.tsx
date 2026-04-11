@@ -130,9 +130,13 @@ const useLogin = () => {
   //       }
   //     });
   // }, []);
+  // Newcoash@gmail.com
 
-  const [credentials, setCredentials] = useState({ email: 'Teisng124@gmail.com', password: '123456' });
-  // const [credentials, setCredentials] = useState({ email: 'John@gmail.com', password: '123456' });
+  // 1) Joshs1424@gmail.com
+  // const [credentials, setCredentials] = useState({ email: 'Koans@gmail.com', password: '123456' });
+  // const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: 'Coachtesting@gmail.com', password: '123456' });
+  // const [credentials, setCredentials] = useState({ email: 'Uplayer@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'John@gmail.com', password: '123456' });
   //  Teisng124@gmail.com
   const [errors, setErrors] = useState({ email: '', password: '' });

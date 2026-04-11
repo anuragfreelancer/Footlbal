@@ -29,7 +29,7 @@ interface ReviewCardProps {
 }
 
 const SEGMENT_COLORS = [
-  '#22C55E', '#4ADE80', '#84CC16', '#A3E635', '#EAB308', 
+  '#22C55E', '#4ADE80', '#84CC16', '#A3E635', '#EAB308',
   '#F59E0B', '#F97316', '#EF4444', '#DC2626', '#B91C1C'
 ];
 
@@ -54,20 +54,20 @@ const StaticScoreSlider = ({ score }: { score: number }) => {
         ))}
       </View>
       {trackWidth > 0 && (
-        <View 
+        <View
           style={[
-            styles.sliderThumbOuter, 
-            { 
+            styles.sliderThumbOuter,
+            {
               left: Math.max(-4, Math.min(thumbLeft, trackWidth - 20)),
               borderColor: SEGMENT_COLORS[Math.min(9, Math.max(0, Math.floor(score)))]
             }
           ]}
         >
-          <View 
+          <View
             style={[
-              styles.sliderThumbInner, 
+              styles.sliderThumbInner,
               { backgroundColor: SEGMENT_COLORS[Math.min(9, Math.max(0, Math.floor(score)))] }
-            ]} 
+            ]}
           />
         </View>
       )}
@@ -115,7 +115,7 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
       </View>
 
       {/* Player Info Section */}
-      <View style={styles.playerInfoContainer}>
+      {/* <View style={styles.playerInfoContainer}>
         <Image
           source={userDetails?.image ? { uri: userDetails.image } : imageIndex.user}
           style={styles.playerAvatar}
@@ -126,40 +126,54 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
             {userDetails?.position_id ? `${localizationStrings.Position || "Pos"}: ${userDetails.position_id}` : (localizationStrings.Player || "Player")} • {userDetails?.team_id ? `${localizationStrings.MyTeam || "Team"} ${userDetails.team_id}` : ""}
           </Text>
         </View>
-      </View>
+      </View> */}
 
       {/* Questionnaire Section */}
       {questions.length > 0 ? (
         <View style={styles.questionnaireContainer}>
           <Text style={styles.sectionTitle}>{localizationStrings.QuestionnaireBeforeAfter || "Questionnaire Details"}</Text>
-          {questions.map((q: any, index: number) => {
-            const scoreValue = Number(q.answers?.[0]?.question_ans_point) || 0;
-            return (
-              <View key={q.id || index} style={styles.questionCard}>
-                <View style={styles.questionHeader}>
-                  <Text style={styles.questionText}>Q: {q.question_french || q.question}</Text>
-                  <View style={styles.scoreBadge}>
-                    <Text style={styles.scoreText}>{scoreValue} Pts</Text>
-                  </View>
-                </View>
-
-                {/* Score Visual Slider */}
-                <StaticScoreSlider score={scoreValue} />
-
-                {q.answers && q.answers.length > 0 ? (
-                  <View style={styles.answerContainer}>
-                    <Text style={styles.answerLabel}>{localizationStrings.Response || "Response"}</Text>
-                    <Text style={styles.answerText}>{q.answers[0].answer}</Text>
-                    <Text style={styles.answeredByText}>{localizationStrings.AnsweredBy || "Answered by"} {q.answers[0].user_name || (localizationStrings.Unknown || "Unknown")}</Text>
-                  </View>
-                ) : (
-                  <View style={{ marginTop: 8 }}>
-                    <Text style={[styles.answerText, { fontStyle: 'italic', color: '#94A3B8' }]}>{localizationStrings.NoAnswerProvided || "No answer provided"}</Text>
-                  </View>
-                )}
+          {questions.map((q: any, qIndex: number) => (
+            <View key={q.id || qIndex} style={styles.questionCard}>
+              <View style={styles.questionHeader}>
+                <Text style={styles.questionText}>Q: {q.question_french || q.question}</Text>
               </View>
-            );
-          })}
+
+              {q.answers && q.answers.length > 0 ? (
+                q.answers.map((ans: any, ansIndex: number) => {
+                  const scoreValue = Number(ans.question_ans_point) || 0;
+                  return (
+                    <View key={ans.id || ansIndex} style={[styles.answerContainer, ansIndex > 0 && { marginTop: 15, borderTopWidth: 1, borderTopColor: '#F1F5F9', paddingTop: 15 }]}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                        <View style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}>
+                          <Image source={{ uri: ans.image }} style={styles.playerAvatar} />
+                          <Text style={[styles.playerName, { fontSize: 13 }]}>{ans.user_name || (localizationStrings.Unknown || "Unknown")}</Text>
+
+                        </View>
+                        <View style={styles.scoreBadge}>
+                          <Text style={styles.scoreText}>{scoreValue} Pts</Text>
+                        </View>
+                      </View>
+
+                      {/* Score Visual Slider for this player */}
+                      <StaticScoreSlider score={scoreValue} />
+
+                      <View style={{ marginTop: 8 }}>
+                        <Text style={styles.answerLabel}>{localizationStrings.Response || "Response"}</Text>
+                        <Text style={styles.answerText}>{ans.answer}</Text>
+                      </View>
+                    </View>
+                  );
+                })
+              ) : (
+                <View style={{ marginTop: 8 }}>
+                  <Text style={[styles.answerText, { fontStyle: 'italic', color: '#94A3B8' }]}>{localizationStrings.NoAnswerProvided || "No answer provided"}</Text>
+                </View>
+              )}
+            </View>
+          ))}
         </View>
       ) : (
         <View style={[styles.reviewInnerContent, { alignItems: 'center', paddingVertical: 20 }]}>
@@ -220,6 +234,7 @@ const AllPlayer = () => {
 
         <TouchableOpacity
           style={styles.fab}
+          // onPress={() => (navigation as any).navigate(ScreenNameEnum.SummaryTable)}
           onPress={() => (navigation as any).navigate(ScreenNameEnum.AddPlayer)}
         >
           <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />

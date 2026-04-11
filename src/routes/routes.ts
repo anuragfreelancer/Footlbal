@@ -40,6 +40,7 @@ import localizationStrings from "../compoent/Localization/Localization";
 import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer";
 import StartSectionScreen from "../screen/bottom/profile/startSectionScreen/StartSectionScreen";
 import AddQuestion from "../screen/bottom/profile/addQuestion/AddQuestion";
+import SummaryTable from "../screen/bottom/playerDetails/summaryTable/SummaryTable";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -81,6 +82,7 @@ const _routes = () => {
       { name: ScreenNameEnum.PaymentWebViewScreen, Component: PaymentWebViewScreen },
       { name: ScreenNameEnum.StartSectionScreen, Component: StartSectionScreen },
       { name: ScreenNameEnum.AddQuestion, Component: AddQuestion },
+      { name: ScreenNameEnum.SummaryTable, Component: SummaryTable },
     ],
 
     BOTTOMTAB_ROUTE: isLogin?.userData?.type === "Coach" ? [
@@ -91,6 +93,13 @@ const _routes = () => {
         label: localizationStrings.Calendar,
         logo: imageIndex.calendar,
         logo1: imageIndex.calendar
+      },
+      {
+        name: ScreenNameEnum.SummaryTable,
+        Component: SummaryTable,
+        label: localizationStrings.Performance,
+        logo: imageIndex.profileUser,
+        logo1: imageIndex.profileUser
       },
       {
         name: ScreenNameEnum.Players,

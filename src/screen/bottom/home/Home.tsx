@@ -71,7 +71,7 @@ const DashboardScreen = () => {
   const renderItem = ({ item }: { item: any }) => {
     const isOngoing = item?.status === "Start";
     const { startedAt, endedAt, formattedDate } = getSessionDisplay(item);
-
+    console.log("item", item)
 
     return (
       <View style={[styles.sessionCard, isOngoing && styles.sessionCardActive]}>
@@ -228,10 +228,10 @@ const DashboardScreen = () => {
         onRequestClose={() => setShowEndModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <TouchableOpacity 
-            style={styles.modalOverlayDismiss} 
-            activeOpacity={1} 
-            onPress={() => setShowEndModal(false)} 
+          <TouchableOpacity
+            style={styles.modalOverlayDismiss}
+            activeOpacity={1}
+            onPress={() => setShowEndModal(false)}
           />
           <View style={styles.modalContentPremium}>
             <View style={styles.modalHandle} />
