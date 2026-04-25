@@ -211,7 +211,7 @@ const AllPlayer = () => {
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
 
-        {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
+        {/* {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null} */}
 
 
         {isLoading ? (

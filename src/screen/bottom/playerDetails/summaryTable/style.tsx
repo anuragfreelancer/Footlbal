@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#0F172A',
         fontWeight: '800',
+        textAlign: "center"
     },
     subHeader: {
         fontSize: 13,

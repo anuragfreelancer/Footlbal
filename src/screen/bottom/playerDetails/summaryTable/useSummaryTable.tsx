@@ -30,6 +30,7 @@ const useSummaryTable = () => {
             if (json.result) {
                 const data = json.result;
                 setSessions(data);
+                console.log("aaa", data)
                 processTableData(data);
             }
         } catch (error) {
@@ -51,7 +52,7 @@ const useSummaryTable = () => {
 
                 q.answers?.forEach((ans: any) => {
                     const playerName = ans.user_name || 'Unknown';
-                    
+
                     // Flattened for Detailed Table
                     flattened.push({
                         id: `${session.id}_${q.id}_${ans.id}`,

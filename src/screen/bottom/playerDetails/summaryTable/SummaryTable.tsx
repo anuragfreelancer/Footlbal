@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import useSummaryTable from './useSummaryTable';
 import styles, {
-    FIXED_COL_WIDTH,
     QUESTION_COL_WIDTH,
     ANSWER_COL_WIDTH,
     SCORE_COL_WIDTH
@@ -166,7 +165,7 @@ const SummaryTable = () => {
             <View style={[styles.headerRowTab, {
                 marginBottom: 11
             }]}>
-                <Text style={styles.headerTitleTab}>Global Overview Dashboard</Text>
+                <Text style={styles.headerTitleTab}>Tableau de bord de vue d'ensemble mondiale</Text>
             </View>
 
             {isLoading ? (

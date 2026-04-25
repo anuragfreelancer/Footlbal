@@ -105,8 +105,17 @@ const MyTeam = () => {
                     <Text style={styles.position}>{localizationStrings.ForwardPosition || "Forward"}</Text>
                   </View>
                   <View style={styles.detailContainer}>
+                    <Image source={imageIndex.arroRight}
+
+                      style={{
+                        height: 25,
+                        width: 25
+                      }}
+                    />
+
                     <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
                     <Text style={styles.value}>{item?.injury}</Text>
+
                   </View>
                 </TouchableOpacity>
               )}

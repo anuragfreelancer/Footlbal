@@ -715,10 +715,11 @@ const PlayerPostApi = async (
             headers: myHeaders,
             body: formData,
         };
+        console.log("formData", formData)
         const respons = await fetch(`${base_url}${constant.addPlayer}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res add --- ", res);
+                console.log("res add ---ddd  ", res);
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     setLoading(false)

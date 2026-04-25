@@ -97,7 +97,7 @@ const _routes = () => {
       {
         name: ScreenNameEnum.SummaryTable,
         Component: SummaryTable,
-        label: localizationStrings.Performance,
+        label: "Tableau récapitulatif",
         logo: imageIndex.profileUser,
         logo1: imageIndex.profileUser
       },

@@ -43,7 +43,7 @@ const ProfilePlayer = () => {
     // { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
-    { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
+    // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
 
   const handleLanguageSelect = (lang) => {
