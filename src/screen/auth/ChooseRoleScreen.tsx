@@ -27,15 +27,15 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                 <TouchableOpacity style={[styles.bottomButton, {
                     borderColor: selectedRole === 'Coach' ? "#A0D803" : "#9DB2BF"
                 }]}
-                onPress={async () => {
-                    try {
-                         setSelectedRole('Coach');
-                        await AsyncStorage.setItem('userRole', 'Coach'); // Save to AsyncStorage
-                   navigation.navigate(ScreenNameEnum.LoginScreen); // Navigate to ReadyScreen
-                    } catch (error) {
-                        console.error('Failed to save user role:', error);
-                    }
-                }}
+                    onPress={async () => {
+                        try {
+                            setSelectedRole('Coach');
+                            await AsyncStorage.setItem('userRole', 'Coach'); // Save to AsyncStorage
+                            navigation.navigate(ScreenNameEnum.LoginScreen); // Navigate to ReadyScreen
+                        } catch (error) {
+                            console.error('Failed to save user role:', error);
+                        }
+                    }}
                 >
                     <Image source={imageIndex.cocah2} style={{
                         height: 60,
@@ -47,15 +47,15 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                 <TouchableOpacity style={[styles.bottomButton, {
                     borderColor: selectedRole === 'Player' ? "#A0D803" : "#9DB2BF"
                 }]}
-                onPress={() => {
-                     setSelectedRole('Player');
-                      AsyncStorage.setItem('userRole', "Player");  // AsyncStorage में save
-                navigation.navigate(ScreenNameEnum.LoginScreen);
-                }}
+                    onPress={() => {
+                        setSelectedRole('Player');
+                        AsyncStorage.setItem('userRole', "Player");  // AsyncStorage में save
+                        navigation.navigate(ScreenNameEnum.LoginScreen);
+                    }}
                 >
                     <Image source={imageIndex.playersP} style={{
-                           height: 60,
-                           width: 60,
+                        height: 60,
+                        width: 60,
                     }} resizeMode="contain" />
                     <Text style={styles.buttonText}>Player</Text>
                 </TouchableOpacity>
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     subHeading: {
         fontSize: 14,
         color: 'black',
-         lineHeight: 21,
-         fontWeight:"400"
+        lineHeight: 21,
+        fontWeight: "400"
     },
     radioContainer: {
         flexDirection: 'row',
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         paddingHorizontal: 20,
-     },
+    },
     bottomButton: {
         flex: 1,
         paddingVertical: 15,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: 'black',
         lineHeight: 24,
-        marginTop:4
+        marginTop: 4
     },
 });
 

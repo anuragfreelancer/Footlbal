@@ -106,9 +106,9 @@ export default function Login() {
                   <TextInputField
                     lable={localizationStrings.Password}
                     text={credentials.password}
-                       onChangeText={(value: string) =>
-                    handleChange('password', value.replace(/\s/g, '')) // ✅ remove all spaces
-                  }
+                    onChangeText={(value: string) =>
+                      handleChange('password', value.replace(/\s/g, '')) // ✅ remove all spaces
+                    }
                     // onChangeText={(value: string) => handleChange('password', value)} // Handles email input dynamically
                     placeholder={localizationStrings.Password}
                     firstLogo={true}

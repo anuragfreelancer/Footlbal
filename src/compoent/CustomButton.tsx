@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, Platform, Image } from 'react-native';
- 
+
 // Define props type
 interface CustomButtonProps {
   title: string;
@@ -29,9 +29,9 @@ const CustomButton: React.FC<CustomButtonProps> = React.memo(({
     >
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
       {secoundImg && (
-        <Image 
-          source={secoundImg} 
-          style={styles.image} 
+        <Image
+          source={secoundImg}
+          style={styles.image}
         />
       )}
     </TouchableOpacity>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   disabledButton: {
-   },
+  },
   image: {
     height: 24,
     width: 24,

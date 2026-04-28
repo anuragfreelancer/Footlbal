@@ -78,9 +78,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.footlbal"
+    namespace "com.KMMPRPE"
     defaultConfig {
-        applicationId "com.footlbal"
+        applicationId "com.KMMPRPE"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
