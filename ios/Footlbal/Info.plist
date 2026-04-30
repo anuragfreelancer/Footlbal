@@ -16,8 +16,8 @@
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-		<key>CFBundleShortVersionString</key>
-		<string>1.0.8</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -35,6 +35,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -48,12 +50,16 @@
 	<string>We use your camera to allow you to take a profile picture when setting up your account.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>We use your contacts to help you find and connect with friends who are already using the app.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We use your microphone so you can record and send voice messages to other users in chat.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We use your photo library to let you upload profile pictures or images for posts and listings.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+		<string>processing</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

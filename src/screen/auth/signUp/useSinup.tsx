@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SinupUserApi } from '../../../redux/Api/AuthApi';
- 
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const useSignup = () => {
   const [errors, setErrors] = useState<any>({});
@@ -34,9 +34,9 @@ const useSignup = () => {
     } else if (password.length < 6) {
       validationErrors.password = 'Password must be at least 6 characters.';
     }
-    if (!selectedOption) {
-      validationErrors.selectedOption = 'Please select an option.';
-    }
+    // if (!selectedOption) {
+    //   validationErrors.selectedOption = 'Please select an option.';
+    // }
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return false;
@@ -52,9 +52,9 @@ const useSignup = () => {
         password: credentials?.password,
         mobile: credentials?.mobile,
         navigation: navigation,
-        type:selectedOption?.team_name
+        type: "Coach"
       };
-       const response = await SinupUserApi(params, setisLoading);
+      const response = await SinupUserApi(params, setisLoading);
     } catch (error) {
       console.error("Signup Error:", error);
     }
@@ -65,8 +65,8 @@ const useSignup = () => {
     isLoading,
     handleChange,
     handleSignup,
-    navigation, 
-    selectedOption, setSelectedOption ,
+    navigation,
+    selectedOption, setSelectedOption,
     dropOpen, setDropOpen
   };
 };

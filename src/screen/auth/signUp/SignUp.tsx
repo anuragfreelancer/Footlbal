@@ -99,9 +99,9 @@ export default function SignUp() {
                                 <View style={{ marginTop: 12 }}>
                                     <TextInputField
                                         lable={localizationStrings.MobileNo}
-                                           onChangeText={(value: string) =>
-                                        handleChange('mobile', value.replace(/\s/g, '')) // ✅ remove all spaces
-                                    }
+                                        onChangeText={(value: string) =>
+                                            handleChange('mobile', value.replace(/\s/g, '')) // ✅ remove all spaces
+                                        }
                                         // onChangeText={(value: string) => handleChange('mobile', value)} // Handles email input dynamically
                                         text={credentials.mobile}
                                         placeholder={localizationStrings.MobileNo}
@@ -125,7 +125,7 @@ export default function SignUp() {
                                 </View>
                                 {errors.password ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.password}</Text> : null}
                             </View>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => setDropOpen(true)}
                                 style={{
                                     flexDirection: 'row',
@@ -168,8 +168,8 @@ export default function SignUp() {
                                 <Image source={imageIndex.arrowDown}
                                     tintColor={"#EBEBEB"}
                                     style={{ height: 24, width: 24, right: 10 }} resizeMode='contain' />
-                            </TouchableOpacity>
-                            {errors.selectedOption ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.selectedOption}</Text> : null}
+                            </TouchableOpacity> */}
+                            {/* {errors.selectedOption ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.selectedOption}</Text> : null} */}
                             <CustomButton
                                 title={localizationStrings.SignUp}
                                 onPress={() => handleSignup()}

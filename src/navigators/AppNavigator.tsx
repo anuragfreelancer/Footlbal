@@ -12,6 +12,10 @@ import NetworkStatusModal from '../compoent/NetworkStatusModal';
 import { LanguageProvider } from '../compoent/Localization/LanguageContext';
 import PaymentDeepLinkHandler from '../utils/PaymentDeepLinkHandler';
 import UpdateModal from '../checkAppUpdate';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMessaging } from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
+import NotificationService from '../NotificationService';
 
 const AppNavigator: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -22,9 +26,53 @@ const AppNavigator: React.FC = () => {
       setIsConnected(state.isConnected);
       setModalVisible(!state.isConnected); // Agar internet off ho to modal show kare, on ho to hide kare
     });
-
+    getFcmToken()
     return () => unsubscribe();
+
   }, []);
+  const getFcmToken = async () => {
+    try {
+      const fcmToken = await getMessaging().getToken();
+
+      if (fcmToken) {
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+        console.log('✅ FCM Token:', fcmToken);
+        return fcmToken;
+      } else {
+        throw new Error('FCM Token not received');
+      }
+
+    } catch (error) {
+      console.log(`❌ FCM Token Error: `, error);
+      return null;
+    }
+  };
+  const initNotifications = async () => {
+    try {
+      // Step 1: iOS ke liye register
+      await NotificationService.registerAppWithFCM();
+
+      // Step 2: Permission maango
+      const granted = await NotificationService.requestPermission();
+      if (!granted) {
+        console.log('Notification permission denied — stopping init');
+        return;
+      }
+
+      // Step 3: Android notification channel banao
+      await NotificationService.createChannel();
+
+      // Step 4: FCM token lo
+      await NotificationService.getFcmToken();
+
+      // Step 5: Foreground listeners setup karo
+      const unsubscribe = NotificationService.setupListeners();
+
+      console.log('Notifications initialized successfully');
+    } catch (error) {
+      console.log('Notification init error:', error);
+    }
+  };
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
