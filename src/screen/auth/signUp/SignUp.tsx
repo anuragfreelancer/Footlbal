@@ -176,23 +176,16 @@ export default function SignUp() {
                                 buttonStyle={{ width: "100%", marginTop: 28 }}
                             />
                         </View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginTop: 40,
-                                marginBottom: 24,
-                                alignSelf: 'center',
-                                justifyContent: 'center',
-                            }}>
-                            <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)' }}>
-                                {localizationStrings.Alreadyhaveaccount || "Already have an account?"}{' '}
+                        <View style={Styles.footerContainer}>
+                            <Text style={Styles.footerText}>
+                                {localizationStrings.Alreadyhaveaccount || "Already have an account?"}
                             </Text>
                             <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate(ScreenNameEnum.LoginScreen);
-                                }}>
-                                <Text style={Styles.text}>{localizationStrings.Login}</Text>
+                                onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}
+                                activeOpacity={0.7}
+                                style={Styles.footerLink}
+                            >
+                                <Text style={Styles.footerLinkText}> {localizationStrings.Login}</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -210,18 +203,36 @@ export default function SignUp() {
 }
 
 const Styles = StyleSheet.create({
+    footerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 40,
+        marginBottom: 24,
+    },
+    footerText: {
+        fontSize: 16,
+        color: '#64748B',
+        fontWeight: '500',
+    },
+    footerLink: {
+        paddingVertical: 4,
+    },
+    footerLinkText: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: 'rgba(160, 216, 3, 1)', // Brand Lime Green
+    },
     text: {
         fontSize: 16,
         lineHeight: 24,
         fontWeight: '700',
-        color: 'rgba(255, 77, 76, 1)',
-        bottom: 2
+        color: 'rgba(160, 216, 3, 1)',
     },
     btn: {
         alignSelf: 'center',
-        backgroundColor: '#E8442E',
+        backgroundColor: 'rgba(160, 216, 3, 1)',
         height: 55,
-
         borderRadius: 30,
         alignItems: 'center',
         justifyContent: 'center',

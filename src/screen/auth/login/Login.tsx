@@ -156,27 +156,20 @@ export default function Login() {
           </View> */}
 
             </View>
-            {role === "Coach" ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 20,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{ fontSize: 16, lineHeight: 22, color: 'rgba(0, 0, 0, 1)', }}>
-                  {localizationStrings.Donthaveaccount || "Don’t have an account?"}{' '}
+            {role === "Coach" && (
+              <View style={Styles.signUpContainer}>
+                <Text style={Styles.dontHaveAccountText}>
+                  {localizationStrings.Donthaveaccount || "Don’t have an account?"}
                 </Text>
                 <TouchableOpacity
-                  style={{}}
-                  onPress={() => {
-                    navigation.navigate(ScreenNameEnum.SignUpScreen)
-                  }}>
-                  <Text style={Styles.text}>{localizationStrings.SignUp}</Text>
+                  onPress={() => navigation.navigate(ScreenNameEnum.SignUpScreen)}
+                  activeOpacity={0.7}
+                  style={Styles.signUpButton}
+                >
+                  <Text style={Styles.signUpText}> {localizationStrings.SignUp}</Text>
                 </TouchableOpacity>
               </View>
-            ) : null}
+            )}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -185,18 +178,36 @@ export default function Login() {
 }
 
 const Styles = StyleSheet.create({
+  signUpContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 24,
+    marginBottom: 20,
+  },
+  dontHaveAccountText: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  signUpButton: {
+    paddingVertical: 4,
+  },
+  signUpText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: 'rgba(160, 216, 3, 1)', // Brand Lime Green
+  },
   text: {
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '700',
-    color: 'rgba(255, 77, 76, 1)',
-    bottom: 2
+    color: 'rgba(160, 216, 3, 1)',
   },
   btn: {
     alignSelf: 'center',
-    backgroundColor: '#E8442E',
+    backgroundColor: 'rgba(160, 216, 3, 1)',
     height: 55,
-
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',

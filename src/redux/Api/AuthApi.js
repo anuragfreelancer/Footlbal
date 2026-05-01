@@ -512,7 +512,7 @@ const GetProfile = async (userId, dispatch) => {
             if (responseData.status === '0' || responseData.status === 0) {
                 dispatch(profileFetchFailed());
             }
-            errorToast(responseData.message || 'Unsuccessfully');
+            // errorToast(responseData.message || 'Unsuccessfully');
         }
     } catch (error) {
         errorToast('Network error');

@@ -1,63 +1,93 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import StatusBarComponent from '../../compoent/StatusBarCompoent';
 import imageIndex from '../../assets/imageIndex';
 import ScreenNameEnum from '../../routes/screenName.enum';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ResponsiveSize from '../../utils/ResponsiveSize';
 
+const { width } = Dimensions.get('window');
+
+/**
+ * ChooseRoleScreen Component
+ * Allows users to select their role (Coach or Player) with a premium UI.
+ */
 const ChooseRoleScreen = ({ navigation }: any) => {
     const [selectedRole, setSelectedRole] = useState('');
+
+    const handleRoleSelection = async (role: string) => {
+        try {
+            setSelectedRole(role);
+            await AsyncStorage.setItem('userRole', role);
+            // Small delay for visual feedback before navigation
+            setTimeout(() => {
+                navigation.navigate(ScreenNameEnum.LoginScreen);
+            }, 300);
+        } catch (error) {
+            console.error('Failed to save user role:', error);
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBarComponent />
-            <View style={styles.logoContainer}>
-                <View style={styles.logo}>
-                    <Image source={imageIndex.app} style={styles.logo} resizeMode="contain" />
-                </View>
+            
+            {/* Header Section */}
+            <View style={styles.header}>
+                <Image source={imageIndex.app} style={styles.logo} resizeMode="contain" />
+                <Text style={styles.heading}>Choose Your Role</Text>
+                <Text style={styles.subHeading}>Select how you want to use Footlball</Text>
             </View>
-            <Text style={styles.heading}>Choose Your Role</Text>
-            <Text style={styles.subHeading}>Select how you want to use Footlball</Text>
-            <Image source={imageIndex.selectionbag} style={{
-                height: 200,
-                width: 300,
-                marginTop: 44
-            }} resizeMode="cover" />
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.bottomButton, {
-                    borderColor: selectedRole === 'Coach' ? "#A0D803" : "#9DB2BF"
-                }]}
-                    onPress={async () => {
-                        try {
-                            setSelectedRole('Coach');
-                            await AsyncStorage.setItem('userRole', 'Coach'); // Save to AsyncStorage
-                            navigation.navigate(ScreenNameEnum.LoginScreen); // Navigate to ReadyScreen
-                        } catch (error) {
-                            console.error('Failed to save user role:', error);
-                        }
-                    }}
+            {/* Illustration Section */}
+            <View style={styles.illustrationContainer}>
+                <Image 
+                    source={imageIndex.selectionbag} 
+                    style={styles.illustration} 
+                    resizeMode="contain" 
+                />
+            </View>
+
+            {/* Role Cards Section */}
+            <View style={styles.cardContainer}>
+                {/* Coach Card */}
+                <TouchableOpacity 
+                    style={[
+                        styles.roleCard, 
+                        selectedRole === 'Coach' && styles.selectedCard
+                    ]}
+                    onPress={() => handleRoleSelection('Coach')}
+                    activeOpacity={0.8}
                 >
-                    <Image source={imageIndex.cocah2} style={{
-                        height: 60,
-                        width: 60,
-                    }} resizeMode="contain" />
-
-                    <Text style={[styles.buttonText,]}>Coach</Text>
+                    <View style={[styles.iconWrapper, selectedRole === 'Coach' && styles.selectedIconWrapper]}>
+                        <Image 
+                            source={imageIndex.coach} 
+                            style={[styles.roleIcon, selectedRole === 'Coach' && { tintColor: '#fff' }]} 
+                            resizeMode="contain" 
+                        />
+                    </View>
+                    <Text style={styles.roleTitle}>Coach</Text>
+                    <Text style={styles.roleDesc}>Manage teams & sessions</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.bottomButton, {
-                    borderColor: selectedRole === 'Player' ? "#A0D803" : "#9DB2BF"
-                }]}
-                    onPress={() => {
-                        setSelectedRole('Player');
-                        AsyncStorage.setItem('userRole', "Player");  // AsyncStorage में save
-                        navigation.navigate(ScreenNameEnum.LoginScreen);
-                    }}
+
+                {/* Player Card */}
+                <TouchableOpacity 
+                    style={[
+                        styles.roleCard, 
+                        selectedRole === 'Player' && styles.selectedCard
+                    ]}
+                    onPress={() => handleRoleSelection('Player')}
+                    activeOpacity={0.8}
                 >
-                    <Image source={imageIndex.playersP} style={{
-                        height: 60,
-                        width: 60,
-                    }} resizeMode="contain" />
-                    <Text style={styles.buttonText}>Player</Text>
+                    <View style={[styles.iconWrapper, selectedRole === 'Player' && styles.selectedIconWrapper]}>
+                        <Image 
+                            source={imageIndex.playersP} 
+                            style={[styles.roleIcon, selectedRole === 'Player' && { tintColor: '#fff' }]} 
+                            resizeMode="contain" 
+                        />
+                    </View>
+                    <Text style={styles.roleTitle}>Player</Text>
+                    <Text style={styles.roleDesc}>Track your performance</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -67,87 +97,103 @@ const ChooseRoleScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 24,
     },
-    logoContainer: {
+    header: {
         alignItems: 'center',
-        marginTop: 100
+        marginTop: ResponsiveSize.height(40),
     },
     logo: {
-        height: 150,
-        width: 150,
+        height: ResponsiveSize.height(70),
+        width: ResponsiveSize.width(70),
+        marginBottom: 16,
     },
     heading: {
-        fontSize: 20,
-        fontWeight: '700',
-        marginTop: 55,
-        lineHeight: 28,
-        color: "black"
+        fontSize: 28,
+        fontWeight: '800',
+        color: "#111827",
+        textAlign: 'center',
+        letterSpacing: -0.5,
     },
     subHeading: {
-        fontSize: 14,
-        color: 'black',
-        lineHeight: 21,
-        fontWeight: "400"
+        fontSize: 15,
+        color: '#6B7280',
+        marginTop: 8,
+        textAlign: 'center',
+        fontWeight: '500',
     },
-    radioContainer: {
-        flexDirection: 'row',
-        marginBottom: 30,
-        gap: 10,
-    },
-    radioButton: {
-        flexDirection: 'row',
+    illustrationContainer: {
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 8,
-        borderColor: 'lightgray',
-        borderWidth: 1,
-    },
-    radioButtonSelected: {
-        backgroundColor: '#e6f7ff',
-        borderColor: 'green',
-    },
-    radioInner: {
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        backgroundColor: 'green',
-        marginRight: 8,
-    },
-    radioText: {
-        fontSize: 16,
     },
     illustration: {
-        width: 100,
-        height: 100,
-        marginVertical: 20,
+        height: ResponsiveSize.height(240),
+        width: width * 0.85,
     },
-    buttonContainer: {
+    cardContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%',
-        position: 'absolute',
-        bottom: 20,
-        paddingHorizontal: 20,
+        marginBottom: ResponsiveSize.height(50),
+        gap: 16,
     },
-    bottomButton: {
+    roleCard: {
         flex: 1,
-        paddingVertical: 15,
-        borderWidth: 1,
-        borderRadius: 15,
+        backgroundColor: '#F9FAFB',
+        borderRadius: 28,
+        padding: 24,
         alignItems: 'center',
-        marginHorizontal: 5,
+        borderWidth: 2,
+        borderColor: '#F3F4F6',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 12,
+        elevation: 3,
     },
-    buttonText: {
-        fontSize: 15,
+    selectedCard: {
+        borderColor: "#A0D803",
+        backgroundColor: "#FFFFFF",
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+        elevation: 8,
+    },
+    iconWrapper: {
+        width: 64,
+        height: 64,
+        borderRadius: 22,
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#F1F5F9',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+    },
+    selectedIconWrapper: {
+        backgroundColor: '#A0D803',
+        borderColor: '#A0D803',
+    },
+    roleIcon: {
+        height: 36,
+        width: 36,
+    },
+    roleTitle: {
+        fontSize: 18,
+        fontWeight: '800',
+        color: '#111827',
+    },
+    roleDesc: {
+        fontSize: 11,
+        color: '#9CA3AF',
+        textAlign: 'center',
+        marginTop: 6,
         fontWeight: '600',
-        color: 'black',
-        lineHeight: 24,
-        marginTop: 4
+        lineHeight: 14,
     },
 });
 
