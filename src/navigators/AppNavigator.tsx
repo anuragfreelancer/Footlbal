@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getMessaging } from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 import NotificationService from '../NotificationService';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AppNavigator: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -82,7 +83,12 @@ const AppNavigator: React.FC = () => {
               <UpdateModal />
               <PaymentDeepLinkHandler />
               <NetworkStatusModal modalVisible={modalVisible} offlineText="No Internet! Please check your connection." />
-              <RegistrationRoutes />
+              <SafeAreaView style={{ flex: 1 }} edges={['bottom']} >
+                {/* <SafeAreaView style={{ flex: 1 }} edges={['top']}> */}
+
+                <RegistrationRoutes />
+              </SafeAreaView>
+
               <Toast config={toastConfig} />
             </LanguageProvider>
           </NavigationContainer>

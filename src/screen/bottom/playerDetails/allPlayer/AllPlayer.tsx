@@ -148,7 +148,15 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
                           flexDirection: "row",
                           alignItems: "center",
                         }}>
-                          <Image source={{ uri: ans.image }} style={styles.playerAvatar} />
+
+                          <Image
+                            source={
+                              ans?.image && ans.image !== "https://kmmps.store/public/uploads/users/"
+                                ? { uri: ans.image }
+                                : imageIndex.prfEdit // default image
+                            }
+                            style={styles.playerAvatar}
+                          />
                           <Text style={[styles.playerName, { fontSize: 13 }]}>{ans.user_name || (localizationStrings.Unknown || "Unknown")}</Text>
 
                         </View>

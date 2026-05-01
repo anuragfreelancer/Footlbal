@@ -77,7 +77,16 @@ const Players = () => {
           {/* Checkbox */}
 
           {/* Player Info */}
-          <Image source={{ uri: item?.image }} style={styles.avatar} />
+          <Image
+            source={
+              item?.image &&
+                item.image.trim() !== "" &&
+                !item.image.endsWith("/users/")
+                ? { uri: item.image }
+                : imageIndex.prfEdit
+            }
+            style={styles.avatar}
+          />
           <View style={styles.contentContainer}>
             <View style={styles.infoContainer}>
               <Text style={styles.name}>{item?.user_name}</Text>
