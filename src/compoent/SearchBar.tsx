@@ -6,10 +6,10 @@ import localizationStrings from "./Localization/Localization";
 interface SearchBarProps {
   placeholder?: string;
   onSearchChange?: (text: string) => void;
-  value?:string
- }
+  value?: string
+}
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder = localizationStrings.Search, onSearchChange ,value}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder = localizationStrings.Search, onSearchChange, value }) => {
   return (
     <View style={styles.searchBar}>
       <Image source={imageIndex.search} style={styles.icon} resizeMode="cover" />
@@ -20,7 +20,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = localizationStrings
         onChangeText={onSearchChange}
         value={value}
       />
-      <Image source={imageIndex.filter} style={styles.icon} resizeMode="cover"  />
+      {/* <Image source={imageIndex.filter} style={styles.icon} resizeMode="cover"  /> */}
     </View>
   );
 };
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 6, // Works for Android
-    height:55
+    height: 55
   },
   icon: {
     height: 20,

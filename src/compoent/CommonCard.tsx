@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import imageIndex from "../assets/imageIndex";
 
 const SESSION_COLORS: Record<string, string> = {
   TRAINING: "#2563EB",
@@ -33,7 +34,18 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accen
       disabled={!onPress}
     >
       <View style={styles.avatarWrap}>
-        <Image source={{ uri: item?.image }} style={styles.avatar} />
+        <Image
+          source={
+            item?.image &&
+              item.image !== "https://kmmps.store/public/uploads/users/"
+              ? { uri: item.image }
+              : imageIndex.prfEdit
+          }
+          defaultSource={imageIndex.prfEdit}
+          onError={() => console.log("Image load failed")}
+          style={styles.avatar}
+        />
+        {/* <Image source={{ uri: item?.image }} style={styles.avatar} /> */}
         {showDot && <View style={[styles.sessionDot, { backgroundColor: dotColor }]} />}
       </View>
       <View style={styles.contentContainer}>
@@ -45,7 +57,7 @@ const CommonCard: React.FC<CommonCardProps> = React.memo(({ item, onPress, accen
           <Text style={styles.label}>Training Type</Text>
           <Text style={styles.value} numberOfLines={1} ellipsizeMode="tail">
             {item.load_type_id}
-           </Text>
+          </Text>
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.label}>Intensity</Text>

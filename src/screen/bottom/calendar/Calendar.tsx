@@ -13,6 +13,7 @@ import localizationStrings from "../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import { errorToast } from "../../../utils/customToast";
 
 const CustomCalendar = () => {
   useLanguage();
@@ -51,15 +52,12 @@ const CustomCalendar = () => {
 
   }) => {
     if (!(time instanceof Date) || !(date instanceof Date)) {
-      Alert.alert(localizationStrings.InvalidInput, localizationStrings.date);
+      errorToast(localizationStrings.date);
       return;
     }
     const playerList = players?.userGetData ?? [];
     if (playerList.length === 0) {
-      Alert.alert(
-        localizationStrings.InvalidInput || "",
-        localizationStrings?.noplayers || "No players available"
-      );
+      errorToast(localizationStrings?.noplayers || "No players available");
       return;
     }
     try {
@@ -83,10 +81,7 @@ const CustomCalendar = () => {
         fetchData();
       }
     } catch (error) {
-      Alert.alert(
-        localizationStrings.InvalidInput || "Error",
-        localizationStrings.SomethingWentWrong
-      );
+      errorToast(localizationStrings.SomethingWentWrong)
     } finally {
       setSessionLoading(false);
     }
@@ -101,7 +96,6 @@ const CustomCalendar = () => {
     [selectedDates, setSelectedDates]
   );
 
-  console.log("filteredPlayers -- ", filteredPlayers)
 
   return (
     <SafeAreaView style={styles.container}>

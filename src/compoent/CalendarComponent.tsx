@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from "react-native";
+import imageIndex from "../assets/imageIndex";
 import moment from "moment";
- 
+
 export interface MarkedDateConfig {
   dotColor?: string;
   color?: string;
 }
- 
+
 const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (date: string) => void, markedDates: Record<string, MarkedDateConfig> }) => {
 
   const [currentMonth, setCurrentMonth] = useState(moment());
@@ -17,25 +18,25 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (
   }, []);
 
   const changeMonth = (direction: "prev" | "next") => {
- 
+
     const newMonth =
       direction === "next"
         ? moment(currentMonth).add(1, "months")
         : moment(currentMonth).subtract(1, "months");
- 
+
     setCurrentMonth(newMonth);
- 
-    const firstDay = newMonth.clone().startOf("month").format("YYYY-MM-DD");
- 
+
+    const firstDay = newMonth?.clone().startOf("month").format("YYYY-MM-DD");
+
     setSelectedDate(firstDay);
- 
+
     onDateSelect(firstDay);
   };
- 
+
   const handleDateSelection = (date: string) => {
- 
+
     setSelectedDate(date);
- 
+
     onDateSelect(date);
   };
 
@@ -62,24 +63,24 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (
 
       <View style={styles.calendarHeader}>
 
-        <TouchableOpacity onPress={() => changeMonth("prev")}>
-          <Text>Prev</Text>
+        <TouchableOpacity style={styles.navButton} onPress={() => changeMonth("prev")}>
+          <Image source={imageIndex.backNav} style={styles.navIcon} />
         </TouchableOpacity>
 
         <Text style={styles.monthText}>
           {currentMonth.format("MMMM YYYY")}
         </Text>
 
-        <TouchableOpacity onPress={() => changeMonth("next")}>
-          <Text>Next</Text>
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.navButton} onPress={() => changeMonth("next")}>
+          <Image source={imageIndex.nextArrow} style={styles.navIcon} />
+        </TouchableOpacity> */}
 
       </View>
 
       <View style={styles.weekRow}>
-        {["SUN","MON","TUE","WED","THU","FRI","SAT"].map((day) => (
+        {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
           <Text key={day} style={styles.weekDay}>
-            {day}
+            {day} {" "}
           </Text>
         ))}
       </View>
@@ -103,8 +104,8 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (
           const circleColor = hasSession
             ? dotColor
             : isSelected
-            ? "#A0D803"
-            : undefined;
+              ? "#A0D803"
+              : undefined;
 
           return (
 
@@ -174,7 +175,22 @@ const styles = StyleSheet.create({
 
   monthText: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "800",
+    color: "#1A1C1E",
+  },
+
+  navButton: {
+    padding: 8,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#E9ECEF",
+  },
+
+  navIcon: {
+    width: 14,
+    height: 14,
+    resizeMode: 'contain',
   },
 
   weekRow: {
