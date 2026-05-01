@@ -20,6 +20,8 @@ import localizationStrings from '../../../../compoent/Localization/Localization'
 import { AddQuestionApi } from '../../../../redux/Api/AuthApi';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 import styles from './style';
+import { errorToast } from '../../../../utils/customToast';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AddQuestion = ({ navigation, route }: any) => {
   useLanguage();
@@ -32,12 +34,14 @@ const AddQuestion = ({ navigation, route }: any) => {
 
   const handleAddQuestion = async () => {
     if (!questionText.trim()) {
-      Alert.alert(localizationStrings.Validation || "Validation", localizationStrings.PleaseEnterQuestion || "Please enter a question.");
+      errorToast(localizationStrings.PleaseEnterQuestion || "Please enter a question.")
+
       return;
     }
 
     if (!coachId) {
-      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
+      errorToast(localizationStrings.Error || localizationStrings.SomethingWentWrong)
+
       return;
     }
 
@@ -52,34 +56,23 @@ const AddQuestion = ({ navigation, route }: any) => {
 
       const response = await AddQuestionApi(params, setLoading);
       if (response && response.status === '1') {
-        Alert.alert(
-          localizationStrings.Success || "Success",
-          localizationStrings.QuestionAddedSuccess || "Question added successfully!",
-          [
-            {
-              text: localizationStrings.Ok || "OK",
-              onPress: () => {
-                if (route.params?.onSuccess) {
-                  route.params.onSuccess();
-                }
-                navigation.goBack();
-              }
-            }
-          ]
-        );
+        if (route.params?.onSuccess) {
+          route.params.onSuccess();
+        }
+        navigation.goBack();
       } else {
-        Alert.alert(localizationStrings.Error, response?.message || localizationStrings.SomethingWentWrong);
+        errorToast(response?.message || localizationStrings.SomethingWentWrong)
       }
     } catch (error) {
-      console.error('Error adding custom question:', error);
-      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
+      errorToast(localizationStrings.Error || localizationStrings.SomethingWentWrong)
+
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.page}>
+    <SafeAreaView style={styles.page}>
       <StatusBarComponent />
       <CustomHeader
         imageSource={imageIndex.backNavs}
@@ -155,7 +148,7 @@ const AddQuestion = ({ navigation, route }: any) => {
           )}
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

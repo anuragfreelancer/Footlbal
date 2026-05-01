@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Dimensions, TouchableOpacity, SafeAreaView, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import imageIndex from '../../assets/imageIndex';
 import CustomButton from '../../compoent/CustomButton';
 import StatusBarComponent from '../../compoent/StatusBarCompoent';
 import ScreenNameEnum from '../../routes/screenName.enum';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ const slides: Slide[] = [
         description: 'Join a community of passionate athletes and sports enthusiasts.',
         image: imageIndex.bagePng,
     },
-    
+
 ];
 
 const OnboardingScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -40,18 +41,18 @@ const OnboardingScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         setCurrentIndex(index);
     };
 
- 
+
 
     const renderSlide = ({ item }: { item: Slide }) => (
         <View style={styles.slide}>
             <ImageBackground source={item.image} style={styles.image} resizeMode='cover'  >
-                
+
             </ImageBackground>
-            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",marginTop:15}}>
-            <Text style={styles.title}>Welcome to </Text>
-            <Text style={[styles.title,{
-                color:"rgba(160, 216, 3, 1)"
-            }]}>Football</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 15 }}>
+                <Text style={styles.title}>Welcome to </Text>
+                <Text style={[styles.title, {
+                    color: "rgba(160, 216, 3, 1)"
+                }]}>Football</Text>
             </View>
             <Text style={styles.description}>{item.description}</Text>
         </View>
@@ -60,67 +61,67 @@ const OnboardingScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-              <StatusBarComponent backgroundColor="black" barStyle="default"/>
-              <FlatList
-                    data={slides}
-                    horizontal
-                    pagingEnabled
-                    ref={flatListRef}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={item => item.id}
-                    renderItem={renderSlide}
-                    onScroll={updateCurrentIndex}
-                    scrollEventThrottle={16}
-                />
-                <View style={{
-                    position: 'absolute',
-                    bottom: 122,
-                    alignSelf: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                }}>
-                    {slides.map((_, index) => (
-                        <View
-                            key={index}
-                            style={[
-                                styles.dot,
-                                currentIndex === index ? styles.activeDot : styles.inactiveDot,
-                            ]}
-                        />
-                    ))}
-                </View>
-                 <CustomButton
+            <StatusBarComponent backgroundColor="black" barStyle="default" />
+            <FlatList
+                data={slides}
+                horizontal
+                pagingEnabled
+                ref={flatListRef}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={item => item.id}
+                renderItem={renderSlide}
+                onScroll={updateCurrentIndex}
+                scrollEventThrottle={16}
+            />
+            <View style={{
+                position: 'absolute',
+                bottom: 122,
+                alignSelf: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+            }}>
+                {slides.map((_, index) => (
+                    <View
+                        key={index}
+                        style={[
+                            styles.dot,
+                            currentIndex === index ? styles.activeDot : styles.inactiveDot,
+                        ]}
+                    />
+                ))}
+            </View>
+            <CustomButton
                 secoundImg={imageIndex.nextArrow}
-                    title={'Next'}
-                    onPress={() => navigation.replace(ScreenNameEnum.LoginScreen)}
-                     buttonStyle={{ marginHorizontal: 120, marginBottom: 20 }}
-                />
-                <View style={{
-                    alignItems:"center",
-                    justifyContent:"center",
-                    flexDirection:"row",
-                    marginBottom: 15 
-                }}>
-                    <Text 
-                    
+                title={'Next'}
+                onPress={() => navigation.replace(ScreenNameEnum.LoginScreen)}
+                buttonStyle={{ marginHorizontal: 120, marginBottom: 20 }}
+            />
+            <View style={{
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                marginBottom: 15
+            }}>
+                <Text
+
                     style={{
-                        fontSize:16,
-                        color:"black",
-                        fontWeight:"400"
+                        fontSize: 16,
+                        color: "black",
+                        fontWeight: "400"
                     }}
-                    >Alrady have an account?</Text>
-                    <TouchableOpacity onPress={()=>navigation.navigate(ScreenNameEnum.LoginScreen)}>
+                >Alrady have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate(ScreenNameEnum.LoginScreen)}>
                     <Text style={{
-                          fontSize:16,
-                          fontWeight:"400"
-,
-                        color:"rgba(237, 126, 98, 1)"
+                        fontSize: 16,
+                        fontWeight: "400"
+                        ,
+                        color: "rgba(237, 126, 98, 1)"
                     }}>{" "}Login</Text>
-                    </TouchableOpacity>
-                </View>
-         </SafeAreaView>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -133,26 +134,26 @@ const styles = StyleSheet.create({
     },
     slide: {
         width,
-     
-     },
+
+    },
     image: {
         width: "100%",
         height: 551,
-          
+
     },
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         color: 'black',
         textAlign: 'center',
-     },
+    },
     description: {
         fontSize: 14,
         color: 'black',
         textAlign: 'center',
-         paddingHorizontal: 16,
+        paddingHorizontal: 16,
         lineHeight: 21,
-        marginTop:10
+        marginTop: 10
     },
     pagination: {
         flexDirection: 'row',
@@ -176,5 +177,5 @@ const styles = StyleSheet.create({
         height: 9,
         width: 9,
     },
-     
+
 });

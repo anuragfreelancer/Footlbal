@@ -29,12 +29,13 @@ const ChatScreen = () => {
         messageText, setMessageText,
         messages,
         sendMessage,
-        isLogin
+        isLogin,
+        item
     } = useChatScreen();
     const currentUserId = userName?.id; // Change this to logged-in user ID
 
 
-     const renderMessage = ({ item }: any) => {
+    const renderMessage = ({ item }: any) => {
         const isCurrentUser = item.sender_id === currentUserId;
         return (
             <View
@@ -51,7 +52,7 @@ const ChatScreen = () => {
                     <Text style={[styles.messageText, !isCurrentUser ? styles.sentText : styles.receivedText]}>
                         {item.chat_message}
                     </Text>
-                   
+
                 </View>
             </View>
         )
@@ -69,14 +70,17 @@ const ChatScreen = () => {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={imageIndex.backorange} style={styles.backIcon} />
                     </TouchableOpacity>
-                    {userName?.image ? (
+                    {userName?.image && userName?.image !== "https://kmmps.store/public/uploads/users/" ? (
                         <Image source={{ uri: userName?.image }} style={styles.userImage} />
                     ) : (
                         <Image source={imageIndex.prfEdit} style={styles.userImage} />
                     )}
                     <View>
                         <Text style={styles.userName}>{userName?.user_name}</Text>
+                        <Text style={styles.userName}>{userName?.email}</Text>
+
                     </View>
+
                 </View>
 
                 <FlatList

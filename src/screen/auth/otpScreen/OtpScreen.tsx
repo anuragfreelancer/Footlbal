@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { CodeField, Cursor, } from
@@ -10,6 +10,7 @@ import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import CustomHeader from '../../../compoent/CustomHeader';
 import useOtp from './useOtp';
 import localizationStrings from '../../../compoent/Localization/Localization';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function OtpScreen() {
   const { props, getCellOnLayoutHandler,

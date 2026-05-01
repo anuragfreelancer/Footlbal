@@ -2,23 +2,24 @@ import {
   View,
   Text,
   Image,
-   StyleSheet,
+  StyleSheet,
   ScrollView,
-  SafeAreaView,
+
 } from 'react-native';
-import React  from 'react';
+import React from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
- import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
+import StatusBarCompoent from '../../../compoent/StatusBarCompoent';
 import imageIndex from '../../../assets/imageIndex';
 import { styles } from '../loginStyle';
 import ResponsiveSize from '../../../utils/ResponsiveSize';
 import { wp } from '../../../utils/Constant';
 import CustomButton from '../../../compoent/CustomButton';
- import CustomHeader from '../../../compoent/CustomHeader';
+import CustomHeader from '../../../compoent/CustomHeader';
 import useCreateNewPassword from './useCreateNewPassword';
 import LoadingModal from '../../../utils/Loader';
 import localizationStrings from '../../../compoent/Localization/Localization';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateNewPassword() {
   const { credentials,
@@ -62,25 +63,25 @@ export default function CreateNewPassword() {
               lable={"Password"}
               text={credentials.password}
               placeholder={localizationStrings.Password}
-              onChangeText={(value:string) => handleChange('password', value)} // Handles email input dynamically
+              onChangeText={(value: string) => handleChange('password', value)} // Handles email input dynamically
 
               firstLogo={true}
               showEye={true}
               img={imageIndex.phone}
             />
-            {errors.password ? <Text style={{ color: 'red', fontSize: 12,marginTop:8 }}>{errors.password}</Text> : null}
+            {errors.password ? <Text style={{ color: 'red', fontSize: 12, marginTop: 8 }}>{errors.password}</Text> : null}
             <View style={{ marginTop: 12 }}>
               <TextInputField
                 lable={"Confirm Password"}
                 text={credentials.confirmPassword}
-                onChangeText={(value:string) => handleChange('confirmPassword', value)} // Handles email input dynamically
+                onChangeText={(value: string) => handleChange('confirmPassword', value)} // Handles email input dynamically
                 placeholder={localizationStrings.confirmpass}
                 firstLogo={true}
                 showEye={true}
                 img={imageIndex.phone}
               />
             </View>
-            {errors.confirmPassword ? <Text style={{ color: 'red', fontSize: 12 ,marginTop:10}}>{errors.confirmPassword}</Text> : null}
+            {errors.confirmPassword ? <Text style={{ color: 'red', fontSize: 12, marginTop: 10 }}>{errors.confirmPassword}</Text> : null}
           </View>
         </View>
 

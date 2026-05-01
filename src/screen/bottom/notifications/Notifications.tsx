@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import CustomHeader from '../../../compoent/CustomHeader';
 import localizationStrings from '../../../compoent/Localization/Localization';
 import imageIndex from '../../../assets/imageIndex';
 import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import styles from './style';
 import useNotifications from './useNotifications';
- import EmptyListComponent from '../../../compoent/EmptyListComponent';
+import EmptyListComponent from '../../../compoent/EmptyListComponent';
 import moment from 'moment';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Notifications = () => {
@@ -32,23 +33,23 @@ const Notifications = () => {
             data={notifications}
             keyExtractor={(_, index) => index.toString()}
             ListEmptyComponent={<EmptyListComponent message={localizationStrings.NoNotifications || "No Notifications available"} />} // Common Empty Component
-            renderItem={({ item }) =>  {
+            renderItem={({ item }) => {
               const formattedDate = moment(item?.created_at).format("h:mm A");
-              return(
+              return (
                 <View style={styles.notificationCard}>
-                {/* <Image
+                  {/* <Image
                   source={{
                     uri:item?.image
                   }}
                   style={styles.avatar}
                 /> */}
-                <View style={styles.notificationText}>
-                  <Text style={styles.name}>{item?.message}</Text>
-                  {/* <Text style={styles.time}></Text> */}
+                  <View style={styles.notificationText}>
+                    <Text style={styles.name}>{item?.message}</Text>
+                    {/* <Text style={styles.time}></Text> */}
+                  </View>
+                  <Text style={styles.time}>{formattedDate}</Text>
+                  {/* <Text style={styles.status}>{item.read_status}</Text> */}
                 </View>
-                <Text style={styles.time}>{formattedDate}</Text>
-                {/* <Text style={styles.status}>{item.read_status}</Text> */}
-              </View>
               )
             }}
           />

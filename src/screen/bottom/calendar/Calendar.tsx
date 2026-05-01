@@ -12,7 +12,6 @@ import styles from "./style";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
-import moment from "moment";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 
 const CustomCalendar = () => {

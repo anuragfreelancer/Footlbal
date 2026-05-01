@@ -3,10 +3,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   PanResponder,
-  Modal,
   TextInput,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -193,11 +191,12 @@ const QuestionSliderCard: React.FC<QuestionSliderCardProps> = React.memo(({
       {showTextInput && (
         <TextInput
           style={styles.questionTextInput}
-          placeholder={localizationStrings?.TypeHere || "Type here..."}
+          placeholder={localizationStrings?.TypeHere ?? "Type here..."}
           placeholderTextColor="#94A3B8"
-          value={text}
-          onChangeText={(t) => onTextChange(questionId, t)}
-          multiline
+          value={text || ""}
+          onChangeText={(value) => onTextChange(questionId, value)}
+          returnKeyType="done"
+          blurOnSubmit={true}
         />
       )}
     </View>

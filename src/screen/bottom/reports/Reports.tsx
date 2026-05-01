@@ -8,6 +8,10 @@ import localizationStrings from "../../../compoent/Localization/Localization";
 import ChartComponent from "../../../compoent/ChartComponent";
 import useHome from "../home/useHome";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
+import useChatScreen from "../chat/useChatScreen";
+import useMessageList from "../messages/useMessageList";
+import EmptyListComponent from "../../../compoent/EmptyListComponent";
+import ScreenNameEnum from "../../../routes/screenName.enum";
 
 
 const Reports = () => {
@@ -21,6 +25,15 @@ const Reports = () => {
     playerName
   } = useReports();
   useLanguage();
+
+  const {
+
+    filteredMessages,
+    searchData,
+    setSearchData,
+  } = useMessageList()
+
+
   const RecentSessionCard = ({ item, onPress }: { item: any, onPress?: () => void }) => {
     return (
       <View style={styles.card}>
@@ -73,32 +86,54 @@ const Reports = () => {
 
       <View style={styles.subHeaderContainer}>
         <Text style={styles.subHeader}>
-          {isLogin?.userData?.type === "Coach" 
+          {isLogin?.userData?.type === "Coach"
             ? (localizationStrings.CoachMonitoringHeader || "Coach Monitoring: Detailed Player Activity & Statistics")
             : (localizationStrings.PerformanceOverviewHeader || "Performance Overview: Shared Insights for Coach & Player")}
         </Text>
       </View>
       <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
 
-      {/* <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         <View style={styles.container}>
-          <Text style={styles.title}>{localizationStrings?.RecentSession}</Text>
+          <Text style={styles.title}>{localizationStrings?.ChatMessages}</Text>
           <FlatList
-            data={rpfData?.userGetData}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <RecentSessionCard item={item}
-            // onPress={() => {
-            //   navigation.navigate(ScreenNameEnum.TrainingFedBack, {
-            //     item: item
-            //   })
-            // }} 
+            showsVerticalScrollIndicator={false}
+            data={filteredMessages}
+            contentContainerStyle={styles.listContent}
+            ListEmptyComponent={<EmptyListComponent message={localizationStrings?.Nochat} />}
+            keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+            renderItem={({ item }: any) => (
+              <TouchableOpacity
+                style={styles.messageContainer}
+                onPress={() =>
+                  navigation.navigate(ScreenNameEnum.ChatScreen, { item })
+                }
+                activeOpacity={0.7}
+              >
+                {item?.image &&
+                  item.image.trim() !== "" &&
+                  !item.image.endsWith("/users/") ? (
+                  <Image source={{ uri: item.image }} style={styles.profileImage} />
+                ) : (
+                  <Image source={imageIndex.prfEdit} style={styles.profileImage} />
+                )}
+                <View style={styles.textContainer}>
+                  <Text style={styles.name} numberOfLines={1}>
+                    {item?.user_name ?? ""}
+                  </Text>
+                  <Text style={styles.lastMessage} numberOfLines={1}>
+                    {item?.last_message ?? ""}
+                  </Text>
+                </View>
 
-            />}
+              </TouchableOpacity>
+            )}
           />
+
         </View>
 
-      </ScrollView> */}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -159,6 +194,62 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: 'center',
     lineHeight: 18,
+  },
+  listContent: {
+    paddingBottom: 24,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 12,
+  },
+  searchIcon: { marginRight: 8 },
+  searchInput: { flex: 1 },
+  messageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  profileImage: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    marginRight: 14,
+    backgroundColor: "#E5E7EB",
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: "center",
+    minWidth: 0,
+    marginRight: 8,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 2,
+  },
+  lastMessage: {
+    fontSize: 13,
+    color: "#6B7280",
+    lineHeight: 18,
+  },
+  message: { color: "#6B7280" },
+  timeContainer: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  time: {
+    fontSize: 12,
+    color: "#9CA3AF",
+    marginBottom: 4,
   },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
 });

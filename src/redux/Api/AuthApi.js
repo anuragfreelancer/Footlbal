@@ -3,6 +3,7 @@ import ScreenNameEnum from "../../routes/screenName.enum";
 import { errorToast, successToast } from "../../utils/customToast";
 import { loginSuccess } from "../feature/authSlice";
 import { getSuccess, profileFetchFailed } from "../feature/authGetSlice";
+import FirebaseMessagingService from "../../services/FirebaseMessagingService";
 
 
 
@@ -10,6 +11,8 @@ const LoginUserApi = async (
     param,
     setLoading,
     dispatch) => {
+    const token = await FirebaseMessagingService.getFcmToken();
+
     try {
         setLoading(true)
         const myHeaders = new Headers();
@@ -17,7 +20,7 @@ const LoginUserApi = async (
         const formdata = new FormData();
         formdata.append("email", param?.email);
         formdata.append("password", param?.password);
-        formdata.append("device_id", param?.token);
+        formdata.append("device_id", token);
         formdata.append("type", param?.logintype);
         const requestOptions = {
             method: "POST",
@@ -28,7 +31,7 @@ const LoginUserApi = async (
         const respons = await fetch(`${base_url}${constant.Login}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("res", res)
+                console.log("res login", res)
 
                 const response = JSON.parse(res)
                 if (response?.status == '1') {
@@ -44,6 +47,8 @@ const LoginUserApi = async (
 
                     return response
                 } else {
+                    console.log("response eeee", res)
+
                     setLoading(false)
                     errorToast(
                         response.message,
@@ -385,7 +390,7 @@ const StartSection = async (param, setLoading) => {
         formData.append("question_id", param?.question_id);
         formData.append("type", param?.session_type);
 
-        console.log("📦 FormData sending...");
+        console.log("📦 FormData sending...", formData);
 
         const response = await fetch(
             `${base_url}${constant.add_coach_session}`,
@@ -397,7 +402,7 @@ const StartSection = async (param, setLoading) => {
         );
 
         const result = await response.text();
-        console.log("✅ API Response:", result);
+        console.log("✅ API Response: ---- ", result);
 
         const data = JSON.parse(result);
 

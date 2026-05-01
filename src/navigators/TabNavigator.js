@@ -1,4 +1,4 @@
-import { View, Text, Image, Keyboard, Platform } from 'react-native'
+import { Text, Image, Keyboard, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import _routes from '../routes/routes';
@@ -59,9 +59,9 @@ export default function TabNavigator() {
                   style={{
                     width: 25,
                     height: 25,
-                    resizeMode:"contain"
-                   }}
-                   tintColor={focused ? "#A0D803" : "#999999"}
+                    resizeMode: "contain"
+                  }}
+                  tintColor={focused ? "#A0D803" : "#999999"}
                 />
                 {screen.label && (
                   <Text

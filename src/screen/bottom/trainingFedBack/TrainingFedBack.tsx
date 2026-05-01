@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, LayoutAnimation, UIManager, Platform, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import imageIndex from '../../../assets/imageIndex';
-import { SafeAreaView } from 'react-native';
 import CustomHeader from '../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../compoent/StatusBarCompoent';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -14,6 +13,7 @@ import { Calendar } from 'react-native-calendars';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import LoadingModal from '../../../utils/Loader';
 import localizationStrings from '../../../compoent/Localization/Localization';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true); // for animation on Android

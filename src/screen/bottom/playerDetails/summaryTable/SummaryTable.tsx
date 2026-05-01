@@ -6,7 +6,7 @@ import {
     ScrollView,
     Image,
     ActivityIndicator,
-    SafeAreaView,
+
     FlatList,
     Animated,
     Easing
@@ -21,6 +21,7 @@ import imageIndex from '../../../../assets/imageIndex';
 import localizationStrings from '../../../../compoent/Localization/Localization';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SCORE_COLORS = [
     '#BE123C', '#BE123C', '#E11D48', '#F43F5E',

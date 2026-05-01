@@ -22,6 +22,8 @@ import { StartSection, EndSection, GetQuestionByCoachApi } from '../../../../red
 import ScreenNameEnum from '../../../../routes/screenName.enum';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
+import { errorToast } from '../../../../utils/customToast';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -122,7 +124,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert(localizationStrings.Error, localizationStrings.SomethingWentWrong);
+      errorToast(localizationStrings.Error || "")
     } finally {
       setLoading(false);
     }
@@ -173,7 +175,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   };
 
   return (
-    <View style={styles.page}>
+    <SafeAreaView style={styles.page}>
       <StatusBarComponent />
 
       <View style={{ marginHorizontal: 12, marginTop: 5 }}>
@@ -275,7 +277,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
       <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }} onCancel={() => setDatePickerVisibility(false)} />
       <DateTimePickerModal isVisible={isTimePickerVisible} mode="time" onConfirm={(t) => { setTime(t); setTimePickerVisibility(false); }} onCancel={() => setTimePickerVisibility(false)} />
-    </View>
+    </SafeAreaView>
   );
 };
 

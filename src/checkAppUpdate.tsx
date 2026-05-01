@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Linking,
   ActivityIndicator,
-  SafeAreaView,
   Platform,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import VersionCheck from "react-native-version-check";
 
 const IOS_APP_STORE_URL =
