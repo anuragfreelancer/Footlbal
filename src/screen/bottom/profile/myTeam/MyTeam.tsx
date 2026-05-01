@@ -36,17 +36,15 @@ const MyTeam = () => {
         <View style={styles.profileHeader}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
 
-            {getLogin?.userGetData?.image || isLogin?.userData?.image ?
-
-              <Image source={{ uri: getLogin?.userGetData?.image || isLogin?.userData?.image }} style={styles.avatar} />
-
-              :
-
-              <Image
-                source={imageIndex.prfEdit}
-                style={styles.avatar}
-              />
-            }
+            <Image
+              source={
+                (getLogin?.userGetData?.image || isLogin?.userData?.image) &&
+                  !(getLogin?.userGetData?.image || isLogin?.userData?.image).endsWith("/users/")
+                  ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image }
+                  : imageIndex.prfEdit
+              }
+              style={styles.avatar}
+            />
 
 
             <View style={styles.profileInfo}>

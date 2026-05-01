@@ -257,7 +257,7 @@ const UpdateProfile_Api = async (
         const myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         const formData = new FormData();
-        if (param?.images) {
+        if (param?.images && typeof param.images === 'string' && !param.images.startsWith('http')) {
             formData.append("image", {
                 uri: param?.images,
                 type: 'image/jpeg',
@@ -277,18 +277,19 @@ const UpdateProfile_Api = async (
         const respons = await fetch(`${base_url}${constant.updateProfile}`, requestOptions)
             .then((response) => response.text())
             .then((res) => {
-                console.log("edit ", response)
-                const response = JSON.parse(res);
-                if (response.status == '1') {
+                const responseData = JSON.parse(res);
+                console.log("edit response", responseData)
+                if (responseData.status == '1') {
                     setLoading(false)
                     // successToast(
-                    //     response?.message
+                    //     responseData?.message
                     // );
                     param.navigation.goBack()
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
-                    return response
+                    return responseData
                 }
             })
+
             .catch((error) =>
                 console.error(error));
         return respons

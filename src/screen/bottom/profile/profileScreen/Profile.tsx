@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, FlatList, Linking } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -38,8 +39,8 @@ const Profile = () => {
   const MenuItems = [
     { title: localizationStrings.MyTeam, icon: imageIndex.myteam, screen: ScreenNameEnum.MyTeam },
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
-    { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
-    { title: localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
+    // { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
+    { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },
     { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
     // { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
@@ -50,7 +51,7 @@ const Profile = () => {
   const PlayData = [
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
     { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
-    { title: localizationStrings.LegalInformation, icon: imageIndex.document, screen: ScreenNameEnum.Legalinfor },
+    { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },
     // { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
     // { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
@@ -89,7 +90,11 @@ const Profile = () => {
         if (title === localizationStrings.Logout) setModal(true);
         else if (screen === "Language") setModalVisible(true);
         else if (screen === "delete") setShowDelete(true);
+        else if (typeof screen === 'string' && screen.startsWith('http')) {
+          Linking.openURL(screen).catch((err) => console.error("An error occurred", err));
+        }
         else navigation.navigate(screen);
+
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>

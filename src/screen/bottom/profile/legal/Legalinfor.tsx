@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, SafeAreaView, useWindowDimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
 import imageIndex from '../../../../assets/imageIndex';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -8,6 +8,7 @@ import HTML from 'react-native-render-html';
 import LoadingModal from '../../../../utils/Loader';
 import localizationStrings from '../../../../compoent/Localization/Localization';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Legalinfor = () => {
     useLanguage();
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
     },
     headerWrapper: {
         marginHorizontal: 16,
-        marginTop: 16,
     },
     container: {
         flex: 1,

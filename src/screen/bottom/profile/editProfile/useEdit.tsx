@@ -67,11 +67,12 @@ const useEdit = () => {
         height: 400,
         cropping: false,
       });
-      setImagePrfile(image)
+      setImagePrfile(image.path)
       setIsModalVisible(false);
     } catch (error) {
       Alert.alert('Error', error.message);
     }
+
   };
 
   const handleSubmit = async () => {
