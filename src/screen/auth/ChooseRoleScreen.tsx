@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, Dimensions, Animated } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image, Dimensions, Animated, Platform } from 'react-native';
 import StatusBarComponent from '../../compoent/StatusBarCompoent';
 import imageIndex from '../../assets/imageIndex';
 import ScreenNameEnum from '../../routes/screenName.enum';
@@ -58,7 +58,7 @@ const ChooseRoleScreen = ({ navigation }: any) => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBarComponent />
-            
+
             {/* Background Decorative Element */}
             <View style={styles.bgCircle} />
 
@@ -67,15 +67,15 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                 <View style={styles.header}>
                     <Image source={imageIndex.app} style={styles.logo} resizeMode="contain" />
                     <Text style={styles.heading}>Choose Your Role</Text>
-                    <Text style={styles.subHeading}>Select how you want to use Footlball</Text>
+                    <Text style={styles.subHeading}>Select how you want to use KMMP RPE</Text>
                 </View>
 
                 {/* Illustration Section */}
                 <View style={styles.illustrationContainer}>
-                    <Image 
-                        source={imageIndex.selectionbag} 
-                        style={styles.illustration} 
-                        resizeMode="contain" 
+                    <Image
+                        source={imageIndex.selectionbag}
+                        style={styles.illustration}
+                        resizeMode="contain"
                     />
                 </View>
 
@@ -83,19 +83,19 @@ const ChooseRoleScreen = ({ navigation }: any) => {
                 <View style={styles.cardContainer}>
                     {/* Coach Card */}
                     <Animated.View style={{ flex: 1, transform: [{ scale: coachScale }] }}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={[
-                                styles.roleCard, 
+                                styles.roleCard,
                                 selectedRole === 'Coach' && styles.selectedCard
                             ]}
                             onPress={() => animateSelection('Coach')}
                             activeOpacity={0.8}
                         >
                             <View style={[styles.iconWrapper, selectedRole === 'Coach' && styles.selectedIconWrapper]}>
-                                <Image 
-                                    source={imageIndex.coach} 
-                                    style={[styles.roleIcon, selectedRole === 'Coach' && { tintColor: '#fff' }]} 
-                                    resizeMode="contain" 
+                                <Image
+                                    source={imageIndex.coach}
+                                    style={[styles.roleIcon, selectedRole === 'Coach' && { tintColor: '#fff' }]}
+                                    resizeMode="contain"
                                 />
                             </View>
                             <Text style={styles.roleTitle}>Coach</Text>
@@ -106,19 +106,19 @@ const ChooseRoleScreen = ({ navigation }: any) => {
 
                     {/* Player Card */}
                     <Animated.View style={{ flex: 1, transform: [{ scale: playerScale }] }}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={[
-                                styles.roleCard, 
+                                styles.roleCard,
                                 selectedRole === 'Player' && styles.selectedCard
                             ]}
                             onPress={() => animateSelection('Player')}
                             activeOpacity={0.8}
                         >
                             <View style={[styles.iconWrapper, selectedRole === 'Player' && styles.selectedIconWrapper]}>
-                                <Image 
-                                    source={imageIndex.playersP} 
-                                    style={[styles.roleIcon, selectedRole === 'Player' && { tintColor: '#fff' }]} 
-                                    resizeMode="contain" 
+                                <Image
+                                    source={imageIndex.playersP}
+                                    style={[styles.roleIcon, selectedRole === 'Player' && { tintColor: '#fff' }]}
+                                    resizeMode="contain"
                                 />
                             </View>
                             <Text style={styles.roleTitle}>Player</Text>
@@ -131,8 +131,8 @@ const ChooseRoleScreen = ({ navigation }: any) => {
 
             {/* Bottom Action Section */}
             <View style={styles.bottomSection}>
-                <CustomButton 
-                    title="Continue" 
+                <CustomButton
+                    title="Continue"
                     onPress={handleContinue}
                     disabled={!selectedRole}
                     buttonStyle={!selectedRole ? styles.disabledBtn : {}}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: ResponsiveSize.height(30),
         gap: 16,
-    
+        marginHorizontal: Platform.OS === 'ios' ? 14 : 0,
     },
     roleCard: {
         backgroundColor: '#F9FAFB',
@@ -275,6 +275,8 @@ const styles = StyleSheet.create({
     },
     bottomSection: {
         marginBottom: ResponsiveSize.height(30),
+        marginHorizontal: Platform.OS === 'ios' ? 14 : 0,
+
     },
     disabledBtn: {
         backgroundColor: '#F1F5F9',
