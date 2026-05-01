@@ -71,9 +71,9 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (
           {currentMonth.format("MMMM YYYY")}
         </Text>
 
-        {/* <TouchableOpacity style={styles.navButton} onPress={() => changeMonth("next")}>
+        <TouchableOpacity style={styles.navButton} onPress={() => changeMonth("next")}>
           <Image source={imageIndex.nextArrow} style={styles.navIcon} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
 
       </View>
 
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     resizeMode: 'contain',
+    tintColor: "#1A1C1E",
   },
 
   weekRow: {

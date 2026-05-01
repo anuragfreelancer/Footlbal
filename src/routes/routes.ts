@@ -1,4 +1,3 @@
-// import imageIndex from "../assets/imageIndex";
 import TabNavigator from "../navigators/TabNavigator";
 import CreateNewPassword from "../screen/auth/createNewPassword/CreateNewPassword";
 import Login from "../screen/auth/login/Login";
@@ -26,7 +25,7 @@ import Reports from "../screen/bottom/reports/Reports";
 import ScreenNameEnum from "./screenName.enum";
 import PlayerEdit from "../screen/bottom/playerDetails/playerEdit/PlayerEdit";
 import SubmitRPE from "../screen/bottom/submitRPE/SubmitRPE";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import imageIndex from "../assets/imageIndex";
 import ChooseRoleScreen from "../screen/auth/ChooseRoleScreen";
 import Notifications from "../screen/bottom/notifications/Notifications";
@@ -41,14 +40,27 @@ import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer"
 import StartSectionScreen from "../screen/bottom/profile/startSectionScreen/StartSectionScreen";
 import AddQuestion from "../screen/bottom/profile/addQuestion/AddQuestion";
 import SummaryTable from "../screen/bottom/playerDetails/summaryTable/SummaryTable";
+import { useEffect } from "react";
+import { GetProfile } from "../redux/Api/AuthApi";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
 };
 
 const _routes = () => {
+
+
+
+
   const isLogin = useAuth(); // Hook function inside component/function
   console.log("isLogin", isLogin)
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    GetProfile(isLogin?.userData?.id, dispatch);
+
+  }, [])
   return {
     REGISTRATION_ROUTE: [
       { name: ScreenNameEnum.SPLASH_SCREEN, Component: Splash },
