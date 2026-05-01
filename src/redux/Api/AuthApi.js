@@ -288,6 +288,13 @@ const UpdateProfile_Api = async (
                     // param.navigation.navigate(ScreenNameEnum.TabNavigator)
                     return responseData
                 }
+                else {
+                    setLoading(false)
+                    errorToast(
+                        responseData?.message
+                    );
+                    return responseData
+                }
             })
 
             .catch((error) =>

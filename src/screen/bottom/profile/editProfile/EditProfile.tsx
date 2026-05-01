@@ -64,62 +64,32 @@ const EditProfile = () => {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 80 }}
             >
-              {/* Profile Image */}
               <View style={styles.profileContainer}>
                 <View style={styles.iamgeView}>
-                  {getLogin?.userGetData?.image ?
-                  
                   <Image
-                    resizeMode="cover"
                     source={
                       imagePrfile
                         ? { uri: imagePrfile }
-                        : { uri: getLogin?.userGetData?.image }
+                        : getLogin?.userGetData?.image && !getLogin.userGetData.image.endsWith("/users/")
+                          ? { uri: getLogin.userGetData.image }
+                          : imageIndex.prfEdit
                     }
-                    style={{
-                      height: ResponsiveSize.height(120),
-                      width: ResponsiveSize.height(120), // match height to make it perfect circle
-                      borderRadius: ResponsiveSize.height(60), // exactly half of height/width
-                      borderWidth: 2,
-                      borderColor: "#9DB2BF",
-                      alignSelf: "center", // center align
-                    }}
-                  /> : (
-                    <Image source={imageIndex.prfEdit} style={{
-                      height: ResponsiveSize.height(120),
-                      width: ResponsiveSize.height(120), // match height to make it perfect circle
-                      borderRadius: ResponsiveSize.height(60), // exactly half of height/width
-                      borderWidth: 2,
-                      borderColor: "#9DB2BF",
-                      alignSelf: "center", // center align
-                    }} />
-                  )}
-
-
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => setIsModalVisible(true)}
-                  style={{
-                    bottom: 15,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: 30,
-                    width: 30,
-                    borderRadius: 30,
-                    left: 11
-                  }}
-                >
-                  <Image
-                    source={imageIndex.floter}
-                    style={{
-                      marginLeft: 30,
-                      height: ResponsiveSize.height(33),
-                      width: ResponsiveSize.width(33),
-                    }}
-                    resizeMode="contain"
+                    style={styles.profileImage}
+                    resizeMode="cover"
                   />
-                </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => setIsModalVisible(true)}
+                    activeOpacity={0.8}
+                    style={styles.cameraIconContainer}
+                  >
+                    <Image
+                      source={imageIndex.floter}
+                      style={styles.cameraIcon}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Form Fields */}

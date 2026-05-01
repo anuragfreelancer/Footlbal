@@ -111,6 +111,8 @@ const Profile = () => {
 
     navigation.navigate(ScreenNameEnum.SPLASH_SCREEN);
   };
+  const imageUrl =
+    getLogin?.userGetData?.image || isLogin?.userData?.image;
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBarComponent />
@@ -129,19 +131,18 @@ const Profile = () => {
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {
-              getLogin?.userGetData?.image || isLogin?.userData?.image ?
-
-                <Image
-                  source={getLogin?.userGetData?.image || isLogin?.userData?.image ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image } : imageIndex.ProfielImge}
-                  style={styles.avatar}
-                />
-                : <Image
-                  source={imageIndex.prfEdit}
-                  style={styles.avatar}
-                />
-            }
-
+            <Image
+              source={
+                imageUrl &&
+                  imageUrl.trim() !== "" &&
+                  !imageUrl.endsWith("/users/")
+                  ? { uri: imageUrl }
+                  : imageIndex.prfEdit
+              }
+              defaultSource={imageIndex.prfEdit}
+              onError={() => console.log("Image load failed")}
+              style={styles.avatar}
+            />
 
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>

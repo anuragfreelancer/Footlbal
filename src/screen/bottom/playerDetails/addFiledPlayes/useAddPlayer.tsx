@@ -153,7 +153,7 @@ const useAddPlayer = () => {
           pass: password
         };
         const response = await PlayerPostApi(params, setisLoading);
-        console.log("response add ",response)
+        console.log("response add ", response)
         if (response) {
           sendEmailFootball(email, password)
         }
@@ -194,6 +194,8 @@ const useAddPlayer = () => {
         width: 300,
         height: 400,
         cropping: false,
+        compressImageQuality: 0.6, // 0 to 1 (0.5 = medium quality)
+
       });
       setImagePrfile(image)
       setIsModalVisible(false);

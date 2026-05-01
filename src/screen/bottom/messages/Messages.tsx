@@ -18,7 +18,7 @@ import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 const Messages = () => {
     useLanguage();
     const {
-         isLoading,
+        isLoading,
         navigation,
         filteredMessages,
         searchData,
@@ -52,11 +52,14 @@ const Messages = () => {
                             }
                             activeOpacity={0.7}
                         >
-                            {item?.image ? (
-                                <Image source={{ uri: item.image }} style={styles.profileImage} />
-                            ) : (
-                                <Image source={imageIndex.prfEdit} style={styles.profileImage} />
-                            )}
+                            <Image
+                                source={
+                                    item?.image && item.image !== "https://kmmps.store/public/uploads/users/"
+                                        ? { uri: item.image }
+                                        : imageIndex.prfEdit
+                                }
+                                style={styles.profileImage}
+                            />
                             <View style={styles.textContainer}>
                                 <Text style={styles.name} numberOfLines={1}>
                                     {item?.user_name ?? ""}

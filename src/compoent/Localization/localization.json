@@ -308,7 +308,9 @@
             "PleaseEnterQuestion": "Please enter a question.",
             "QuestionAddedSuccess": "Question added successfully!",
             "End": "End",
-            "StrengthTraining": "Strength & Conditioning"
+            "StrengthTraining": "Strength & Conditioning",
+            "NoActiveSession": "No Active Sessions",
+            "WaitCoach": "The coach hasn't started any section yet. Please wait or check back later."
       },
       "French": {
             "EndTime": "Heure de fin",
@@ -617,6 +619,8 @@
             "StartSectionTitle": "Début de section",
             "PleaseEnterQuestion": "Veuillez saisir une question.",
             "QuestionAddedSuccess": "Question ajoutée avec succès !",
-            "End": "Fin"
+            "End": "Fin",
+            "NoActiveSession": "Aucune session active",
+            "WaitCoach": "L'entraîneur n'a pas encore commencé de section. Veuillez patienter ou revenir plus tard."
       }
 }

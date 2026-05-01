@@ -418,5 +418,31 @@ const styles = StyleSheet.create({
       fontWeight: '700',
       color: '#fff',
     },
+    emptyStateContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingVertical: 80,
+      paddingHorizontal: 40,
+    },
+    emptyStateIcon: {
+      width: 120,
+      height: 120,
+      marginBottom: 24,
+      tintColor: "#E5E7EB",
+    },
+    emptyStateTitle: {
+      fontSize: 22,
+      fontWeight: "800",
+      color: "#1F2937",
+      textAlign: "center",
+      marginBottom: 12,
+    },
+    emptyStateText: {
+      fontSize: 15,
+      color: "#6B7280",
+      textAlign: "center",
+      lineHeight: 22,
+    },
   });
 export default styles;

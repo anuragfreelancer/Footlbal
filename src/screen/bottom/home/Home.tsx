@@ -174,6 +174,16 @@ const DashboardScreen = () => {
     );
   };
 
+  const renderEmptyState = () => (
+    <View style={styles.emptyStateContainer}>
+      <Image source={imageIndex.coach} style={styles.emptyStateIcon} resizeMode="contain" />
+      <Text style={styles.emptyStateTitle}>{localizationStrings.NoActiveSession || "No Active Sessions"}</Text>
+      <Text style={styles.emptyStateText}>
+        {localizationStrings.WaitCoach || "The coach hasn't started any section yet. Please wait or check back later."}
+      </Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBarComponent />
@@ -218,46 +228,11 @@ const DashboardScreen = () => {
           keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
           renderItem={renderItem}
           scrollEnabled={false}
+          ListEmptyComponent={renderEmptyState}
           contentContainerStyle={styles.listContent} />
 
       </ScrollView>
-      <Modal
-        visible={showEndModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowEndModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <TouchableOpacity
-            style={styles.modalOverlayDismiss}
-            activeOpacity={1}
-            onPress={() => setShowEndModal(false)}
-          />
-          <View style={styles.modalContentPremium}>
-            <View style={styles.modalHandle} />
-            <Text style={styles.modalTitlePremium}>{localizationStrings?.Confirmation || "Confirmation"}</Text>
-            <Text style={styles.modalMessagePremium}>
-              {localizationStrings?.AreYouSureEndSession || "Are you sure you want to end this session now?"}
-            </Text>
 
-            <View style={styles.modalButtonsPremium}>
-              <TouchableOpacity
-                style={[styles.modalButtonPremium, styles.cancelBtnPremium]}
-                onPress={() => setShowEndModal(false)}
-              >
-                <Text style={[styles.buttonTextPremium, { color: '#6B7280' }]}>{localizationStrings?.Cancel || "Cancel"}</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.modalButtonPremium, styles.endBtnPremium]}
-                onPress={handleEndSession}
-              >
-                <Text style={[styles.buttonTextPremium, { color: '#fff' }]}>{localizationStrings?.Confirm || "Confirm"}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };

@@ -35,43 +35,31 @@ const Reports = () => {
 
 
   const RecentSessionCard = ({ item, onPress }: { item: any, onPress?: () => void }) => {
+    const effort = Number(item.rate_efforts) || 0;
+    const badgeColor = effort > 7 ? "#EF4444" : effort > 4 ? "#F59E0B" : "#10B981";
+
     return (
-      <View style={styles.card}>
-        <TouchableOpacity style={styles.row} onPress={onPress}>
-          <View>
-            <Text style={styles.boldText}>{localizationStrings.DateLabel || "Date"} - {item?.rpf_date}</Text>
-            <Text style={styles.lightText}>{item.rpf_session}</Text>
+      <TouchableOpacity style={styles.reportCard} onPress={onPress} activeOpacity={0.7}>
+        <View style={styles.reportMain}>
+          <Text style={styles.reportDate}>{item?.rpf_date || "—"}</Text>
+          <Text style={styles.reportSession} numberOfLines={1}>{item.rpf_session || localizationStrings.TrainingSession}</Text>
+        </View>
+        <View style={styles.scoreContainer}>
+          <View style={[styles.scoreBadge, { backgroundColor: badgeColor }]}>
+            <Text style={styles.scoreValue}>{effort}</Text>
+            <Text style={styles.scoreLabel}>RPE</Text>
           </View>
-          <View style={styles.scoreSection}>
-
-            {item.rate_efforts > 6 ? <Image source={imageIndex.redGrap}
-              style={{
-                height: 28,
-                width: 28
-              }}
-            /> : <Image source={imageIndex.greenGrap}
-
-              style={{
-                height: 28,
-                width: 28
-              }}
-            />}
-            <Text style={styles.boldText}>{localizationStrings.RPEScore || "RPE Score"}</Text>
-            <Text style={styles.scoreText}>{item.rate_efforts}</Text>
-          </View>
-
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     );
   };
+
   const chartDataScreen1 = {
     weekly: { data: [1400, 2800, 100, 1600, 100, 800, 200] },
     monthly: { data: [70, 200, 150] },
     yearly: { data: [180, 222, 111] },
   };
-  const {
 
-  } = useHome();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? <LoadingModal /> : null}
@@ -93,22 +81,47 @@ const Reports = () => {
       </View>
       <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
 
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        {/* Recent Reports Section */}
+        {rpfData?.userGetData?.length > 0 && (
+          <View style={{ marginBottom: 10 }}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{localizationStrings.RecentSession || "Recent Reports"}</Text>
+            </View>
+            <FlatList
+              data={rpfData.userGetData.slice(0, 10)}
+              scrollEnabled={false}
+              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
+              renderItem={({ item }) => <RecentSessionCard item={item} />}
+            />
+          </View>
+        )}
 
-        <View style={styles.container}>
-          <Text style={styles.title}>{localizationStrings?.ChatMessages}</Text>
+        {/* Chat Messages Section */}
+        <View>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>{localizationStrings.ChatMessages || "Chat Messages"}</Text>
+          </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={filteredMessages}
+            scrollEnabled={false}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={<EmptyListComponent message={localizationStrings?.Nochat} />}
             keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
             renderItem={({ item }: any) => (
               <TouchableOpacity
                 style={styles.messageContainer}
-                onPress={() =>
-                  navigation.navigate(ScreenNameEnum.ChatScreen, { item })
-                }
+                // onPress={() =>
+                //   navigation.navigate(ScreenNameEnum.ChatScreen, { item })
+                // }
+                onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
+                  item: item
+                })}
                 activeOpacity={0.7}
               >
                 {item?.image &&
@@ -122,17 +135,19 @@ const Reports = () => {
                   <Text style={styles.name} numberOfLines={1}>
                     {item?.user_name ?? ""}
                   </Text>
-                  <Text style={styles.lastMessage} numberOfLines={1}>
-                    {item?.last_message ?? ""}
+                  <Text style={styles.name} numberOfLines={1}>
+                    {item?.email ?? ""}
                   </Text>
+                  {/* <Text style={styles.lastMessage} numberOfLines={1}>
+                    {item?.last_message ?? ""}
+                  </Text> */}
                 </View>
+                <Image source={imageIndex.bubbleChat} style={styles.chatIcon} resizeMode="contain" />
 
               </TouchableOpacity>
             )}
           />
-
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );
@@ -143,7 +158,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    marginHorizontal: 15
+    marginHorizontal: 10
   },
   containewr: {
     padding: 16,
@@ -195,61 +210,120 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 24,
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#1E293B",
+  },
   listContent: {
     paddingBottom: 24,
   },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F3F4F6",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+  reportCard: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    padding: 16,
     marginBottom: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
   },
-  searchIcon: { marginRight: 8 },
-  searchInput: { flex: 1 },
+  reportMain: {
+    flex: 1,
+    marginRight: 12,
+  },
+  reportDate: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#1E293B",
+    marginBottom: 4,
+  },
+  reportSession: {
+    fontSize: 13,
+    color: "#64748B",
+    fontWeight: "500",
+  },
+  scoreContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scoreBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 50,
+  },
+  scoreValue: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#fff",
+  },
+  scoreLabel: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: "rgba(255,255,255,0.9)",
+    textTransform: "uppercase",
+    marginTop: -2,
+  },
   messageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 14,
-    paddingHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    backgroundColor: "#fff",
+    padding: 14,
+    borderRadius: 18,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
   },
   profileImage: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     marginRight: 14,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: "#F1F5F9",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
   },
   textContainer: {
     flex: 1,
     justifyContent: "center",
-    minWidth: 0,
-    marginRight: 8,
+    marginRight: 10,
   },
   name: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#111827",
-    marginBottom: 2,
+    fontWeight: "700",
+    color: "#1E293B",
+    marginBottom: 4,
   },
   lastMessage: {
     fontSize: 13,
-    color: "#6B7280",
+    color: "#64748B",
     lineHeight: 18,
   },
-  message: { color: "#6B7280" },
-  timeContainer: {
-    alignItems: "flex-end",
-    justifyContent: "center",
-  },
-  time: {
-    fontSize: 12,
-    color: "#9CA3AF",
-    marginBottom: 4,
+  chatIcon: {
+    width: 22,
+    height: 22,
+    tintColor: "#A0D803",
   },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
 });
