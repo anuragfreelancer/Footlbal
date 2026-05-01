@@ -176,7 +176,7 @@ const DashboardScreen = () => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyStateContainer}>
-      <Image source={imageIndex.coach} style={styles.emptyStateIcon} resizeMode="contain" />
+      <Image source={imageIndex.Sport} style={styles.emptyStateIcon} resizeMode="contain" />
       <Text style={styles.emptyStateTitle}>{localizationStrings.NoActiveSession || "No Active Sessions"}</Text>
       <Text style={styles.emptyStateText}>
         {localizationStrings.WaitCoach || "The coach hasn't started any section yet. Please wait or check back later."}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import imageIndex from '../assets/imageIndex';
 
 interface EmptyListComponentProps {
     message?: string;
@@ -8,6 +9,7 @@ interface EmptyListComponentProps {
 const EmptyListComponent: React.FC<EmptyListComponentProps> = ({ message = "No Data Available" }) => {
     return (
         <View style={styles.emptyContainer}>
+            <Image source={imageIndex.notChat} style={{ height: 222, width: 222 }} resizeMode='contain' />
             <Text style={styles.emptyText}>{message}</Text>
         </View>
     );

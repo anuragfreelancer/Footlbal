@@ -23,13 +23,7 @@ export default function TabNavigator() {
           height: 60 + insets.bottom,       // ✅ iPhone home indicator ke liye
           paddingBottom: insets.bottom,      // ✅ Icons upar rahe home bar se
           paddingTop: 8,
-          borderTopWidth: 1,
-          borderTopColor: '#F0F0F0',
-          elevation: 10,                     // Android shadow
-          shadowColor: '#000',               // iOS shadow
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.06,
-          shadowRadius: 6,
+
         },
       }}
     >
