@@ -132,7 +132,7 @@ const Profile = () => {
           onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
+            {/* <Image
               source={
                 imageUrl &&
                   imageUrl.trim() !== "" &&
@@ -143,8 +143,15 @@ const Profile = () => {
               defaultSource={imageIndex.prfEdit}
               onError={() => console.log("Image load failed")}
               style={styles.avatar}
+            /> */}
+            <Image
+              source={
+                imageUrl !== "https://kmmps.store/public/uploads/users/"
+                  ? { uri: imageUrl }
+                  : imageIndex.prfEdit
+              }
+              style={styles.avatar}
             />
-
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
               <Text style={styles.profileLink}>{getLogin?.userGetData?.email || isLogin?.userData?.email}</Text>
