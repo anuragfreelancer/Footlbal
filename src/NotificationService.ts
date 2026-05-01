@@ -17,73 +17,73 @@ class NotificationService {
     }
   };
 
- requestPermission = async (): Promise<boolean> => {
-  try {
-    if (Platform.OS === 'android') {
-      if (Platform.Version >= 33) {
-        
-        // ✅ String directly use karo — library version issue bypass
-        const permission = 'android.permission.POST_NOTIFICATIONS' as any;
-        
-        const currentStatus = await check(permission);
+  requestPermission = async (): Promise<boolean> => {
+    try {
+      if (Platform.OS === 'android') {
+        if (Platform.Version >= 33) {
 
-        if (currentStatus === RESULTS.GRANTED) {
-          console.log('Android: Permission already granted');
+          // ✅ String directly use karo — library version issue bypass
+          const permission = 'android.permission.POST_NOTIFICATIONS' as any;
+
+          const currentStatus = await check(permission);
+
+          if (currentStatus === RESULTS.GRANTED) {
+            console.log('Android: Permission already granted');
+            return true;
+          }
+
+          if (currentStatus === RESULTS.BLOCKED) {
+            // Alert.alert(
+            //   'Notification Permission Required',
+            //   'Please enable notifications from App Settings.',
+            //   [{ text: 'OK' }]
+            // );
+            return false;
+          }
+
+          const result = await request(permission);
+          console.log('Android 13+ permission result:', result);
+          return result === RESULTS.GRANTED;
+
+        } else {
+          // Android 12 aur neeche — permission ki zaroorat nahi
+          console.log('Android < 13: No permission needed');
           return true;
         }
 
-        if (currentStatus === RESULTS.BLOCKED) {
-          Alert.alert(
-            'Notification Permission Required',
-            'Please enable notifications from App Settings.',
-            [{ text: 'OK' }]
-          );
-          return false;
-        }
-
-        const result = await request(permission);
-        console.log('Android 13+ permission result:', result);
-        return result === RESULTS.GRANTED;
-
       } else {
-        // Android 12 aur neeche — permission ki zaroorat nahi
-        console.log('Android < 13: No permission needed');
-        return true;
+        // iOS
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        return enabled;
       }
+    } catch (error) {
+      console.log('requestPermission error:', error);
+      return false;
+    }
+  };
 
-    } else {
-      // iOS
-      const authStatus = await messaging().requestPermission();
-      const enabled =
+  checkPermission = async (): Promise<boolean> => {
+    try {
+      if (Platform.OS === 'android' && Platform.Version >= 33) {
+        // ✅ Same fix here
+        const permission = 'android.permission.POST_NOTIFICATIONS' as any;
+        const status = await check(permission);
+        return status === RESULTS.GRANTED;
+      }
+      const authStatus = await messaging().hasPermission();
+      return (
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-      return enabled;
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL
+      );
+    } catch (error) {
+      console.log('checkPermission error:', error);
+      return false;
     }
-  } catch (error) {
-    console.log('requestPermission error:', error);
-    return false;
-  }
-};
+  };
 
-checkPermission = async (): Promise<boolean> => {
-  try {
-    if (Platform.OS === 'android' && Platform.Version >= 33) {
-      // ✅ Same fix here
-      const permission = 'android.permission.POST_NOTIFICATIONS' as any;
-      const status = await check(permission);
-      return status === RESULTS.GRANTED;
-    }
-    const authStatus = await messaging().hasPermission();
-    return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
-    );
-  } catch (error) {
-    console.log('checkPermission error:', error);
-    return false;
-  }
-};
-  
 
   getFcmToken = async (): Promise<string | null> => {
     try {
@@ -109,7 +109,7 @@ checkPermission = async (): Promise<boolean> => {
             return fcmToken;
           }
         } catch (err: any) {
-            const fcmToken = await messaging().getToken();
+          const fcmToken = await messaging().getToken();
           if (fcmToken) {
             await AsyncStorage.setItem('fcmToken', fcmToken);
             console.log('New FCM Token:', fcmToken);

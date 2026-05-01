@@ -6,15 +6,23 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    padding: 10,
+    backgroundColor: "#fff",
+    padding: 12,
     borderRadius: 15,
-    marginVertical: 6,
-    marginHorizontal: 1,
+    marginVertical: 8,
+    marginHorizontal: 4,
+
+    // iOS Shadow
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 1,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+
+    // Android Shadow
+    elevation: 4,
   },
   avatar: {
     width: 50, height: 50, borderRadius: 25, marginRight: 12,

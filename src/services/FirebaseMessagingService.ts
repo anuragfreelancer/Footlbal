@@ -28,16 +28,16 @@ class FirebaseMessagingService {
   }
 
   // ✅ FIX 1: Was missing closing brace — getFcmToken() was nested inside this method
-  showPermissionDeniedAlert(): void {
-    Alert.alert(
-      'Permission Required',
-      'Please enable notifications in your device settings to receive updates.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: () => Linking.openSettings() },
-      ]
-    );
-  } // ← was missing
+  // showPermissionDeniedAlert(): void {
+  //   Alert.alert(
+  //     'Permission Required',
+  //     'Please enable notifications in your device settings to receive updates.',
+  //     [
+  //       { text: 'Cancel', style: 'cancel' },
+  //       { text: 'Open Settings', onPress: () => Linking.openSettings() },
+  //     ]
+  //   );
+  // } // ← was missing
 
   async getFcmToken(): Promise<string | null> {
     try {
