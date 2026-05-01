@@ -95,31 +95,44 @@ const MyTeam = () => {
                         ? { uri: item.image }
                         : imageIndex.prfEdit
                     }
-                    style={{
-                      height: 44,
-                      width: 44,
-                      borderRadius: 22,
-                      overflow: 'hidden',
-                    }}
+                    style={styles.playerAvatar}
                     resizeMode="cover"
                   />
 
                   <View style={styles.infoContainer}>
                     <Text style={styles.name}>{item?.user_name}</Text>
                     <Text style={styles.position}>{localizationStrings.ForwardPosition || "Forward"}</Text>
+
+                    <View style={styles.actionContainer}>
+                      <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
+                          item: item
+                        })}
+                      >
+                        <Image source={imageIndex.edit} style={[styles.actionIcon, styles.editIcon]} />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
+                          item: item
+                        })}
+                      >
+                        <Image source={imageIndex.bubbleChat} style={[styles.actionIcon, styles.msgIcon]} />
+                      </TouchableOpacity>
+                      {/* <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => console.log("Delete player", item?.id)}
+                      >
+                        <Image source={imageIndex.delete} style={[styles.actionIcon, styles.deleteIcon]} />
+                      </TouchableOpacity> */}
+                    </View>
                   </View>
+
                   <View style={styles.detailContainer}>
-                    <Image source={imageIndex.arroRight}
-
-                      style={{
-                        height: 25,
-                        width: 25
-                      }}
-                    />
-
                     <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
-                    <Text style={styles.value}>{item?.injury}</Text>
-
+                    {/* <Text style={styles.value}>{item?.injury || "No Injury"}</Text> */}
                   </View>
                 </TouchableOpacity>
               )}

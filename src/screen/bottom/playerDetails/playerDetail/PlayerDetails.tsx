@@ -66,11 +66,16 @@ const PlayerDetails = () => {
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.profileContainer}>
-                    {item?.image ? <Image source={{ uri: item.image }} style={styles.profileImage} />
-                        : (
-                            <Image source={imageIndex.prfEdit} style={styles.profileImage} />
-
-                        )}
+                    <Image
+                        source={
+                            item?.image &&
+                                item.image.trim() !== "" &&
+                                !item.image.endsWith("/users/")
+                                ? { uri: item.image }
+                                : imageIndex.prfEdit
+                        }
+                        style={styles.profileImage}
+                    />
                 </View>
                 <View >
                     <View style={styles.detailRow}>
