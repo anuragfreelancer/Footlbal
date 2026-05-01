@@ -63,6 +63,9 @@ const Messages = () => {
                             <View style={styles.textContainer}>
                                 <Text style={styles.name} numberOfLines={1}>
                                     {item?.user_name ?? "aaa"}
+                                </Text>
+                                <Text style={styles.name} numberOfLines={1}>
+
                                     {item?.email ?? ""}
                                 </Text>
                                 <Text style={styles.lastMessage} numberOfLines={1}>
