@@ -88,14 +88,20 @@ const MyTeam = () => {
                   })}
                 >
                   <Image
-                    source={{ uri: item?.image }}
+                    source={
+                      item?.image &&
+                        item.image.trim() !== "" &&
+                        !item.image.endsWith("/users/")
+                        ? { uri: item.image }
+                        : imageIndex.prfEdit
+                    }
                     style={{
                       height: 44,
                       width: 44,
-                      borderRadius: 22, // Half of height/width for a perfect circle
-                      overflow: 'hidden', // Ensures the image is clipped if needed
+                      borderRadius: 22,
+                      overflow: 'hidden',
                     }}
-                    resizeMode="cover" // 'cover' usually looks better in circular images
+                    resizeMode="cover"
                   />
 
                   <View style={styles.infoContainer}>
