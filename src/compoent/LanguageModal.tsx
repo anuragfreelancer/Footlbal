@@ -38,10 +38,10 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <TouchableOpacity 
-          style={styles.blurOverlay} 
-          activeOpacity={1} 
-          onPress={onClose} 
+        <TouchableOpacity
+          style={StyleSheet.absoluteFill}
+          activeOpacity={1}
+          onPress={onClose}
         />
         <View style={styles.modalContentPremium}>
           <View style={styles.modalHandle} />
@@ -57,7 +57,7 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
               activeOpacity={0.7}
             >
               <View style={styles.optionInner}>
-                <View style={styles.flagWrapper}>
+                <View style={[styles.flagWrapper, selectedLanguage === 'English' && styles.flagWrapperActive]}>
                   <Text style={styles.flagIcon}>🇬🇧</Text>
                 </View>
                 <Text style={[styles.optionLabel, selectedLanguage === 'English' && styles.optionLabelActive]}>
@@ -78,7 +78,7 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
               activeOpacity={0.7}
             >
               <View style={styles.optionInner}>
-                <View style={styles.flagWrapper}>
+                <View style={[styles.flagWrapper, selectedLanguage === 'French' && styles.flagWrapperActive]}>
                   <Text style={styles.flagIcon}>🇫🇷</Text>
                 </View>
                 <Text style={[styles.optionLabel, selectedLanguage === 'French' && styles.optionLabelActive]}>
@@ -91,135 +91,139 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage }: any) => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={onClose} style={styles.closeBtnPremium} activeOpacity={0.8}>
-            <Text style={styles.closeBtnTextPremium}>{localizationStrings.Cancel}</Text>
+          <TouchableOpacity onPress={onClose} style={styles.cancelBtn} activeOpacity={0.8}>
+            <Text style={styles.cancelBtnText}>{localizationStrings.Cancel}</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
-
   );
 };
-
-export default LanguageModal;
-
-const PRIMARY_COLOR = '#A0D803';      // Green highlight
-const BACKGROUND_LIGHT = '#F2FFE2';  // Light green background
-const TEXT_COLOR = '#2C2C2C';        // Dark gray for text
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'flex-end',
-  },
-  blurOverlay: {
-    ...StyleSheet.absoluteFillObject,
   },
   modalContentPremium: {
     backgroundColor: '#fff',
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    padding: 24,
-    paddingTop: 8,
+    borderTopLeftRadius: 36,
+    borderTopRightRadius: 36,
+    paddingHorizontal: 24,
+    paddingBottom: Platform.OS === 'ios' ? 40 : 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -10 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 20,
     elevation: 20,
   },
   modalHandle: {
-    width: 40,
+    width: 48,
     height: 5,
     backgroundColor: '#E2E8F0',
     borderRadius: 3,
     alignSelf: 'center',
-    marginBottom: 24,
-    marginTop: 8,
+    marginVertical: 12,
   },
   titlePremium: {
     fontSize: 22,
-    fontWeight: '800',
-    color: '#0F172A',
-    marginBottom: 24,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginVertical: 20,
     textAlign: 'center',
   },
   optionsContainer: {
-    marginBottom: 24,
+    marginBottom: 10,
   },
   optionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
-    padding: 16,
+    backgroundColor: '#F8F9FA',
+    padding: 18,
     borderRadius: 20,
-    marginVertical: 6,
+    marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: '#F1F3F5',
   },
   optionSelected: {
     borderColor: '#A0D803',
-    backgroundColor: '#F0FDF4',
+    backgroundColor: 'rgba(160, 216, 3, 0.05)',
   },
   optionInner: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   flagWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff',
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  flagWrapperActive: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(160, 216, 3, 0.2)',
   },
   flagIcon: {
-    fontSize: 20,
+    fontSize: 22,
   },
   optionLabel: {
-    fontSize: 16,
-    color: '#64748B',
+    fontSize: 17,
+    color: '#495057',
     fontWeight: '600',
   },
   optionLabelActive: {
-    color: '#0F172A',
+    color: '#1A1A1A',
     fontWeight: '700',
   },
   radioOuter: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#CBD5E1',
+    borderColor: '#DEE2E6',
     justifyContent: 'center',
     alignItems: 'center',
   },
   radioOuterActive: {
     borderColor: '#A0D803',
+    backgroundColor: '#FFFFFF',
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     backgroundColor: '#A0D803',
   },
-  closeBtnPremium: {
-    backgroundColor: '#F1F5F9',
-    borderRadius: 16,
+  cancelBtn: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 18,
     paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: Platform.OS === 'ios' ? 20 : 0,
+    marginTop: 15,
   },
-  closeBtnTextPremium: {
-    color: '#64748B',
+  cancelBtnText: {
+    color: '#1C1C1E',
     fontSize: 16,
     fontWeight: '700',
   },
 });
+
+export default LanguageModal;
+

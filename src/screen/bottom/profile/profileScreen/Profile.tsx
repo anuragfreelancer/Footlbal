@@ -87,6 +87,7 @@ const Profile = () => {
   const MenuItem = ({ title, icon, screen }: any) => (
     <TouchableOpacity
       style={styles.menuItem}
+      activeOpacity={0.7}
       onPress={() => {
         if (title === localizationStrings.Logout) setModal(true);
         else if (screen === "Language") setModalVisible(true);
@@ -95,14 +96,19 @@ const Profile = () => {
           Linking.openURL(screen).catch((err) => console.error("An error occurred", err));
         }
         else navigation.navigate(screen);
-
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image source={icon} style={{ height: 26, width: 26 }} resizeMode="contain" />
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        <View style={styles.iconWrapper}>
+          <Image source={icon} style={{ height: 22, width: 22, tintColor: '#A0D803' }} resizeMode="contain" />
+        </View>
         <Text style={styles.menuText}>{title}</Text>
       </View>
-      <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />
+      <Image 
+        source={imageIndex.arroRight} 
+        style={{ height: 18, width: 18, tintColor: '#C7C7CC' }} 
+        resizeMode="contain" 
+      />
     </TouchableOpacity>
   );
   const dispatch = useDispatch();
@@ -115,78 +121,91 @@ const Profile = () => {
   const imageUrl =
     getLogin?.userGetData?.image || isLogin?.userData?.image;
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={styles.container}>
       <StatusBarComponent />
-
-
-      {/* {status === 'Free' && <FreeUI />}
-
-{(!isValid || status === 'Deactive') && <ExpiredUI />} */}
+      
+      {/* Curved Top Background */}
+      <View style={styles.topBackground} />
 
       {isLoading && <LoadingModal />}
-      <Text style={styles.header}>{localizationStrings.Profile}</Text>
-
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.profileHeader}
-          onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Image
-              source={
-                imageUrl &&
-                  imageUrl.trim() !== "" &&
-                  !imageUrl.endsWith("/users/")
-                  ? { uri: imageUrl }
-                  : imageIndex.prfEdit
-              }
-              defaultSource={imageIndex.prfEdit}
-              onError={() => console.log("Image load failed")}
-              style={styles.avatar}
-            /> */}
-            <Image
-              source={
-                imageUrl !== "https://kmmps.store/public/uploads/users/"
-                  ? { uri: imageUrl }
-                  : imageIndex.prfEdit
-              }
-              style={styles.avatar}
-            />
-            <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
-              <Text style={styles.profileLink}>{getLogin?.userGetData?.email || isLogin?.userData?.email}</Text>
-            </View>
+      
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.header}>{localizationStrings.Profile}</Text>
           </View>
-          <Image source={imageIndex.arroRight} style={{ height: 23, width: 23 }} resizeMode="contain" />
-        </TouchableOpacity>
 
+          <TouchableOpacity
+            style={styles.profileHeader}
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate(ScreenNameEnum.EditProfile)}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+              <View style={styles.avatarContainer}>
+                <Image
+                  source={
+                    imageUrl !== "https://kmmps.store/public/uploads/users/"
+                      ? { uri: imageUrl }
+                      : imageIndex.prfEdit
+                  }
+                  style={styles.avatar}
+                />
+                <View style={styles.onlineIndicator} />
+              </View>
+              <View style={styles.profileInfo}>
+                <Text numberOfLines={1} style={styles.profileName}>
+                  {getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}
+                </Text>
+                <Text numberOfLines={1} style={styles.profileLink}>
+                  {getLogin?.userGetData?.email || isLogin?.userData?.email}
+                </Text>
+              </View>
+            </View>
+            <Image 
+              source={imageIndex.arroRight} 
+              style={{ height: 20, width: 20, tintColor: '#A0D803' }} 
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
 
-        <FlatList
-          data={MenuItems}
-          keyExtractor={(item) => item?.screen}
-          renderItem={({ item }) => <MenuItem title={item?.title} icon={item?.icon} screen={item?.screen} />}
-        />
+          <View style={styles.menuContainer}>
+            {MenuItems.map((item, index) => (
+              <React.Fragment key={item.screen + index}>
+                <MenuItem title={item.title} icon={item.icon} screen={item.screen} />
+                {index < MenuItems.length - 1 && <View style={styles.divider} />}
+              </React.Fragment>
+            ))}
+          </View>
 
-
-
-        <LogoutModal isVisible={modal} close={() => setModal(false)} onSumbit={() => {
-          handleLogout();
-          setModal(false);
-        }} />
-        <LanguageModal visible={isModalVisible} onClose={() => setModalVisible(false)} onSelectLanguage={handleLanguageSelect} />
-        <DeleteConfirmModal
-          visible={showDelete}
-          onCancel={() => setShowDelete(false)}
-          onConfirm={handleConfirmDelete}
-          title={localizationStrings.DeleteAccount}
-          message={localizationStrings.Are}
-          confirmText={localizationStrings.YesDelete}
-          cancelText={localizationStrings.No}
-          destructive
-        />
-      </ScrollView>
-    </SafeAreaView>
+          <LogoutModal 
+            isVisible={modal} 
+            close={() => setModal(false)} 
+            onSumbit={() => {
+              handleLogout();
+              setModal(false);
+            }} 
+          />
+          <LanguageModal 
+            visible={isModalVisible} 
+            onClose={() => setModalVisible(false)} 
+            onSelectLanguage={handleLanguageSelect} 
+          />
+          <DeleteConfirmModal
+            visible={showDelete}
+            onCancel={() => setShowDelete(false)}
+            onConfirm={handleConfirmDelete}
+            title={localizationStrings.DeleteAccount}
+            message={localizationStrings.Are}
+            confirmText={localizationStrings.YesDelete}
+            cancelText={localizationStrings.No}
+            destructive
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
+
+
 };
 
 export default Profile;

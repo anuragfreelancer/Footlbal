@@ -20,9 +20,9 @@ export default function TabNavigator() {
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
-          height: 60 + insets.bottom,       // ✅ iPhone home indicator ke liye
+          height: 70 + insets.bottom,       // ✅ iPhone home indicator ke liye
           paddingBottom: insets.bottom,      // ✅ Icons upar rahe home bar se
-          paddingTop: 8,
+          paddingTop: 10,
 
         },
       }}
@@ -37,7 +37,7 @@ export default function TabNavigator() {
               <View style={styles.tabItem}>
 
                 {/* ✅ Active top indicator */}
-                {focused && <View style={styles.activeIndicator} />}
+                {/* {focused && <View style={styles.activeIndicator} />} */}
 
                 <Image
                   source={focused ? screen.logo1 : screen.logo}
