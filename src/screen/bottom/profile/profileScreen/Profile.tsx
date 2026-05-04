@@ -39,12 +39,12 @@ const Profile = () => {
   const MenuItems = [
     { title: localizationStrings.MyTeam, icon: imageIndex.myteam, screen: ScreenNameEnum.MyTeam },
     { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
+    { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
 
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
     // { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
     { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },
     // { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
-    { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
     // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
@@ -104,10 +104,10 @@ const Profile = () => {
         </View>
         <Text style={styles.menuText}>{title}</Text>
       </View>
-      <Image 
-        source={imageIndex.arroRight} 
-        style={{ height: 18, width: 18, tintColor: '#C7C7CC' }} 
-        resizeMode="contain" 
+      <Image
+        source={imageIndex.arroRight}
+        style={{ height: 18, width: 18, tintColor: '#C7C7CC' }}
+        resizeMode="contain"
       />
     </TouchableOpacity>
   );
@@ -123,12 +123,12 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <StatusBarComponent />
-      
+
       {/* Curved Top Background */}
       <View style={styles.topBackground} />
 
       {isLoading && <LoadingModal />}
-      
+
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.headerContainer}>
@@ -161,10 +161,10 @@ const Profile = () => {
                 </Text>
               </View>
             </View>
-            <Image 
-              source={imageIndex.arroRight} 
-              style={{ height: 20, width: 20, tintColor: '#A0D803' }} 
-              resizeMode="contain" 
+            <Image
+              source={imageIndex.arroRight}
+              style={{ height: 20, width: 20, tintColor: '#A0D803' }}
+              resizeMode="contain"
             />
           </TouchableOpacity>
 
@@ -177,18 +177,18 @@ const Profile = () => {
             ))}
           </View>
 
-          <LogoutModal 
-            isVisible={modal} 
-            close={() => setModal(false)} 
+          <LogoutModal
+            isVisible={modal}
+            close={() => setModal(false)}
             onSumbit={() => {
               handleLogout();
               setModal(false);
-            }} 
+            }}
           />
-          <LanguageModal 
-            visible={isModalVisible} 
-            onClose={() => setModalVisible(false)} 
-            onSelectLanguage={handleLanguageSelect} 
+          <LanguageModal
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            onSelectLanguage={handleLanguageSelect}
           />
           <DeleteConfirmModal
             visible={showDelete}
