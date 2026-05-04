@@ -59,116 +59,125 @@ const PlayerDetails = () => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBarComponent />
-            <View style={styles.headerContainer}>
-                <CustomHeader imageSource={imageIndex.backNavs} label={localizationStrings?.PlayerDetails} />
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.profileContainer}>
-                    <Image
-                        source={
-                            item?.image &&
-                                item.image.trim() !== "" &&
-                                !item.image.endsWith("/users/")
-                                ? { uri: item.image }
-                                : imageIndex.prfEdit
-                        }
-                        style={styles.profileImage}
+
+            {/* Curved Top Background */}
+            <View style={styles.topBackground} />
+
+            <SafeAreaView style={{ flex: 1 }}>
+                {/* Header */}
+                <View style={styles.headerContainer}>
+                    <CustomHeader
+                        imageSource={imageIndex.backNav}
+                        label={localizationStrings?.PlayerDetails}
+                        textStyle={{ color: 'white' }}
                     />
                 </View>
-                <View >
-                    <View style={styles.detailRow}>
-                        <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>{localizationStrings?.PlayerDetails}</Text>
+
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {/* Player Image Section */}
+                    <View style={styles.profileContainer}>
+                        <View style={styles.imageRing}>
+                            <Image
+                                source={
+                                    item?.image &&
+                                        item.image.trim() !== "" &&
+                                        !item.image.endsWith("/users/")
+                                        ? { uri: item.image }
+                                        : imageIndex.prfEdit
+                                }
+                                style={styles.profileImage}
+                                resizeMode="cover"
+                            />
                         </View>
-                        <Text style={styles.detailValue}>{item?.user_name}</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>{localizationStrings?.Position}</Text>
-                        </View>
-                        <Text style={styles.detailValue}>{item?.position_id}</Text>
                     </View>
 
-                    <View style={styles.detailRow}>
-                        <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>{localizationStrings?.MyTeam}</Text>
-                        </View>
-                        <Text style={styles.detailValue}>{item?.team_id}</Text>
-                    </View>
-                    <View style={styles.detailRow}>
-                        <View style={styles.buttCol}>
-                            <Text style={styles.detailLabel}>Dob</Text>
-                        </View>
-                        <Text style={styles.detailValue}>{formattedDate}</Text>
-                    </View>
-
-                    {isLogin?.userData?.type === "Coach" && (
+                    {/* Information Card */}
+                    <View style={styles.infoCard}>
                         <View style={styles.detailRow}>
-                            <View style={styles.buttCol}>
-                                <Text style={styles.detailLabel}>{localizationStrings?.Performance || "Performance"}</Text>
-                            </View>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate(ScreenNameEnum.Reports, {
-                                    playerUserId: item?.id,
-                                    playerName: item?.user_name
-                                })}
-                                style={{
-                                    backgroundColor: '#F2FFE2',
-                                    paddingHorizontal: 12,
-                                    paddingVertical: 6,
-                                    borderRadius: 8,
-                                    borderWidth: 1,
-                                    borderColor: '#A0D803',
-                                    justifyContent: "center",
-                                    right: 4
-                                }}
-                            >
-                                <Text style={{ color: '#047857', fontWeight: '700' }}>
-                                    {localizationStrings?.PerformanceReports || "View Reports"}
-                                </Text>
-                            </TouchableOpacity>
+                            <Text style={styles.detailLabel}>{localizationStrings?.PlayerDetails}</Text>
+                            <Text style={styles.detailValue}>{item?.user_name}</Text>
                         </View>
-                    )}
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>{localizationStrings?.Position}</Text>
+                            <Text style={styles.detailValue}>{item?.position_id}</Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>{localizationStrings?.MyTeam}</Text>
+                            <Text style={styles.detailValue}>{item?.team_id}</Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>DOB</Text>
+                            <Text style={styles.detailValue}>{formattedDate}</Text>
+                        </View>
+
+                        {isLogin?.userData?.type === "Coach" && (
+                            <View style={[styles.detailRow, { borderBottomWidth: 0 }]}>
+                                <Text style={styles.detailLabel}>{localizationStrings?.Performance || "Performance"}</Text>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => navigation.navigate(ScreenNameEnum.Reports, {
+                                        playerUserId: item?.id,
+                                        playerName: item?.user_name
+                                    })}
+                                    style={styles.reportButton}
+                                >
+                                    <Text style={styles.reportButtonText}>
+                                        {localizationStrings?.PerformanceReports || "View Reports"}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+
+                    {/* Coach Notes Section */}
+                    <View style={styles.notesCard}>
+                        <Text style={styles.notesTitle}>{localizationStrings?.CoachNotes}</Text>
+                        <Text style={styles.notesText}>{item?.player_details || "No notes available for this player."}</Text>
+                    </View>
+
+                    {/* Spacing for bottom buttons */}
+                    <View style={{ height: 40 }} />
+                </ScrollView>
+
+                {/* Fixed Action Buttons */}
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => navigation.navigate(ScreenNameEnum.PlayerEdit, {
+                            item: item
+                        })}
+                        style={[styles.button, {
+                            borderColor: '#A0D803',
+                            borderWidth: 1.5,
+                            backgroundColor: 'white',
+                        }]}
+                    >
+                        <Text style={[styles.buttonText, { color: "#A0D803" }]}>
+                            {localizationStrings?.Edit}
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        style={[styles.button, { backgroundColor: '#A0D803' }]}
+                        onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
+                            item: item
+                        })}
+                    >
+                        <Text style={[styles.buttonText, { color: 'white' }]}>
+                            {localizationStrings?.ChatMessages}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.notesContainer}>
-                    <Text style={styles.notesTitle}>{localizationStrings?.CoachNotes}</Text>
-                    <Text style={styles.notesText}>{item?.player_details}</Text>
-                </View>
-
-            </ScrollView>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate(ScreenNameEnum.PlayerEdit, {
-                        item: item
-                    })}
-                    style={[styles.button, {
-                        borderColor: '#A0D803',
-                        borderWidth: 1,
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }]}>
-                    <Text style={[styles.buttonText, {
-                        color: "#A0D803",
-                        textAlign: "center"
-                    }]}>{localizationStrings?.Edit}</Text>
-                </TouchableOpacity>
-
-
-                <TouchableOpacity style={[styles.button, {
-                    backgroundColor: '#A0D803',
-                }]}
-                    onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
-                        item: item
-                    })}
-                // onPress={() => navigation.navigate(ScreenNameEnum.Messages)}
-                >
-                    <Text style={styles.buttonText}>{localizationStrings?.ChatMessages}</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </View>
     );
+
 };
 
 
