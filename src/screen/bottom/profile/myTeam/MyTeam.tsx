@@ -11,7 +11,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
 
-
 const MyTeam = () => {
   useLanguage();
   const {
@@ -20,69 +19,67 @@ const MyTeam = () => {
     navigation,
     getLogin,
     isLogin
-
-  } = useMyTeam()
+  } = useMyTeam();
 
   return (
-    <SafeAreaView style={{
-      flex: 1,
-      backgroundColor: "white"
-    }}>
+    <View style={styles.container}>
       <StatusBarComponent />
-      <View style={{ marginHorizontal: 8, marginTop: 12 }}>
-        <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.MyTeam} />
-      </View>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.profileHeader}>
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
 
-            <Image
-              source={
-                (getLogin?.userGetData?.image || isLogin?.userData?.image) &&
-                  !(getLogin?.userGetData?.image || isLogin?.userData?.image).endsWith("/users/")
-                  ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image }
-                  : imageIndex.prfEdit
-              }
-              style={styles.avatar}
-            />
+      {/* Curved Top Background */}
+      <View style={styles.topBackground} />
 
+      <SafeAreaView style={{ flex: 1 }}>
+        {/* Header */}
+        <View style={styles.headerWrapper}>
+          <CustomHeader
+            imageSource={imageIndex.backNav}
+            label={localizationStrings.MyTeam}
+            textStyle={{
+              color: "white"
 
-            <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
-              <TouchableOpacity  >
+            }}
+          />
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.profileHeader}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                source={
+                  (getLogin?.userGetData?.image || isLogin?.userData?.image) &&
+                    !(getLogin?.userGetData?.image || isLogin?.userData?.image).endsWith("/users/")
+                    ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image }
+                    : imageIndex.prfEdit
+                }
+                style={styles.avatar}
+              />
+
+              <View style={styles.profileInfo}>
+                <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
                 <Text style={styles.profileLink}>{localizationStrings?.StrengthTraining}</Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
 
-        </View>
-        <Text
-          style={{
-            marginLeft: 15,
-            fontSize: 18,
-            color: "#192126",
-            fontWeight: "700"
-          }}
-        >
-          {localizationStrings?.Players} ({MyTeam?.userGetData?.length || 0})
-        </Text>
-        {
-          isLoading ? (
+          <Text style={styles.sectionTitle}>
+            {localizationStrings?.Players} ({MyTeam?.userGetData?.length || 0})
+          </Text>
+
+          {isLoading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
               <ActivityIndicator size={30} color="#A0D803" />
             </View>
           ) : (
             <FlatList
               data={MyTeam?.userGetData}
-              style={{
-                marginTop: 15
-              }}
-              ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />} // Common Empty Component
+              scrollEnabled={false} // Since we are inside a ScrollView
+              ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
               showsVerticalScrollIndicator={false}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                console.log("item --- ", item),
-                <TouchableOpacity style={styles.card}
+                <TouchableOpacity
+                  style={styles.card}
+                  activeOpacity={0.9}
                   onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
                     item: item
                   })}
@@ -106,6 +103,7 @@ const MyTeam = () => {
                     <View style={styles.actionContainer}>
                       <TouchableOpacity
                         style={styles.actionButton}
+                        activeOpacity={0.7}
                         onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
                           item: item
                         })}
@@ -115,50 +113,27 @@ const MyTeam = () => {
 
                       <TouchableOpacity
                         style={styles.actionButton}
+                        activeOpacity={0.7}
                         onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
                           item: item
                         })}
                       >
                         <Image source={imageIndex.bubbleChat} style={[styles.actionIcon, styles.msgIcon]} />
                       </TouchableOpacity>
-                      {/* <TouchableOpacity
-                        style={styles.actionButton}
-                        onPress={() => console.log("Delete player", item?.id)}
-                      >
-                        <Image source={imageIndex.delete} style={[styles.actionIcon, styles.deleteIcon]} />
-                      </TouchableOpacity> */}
                     </View>
                   </View>
 
                   <View style={styles.detailContainer}>
                     <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
-                    {/* <Text style={styles.value}>{item?.injury || "No Injury"}</Text> */}
                   </View>
                 </TouchableOpacity>
               )}
             />
-          )
-        }
-
-
-      </ScrollView>
-      {/* <View style={{
-        justifyContent: 'flex-start', marginBottom: 11,
-        marginHorizontal: 12
-      }}>
-        <CustomButton
-          title={localizationStrings.Edit}
-          onPress={() =>
-            navigation.goBack()
-          }
-        />
-      </View> */}
-    </SafeAreaView>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 };
-
-
-
-
 
 export default MyTeam;

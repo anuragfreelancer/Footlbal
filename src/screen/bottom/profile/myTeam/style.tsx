@@ -1,100 +1,138 @@
-
-import { StyleSheet } from 'react-native';
-import ResponsiveSize from '../../../../utils/ResponsiveSize';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#F4F7F6", // Soft professional background
+  },
+  topBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 180,
+    backgroundColor: '#A0D803', // Brand green
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
   },
   headerWrapper: {
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    backgroundColor: "#fff",
+    marginHorizontal: 12,
+    marginTop: 10,
   },
   profileHeader: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.05,
-    shadowRadius: 15,
-    elevation: 10,
-    marginBottom: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+    padding: 24,
+    backgroundColor: "white",
+    borderRadius: 24,
+    justifyContent: "space-between",
+    marginBottom: 25,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 12 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+      },
+      android: {
+        // elevation: 10,
+      },
+    }),
   },
   avatar: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    borderWidth: 3,
-    borderColor: "#A0D803",
+    borderWidth: 4,
+    borderColor: "#FFFFFF",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+      },
+      android: {
+        // elevation: 4,
+      },
+    }),
   },
   profileInfo: {
-    marginLeft: 20,
     flex: 1,
+    marginLeft: 18,
   },
   profileName: {
     fontSize: 22,
     fontWeight: "800",
-    color: "#1A1C1E",
+    color: "#1A1A1A",
   },
   profileLink: {
     fontSize: 14,
     color: "#A0D803",
-    fontWeight: "600",
+    fontWeight: "700",
     marginTop: 4,
+  },
+  sectionTitle: {
+    marginHorizontal: 22,
+    fontSize: 18,
+    color: "#1A1A1A",
+    fontWeight: "800",
+    marginBottom: 15,
   },
   card: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
-    padding: 14,
-    borderRadius: 16,
+    padding: 16,
+    borderRadius: 22,
     marginVertical: 8,
-    marginHorizontal: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 5,
+    marginHorizontal: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.05,
+        shadowRadius: 15,
+      },
+      android: {
+        // elevation: 5,
+      },
+    }),
   },
   playerAvatar: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: "#E9ECEF",
+    height: 64,
+    width: 64,
+    borderRadius: 32,
+    borderWidth: 3,
+    borderColor: "rgba(160, 216, 3, 0.1)",
   },
   infoContainer: {
     flex: 1,
-    marginLeft: 14,
+    marginLeft: 16,
   },
   name: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
-    color: "#1A1C1E",
+    color: "#1A1A1A",
   },
   position: {
     fontSize: 13,
     color: "#6C757D",
     marginTop: 2,
+    fontWeight: '500',
   },
   actionContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
+    gap: 10,
   },
   actionButton: {
-    marginRight: 12,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "rgba(160, 216, 3, 0.08)",
     padding: 8,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#E9ECEF",
   },
   actionIcon: {
     height: 18,
@@ -107,22 +145,19 @@ const styles = StyleSheet.create({
   msgIcon: {
     tintColor: "#007AFF",
   },
-  deleteIcon: {
-    tintColor: "#FF4D4D",
-  },
   detailContainer: {
     alignItems: "flex-end",
     justifyContent: "center",
-    paddingLeft: 10,
   },
   label: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#ADB5BD",
-    fontWeight: "600",
+    fontWeight: "800",
     textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   value: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#495057",
     fontWeight: "700",
     marginTop: 2,
@@ -130,3 +165,4 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
+
