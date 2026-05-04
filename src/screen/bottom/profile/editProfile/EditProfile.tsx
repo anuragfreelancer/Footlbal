@@ -42,105 +42,124 @@ const EditProfile = () => {
   } = useEdit();
 
   return (
-    <SafeAreaView style={styles.mainView}>
+    <View style={styles.mainView}>
+      <StatusBarComponent />
+
+      {/* Curved Top Background */}
+      <View style={styles.topBackground} />
+
       <LoadingModal visible={isLoading} />
 
-      <StatusBarComponent />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1 }}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ flex: 1 }}>
-            {/* Header */}
-            <View style={{ marginHorizontal: 12, marginTop: 5 }}>
-              <CustomHeader
-                imageSource={imageIndex.backNav}
-                label={localizationStrings.Edit}
-              />
-            </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ flex: 1 }}>
+              {/* Header */}
+              <View style={styles.headerWrapper}>
+                <CustomHeader
+                  imageSource={imageIndex.backNav}
+                  label={localizationStrings.Edit}
+                  textStyle={{
+                    color: "#FFF",
 
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 80 }}
-            >
-              <View style={styles.profileContainer}>
-                <View style={styles.iamgeView}>
-                  <Image
-                    source={
-                      imagePrfile
-                        ? { uri: imagePrfile }
-                        : getLogin?.userGetData?.image && !getLogin.userGetData.image.endsWith("/users/")
-                          ? { uri: getLogin.userGetData.image }
-                          : imageIndex.prfEdit
-                    }
-                    style={styles.profileImage}
-                    resizeMode="cover"
-                  />
+                  }}
+                />
+              </View>
 
-                  <TouchableOpacity
-                    onPress={() => setIsModalVisible(true)}
-                    activeOpacity={0.8}
-                    style={styles.cameraIconContainer}
-                  >
-                    <Image
-                      source={imageIndex.floter}
-                      style={styles.cameraIcon}
-                      resizeMode="contain"
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+              >
+                <View style={styles.profileContainer}>
+                  <View style={styles.iamgeView}>
+                    <View style={styles.imageRing}>
+                      <Image
+                        source={
+                          imagePrfile
+                            ? { uri: imagePrfile }
+                            : getLogin?.userGetData?.image && !getLogin.userGetData.image.endsWith("/users/")
+                              ? { uri: getLogin.userGetData.image }
+                              : imageIndex.prfEdit
+                        }
+                        style={styles.profileImage}
+                        resizeMode="cover"
+                      />
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={() => setIsModalVisible(true)}
+                      activeOpacity={0.8}
+                      style={styles.cameraIconContainer}
+                    >
+                      <Image
+                        source={imageIndex.floter}
+                        style={styles.cameraIcon}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Form Card */}
+                <View style={styles.formContainer}>
+                  <Text style={styles.formTitle}>{localizationStrings.PersonalDetails || "Personal Details"}</Text>
+
+                  <View style={styles.inputWrapper}>
+                    <TextInputField
+                      text={fullName}
+                      onChangeText={handleTextChange}
+                      lable={localizationStrings?.full}
+                      placeholder={localizationStrings?.full}
+                      firstLogo
+                      img={imageIndex.myteam}
+                      // Overriding default salmon color to brand green
+                      style={{ borderColor: '#A0D803' }}
                     />
-                  </TouchableOpacity>
+                  </View>
+
+                  {errorMessage ? (
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                  ) : null}
+
+                  <View style={styles.inputWrapper}>
+                    <TextInputField
+                      text={PhoneNumber}
+                      onChangeText={setPhoneNumber}
+                      lable={localizationStrings?.mb}
+                      placeholder={localizationStrings?.mb}
+                      firstLogo
+                      img={imageIndex.phone}
+                      type="decimal-pad"
+                      // Overriding default salmon color to brand green
+                      style={{ borderColor: '#A0D803' }}
+                    />
+                  </View>
                 </View>
+
+                {/* Image Picker Modal */}
+                <ImagePickerModal
+                  modalVisible={isModalVisible}
+                  setModalVisible={setIsModalVisible}
+                  pickImageFromGallery={pickImageFromGallery}
+                  takePhotoFromCamera={takePhotoFromCamera}
+                />
+              </ScrollView>
+
+              {/* Fixed Submit Button with Shadow */}
+              <View style={[styles.buttView, styles.saveButtonShadow]}>
+                <CustomButton title={localizationStrings.Save} onPress={handleSubmit} />
               </View>
-
-              {/* Form Fields */}
-              <View style={{ marginHorizontal: 15 }}>
-                <View style={{ marginTop: 15 }}>
-                  <TextInputField
-                    text={fullName}
-                    onChangeText={handleTextChange}
-                    lable={localizationStrings?.full}
-                    placeholder={localizationStrings?.full}
-                    firstLogo
-                    img={imageIndex.myteam}
-                  />
-                </View>
-
-                {errorMessage ? (
-                  <Text style={styles.errorText}>{errorMessage}</Text>
-                ) : null}
-
-                <View style={{ marginTop: 15 }}>
-                  <TextInputField
-                    text={PhoneNumber}
-                    onChangeText={setPhoneNumber}
-                    lable={localizationStrings?.mb}
-                    placeholder={localizationStrings?.mb}
-                    firstLogo
-                    img={imageIndex.phone}
-                    type="decimal-pad"
-                  />
-                </View>
-              </View>
-
-              {/* Image Picker Modal */}
-              <ImagePickerModal
-                modalVisible={isModalVisible}
-                setModalVisible={setIsModalVisible}
-                pickImageFromGallery={pickImageFromGallery}
-                takePhotoFromCamera={takePhotoFromCamera}
-              />
-            </ScrollView>
-
-            {/* Submit Button */}
-            <View style={styles.buttView}>
-              <CustomButton title={localizationStrings.Save} onPress={handleSubmit} />
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
+
+
 };
 
 export default EditProfile;

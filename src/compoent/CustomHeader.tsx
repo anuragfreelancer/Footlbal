@@ -7,7 +7,8 @@ interface BackButtonWithLabelProps {
     imageSource: any;
     onPress?: () => void;
     imageProps?: any;  // Make it optional
-    mainView?: any;     // Make it optional
+    mainView?: any;
+    textStyle?: any;   // Make it optional
 
 }
 
@@ -16,7 +17,8 @@ const CustomHeader: React.FC<BackButtonWithLabelProps> = ({
     imageSource,
     onPress,
     imageProps,
-    mainView
+    mainView,
+    textStyle
 }) => {
     const navigation = useNavigation();
 
@@ -29,20 +31,20 @@ const CustomHeader: React.FC<BackButtonWithLabelProps> = ({
     };
 
     return (
-        <View style={[styles.container,mainView]}>
+        <View style={[styles.container, mainView]}>
             {/* Back Button - Aligned to Left */}
             <TouchableOpacity style={styles.button} onPress={handlePress}>
-                <Image source={imageSource} style={[styles.image,imageProps]}
-                resizeMode='cover'
+                <Image source={imageSource} style={[styles.image, imageProps]}
+                    resizeMode='cover'
                 />
             </TouchableOpacity>
 
             {/* Centered Label */}
             {label && <View style={styles.labelContainer}>
-                <Text style={styles.text}>{label}</Text>
+                <Text style={[styles.text, textStyle]}>{label}</Text>
             </View>
             }
-            
+
         </View>
     );
 };
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         width: '100%',
         position: 'relative',
-        
+
     },
     button: {
         position: 'absolute',
