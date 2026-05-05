@@ -116,34 +116,32 @@ const Reports = () => {
             renderItem={({ item }: any) => (
               <TouchableOpacity
                 style={styles.messageContainer}
-                // onPress={() =>
-                //   navigation.navigate(ScreenNameEnum.ChatScreen, { item })
-                // }
                 onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
                   item: item
                 })}
                 activeOpacity={0.7}
               >
-                {item?.image &&
-                  item.image.trim() !== "" &&
-                  !item.image.endsWith("/users/") ? (
-                  <Image source={{ uri: item.image }} style={styles.profileImage} />
-                ) : (
-                  <Image source={imageIndex.prfEdit} style={styles.profileImage} />
-                )}
+                <View style={styles.profileImageWrapper}>
+                  {item?.image &&
+                    item.image.trim() !== "" &&
+                    !item.image.endsWith("/users/") ? (
+                    <Image source={{ uri: item.image }} style={styles.profileImage} />
+                  ) : (
+                    <Image source={imageIndex.prfEdit} style={styles.profileImage} />
+                  )}
+                  <View style={styles.onlineBadge} />
+                </View>
                 <View style={styles.textContainer}>
                   <Text style={styles.name} numberOfLines={1}>
                     {item?.user_name ?? ""}
                   </Text>
-                  <Text style={styles.name} numberOfLines={1}>
+                  <Text style={styles.emailText} numberOfLines={1}>
                     {item?.email ?? ""}
                   </Text>
-                  {/* <Text style={styles.lastMessage} numberOfLines={1}>
-                    {item?.last_message ?? ""}
-                  </Text> */}
                 </View>
-                <Image source={imageIndex.bubbleChat} style={styles.chatIcon} resizeMode="contain" />
-
+                <View style={styles.chatIconWrapper}>
+                  <Image source={imageIndex.bubbleChat} style={styles.chatIcon} resizeMode="contain" />
+                </View>
               </TouchableOpacity>
             )}
           />
@@ -227,28 +225,34 @@ const styles = StyleSheet.create({
   },
   reportCard: {
     backgroundColor: "#fff",
-    borderRadius: 18,
-    padding: 16,
+    borderRadius: 20,
+    padding: 18,
     marginBottom: 12,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 3,
     borderWidth: 1,
     borderColor: "#F1F5F9",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#0F172A",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.04,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   reportMain: {
     flex: 1,
     marginRight: 12,
   },
   reportDate: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "700",
-    color: "#1E293B",
+    color: "#0F172A",
     marginBottom: 4,
   },
   reportSession: {
@@ -261,12 +265,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scoreBadge: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 14,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 50,
+    minWidth: 54,
   },
   scoreValue: {
     fontSize: 18,
@@ -284,53 +288,74 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 10,
-    marginHorizontal: 6,
-    marginTop: 1,
-
+    padding: 16,
+    borderRadius: 20,
+    marginBottom: 12,
+    marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
     ...Platform.select({
       ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.08,
+        shadowColor: "#0F172A",
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.05,
         shadowRadius: 12,
       },
       android: {
-        elevation: 6,
+        elevation: 4,
       },
     }),
   },
+  profileImageWrapper: {
+    position: 'relative',
+    marginRight: 16,
+  },
   profileImage: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    marginRight: 14,
-    backgroundColor: "#F1F5F9",
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: "#F8FAFC",
+    borderWidth: 2,
+    borderColor: "#FFF",
+  },
+  onlineBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: "#A0D803",
+    borderWidth: 2,
+    borderColor: "#FFF",
   },
   textContainer: {
     flex: 1,
     justifyContent: "center",
-    marginRight: 10,
   },
   name: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1E293B",
-    marginBottom: 4,
+    color: "#0F172A",
+    marginBottom: 2,
   },
-  lastMessage: {
+  emailText: {
     fontSize: 13,
     color: "#64748B",
-    lineHeight: 18,
+    fontWeight: "500",
+  },
+  chatIconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#F1F5F9",
+    justifyContent: "center",
+    alignItems: "center",
   },
   chatIcon: {
-    width: 22,
-    height: 22,
-    tintColor: "#A0D803",
+    width: 20,
+    height: 20,
+    tintColor: "#0F172A",
   },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center' },
 });
