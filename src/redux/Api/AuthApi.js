@@ -1833,6 +1833,7 @@ const AddQuestionAnsApi = async (param) => {
         const formData = new FormData();
         formData.append("user_id", param?.user_id);
         formData.append("question_id", param?.question_id);
+        formData.append("session_id", param?.question_id);
         formData.append("question_ans_point", param?.question_ans_point);
         formData.append("answer", param?.answer);
         console.log("formData", formData)

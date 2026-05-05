@@ -121,6 +121,7 @@ const useSubmitRPE = () => {
     ];
 
 
+    console.log("params1", params1?.item?.id)
 
     const handleSubmit = async () => {
         const answerEntries = Object.entries(questionAnswers);
