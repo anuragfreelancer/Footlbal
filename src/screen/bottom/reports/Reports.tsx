@@ -12,6 +12,7 @@ import useChatScreen from "../chat/useChatScreen";
 import useMessageList from "../messages/useMessageList";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import ScreenNameEnum from "../../../routes/screenName.enum";
+import SearchBar from "../../../compoent/SearchBar";
 
 
 const Reports = () => {

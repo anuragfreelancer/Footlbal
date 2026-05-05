@@ -72,7 +72,7 @@ const useAllPlayer = () => {
         // Check if any player in the question details matches
         const hasMatchingPlayerInQuestions = item?.question_details?.some((q: any) => 
           q.answers?.some((ans: any) => 
-            ans.user_name?.toLowerCase().includes(searchTerm)
+            (ans.user_name?.toLowerCase() || '').includes(searchTerm)
           )
         );
 
