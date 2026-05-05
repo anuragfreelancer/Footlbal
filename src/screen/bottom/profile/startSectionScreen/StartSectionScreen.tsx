@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   sectionLabel: { fontSize: 11, fontWeight: '700', color: '#64748B', marginBottom: 12, letterSpacing: 1 },
 
   typeGrid: { flexDirection: 'row', justifyContent: 'space-between' },
-  typeBox: { flex: 1, backgroundColor: '#F1F5F9', borderRadius: 10, paddingVertical: 12, marginHorizontal: 4, alignItems: 'center' },
+  typeBox: { flex: 1, backgroundColor: '#F1F5F9', borderRadius: 10, height: 55, alignItems: 'center', justifyContent: "center", marginHorizontal: 4 },
   typeBoxActive: { backgroundColor: '#A0D803' },
   typeTxt: { fontSize: 13, fontWeight: '600', color: '#64748B', textAlign: "center" },
   typeTxtActive: { color: '#FFF' },
