@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, Text,Image, Dimensions, TouchableOpacity, Modal, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { View, Text, Image, Dimensions, TouchableOpacity, Modal, TouchableWithoutFeedback, StyleSheet, Platform } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import imageIndex from "../assets/imageIndex";
 import localizationStrings from "./Localization/Localization";
- 
+
 const screenWidth = Dimensions.get("window").width;
-const chartWidth = screenWidth - 48;
+// Responsive width: Exactly fits within the card's horizontal padding
+const chartWidth = screenWidth - 60;
+
 
 const normalizeToPercent = (arr) => {
   if (!arr?.length) return arr;
@@ -33,32 +35,46 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
     ? Math.round(currentData.reduce((a, b) => a + b, 0) / currentData.length)
     : 0;
 
+  const brandGreen = "#A0D803";
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.titleBlock}>
-          <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
+          <View style={[styles.statusDot, { backgroundColor: statusColor || brandGreen }]} />
           <View>
-            <Text style={styles.statusText}>{statusText}</Text>
+            <Text style={styles.statusText}>{statusText || localizationStrings.Safe}</Text>
             <Text style={styles.cardSubtitle}>{getSubtitle(selectedType)}</Text>
-            <Text style={styles.statsInline}>{localizationStrings.Peak} {peak}% · {localizationStrings.Avg} {avg}%</Text>
           </View>
         </View>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => setModalVisible(true)} style={styles.selectorButton}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => setModalVisible(true)}
+          style={styles.selectorButton}
+        >
           <Text style={styles.selectorText}>
             {selectedType === "weekly" ? localizationStrings.Weekly : selectedType === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
           </Text>
-          <Image source={imageIndex.arrowDown} 
-          style={{
-            height:15,
-            width:15 ,
-            tintColor:"white"
-          }}
-          resizeMode="contain"
+          <Image
+            source={imageIndex.arrowDown}
+            style={styles.selectorIcon}
+            resizeMode="contain"
           />
-    
         </TouchableOpacity>
       </View>
+
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+          <Text style={styles.statValue}>{peak}%</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Peak}</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <Text style={styles.statValue}>{avg}%</Text>
+          <Text style={styles.statLabel}>{localizationStrings.Avg}</Text>
+        </View>
+      </View>
+
       <View style={styles.chartWrapper}>
         <LineChart
           data={{
@@ -66,49 +82,53 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
             datasets: [
               {
                 data: currentData.length ? currentData : [0, 0, 0, 0, 0, 0, 0],
-                color: (opacity = 1) => `rgba(72, 187, 120, ${opacity})`,
-                strokeWidth: 2.5,
+                color: (opacity = 1) => `rgba(160, 216, 3, ${opacity})`,
+                strokeWidth: 3,
               },
             ],
           }}
           width={chartWidth}
-          height={200}
+          height={180}
           yAxisSuffix="%"
           fromZero
           yAxisInterval={25}
           chartConfig={{
-            backgroundColor: "transparent",
-            backgroundGradientFrom: "rgba(240, 253, 244, 0.5)",
-            backgroundGradientTo: "rgba(255, 255, 255, 0)",
+            backgroundColor: "#FFFFFF",
+            backgroundGradientFrom: "#FFFFFF",
+            backgroundGradientTo: "#FFFFFF",
             decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(72, 187, 120, ${opacity})`,
+            color: (opacity = 1) => `rgba(160, 216, 3, ${opacity})`,
             labelColor: () => "#94A3B8",
-            barPercentage: 0.5,
+            propsForDots: {
+              r: "5",
+              strokeWidth: "3",
+              stroke: "#FFFFFF",
+            },
+            propsForBackgroundLines: {
+              stroke: "#F1F5F9",
+              strokeWidth: 1,
+              strokeDasharray: "", // solid lines for premium feel
+            },
+            fillShadowGradient: brandGreen,
+            fillShadowGradientOpacity: 0.15,
             useShadowColorFromDataset: false,
-            propsForDots: { r: 3.5, strokeWidth: 2, stroke: "#fff" },
-            propsForBackgroundLines: { stroke: "#E2E8F0", strokeWidth: 0.8 },
-            propsForVerticalLabels: { fill: "#64748B", fontSize: 10, fontWeight: "500" },
-            propsForHorizontalLabels: { fill: "#64748B", fontSize: 10, fontWeight: "500" },
-            formatYLabel: (label) => `${label}%`,
-            fillShadowGradient: "rgba(72, 187, 120, 0.2)",
-            fillShadowGradientOpacity: 1,
           }}
           bezier
           withDots={true}
-          withShadow={false}
           withInnerLines={true}
           withOuterLines={false}
           withVerticalLines={false}
-          withVerticalLabels={true}
           withHorizontalLabels={true}
           style={styles.chart}
         />
       </View>
+
       <Modal visible={modalVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.overlay}>
             <View style={styles.modalContainer}>
-               {types.map((item) => (
+              <Text style={styles.modalTitle}>{localizationStrings.SelectPeriod || "Select Period"}</Text>
+              {types.map((item) => (
                 <TouchableOpacity
                   key={item}
                   onPress={() => {
@@ -120,7 +140,11 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
                   <Text style={[styles.modalItemText, selectedType === item && styles.modalItemTextActive]}>
                     {item === "weekly" ? localizationStrings.Weekly : item === "monthly" ? localizationStrings.Monthly : localizationStrings.Yearly}
                   </Text>
-                  {selectedType === item && <Text style={styles.modalCheck}>✓</Text>}
+                  {selectedType === item && (
+                    <View style={styles.checkWrapper}>
+                      <Text style={styles.modalCheck}>✓</Text>
+                    </View>
+                  )}
                 </TouchableOpacity>
               ))}
             </View>
@@ -130,71 +154,143 @@ const ChartComponent = ({ data, statusText, statusColor }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    marginBottom: 24,
     backgroundColor: "#fff",
     borderRadius: 20,
-    padding: 18,
-    shadowColor: "#0f172a",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    paddingTop: 16,
+    paddingBottom: 12,
+    paddingHorizontal: 12,
+
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.1,
+        shadowRadius: 15,
+      },
+      android: {
+        elevation: 5, // main shadow for Android
+        marginHorizontal: 1,
+      },
+    }),
   },
   cardHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 18,
+    paddingHorizontal: 20,
+    marginBottom: 15,
   },
-  titleBlock: { flexDirection: "row", alignItems: "center", gap: 12 },
-  statusDot: { width: 10, height: 10, borderRadius: 5 },
-  statusText: { fontSize: 18, fontWeight: "700", color: "#0f172a" },
-  cardSubtitle: { fontSize: 13, color: "#64748B", marginTop: 2, fontWeight: "500" },
-  statsInline: { fontSize: 11, color: "#94A3B8", marginTop: 4, fontWeight: "500" },
+  titleBlock: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statusDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  statusText: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#1A1A1A",
+  },
+  cardSubtitle: {
+    fontSize: 12,
+    color: "#6C757D",
+    fontWeight: "600",
+    marginTop: 1,
+  },
   selectorButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: "#F1F5F9",
     paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    gap: 3,
+    paddingHorizontal: 12,
+    borderRadius: 12,
   },
-  selectorText: { fontSize: 13, fontWeight: "600", color: "white" },
-  selectorChevron: { fontSize: 12, color: "#64748B" },
+  selectorText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    marginRight: 6,
+  },
+  selectorIcon: {
+    width: 12,
+    height: 12,
+    tintColor: "#1A1A1A",
+  },
+  statsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    marginBottom: 10,
+  },
+  statItem: {
+    flex: 1,
+  },
+  statValue: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#1A1A1A",
+  },
+  statLabel: {
+    fontSize: 11,
+    color: "#6C757D",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: "#E2E8F0",
+    marginHorizontal: 20,
+  },
   chartWrapper: {
-     borderRadius: 14,
-    paddingVertical: 5,
-   },
-  chart: { marginLeft: -6, borderRadius: 14 },
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  chart: {
+    borderRadius: 20,
+    marginTop: 10,
+  },
   overlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(15, 23, 42, 0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
   modalContainer: {
     backgroundColor: "#fff",
-    paddingVertical: 8,
-    borderRadius: 16,
-    width: 280,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 8,
+    borderRadius: 24,
+    width: "80%",
+
+    padding: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 20 },
+        shadowOpacity: 0.2,
+        shadowRadius: 30,
+      },
+      android: {
+        elevation: 0.1,
+
+      },
+    }),
   },
   modalTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#94A3B8",
-    marginBottom: 4,
-    paddingHorizontal: 16,
-    paddingTop: 4,
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#1A1A1A",
+    marginBottom: 15,
+    textAlign: 'center',
   },
   modalItem: {
     flexDirection: "row",
@@ -202,24 +298,35 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 14,
     paddingHorizontal: 16,
+    borderRadius: 16,
+    marginBottom: 4,
   },
   modalItemActive: {
-   },
+    backgroundColor: "rgba(160, 216, 3, 0.08)",
+  },
   modalItemText: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#334155",
+    fontWeight: "600",
+    color: "#4A5568",
   },
   modalItemTextActive: {
-    color: "#166534",
-    fontWeight: "600",
+    color: "#A0D803",
+  },
+  checkWrapper: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#A0D803",
+    alignItems: "center",
+    justifyContent: "center",
   },
   modalCheck: {
     fontSize: 14,
-    fontWeight: "700",
-    color: "#22C55E",
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 });
 
 export default ChartComponent;
+
 

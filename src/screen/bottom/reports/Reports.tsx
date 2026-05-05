@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, FlatList, TouchableOpacity, Platform } from "react-native";
 import StatusBarComponent from "../../../compoent/StatusBarCompoent";
 import useReports from "./useReports";
 import LoadingModal from "../../../utils/Loader";
@@ -72,14 +72,14 @@ const Reports = () => {
         <View style={{ width: 40 }} />
       </View>
 
-      <View style={styles.subHeaderContainer}>
-        <Text style={styles.subHeader}>
-          {isLogin?.userData?.type === "Coach"
-            ? (localizationStrings.CoachMonitoringHeader || "Coach Monitoring: Detailed Player Activity & Statistics")
-            : (localizationStrings.PerformanceOverviewHeader || "Performance Overview: Shared Insights for Coach & Player")}
-        </Text>
+      <View style={{
+        marginHorizontal: 16,
+        marginBottom: 11
+      }}>
+        <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
+
+
       </View>
-      <ChartComponent data={chartDataScreen1} statusText={localizationStrings.Safe} statusColor="rgba(160, 216, 3, 1)" />
 
       <ScrollView
         style={styles.container}
@@ -285,15 +285,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 14,
-    borderRadius: 18,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
+    borderRadius: 16,
+    marginBottom: 10,
+    marginHorizontal: 6,
+    marginTop: 1,
+
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
   },
   profileImage: {
     width: 54,
