@@ -31,9 +31,12 @@ import { Getplayer } from '../../../../redux/Api/AuthApi';
     if (searchPlaylist?.trim() === '') {
       setFilterData(allPlay);
     } else {
-      const filtered = allPlay?.filter((msg:any) =>
-        msg?.user_name?.toLowerCase()?.includes(searchPlaylist?.toLowerCase())
-      );
+      const searchTerm = searchPlaylist.toLowerCase();
+      const filtered = allPlay?.filter((msg: any) => {
+        const userName = msg?.user_name?.toLowerCase() || '';
+        const email = msg?.email?.toLowerCase() || '';
+        return userName.includes(searchTerm) || email.includes(searchTerm);
+      });
       setFilterData(filtered);
     }
   }, [searchPlaylist, allPlay]);

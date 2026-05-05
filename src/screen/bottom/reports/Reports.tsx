@@ -81,6 +81,13 @@ const Reports = () => {
 
       </View>
 
+      <View style={{ marginHorizontal: 16, marginBottom: 10 }}>
+        <SearchBar
+          value={searchData}
+          onSearchChange={setSearchData}
+        />
+      </View>
+
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}

@@ -205,9 +205,11 @@ const AllPlayer = () => {
   const {
     isLoading,
     navigation,
-
     viewType,
-    allPlay
+    allPlay,
+    searchPlaylist,
+    setSearchPlaylist,
+    filterData
   } = useAllPlayer();
   useLanguage();
   const [is] = useState(false);
@@ -222,20 +224,26 @@ const AllPlayer = () => {
         {/* {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null} */}
 
 
+        {/* Search Bar */}
+        <View style={{ marginBottom: 15 }}>
+          <SearchBar
+            value={searchPlaylist}
+            onSearchChange={setSearchPlaylist}
+          />
+        </View>
+
         {isLoading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size={30} color="#A0D803" />
           </View>
         ) : (
           <FlatList
-            data={allPlay}
+            data={filterData}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<EmptyListComponent message={viewType === 'Players' ? (localizationStrings?.noplayers || "No players found") : (localizationStrings?.NoReviewsFound || "No reviews found")} />}
             keyExtractor={(item, index) => (item.id || item.user_id || index).toString()}
             renderItem={({ item }) => (
-
               <SessionDetailCard item={item} />
-
             )}
           />
         )}

@@ -64,9 +64,12 @@ const useMessageList = () => {
     if (searchData?.trim() === '') {
       setFilteredMessages(chatMess);
     } else {
-      const filtered = chatMess?.filter((msg) =>
-        msg?.user_name?.toLowerCase().includes(searchData?.toLowerCase())
-      );
+      const searchTerm = searchData.toLowerCase();
+      const filtered = chatMess?.filter((msg) => {
+        const userName = msg?.user_name?.toLowerCase() || '';
+        const email = msg?.email?.toLowerCase() || '';
+        return userName.includes(searchTerm) || email.includes(searchTerm);
+      });
       setFilteredMessages(filtered);
     }
   }, [searchData, chatMess]);

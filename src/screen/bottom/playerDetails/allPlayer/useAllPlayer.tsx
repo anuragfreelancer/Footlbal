@@ -64,9 +64,20 @@ const useAllPlayer = () => {
     if (searchPlaylist?.trim() === '') {
       setFilterData(allPlay);
     } else {
-      const filtered = allPlay?.filter((msg: any) =>
-        msg?.user_name?.toLowerCase()?.includes(searchPlaylist?.toLowerCase())
-      );
+      const searchTerm = searchPlaylist.toLowerCase();
+      const filtered = allPlay?.filter((item: any) => {
+        const userName = item?.user_details?.user_name?.toLowerCase() || '';
+        const email = item?.user_details?.email?.toLowerCase() || '';
+        
+        // Check if any player in the question details matches
+        const hasMatchingPlayerInQuestions = item?.question_details?.some((q: any) => 
+          q.answers?.some((ans: any) => 
+            ans.user_name?.toLowerCase().includes(searchTerm)
+          )
+        );
+
+        return userName.includes(searchTerm) || email.includes(searchTerm) || hasMatchingPlayerInQuestions;
+      });
       setFilterData(filtered);
     }
   }, [searchPlaylist, allPlay]);
