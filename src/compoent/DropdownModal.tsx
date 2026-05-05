@@ -22,7 +22,7 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
 
             ListEmptyComponent={<EmptyListComponent message="Not Found Data" />} // Common Empty Component
 
-            renderItem={({ item }:any) => (
+            renderItem={({ item }: any) => (
               <TouchableOpacity
                 style={styles.option}
                 onPress={() => {
@@ -30,7 +30,7 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
                   onClose();
                 }}
               >
-                <Text style={styles.optionText}>{ item?.team_name|| item?.name || item?.position_name || item?.load_type} </Text>
+                <Text style={styles.optionText}>{item?.team_name || item?.name || item?.position_name || item?.load_type} </Text>
               </TouchableOpacity>
             )}
           />
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "500",
     marginBottom: 6,
-    marginTop: 5 ,
-    textTransform: 'uppercase' 
+    marginTop: 5,
+    textTransform: 'uppercase'
 
   },
   closeButton: {

@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
     color: "#374151",
-    textTransform: "uppercase",
     textAlign: "center",
   },
 });

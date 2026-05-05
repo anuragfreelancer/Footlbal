@@ -13,7 +13,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import imageIndex from '../../../../assets/imageIndex';
 import localizationStrings from '../../../../compoent/Localization/Localization';
@@ -24,6 +26,8 @@ import CustomHeader from '../../../../compoent/CustomHeader';
 import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 import { errorToast } from '../../../../utils/customToast';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 
 
 
@@ -73,6 +77,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   };
 
   const toggleQuestionSelection = (question: any, isBefore: boolean) => {
+    ReactNativeHapticFeedback.trigger("impactLight");
     const list = isBefore ? selectedBefore : selectedAfter;
     const setList = isBefore ? setSelectedBefore : setSelectedAfter;
 
@@ -85,14 +90,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
 
   const handleStart = async () => {
-    // if (selectedBefore.length === 0 || selectedAfter.length === 0) {
-    //   Alert.alert(
-    //     localizationStrings.Validation || "Validation",
-    //     "Please select at least one question for both sections."
-    //   );
-    //   return;
-    // }
-
+    ReactNativeHapticFeedback.trigger("notificationSuccess");
     try {
       setLoading(true);
       const formattedDate = date.toISOString().split('T')[0];
@@ -131,7 +129,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   };
 
   const sessionTypes = [
-    { key: 'training', label: localizationStrings.TrainingSession || "Training", icon: '🏃' },
+    { key: 'training', label: localizationStrings.TrainingSession || "Training", icon: '🏃‍♂️' },
     { key: 'match', label: localizationStrings.MatchSession || "Match", icon: '⚽' },
     { key: 'break', label: localizationStrings.BreakSession || "Break", icon: '🧘' },
   ];
@@ -140,7 +138,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
     if (allList.length === 0) {
       return (
         <View style={styles.emptyCardTrigger}>
-          <Text style={styles.modalEmptyText}>{localizationStrings.StartSectionScreen_NoQuestionsAvailable || "No questions available. Tap \"Add Question\" below."}</Text>
+          <Text style={styles.modalEmptyText}>{localizationStrings.NoQuestionnaireData}</Text>
         </View>
       );
     }
@@ -152,22 +150,20 @@ const StartSectionScreen = ({ route, navigation }: any) => {
         {allList?.map((q, index) => {
           const isSelected = selectedList.some(item => item.id === q.id);
           return (
-            <TouchableOpacity
+            <AnimatedItem
               key={q.id || index}
-              style={[styles.listItem, isSelected && styles.listItemActive]}
               onPress={() => toggleQuestionSelection(q, isBefore)}
+              delay={(index + 3) * 100}
             >
-              <View style={styles.flex}>
+              <View style={[styles.listItem, isSelected && styles.listItemActive]}>
                 <Text style={[styles.liText, isSelected && styles.liTextActive]}>
                   {q?.question || q?.title || ''}
                 </Text>
-              </View>
-              <View style={styles.liActionRow}>
                 <View style={[styles.liCheck, isSelected && styles.liCheckActive]}>
                   {isSelected && <Text style={styles.checkTxt}>✓</Text>}
                 </View>
               </View>
-            </TouchableOpacity>
+            </AnimatedItem>
           );
         })}
       </View>
@@ -175,182 +171,457 @@ const StartSectionScreen = ({ route, navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={styles.page}>
+    <View style={styles.page}>
       <StatusBarComponent />
 
-      <View style={{ marginHorizontal: 12, marginTop: 5 }}>
+
+      <SafeAreaView style={styles.flex} edges={['top']}>
         <CustomHeader
           imageSource={imageIndex.backNav}
-          label={"Début de section"}
+          label={localizationStrings.StartSection}
+
         />
-      </View>
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-            <View style={styles.main}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollContent}
+            >
+              {/* STICKY INDICATOR / PROGRESS (Optional, but adds premium feel) */}
+              <View style={{ height: 1 }} />
 
-              {/* SESSION TYPE */}
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionLabel}>{localizationStrings.StartSectionScreen_SessionType || "SESSION TYPE"}</Text>
-                <View style={styles.typeGrid}>
-                  {sessionTypes.map((item) => (
-                    <TouchableOpacity
-                      key={item.key}
-                      style={[styles.typeBox, type === item.key && styles.typeBoxActive]}
-                      onPress={() => setType(item.key)}
-                    >
-                      <Text style={[styles.typeTxt, type === item.key && styles.typeTxtActive]}>{item.label}</Text>
+              <View style={styles.main}>
+
+                {/* STICKY INDICATOR / PROGRESS (Optional, but adds premium feel) */}
+                <AnimatedItem
+                  onPress={() => navigation.navigate(ScreenNameEnum.AddQuestion, { onSuccess: fetchQuestions, coachId: coachId })}
+                  delay={600}
+                >
+                  <View style={styles.addBtn}>
+                    <View style={styles.addIconCircle}><Text style={styles.addPlus}>+</Text></View>
+                    <Text style={styles.addBtnTxt}>{localizationStrings.AddCustomQuestionBtn || "Add Custom Question"}</Text>
+                  </View>
+                </AnimatedItem>
+                {/* SESSION TYPE */}
+                <View style={styles.glassCard}>
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.sectionLabel}>{localizationStrings.SessionType}</Text>
+                  </View>
+                  <View style={[styles.typeGrid, {
+                    marginTop: 15,
+                    marginBottom: 5
+                  }]}>
+                    {sessionTypes.map((item, index) => (
+                      <AnimatedItem
+                        key={item.key}
+                        onPress={() => setType(item.key)}
+                        delay={index * 100}
+                        style={{ flex: 1 }}
+                      >
+                        <View style={[styles.typeBox, type === item.key && styles.typeBoxActive]}>
+
+                          <Text
+                            style={[styles.typeTxt, type === item.key && styles.typeTxtActive]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                          >
+                            {item.label}
+                          </Text>
+                          {type === item.key && <View style={styles.activeIndicator} />}
+                        </View>
+                      </AnimatedItem>
+                    ))}
+                  </View>
+                </View>
+
+                {/* QUESTIONNAIRES */}
+                {fetchingQuestions ? (
+                  <View style={styles.modalLoader}>
+                    <ActivityIndicator color="#A0D803" size="large" />
+                    <Text style={styles.loaderTxt}>Chargement des questions...</Text>
+                  </View>
+                ) : (
+                  <>
+                    <View style={styles.glassCard}>
+                      <View style={styles.sectionHeaderRow}>
+                        <View style={styles.cardHeader}>
+                          <View style={[styles.cardDot, { backgroundColor: '#10B981' }]} />
+                          <Text style={styles.sectionLabel}>{Before || (localizationStrings.BeforeSessionHeader || "BEFORE SESSION")}</Text>
+                        </View>
+                        <View style={styles.countBadge}>
+                          <Text style={styles.countText}>{selectedBefore.length}/{availableBefore.length}</Text>
+                        </View>
+                      </View>
+                      {renderAllQuestions(availableBefore, true)}
+                    </View>
+
+                    <View style={styles.glassCard}>
+                      <View style={styles.sectionHeaderRow}>
+                        <View style={styles.cardHeader}>
+                          <View style={[styles.cardDot, { backgroundColor: '#F59E0B' }]} />
+                          <Text style={styles.sectionLabel}>{Training || (localizationStrings.AfterSessionHeader || "AFTER SESSION")}</Text>
+                        </View>
+                        <View style={[styles.countBadge, { backgroundColor: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.2)' }]}>
+                          <Text style={[styles.countText, { color: '#D97706' }]}>{selectedAfter.length}/{availableAfter.length}</Text>
+                        </View>
+                      </View>
+                      {renderAllQuestions(availableAfter, false)}
+                    </View>
+                  </>
+                )}
+
+                {/* ADD QUESTION BTN */}
+
+
+                {/* SCHEDULE */}
+                <View style={styles.glassCard}>
+                  <View style={styles.cardHeader}>
+                    <View style={[styles.cardDot, { backgroundColor: '#6366F1' }]} />
+                    <Text style={styles.sectionLabel}>{localizationStrings.Schedule || ""}</Text>
+                  </View>
+                  <View style={[styles.pickContainer, {
+                    marginTop: 9
+                  }]}>
+                    <TouchableOpacity style={styles.pickBox} onPress={() => setDatePickerVisibility(true)}>
+                      <View style={[styles.pickIconBox, { backgroundColor: 'rgba(99, 102, 241, 0.1)' }]}>
+                        <Image source={imageIndex.calendar} style={[styles.pickIcon, { tintColor: '#6366F1' }]} />
+                      </View>
+                      <View>
+                        <Text style={styles.pickLabel}>{localizationStrings.DateLabel || "DATE"}</Text>
+                        <Text style={styles.pickValue}>{date.toLocaleDateString()}</Text>
+                      </View>
                     </TouchableOpacity>
-                  ))}
+
+                    <View style={styles.pickDivider} />
+
+                    <TouchableOpacity style={styles.pickBox} onPress={() => setTimePickerVisibility(true)}>
+                      <View style={[styles.pickIconBox, { backgroundColor: 'rgba(16, 185, 129, 0.1)' }]}>
+                        <Image source={imageIndex.clocks} style={[styles.pickIcon, { tintColor: '#10B981' }]} />
+                      </View>
+                      <View>
+                        <Text style={styles.pickLabel}>{localizationStrings.Time || "TIME"}</Text>
+                        <Text style={styles.pickValue}>{time?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
+
               </View>
+            </ScrollView>
 
-              {/* QUESTIONNAIRES */}
-              {fetchingQuestions ? (
-                <View style={styles.modalLoader}>
-                  <ActivityIndicator color="#A0D803" size="large" />
-                </View>
-              ) : (
-                <>
-                  <View style={styles.sectionCard}>
-                    <View style={styles.sectionHeaderRow}>
-                      <Text style={styles.sectionLabel}>{Before || (localizationStrings.BeforeSessionHeader || "BEFORE SESSION")}</Text>
-                      <View style={styles.countBadge}><Text style={styles.countText}>{selectedBefore.length} / {availableBefore.length}</Text></View>
-                    </View>
-                    {renderAllQuestions(availableBefore, true)}
-                  </View>
-
-                  <View style={styles.sectionCard}>
-                    <View style={styles.sectionHeaderRow}>
-                      <Text style={styles.sectionLabel}>{Training || (localizationStrings.AfterSessionHeader || "AFTER SESSION")}</Text>
-                      <View style={[styles.countBadge, { backgroundColor: '#FEF3C7' }]}><Text style={[styles.countText, { color: '#B45309' }]}>{selectedAfter.length} / {availableAfter.length}</Text></View>
-                    </View>
-                    {renderAllQuestions(availableAfter, false)}
-                  </View>
-                </>
-              )}
-
-              {/* ADD QUESTION BTN */}
+            {/* PREMIUM FOOTER */}
+            <View style={styles.footer}>
               <TouchableOpacity
-                style={styles.addBtn}
-                onPress={() => navigation.navigate(ScreenNameEnum.AddQuestion, { onSuccess: fetchQuestions, coachId: coachId })}
+                style={[styles.mainBtn, loading && styles.btnDisabled]}
+                onPress={handleStart}
+                disabled={loading}
+                activeOpacity={0.8}
               >
-                <Text style={styles.addBtnTxt}>{localizationStrings.AddCustomQuestionBtn || "+ Add Custom Question"}</Text>
+                {loading ? (
+                  <ActivityIndicator color="#FFF" />
+                ) : (
+                  <View style={styles.btnContent}>
+                    <Text style={styles.mainBtnTxt}>{localizationStrings.StartSection || "Start section"}</Text>
+                  </View>
+                )}
               </TouchableOpacity>
-
-              {/* SCHEDULE */}
-              <View style={styles.sectionCard}>
-                <Text style={styles.sectionLabel}>{localizationStrings.StartSectionScreen_Schedule || "SCHEDULE"}</Text>
-                <View style={styles.pickContainer}>
-                  <TouchableOpacity style={styles.pickBox} onPress={() => setDatePickerVisibility(true)}>
-                    <View style={styles.pickIconBox}><Image source={imageIndex.calendar} style={styles.pickIcon} /></View>
-                    <View>
-                      <Text style={styles.pickLabel}>{localizationStrings.DateLabel || "DATE"}</Text>
-                      <Text style={styles.pickValue}>{date.toLocaleDateString()}</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <View style={styles.pickDivider} />
-                  <TouchableOpacity style={styles.pickBox} onPress={() => setTimePickerVisibility(true)}>
-                    <View style={styles.pickIconBox}><Image source={imageIndex.clocks} style={styles.pickIcon} /></View>
-                    <View>
-                      <Text style={styles.pickLabel}>{localizationStrings.Time || "TIME"}</Text>
-                      <Text style={styles.pickValue}>{time?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
             </View>
-          </ScrollView>
 
-          {/* FOOTER */}
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.mainBtn} onPress={handleStart} disabled={loading}>
-              {loading ? <ActivityIndicator color="#FFF" /> : <Text style={styles.mainBtnTxt}>{localizationStrings.StartSection || "Start section"}</Text>}
-            </TouchableOpacity>
-          </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
 
-        </KeyboardAvoidingView>
-
-      </TouchableWithoutFeedback>
-
-      <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }} onCancel={() => setDatePickerVisibility(false)} />
-      <DateTimePickerModal isVisible={isTimePickerVisible} mode="time" onConfirm={(t) => { setTime(t); setTimePickerVisibility(false); }} onCancel={() => setTimePickerVisibility(false)} />
-    </SafeAreaView>
+        <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={(d) => { setDate(d); setDatePickerVisibility(false); }} onCancel={() => setDatePickerVisibility(false)} />
+        <DateTimePickerModal isVisible={isTimePickerVisible} mode="time" onConfirm={(t) => { setTime(t); setTimePickerVisibility(false); }} onCancel={() => setTimePickerVisibility(false)} />
+      </SafeAreaView>
+    </View>
   );
 };
 
 export default StartSectionScreen;
 
+const AnimatedItem = ({ children, isSelected, onPress, delay = 0, style }: any) => {
+  const scale = React.useRef(new Animated.Value(1)).current;
+  const opacity = React.useRef(new Animated.Value(0)).current;
+  const translateY = React.useRef(new Animated.Value(20)).current;
+
+  React.useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 600,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.spring(translateY, {
+        toValue: 0,
+        friction: 6,
+        tension: 40,
+        delay,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [delay]);
+
+  const handlePressIn = () => {
+    Animated.spring(scale, { toValue: 0.95, useNativeDriver: true }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scale, { toValue: 1, friction: 3, tension: 40, useNativeDriver: true }).start();
+  };
+
+  return (
+    <Animated.View style={[{ opacity, transform: [{ scale }, { translateY }] }, style]}>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        style={style}
+      >
+        {children}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: '#F8FAFC' },
   flex: { flex: 1 },
-  scrollContent: { paddingBottom: 150 },
-  main: { padding: 16 },
+  scrollContent: { paddingBottom: hp(22) },
+  main: { padding: wp(5) },
 
-  sectionCard: { backgroundColor: '#FFF', borderRadius: 16, padding: 12, marginBottom: 16, borderWidth: 1, borderColor: '#F1F5F9' },
-  sectionLabel: { fontSize: 11, fontWeight: '700', color: '#64748B', marginBottom: 12, letterSpacing: 1 },
+  // HEADER
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(5),
+    paddingVertical: hp(2),
+  },
+  backCircle: {
+    width: wp(11),
+    height: wp(11),
+    borderRadius: wp(5.5),
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  backIcon: { width: wp(5), height: wp(5), resizeMode: 'contain' },
+  headerTitle: { fontSize: hp(2.4), fontWeight: '600', color: '#0F172A', letterSpacing: 0.5 },
 
-  typeGrid: { flexDirection: 'row', justifyContent: 'space-between' },
-  typeBox: { flex: 1, backgroundColor: '#F1F5F9', borderRadius: 10, height: 55, alignItems: 'center', justifyContent: "center", marginHorizontal: 4 },
-  typeBoxActive: { backgroundColor: '#A0D803' },
-  typeTxt: { fontSize: 13, fontWeight: '600', color: '#64748B', textAlign: "center" },
-  typeTxtActive: { color: '#FFF' },
+  // CARDS
+  glassCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: wp(8),
+    padding: wp(5),
+    marginBottom: hp(2.5),
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.1,
+    shadowRadius: 30,
+    elevation: 8,
+  },
+  cardDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#A0D803', marginRight: 10 },
+  sectionLabel: {
+    fontSize: hp(1.6),
+    fontWeight: '600',
+    color: 'black',
+    letterSpacing: 1.5,
+  },
 
-  sectionHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  countBadge: { backgroundColor: '#E2E8F0', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-  countText: { fontSize: 11, fontWeight: '700', color: '#475569' },
+  // SESSION TYPES
+  typeGrid: { flexDirection: 'row', justifyContent: 'space-between', gap: wp(3) },
+  typeBox: {
+    flex: 1,
+    backgroundColor: '#F1F5F9',
+    borderRadius: wp(10),
+    minHeight: hp(5),
+    alignItems: 'center',
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: 'transparent',
+    padding: wp(2),
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  typeBoxActive: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#A0D803',
+  },
+  iconContainer: {
+    width: wp(12),
+    height: wp(12),
+    borderRadius: wp(4),
+    backgroundColor: '#E2E8F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp(1),
+  },
+  iconContainerActive: { backgroundColor: 'rgba(160, 216, 3, 0.15)' },
+  typeIcon: { fontSize: hp(3) },
+  typeTxt: { fontSize: hp(1.4), fontWeight: '600', color: 'black', textAlign: 'center' },
+  typeTxtActive: { color: '#0F172A', fontWeight: '600' },
+  activeIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    width: '40%',
+    height: 4,
+    backgroundColor: '#A0D803',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
 
-  emptyCardTrigger: { padding: 16, alignItems: 'center', justifyContent: 'center' },
-  modalEmptyText: { color: '#94A3B8', fontSize: 13 },
-  modalLoader: { padding: 40, alignItems: 'center' },
-
-  questionContainer: { marginTop: 4 },
-  listItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', padding: 14, borderRadius: 12, marginBottom: 8, borderWidth: 1, borderColor: '#E2E8F0' },
-  listItemActive: { backgroundColor: '#F0FDF4', borderColor: '#A0D803' },
-  liEmoji: { fontSize: 18, marginRight: 12 },
-  liText: { fontSize: 14, fontWeight: '500', color: '#334155' },
-  liTextActive: { color: '#0F172A', fontWeight: '600' },
-  liActionRow: { flexDirection: 'row', alignItems: 'center' },
-  liCheck: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: '#CBD5E1', justifyContent: 'center', alignItems: 'center' },
+  // QUESTIONS
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: hp(2),
+    gap: 10,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  countBadge: {
+    backgroundColor: 'rgba(160, 216, 3, 0.1)',
+    paddingHorizontal: wp(2.5),
+    paddingVertical: hp(0.5),
+    borderRadius: wp(2.5),
+    borderWidth: 1,
+    borderColor: 'rgba(160, 216, 3, 0.2)',
+    minWidth: wp(12),
+    alignItems: 'center',
+  },
+  countText: { fontSize: hp(1.2), fontWeight: '600', color: '#166534' },
+  questionContainer: { gap: hp(1.2) },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: wp(4),
+    borderRadius: wp(5),
+    borderWidth: 1.5,
+    borderColor: '#F1F5F9',
+  },
+  listItemActive: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#A0D803',
+    shadowColor: '#A0D803',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  liText: { fontSize: hp(1.7), fontWeight: '600', color: '#475569', flex: 1 },
+  liTextActive: { color: '#0F172A', fontWeight: '800' },
+  liCheck: {
+    width: wp(6),
+    height: wp(6),
+    borderRadius: wp(2),
+    borderWidth: 2,
+    borderColor: '#E2E8F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
   liCheckActive: { backgroundColor: '#A0D803', borderColor: '#A0D803' },
-  checkTxt: { color: '#FFF', fontSize: 10, fontWeight: 'bold' },
+  checkTxt: { color: '#FFF', fontSize: hp(1.2), fontWeight: '600' },
 
-  addBtn: { backgroundColor: '#A0D803', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginBottom: 20 },
-  addBtnTxt: { color: '#FFF', fontSize: 15, fontWeight: '700' },
+  // ADD BUTTON
+  addBtn: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: hp(2.2),
+    paddingHorizontal: wp(5),
+    borderRadius: wp(6),
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp(3),
+    borderWidth: 2,
+    borderColor: '#A0D803',
+    borderStyle: 'dotted',
+    justifyContent: "center"
+  },
+  addIconCircle: {
+    width: wp(8),
+    height: wp(8),
+    borderRadius: wp(4),
+    backgroundColor: 'rgba(160, 216, 3, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(3),
+  },
+  addPlus: { color: '#A0D803', fontSize: hp(2.9), fontWeight: '700' },
+  addBtnTxt: { color: 'black', fontSize: hp(2), fontWeight: '600' },
 
-  pickContainer: { flexDirection: 'row', backgroundColor: '#F1F5F9', borderRadius: 12, padding: 4 },
-  pickBox: { flex: 1, flexDirection: 'row', alignItems: 'center', padding: 12 },
-  pickIconBox: { width: 32, height: 32, borderRadius: 10, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', marginRight: 10 },
-  pickIcon: { width: 14, height: 14, tintColor: '#475569' },
-  pickLabel: { fontSize: 9, fontWeight: '800', color: '#64748B', marginBottom: 2 },
-  pickValue: { fontSize: 13, fontWeight: '600', color: '#0F172A' },
-  pickDivider: { width: 1, height: '50%', backgroundColor: '#CBD5E1', alignSelf: 'center' },
+  // SCHEDULE
+  pickContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#F8FAFC',
+    borderRadius: wp(6),
+    padding: wp(1),
+    borderWidth: 1,
+    borderColor: '#e9f0e2ff',
+  },
+  pickBox: { flex: 1, flexDirection: 'row', alignItems: 'center', padding: wp(3.5) },
+  pickIconBox: {
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(3),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(3),
+  },
+  pickIcon: { width: wp(4.5), height: wp(4.5) },
+  pickLabel: { fontSize: hp(1.1), fontWeight: '800', color: '#94A3B8', marginBottom: 2, },
+  pickValue: { fontSize: hp(1.6), fontWeight: '600', color: '#0F172A' },
+  pickDivider: { width: 1, height: '50%', backgroundColor: '#E2E8F0', alignSelf: 'center' },
 
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFF', flexDirection: 'row', padding: 16, paddingBottom: Platform.OS === 'ios' ? 32 : 16, borderTopWidth: 1, borderColor: '#F1F5F9' },
-  cancelBtn: { paddingHorizontal: 20, justifyContent: 'center' },
-  cancelTxt: { fontSize: 15, fontWeight: '600', color: '#64748B' },
-  mainBtn: { flex: 1, backgroundColor: '#A0D803', borderRadius: 14, paddingVertical: 16, alignItems: 'center' },
-  mainBtnTxt: { fontSize: 16, fontWeight: '700', color: '#FFF' },
+  // FOOTER & MAIN BUTTON
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: wp(6),
+    paddingTop: hp(2),
+    paddingBottom: Platform.OS === 'ios' ? hp(4) : hp(2.5),
+  },
+  mainBtn: {
+    backgroundColor: '#A0D803',
+    borderRadius: wp(6),
+    height: hp(8),
+    justifyContent: 'center',
+    alignItems: 'center',
 
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#FFF', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  modalTitle: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
-  closeIcon: { width: 22, height: 22, tintColor: '#64748B' },
-  pillContainer: { marginBottom: 20 },
-  pillBg: { flexDirection: 'row', backgroundColor: '#F1F5F9', borderRadius: 12, padding: 4 },
-  pillItem: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
-  pillActive: { backgroundColor: '#FFF', shadowColor: '#000', shadowOpacity: 0.05, elevation: 1 },
-  pillTxt: { fontSize: 13, fontWeight: '600', color: '#64748B' },
-  pillTxtActive: { color: '#0F172A' },
+  },
+  btnDisabled: { backgroundColor: '#CBD5E1', shadowOpacity: 0 },
+  btnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
+  mainBtnTxt: { fontSize: hp(2), fontWeight: '600', color: '#FFF', letterSpacing: 1, },
+  btnArrowCircle: {
+    width: wp(7),
+    height: wp(7),
+    borderRadius: wp(3.5),
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: wp(3),
+  },
+  btnArrow: { color: '#FFF', fontSize: hp(1.8), fontWeight: '600' },
 
-  doneBtn: { backgroundColor: '#0F172A', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 10 },
-  doneBtnTxt: { color: '#FFF', fontSize: 15, fontWeight: '700' },
-
-  inputGroup: { marginBottom: 20 },
-  inputLabel: { fontSize: 12, fontWeight: '700', color: '#475569', marginBottom: 8 },
-  largeInput: { backgroundColor: '#F8FAFC', borderRadius: 12, padding: 16, height: 100, fontSize: 14, color: '#0F172A', textAlignVertical: 'top', borderWidth: 1, borderColor: '#E2E8F0' },
+  // LOADERS
+  modalLoader: { padding: hp(5), alignItems: 'center' },
+  loaderTxt: { marginTop: hp(1.5), color: 'black', fontWeight: '600' },
+  emptyCardTrigger: { padding: hp(4), alignItems: 'center', justifyContent: 'center' },
+  modalEmptyText: { color: '#94A3B8', fontSize: hp(1.7), textAlign: 'center', fontStyle: 'italic', lineHeight: hp(2.5) },
 });
-

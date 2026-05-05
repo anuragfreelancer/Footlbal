@@ -1,6 +1,6 @@
 
 import { StyleSheet } from 'react-native';
- 
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB", }, // Lighter gray for background
   header: { fontSize: 24, color: "#111827", fontWeight: "700", textAlign: "center", marginTop: 28 },
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#64748B",
     fontWeight: "600",
-    textTransform: "uppercase",
   },
   questionText: {
     fontSize: 13,

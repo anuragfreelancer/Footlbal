@@ -34,7 +34,6 @@ export default StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: 'black',
-    textTransform: 'uppercase',
     letterSpacing: 1.2,
     marginBottom: 16,
     paddingLeft: 4,

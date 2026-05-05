@@ -35,12 +35,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 15,
     ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-      },
+
       android: {
         elevation: 4,
       },
@@ -108,10 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FCF0',
     borderWidth: 1.5,
     ...Platform.select({
-      ios: {
-        shadowColor: "#A0D803",
-        shadowOpacity: 0.15,
-      },
+
       android: {
         elevation: 6,
       },
@@ -139,7 +131,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     color: "#64748B",
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   checkboxContainer: {
@@ -174,12 +165,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     ...Platform.select({
-      ios: {
-        shadowColor: "#A0D803",
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.4,
-        shadowRadius: 18,
-      },
+
       android: {
         elevation: 10,
       },

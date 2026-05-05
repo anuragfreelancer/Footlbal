@@ -1,9 +1,9 @@
 
 import { StyleSheet } from 'react-native';
- 
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white",},
-  header: { fontSize: 24,color:"black", fontWeight: "700", textAlign: "center", marginTop:11  },
+  container: { flex: 1, backgroundColor: "white", },
+  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginTop: 11 },
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     marginVertical: 6,
-    marginHorizontal:1,
+    marginHorizontal: 1,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
   },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 12 },
   infoContainer: { flex: 1 },
-  name: { fontSize: 12, fontWeight: "600",color:"black" },
-  position: { fontSize: 12, fontWeight: "600",color:"rgba(153, 153, 153, 1)"  },
+  name: { fontSize: 12, fontWeight: "600", color: "black" },
+  position: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
   detailContainer: { alignItems: "center", marginHorizontal: 10 },
-  label: { fontSize: 12, fontWeight: "600",color:"black" },
-  value: { fontSize: 12, fontWeight: "600",color:"rgba(153, 153, 153, 1)" },
+  label: { fontSize: 12, fontWeight: "600", color: "black" },
+  value: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
   fab: {
     position: "absolute",
     bottom: 20,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     color: "#94A3B8",
-    textAlign:"center"
+    textAlign: "center"
   },
   activeTabText: {
     color: "white",
@@ -338,7 +338,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: '#94A3B8',
-    textTransform: 'uppercase',
     marginBottom: 4,
   },
   answerText: {

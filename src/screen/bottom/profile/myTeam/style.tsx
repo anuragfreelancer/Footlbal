@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#ADB5BD",
     fontWeight: "800",
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   value: {

@@ -163,6 +163,14 @@ const DashboardScreen = () => {
   };
 
   const dynamicChartData = getDynamicChartData();
+  const baseUrl = "https://kmmps.store/public/uploads/users/";
+  const imagePath = getLogin?.userGetData?.image || isLogin?.userData?.image;
+
+  const imageUrl = imagePath
+    ? imagePath.startsWith("http")
+      ? imagePath
+      : baseUrl + imagePath
+    : baseUrl;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -170,10 +178,12 @@ const DashboardScreen = () => {
       <View style={styles.header}>
         <View style={{ marginTop: 12 }}>
           <Image
-            source={getLogin?.userGetData?.image || isLogin?.userData?.image ? { uri: getLogin?.userGetData?.image || isLogin?.userData?.image } : imageIndex.prfEdit}
+            source={
+              imageUrl !== baseUrl
+                ? { uri: imageUrl }
+                : imageIndex.prfEdit
+            }
             style={styles.avatar}
-            onLoad={() => setImgloading(false)}
-            onError={() => setImgloading(false)}
           />
           {imgloading && (
             <View style={styles.avatarLoader}>

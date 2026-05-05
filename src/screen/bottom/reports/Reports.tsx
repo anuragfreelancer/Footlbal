@@ -82,12 +82,12 @@ const Reports = () => {
 
       </View>
 
-      <View style={{ marginHorizontal: 16, marginBottom: 10 }}>
+      {/* <View style={{ marginHorizontal: 16, marginBottom: 10 }}>
         <SearchBar
           value={searchData}
           onSearchChange={setSearchData}
         />
-      </View>
+      </View> */}
 
       <ScrollView
         style={styles.container}
@@ -289,7 +289,6 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: "800",
     color: "rgba(255,255,255,0.9)",
-    textTransform: "uppercase",
     marginTop: -2,
   },
   messageContainer: {
