@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-  ActivityIndicator, Alert
+  ActivityIndicator, ScrollView
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -10,7 +10,6 @@ import styles from "./style";
 import usePlayers from "./usePlayers";
 import EmptyListComponent from "../../../../compoent/EmptyListComponent";
 import SearchBar from "../../../../compoent/SearchBar";
-import { StartSection } from "../../../../redux/Api/AuthApi";
 import LoadingModal from "../../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
@@ -23,23 +22,23 @@ const Players = () => {
     isLogin,
     isLoading,
     navigation,
-
     searchPlaylist, setSearchPlaylist,
     filterData,
   } = usePlayers();
-  const [is, setIsLoading] = useState(false)
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState([]);
+  
+  const [selectedPlayerIds, setSelectedPlayerIds] = useState<any[]>([]);
 
-  const togglePlayerSelect = (id) => {
+  const togglePlayerSelect = (id: any) => {
     if (selectedPlayerIds.includes(id)) {
       setSelectedPlayerIds(selectedPlayerIds.filter(pid => pid !== id));
     } else {
       setSelectedPlayerIds([...selectedPlayerIds, id]);
     }
   };
-  const handleOpenModal = () => {
+
+  const handleStartSection = () => {
     if (selectedPlayerIds.length === 0) {
-      errorToast(localizationStrings?.Pleaseselectleastone || "")
+      errorToast(localizationStrings?.Pleaseselectleastone || "Please select at least one player")
       return;
     }
 
@@ -57,26 +56,17 @@ const Players = () => {
     });
   };
 
-
-
-
-  const CommonCard = React.memo(({ item, onPress, isSelected }) => {
+  const CommonCard = React.memo(({ item, onPress, isSelected }: any) => {
     return (
       <TouchableOpacity
         style={[
           styles.card,
-          isSelected && {
-            borderColor: '#A0D803',
-            borderWidth: 2,
-            backgroundColor: '#F2FFE2'
-          }
+          isSelected && styles.selectedCard
         ]}
         onPress={onPress}
+        activeOpacity={0.7}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {/* Checkbox */}
-
-          {/* Player Info */}
+        <View style={{ position: 'relative' }}>
           <Image
             source={
               item?.image &&
@@ -87,134 +77,130 @@ const Players = () => {
             }
             style={styles.avatar}
           />
-          <View style={styles.contentContainer}>
-            <View style={styles.infoContainer}>
-              <Text style={styles.name}>{item?.user_name}</Text>
-              <Text style={styles.position}>Forward</Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={onPress}
-            style={{
-              height: 22,
-              width: 22,
+          {isSelected && (
+            <View style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 12,
+              backgroundColor: '#A0D803',
+              borderRadius: 10,
               borderWidth: 2,
-              borderColor: isSelected ? '#A0D803' : '#ccc',
-              backgroundColor: isSelected ? '#A0D803' : '#fff',
-              borderRadius: 4,
-              marginRight: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {isSelected && (
-              <Text style={{ color: 'white', fontSize: 16 }}>✓</Text>
-            )}
-          </TouchableOpacity>
-
+              borderColor: '#fff',
+              padding: 2
+            }}>
+              <Text style={{ color: '#fff', fontSize: 8, fontWeight: 'bold' }}>✓</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.playerInfo}>
+          <Text style={styles.name} numberOfLines={1}>{item?.user_name}</Text>
+          <Text style={styles.position}>{localizationStrings?.Player || "Player"}</Text>
+        </View>
+        <View style={[
+          styles.checkboxContainer,
+          isSelected ? styles.checkboxSelected : styles.checkboxUnselected
+        ]}>
+          {isSelected && <Text style={styles.checkIcon}>✓</Text>}
         </View>
       </TouchableOpacity>
     );
   });
 
-
   return (
-    <SafeAreaView style={styles.container}>
-      {is ? <LoadingModal /> : null}
+    <View style={styles.mainContainer}>
       <StatusBarComponent />
+      
+      {/* Curved Top Background */}
+      <View style={styles.topBackground} />
 
-      <View style={[styles.container, { padding: 15 }]}>
+      {isLoading && <LoadingModal />}
 
-        <Text style={styles.header}>{localizationStrings.Players}</Text>
-        <SearchBar
-          value={searchPlaylist}
-          onSearchChange={setSearchPlaylist}
-        />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 10 }}>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(160, 216, 3, 1)', // greenish tone for "Start"
-              padding: 12,
-              borderRadius: 10,
-              alignItems: 'center',
-              marginBottom: 15,
-              height: 50,
-              justifyContent: 'center',
-            }}
-            onPress={handleOpenModal}
-          >
-            <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-              {localizationStrings?.StartSection}({selectedPlayerIds.length})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              backgroundColor: '#F44336', // reddish tone for "End"
-              padding: 12,
-              borderRadius: 10,
-              alignItems: 'center',
-              marginBottom: 15,
-              height: 50,
-              justifyContent: 'center',
-            }}
-            onPress={() => {
-              navigation.navigate(ScreenNameEnum.EndSectionScreen)
-            }}
-          >
-            <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 16 }}>
-              {localizationStrings?.endSection}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {isLoading ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size={30} color="#A0D803" />
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+          stickyHeaderIndices={[1]}
+        >
+          {/* Header Title */}
+          <View style={styles.headerTitleSection}>
+            <Text style={styles.mainHeaderTitle}>{localizationStrings.Players}</Text>
           </View>
-        ) : (
-          <FlatList
-            data={filterData}
-            style={{ marginTop: 12 }}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <CommonCard
-                item={item}
-                onPress={() => togglePlayerSelect(item.id)}
-                isSelected={selectedPlayerIds.includes(item.id)}
+
+          {/* Sticky Controls Panel */}
+          <View style={{ backgroundColor: 'transparent', paddingBottom: 10 }}>
+            {/* Search Bar Wrapper */}
+            <View style={styles.searchContainer}>
+              <SearchBar
+                value={searchPlaylist}
+                onSearchChange={setSearchPlaylist}
+              />
+            </View>
+
+            {/* Action Buttons Row */}
+            <View style={styles.actionButtonsRow}>
+              <TouchableOpacity
+                style={[styles.actionButton, { backgroundColor: '#A0D803' }]}
+                onPress={handleStartSection}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.actionButtonText}>
+                  {localizationStrings?.StartSection} ({selectedPlayerIds.length})
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.actionButton, { backgroundColor: '#F44336' }]}
+                onPress={() => navigation.navigate(ScreenNameEnum.EndSectionScreen as any)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.actionButtonText}>
+                  {localizationStrings?.endSection}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Players List Container */}
+          <View style={styles.contentContainer}>
+            {isLoading ? (
+              <View style={{ paddingVertical: 40, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#A0D803" />
+              </View>
+            ) : (
+              <FlatList
+                data={filterData}
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+                ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
+                keyExtractor={(item: any) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <CommonCard
+                    item={item}
+                    onPress={() => togglePlayerSelect(item.id)}
+                    isSelected={selectedPlayerIds.includes(item.id)}
+                  />
+                )}
               />
             )}
-          />
-        )}
-        {selectedPlayerIds?.length > 0 && (
+          </View>
+        </ScrollView>
+
+        {selectedPlayerIds.length > 0 && (
           <TouchableOpacity
             style={styles.fab}
-            onPress={() => {
-              navigation.navigate(ScreenNameEnum.StartSectionScreen, {
-                title: localizationStrings.QuestionnaireBeforeAfter,
-                Before: localizationStrings.BeforeTrainingQuestionnaire,
-                Training: localizationStrings.AfterTrainingQuestionnaire,
-                buttTitle: localizationStrings?.StartSection,
-                playerIds: selectedPlayerIds,
-                coachId: isLogin?.userData?.id,
-                mode: 'start',
-                onSuccess: () => {
-                  setSelectedPlayerIds([]);
-                },
-              });
-            }}
+            onPress={handleStartSection}
+            activeOpacity={0.9}
           >
-            <Text style={{ color: '#fff', fontSize: 16 }}>{localizationStrings.StartSection}  </Text>
+            <Text style={styles.fabText}>
+              {localizationStrings.StartSection} ({selectedPlayerIds.length})
+            </Text>
           </TouchableOpacity>
         )}
-
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
+
 };
 
 export default Players;

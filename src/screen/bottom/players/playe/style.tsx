@@ -1,61 +1,197 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white" },
-  header: { fontSize: 24, color: "black", fontWeight: "700", textAlign: "center", marginTop: 11 },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "#F8FAF9",
+  },
+  topBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 180, // Slightly taller for more presence
+    backgroundColor: '#A0D803',
+    borderBottomLeftRadius: 60,
+    borderBottomRightRadius: 60,
+  },
+  headerWrapper: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+  },
+  headerTitleSection: {
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  mainHeaderTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    letterSpacing: -0.5,
+  },
+  searchContainer: {
+    marginHorizontal: 16,
+    marginBottom: 15,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  actionButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    gap: 12,
+    marginBottom: 20,
+  },
+  actionButton: {
+    flex: 1,
+    height: 52,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.12,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
+  },
+  actionButtonText: {
+    fontWeight: '800',
+    color: '#FFFFFF',
+    fontSize: 15,
+    letterSpacing: 0.5,
+  },
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
   card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 15,
-    marginVertical: 8,
-    marginHorizontal: 4,
-
-    // iOS Shadow
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-
-    // Android Shadow
-    elevation: 4,
+    backgroundColor: "#FFFFFF",
+    padding: 14,
+    borderRadius: 22,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: '#F1F3F5',
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  selectedCard: {
+    borderColor: '#A0D803',
+    backgroundColor: '#F7FCF0',
+    borderWidth: 1.5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#A0D803",
+        shadowOpacity: 0.15,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
   },
   avatar: {
-    width: 50, height: 50, borderRadius: 25, marginRight: 12,
-    borderWidth: 1,
-    borderColor: "gray",
-    backgroundColor: "gray"
-
-
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    marginRight: 16,
+    backgroundColor: '#F1F3F5',
+    borderWidth: 3,
+    borderColor: '#FFFFFF',
   },
-  infoContainer: { flex: 1 },
-  name: { fontSize: 12, fontWeight: "600", color: "black" },
-  position: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
-  detailContainer: { alignItems: "center", marginHorizontal: 10 },
-  label: { fontSize: 12, fontWeight: "600", color: "black" },
-  value: { fontSize: 12, fontWeight: "600", color: "rgba(153, 153, 153, 1)" },
+  playerInfo: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#1E293B",
+    marginBottom: 4,
+  },
+  position: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#64748B",
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  checkboxContainer: {
+    height: 28,
+    width: 28,
+    borderWidth: 2,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxUnselected: {
+    borderColor: '#E2E8F0',
+    backgroundColor: '#FFFFFF',
+  },
+  checkboxSelected: {
+    borderColor: '#A0D803',
+    backgroundColor: '#A0D803',
+  },
+  checkIcon: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '900',
+  },
   fab: {
     position: "absolute",
-    bottom: 1,
+    bottom: 25,
+    left: 20,
     right: 20,
-    backgroundColor: "rgba(160, 216, 3, 1)",
-    borderRadius: 10,
-    width: "100%",
+    backgroundColor: "#A0D803",
+    borderRadius: 20,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    height: 55
-
+    ...Platform.select({
+      ios: {
+        shadowColor: "#A0D803",
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.4,
+        shadowRadius: 18,
+      },
+      android: {
+        elevation: 10,
+      },
+    }),
   },
-  contentContainer: {
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
+  fabText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '900',
+    letterSpacing: 0.8,
   },
 });
+
+
 export default styles;
