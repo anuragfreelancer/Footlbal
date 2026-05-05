@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { PlayerPostApi, PositioncCategory, Teamcategory, TrainingCategory } from '../../../../redux/Api/AuthApi';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import localizationStrings from '../../../../compoent/Localization/Localization';
+import { errorToast, successToast } from '../../../../utils/customToast';
 
 const useAddPlayer = () => {
   const [fullName, setFullName] = useState("");
@@ -38,9 +39,6 @@ const useAddPlayer = () => {
     Traininglist()
   }, [])
 
-
-
-
   const sendEmailFootball = async (email, password) => {
     try {
       const url = `https://brayhuae.com/api/send_email_football?email=${email}&password=${password}`;
@@ -72,8 +70,12 @@ const useAddPlayer = () => {
       valid = false;
     }
 
-    if (!injuryHistory.trim()) {
-      newErrors.injuryHistory = localizationStrings?.selectinjury;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = localizationStrings?.Emailrequired;
+      valid = false;
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = localizationStrings?.validemail;
       valid = false;
     }
 
@@ -85,13 +87,13 @@ const useAddPlayer = () => {
       valid = false;
     }
 
-    // Email validation with regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      newErrors.email = localizationStrings?.Emailrequired;
+    if (!dob) {
+      newErrors.dob = localizationStrings?.Daterequired;
       valid = false;
-    } else if (!emailRegex.test(email)) {
-      newErrors.email = localizationStrings?.validemail;
+    }
+
+    if (!playerId.trim()) {
+      newErrors.playerId = localizationStrings?.Playerrequired;
       valid = false;
     }
 
@@ -110,27 +112,24 @@ const useAddPlayer = () => {
       valid = false;
     }
 
-    if (!notes.trim()) {
-      newErrors.notes = localizationStrings?.Performancerequired;
+    if (!injuryHistory.trim()) {
+      newErrors.injuryHistory = localizationStrings?.selectinjury;
       valid = false;
     }
 
-    // if (!imagePrfile) {
-    //   newErrors.imagePrfile = localizationStrings?.Profilerequired;
+    // if (!notes.trim()) {
+    //   newErrors.notes = localizationStrings?.Performancerequired;
     //   valid = false;
     // }
 
-    if (!dob) {
-      newErrors.dob = localizationStrings?.Daterequired;
-      valid = false;
-    }
-
-    if (!playerId.trim()) {
-      newErrors.playerId = localizationStrings?.Playerrequired,
-        valid = false;
-    }
-
     setErrors(newErrors);
+
+    if (!valid) {
+      // Show toast for the first error found
+      const firstError = Object.values(newErrors)[0] as string;
+      errorToast(firstError);
+    }
+
     return valid;
   };
 
@@ -154,11 +153,13 @@ const useAddPlayer = () => {
         };
         const response = await PlayerPostApi(params, setisLoading);
         console.log("response add ", response)
-        if (response) {
-          sendEmailFootball(email, password)
+        if (response && response.status === '1') {
+          sendEmailFootball(email, password);
+          // Toast is already handled inside PlayerPostApi
         }
       } catch (error) {
         console.error("Error updating profile:", error);
+        errorToast(localizationStrings.SomethingWentWrong);
       }
     }
   };
@@ -200,7 +201,7 @@ const useAddPlayer = () => {
       setImagePrfile(image)
       setIsModalVisible(false);
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      errorToast(error.message);
     }
   };
   const Teamlist = async () => {

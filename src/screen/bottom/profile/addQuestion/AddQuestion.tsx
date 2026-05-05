@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,10 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Animated,
+  LayoutChangeEvent,
 } from 'react-native';
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import { useSelector } from 'react-redux';
 import CustomHeader from '../../../../compoent/CustomHeader';
 import StatusBarComponent from '../../../../compoent/StatusBarCompoent';
@@ -31,6 +34,28 @@ const AddQuestion = ({ navigation, route }: any) => {
   const [questionText, setQuestionText] = useState('');
   const [selectionType, setSelectionType] = useState('before'); // 'before' or 'after'
   const [loading, setLoading] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.spring(scrollX, {
+      toValue: selectionType === 'before' ? 0 : 1,
+      useNativeDriver: false,
+      tension: 60,
+      friction: 12,
+    }).start();
+  }, [selectionType]);
+
+  const onSegmentPress = (type: string) => {
+    setSelectionType(type);
+    ReactNativeHapticFeedback.trigger("impactLight");
+  };
+
+  const sliderWidth = (containerWidth - 8) / 2;
+  const translateX = scrollX.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, sliderWidth],
+  });
 
   const handleAddQuestion = async () => {
     if (!questionText.trim()) {
@@ -91,18 +116,32 @@ const AddQuestion = ({ navigation, route }: any) => {
             {/* Step 1: Select Section */}
             <View style={styles.sectionCard}>
               <Text style={styles.inputLabel}>{localizationStrings.SelectSection || "Select Section"}</Text>
-              <View style={styles.segmentControl}>
+              <View 
+                style={styles.segmentControlContainer}
+                onLayout={(e: LayoutChangeEvent) => setContainerWidth(e.nativeEvent.layout.width)}
+              >
+                <Animated.View 
+                  style={[
+                    styles.segmentSlider, 
+                    { 
+                      width: sliderWidth,
+                      transform: [{ translateX }]
+                    }
+                  ]} 
+                />
                 <TouchableOpacity
-                  style={[styles.segmentItem, selectionType === 'before' && styles.segmentActive]}
-                  onPress={() => setSelectionType('before')}
+                  activeOpacity={1}
+                  style={styles.segmentItem}
+                  onPress={() => onSegmentPress('before')}
                 >
                   <Text style={[styles.segmentTxt, selectionType === 'before' && styles.segmentTxtActive]}>
                     {localizationStrings.BeforeSessionHeader || "Before Session"}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.segmentItem, selectionType === 'after' && styles.segmentActive]}
-                  onPress={() => setSelectionType('after')}
+                  activeOpacity={1}
+                  style={styles.segmentItem}
+                  onPress={() => onSegmentPress('after')}
                 >
                   <Text style={[styles.segmentTxt, selectionType === 'after' && styles.segmentTxtActive]}>
                     {localizationStrings.AfterSessionHeader || "After Session"}
