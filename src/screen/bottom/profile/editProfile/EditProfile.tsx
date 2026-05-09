@@ -144,7 +144,7 @@ const EditProfile = () => {
                   modalVisible={isModalVisible}
                   setModalVisible={setIsModalVisible}
                   pickImageFromGallery={pickImageFromGallery}
-                  takePhotoFromCamera={takePhotoFromCamera}
+                // takePhotoFromCamera={takePhotoFromCamera}
                 />
               </ScrollView>
 

@@ -9,7 +9,6 @@ import useAddPlayer from './useAddPlayer';
 import DatePicker from "react-native-date-picker";
 import ImagePickerModal from '../../../../compoent/ImagePickerModal';
 import DropdownModal from '../../../../compoent/DropdownModal';
-import LoadingModal from '../../../../utils/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';

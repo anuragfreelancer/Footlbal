@@ -1,5 +1,4 @@
 import { StyleSheet, Platform } from 'react-native';
-import ResponsiveSize from '../../../../utils/ResponsiveSize';
 
 const styles = StyleSheet.create({
   mainView: {
@@ -115,7 +114,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 13,
     fontWeight: '600',
-    textAlign: 'center',
   },
 });
 
