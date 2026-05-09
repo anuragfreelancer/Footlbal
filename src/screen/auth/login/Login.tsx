@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import TextInputField from '../../../utils/TextInputField';
@@ -169,6 +170,14 @@ export default function Login() {
                 </TouchableOpacity>
               </View>
             )}
+
+            <View style={{ marginBottom: 20, alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => Linking.openURL('https://bomiappadmin.jensgetfitgroup.com/privacy-policies.php')}>
+                <Text style={{ color: '#64748B', textDecorationLine: 'underline' }}>
+                  {localizationStrings.PrivacyPolicy || "Privacy Policy"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

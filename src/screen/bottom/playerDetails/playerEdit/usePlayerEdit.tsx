@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import ImagePicker from "react-native-image-crop-picker";
+
 import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import {  PlayerPostApi, PlayerPostEditApi, PositioncCategory, Teamcategory, TrainingCategory } from '../../../../redux/Api/AuthApi';
