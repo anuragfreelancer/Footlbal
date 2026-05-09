@@ -11,7 +11,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const useLogin = () => {
   const [deviceToken, setDeviceToken] = useState("")
-
+  // Amancoach@gmail.com
   useEffect(() => {
     const fetchToken = async () => {
       const token = await FirebaseMessagingService.getFcmToken();
@@ -24,9 +24,9 @@ const useLogin = () => {
   // Newcoash@gmail.com
 
   // 1) Joshs1424@gmail.com
-  const [credentials, setCredentials] = useState({ email: 'Ramji@gmail.com', password: '123456' });
+  // const [credentials, setCredentials] = useState({ email: 'Ramji@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'playerkmmp@gmail.com', password: '123456' });
-  // const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   // const [credentials, setCredentials] = useState({ email: 'Amanwo@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'kmmp@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'Coachtesting@gmail.com', password: '123456' });

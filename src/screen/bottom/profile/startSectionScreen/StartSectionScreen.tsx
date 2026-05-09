@@ -199,8 +199,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                   delay={600}
                 >
                   <View style={styles.addBtn}>
-                    <View style={styles.addIconCircle}><Text style={styles.addPlus}>+</Text></View>
-                    <Text style={styles.addBtnTxt}>{localizationStrings.AddCustomQuestionBtn || "Add Custom Question"}</Text>
+                    <Text style={styles.addBtnTxt}>+{" "} {localizationStrings.AddCustomQuestionBtn || "Add Custom Question"}</Text>
                   </View>
                 </AnimatedItem>
                 {/* SESSION TYPE */}
@@ -454,7 +453,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   typeBoxActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#A0D803',
     borderColor: '#A0D803',
   },
   iconContainer: {
@@ -468,7 +467,7 @@ const styles = StyleSheet.create({
   },
   iconContainerActive: { backgroundColor: 'rgba(160, 216, 3, 0.15)' },
   typeIcon: { fontSize: hp(3) },
-  typeTxt: { fontSize: hp(1.4), fontWeight: '600', color: 'black', textAlign: 'center' },
+  typeTxt: { fontSize: hp(2.5), fontWeight: '600', color: 'black', textAlign: 'center' },
   typeTxtActive: { color: '#0F172A', fontWeight: '600' },
   activeIndicator: {
     position: 'absolute',
@@ -543,7 +542,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingVertical: hp(2.2),
     paddingHorizontal: wp(5),
-    borderRadius: wp(6),
+    borderRadius: wp(4),
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: hp(3),

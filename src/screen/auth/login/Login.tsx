@@ -142,8 +142,7 @@ export default function Login() {
                 onPress={() => loginFunctiom()}
                 buttonStyle={{ width: "100%", marginTop: 28 }}
               />
-              {role === "Coach" && <Text style={{ lineHeight: 16, marginTop: 28, marginBottom: 12, fontSize: 16, color: "rgba(0, 0, 0, 1)", textAlign: "center", fontWeight: "500" }}>{localizationStrings.OR || "OR"}</Text>
-              }
+
               {/* <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
             <Image
               source={imageIndex.googlelogin}
