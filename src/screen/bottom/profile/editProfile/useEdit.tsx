@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
-import ImagePicker from "react-native-image-crop-picker";
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { GetProfile, UpdateProfile_Api } from '../../../../redux/Api/AuthApi';
 import localizationStrings from '../../../../compoent/Localization/Localization';
@@ -24,18 +23,7 @@ const useEdit = () => {
       setPhoneNumber(getLogin?.userGetData?.mobile || isLogin?.userData?.mobile || "");
     }
   }, [getLogin]);
-  // const pickImageFromGallery = () => {
-  //   ImagePicker.openPicker({
-  //     width: 300,
-  //     height: 400,
-  //     cropping: false,
-  //   })
-  //     .then((image) => {
-  //       setImagePrfile(image)
-  //       setIsModalVisible(false);
-  //     })
-  //     .catch((error) => console.log(error));
-  // };
+
   const pickImageFromGallery = async () => {
     setTimeout(() => {
       const options = {
@@ -61,20 +49,26 @@ const useEdit = () => {
   };
 
   const takePhotoFromCamera = async () => {
-    try {
-      const image = await ImagePicker.openCamera({
-        width: 300,
-        height: 400,
-        cropping: false,
-        compressImageQuality: 0.6, // 0 to 1 (0.5 = medium quality)
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 400,
+      quality: 0.8,
+      saveToPhotos: false, // Set to false to avoid needing storage permission
+    };
 
-      });
-      setImagePrfile(image.path)
-      setIsModalVisible(false);
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-
+    launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.errorCode) {
+        console.log('Camera Error: ', response.errorMessage);
+        Alert.alert('Error', response.errorMessage || 'An error occurred while taking photo');
+      } else if (response.assets && response.assets.length > 0) {
+        const imageUri = response.assets?.[0]?.uri;
+        setImagePrfile(imageUri);
+        setIsModalVisible(false);
+      }
+    });
   };
 
   const handleSubmit = async () => {

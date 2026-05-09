@@ -91,17 +91,26 @@ const usePlayerEdit = () => {
     }, 200); // Delay helps when launched from modal or state update
   };
   const takePhotoFromCamera = async () => {
-    try {
-      const image: any = await ImagePicker.openCamera({
-        width: 300,
-        height: 400,
-        cropping: false,
-      });
-      setImagePrfile(image)
-      setIsModalVisible(false);
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
-    }
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 400,
+      quality: 0.8,
+      saveToPhotos: false,
+    };
+
+    launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.errorCode) {
+        console.log('Camera Error: ', response.errorMessage);
+        Alert.alert('Error', response.errorMessage || 'An error occurred while taking photo');
+      } else if (response.assets && response.assets.length > 0) {
+        const imageUri = response.assets?.[0]?.uri;
+        setImagePrfile(imageUri);
+        setIsModalVisible(false);
+      }
+    });
   };
   const Teamlist = async () => {
     try {

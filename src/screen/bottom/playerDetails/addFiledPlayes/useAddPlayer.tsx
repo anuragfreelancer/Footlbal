@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import ImagePicker from "react-native-image-crop-picker";
+
 import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { PlayerPostApi, PositioncCategory, Teamcategory, TrainingCategory } from '../../../../redux/Api/AuthApi';
@@ -190,19 +190,26 @@ const useAddPlayer = () => {
     }, 200); // Delay helps when launched from modal or state update
   };
   const takePhotoFromCamera = async () => {
-    try {
-      const image: any = await ImagePicker.openCamera({
-        width: 300,
-        height: 400,
-        cropping: false,
-        compressImageQuality: 0.6, // 0 to 1 (0.5 = medium quality)
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 400,
+      quality: 0.8,
+      saveToPhotos: false,
+    };
 
-      });
-      setImagePrfile(image)
-      setIsModalVisible(false);
-    } catch (error: any) {
-      errorToast(error.message);
-    }
+    launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.errorCode) {
+        console.log('Camera Error: ', response.errorMessage);
+        errorToast(response.errorMessage || 'An error occurred while taking photo');
+      } else if (response.assets && response.assets.length > 0) {
+        const imageUri = response.assets?.[0]?.uri;
+        setImagePrfile(imageUri);
+        setIsModalVisible(false);
+      }
+    });
   };
   const Teamlist = async () => {
     try {

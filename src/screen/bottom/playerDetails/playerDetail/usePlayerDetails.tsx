@@ -21,16 +21,9 @@ const usePlayerDetails = () => {
         : `${RNFS.DocumentDirectoryPath}/${fileName}`;
   
     try {
-      // Ask permission (Android 10 or lower)
-      if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        );
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('Permission Denied', 'Storage permission is required to download files.');
-          return;
-        }
-      }
+      // Broad storage permission requests are being removed for Play Store compliance.
+      // On Android 10+, Scoped Storage handles file access without broad permissions.
+      // On older versions, we proceed and rely on standard file system behavior or alternative storage.
       // Delete existing file if exists
       const fileExists = await RNFS.exists(downloadPath);
       if (fileExists) {
