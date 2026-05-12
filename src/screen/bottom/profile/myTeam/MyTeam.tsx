@@ -10,6 +10,7 @@ import localizationStrings from "../../../../compoent/Localization/Localization"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
+import { hp } from "../../../../utils/Constant";
 
 const MyTeam = () => {
   useLanguage();
@@ -41,9 +42,12 @@ const MyTeam = () => {
           />
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: hp(4) }}
+        >
           <View style={styles.profileHeader}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
               <Image
                 source={
                   (getLogin?.userGetData?.image || isLogin?.userData?.image) &&
@@ -55,7 +59,9 @@ const MyTeam = () => {
               />
 
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}</Text>
+                <Text style={styles.profileName} numberOfLines={1}>
+                  {getLogin?.userGetData?.user_name || isLogin?.userData?.user_name}
+                </Text>
                 <Text style={styles.profileLink}>{localizationStrings?.StrengthTraining}</Text>
               </View>
             </View>
@@ -66,16 +72,15 @@ const MyTeam = () => {
           </Text>
 
           {isLoading ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
-              <ActivityIndicator size={30} color="#A0D803" />
+            <View style={{ marginTop: hp(10), alignItems: 'center' }}>
+              <ActivityIndicator size="large" color="#A0D803" />
             </View>
           ) : (
             <FlatList
               data={MyTeam?.userGetData}
-              scrollEnabled={false} // Since we are inside a ScrollView
+              scrollEnabled={false}
               ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={(_, index) => index.toString()}
+              keyExtractor={(item) => item?.id?.toString() || Math.random().toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.card}
@@ -93,12 +98,11 @@ const MyTeam = () => {
                         : imageIndex.prfEdit
                     }
                     style={styles.playerAvatar}
-                    resizeMode="cover"
                   />
 
                   <View style={styles.infoContainer}>
-                    <Text style={styles.name}>{item?.user_name}</Text>
-                    <Text style={styles.position}>{localizationStrings.ForwardPosition || "Forward"}</Text>
+                    <Text style={styles.name} numberOfLines={1}>{item?.user_name}</Text>
+                    <Text style={styles.position}>{item?.position || localizationStrings.ForwardPosition || "Forward"}</Text>
 
                     <View style={styles.actionContainer}>
                       <TouchableOpacity
@@ -125,6 +129,7 @@ const MyTeam = () => {
 
                   <View style={styles.detailContainer}>
                     <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
+                    <Text style={styles.value}>—</Text>
                   </View>
                 </TouchableOpacity>
               )}

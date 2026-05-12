@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlign: "center",
     marginTop: 12,
-    marginBottom: 8,
+    marginBottom: 15,
     letterSpacing: 0.3,
   },
   legendRow: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 20,
     marginHorizontal: 16,
   },
   legendItem: {

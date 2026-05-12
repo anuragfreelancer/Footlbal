@@ -120,7 +120,7 @@ const CustomCalendar = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginHorizontal: 15 }}>
+        <View style={{ marginTop: 11, flex: 1, justifyContent: "center", alignItems: "center", marginHorizontal: 15 }}>
           <CalendarComponent
             onDateSelect={handleDateSelect}
             markedDates={markedDates}
