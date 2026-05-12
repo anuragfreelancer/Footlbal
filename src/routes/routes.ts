@@ -40,6 +40,7 @@ import ProfilePlayer from "../screen/bottom/profile/profilePlayer/ProfilePlayer"
 import StartSectionScreen from "../screen/bottom/profile/startSectionScreen/StartSectionScreen";
 import AddQuestion from "../screen/bottom/profile/addQuestion/AddQuestion";
 import SummaryTable from "../screen/bottom/playerDetails/summaryTable/SummaryTable";
+import CommonWebView from "../screen/CommonWebView";
 import { useEffect } from "react";
 import { GetProfile } from "../redux/Api/AuthApi";
 
@@ -95,6 +96,7 @@ const _routes = () => {
       { name: ScreenNameEnum.StartSectionScreen, Component: StartSectionScreen },
       { name: ScreenNameEnum.AddQuestion, Component: AddQuestion },
       { name: ScreenNameEnum.SummaryTable, Component: SummaryTable },
+      { name: ScreenNameEnum.CommonWebView, Component: CommonWebView },
     ],
 
     BOTTOMTAB_ROUTE: isLogin?.userData?.type === "Coach" ? [

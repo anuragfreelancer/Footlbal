@@ -81,9 +81,9 @@ const ProfilePlayer = () => {
         else if (screen === "Language") setModalVisible(true);
         else if (screen === "delete") setShowDelete(true);
         else if (typeof screen === 'string' && screen.startsWith('http')) {
-          Linking.openURL(screen).catch((err) => console.error("An error occurred", err));
+          (navigation as any).navigate(ScreenNameEnum.CommonWebView, { url: screen, title: title });
         }
-        else navigation.navigate(screen);
+        else navigation.navigate(screen as any);
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>

@@ -37,6 +37,7 @@ enum ScreenNameEnum {
   StartSectionScreen = "StartSectionScreen",
   AddQuestion = "AddQuestion",
   SummaryTable = "SummaryTable",
+  CommonWebView = "CommonWebView",
 }
 
 export default ScreenNameEnum;

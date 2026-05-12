@@ -172,7 +172,7 @@ export default function Login() {
             )}
 
             <View style={{ marginBottom: 20, alignItems: 'center' }}>
-              <TouchableOpacity onPress={() => Linking.openURL('https://kmmps.store/kmmp-privacy-policy.html')}>
+              <TouchableOpacity onPress={() => (navigation as any).navigate(ScreenNameEnum.CommonWebView, { url: 'https://kmmps.store/kmmp-privacy-policy.html', title: localizationStrings.PrivacyPolicy })}>
                 <Text style={{ color: '#64748B', textDecorationLine: 'underline' }}>
                   {localizationStrings.PrivacyPolicy || "Privacy Policy"}
                 </Text>
