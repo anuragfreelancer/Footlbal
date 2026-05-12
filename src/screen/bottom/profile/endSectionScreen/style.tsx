@@ -9,13 +9,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderWidth: 1.5,
+    borderColor: "rgba(160, 216, 3, 1)",
   },
   avatar: {
     width: 48,
@@ -58,9 +53,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 16,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+
   },
   questionSection: {
     marginTop: 12,

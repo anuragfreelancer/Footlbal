@@ -186,17 +186,17 @@ const Players = () => {
           </View>
         </ScrollView>
 
-        {selectedPlayerIds.length > 0 && (
-          <TouchableOpacity
-            style={styles.fab}
-            onPress={handleStartSection}
-            activeOpacity={0.9}
-          >
-            <Text style={styles.fabText}>
-              {localizationStrings.StartSectionTitle} ({selectedPlayerIds.length}) {" "}
-            </Text>
-          </TouchableOpacity>
-        )}
+
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={handleStartSection}
+          activeOpacity={0.9}
+        >
+          <Text style={styles.fabText}>
+            {localizationStrings.StartSectionTitle} ({selectedPlayerIds.length}) {" "}
+          </Text>
+        </TouchableOpacity>
+
       </SafeAreaView>
     </View>
   );

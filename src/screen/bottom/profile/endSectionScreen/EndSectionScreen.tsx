@@ -112,7 +112,7 @@ const EndSectionScreen = () => {
 
   const CommonCard = React.memo(({ item, onPress, isSelected }: any) => {
 
-    console.log("item", item)
+
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -121,10 +121,14 @@ const EndSectionScreen = () => {
       >
         <View style={styles.contentContainer}>
           <Image
-            source={item?.user_details?.image ? { uri: item?.user_details?.image } : imageIndex.prfEdit}
+            source={
+              item?.user_details?.image &&
+                item?.user_details?.image !== "https://kmmps.store/public/uploads/users/"
+                ? { uri: item?.user_details?.image }
+                : imageIndex.prfEdit
+            }
             style={styles.avatar}
           />
-
           <View style={styles.infoContainer}>
             <Text style={styles.name}>{item?.user_details?.user_name || (localizationStrings.UnknownPlayer || "Unknown Player")}</Text>
             <Text style={styles.position}>{item?.type || (localizationStrings.TrainingSession || "Training Session")}</Text>
@@ -199,7 +203,6 @@ const EndSectionScreen = () => {
   const filteredData = data?.filter(
     (item) => item?.session_end_date === "" && item?.session_end_time === ""
   );
-  console.log("filteredData", filteredData)
   return (
     <SafeAreaView style={styles.container}>
       <StatusBarComponent />
@@ -216,7 +219,7 @@ const EndSectionScreen = () => {
         ) : (
           <FlatList
             data={filteredData}
-            style={{ marginTop: 12 }}
+            style={{ marginTop: 20, marginBottom: 11 }}
             contentContainerStyle={{ paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<EmptyListComponent message={localizationStrings?.noplayers} />}

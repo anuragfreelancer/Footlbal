@@ -83,9 +83,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: "#F3F4F6",
+    borderWidth: 1.5,
+    borderColor: "rgba(160, 216, 3, 1)",
   },
   cardAccent: {
     borderLeftWidth: 4,
