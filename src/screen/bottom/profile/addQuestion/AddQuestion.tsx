@@ -116,18 +116,18 @@ const AddQuestion = ({ navigation, route }: any) => {
             {/* Step 1: Select Section */}
             <View style={styles.sectionCard}>
               <Text style={styles.inputLabel}>{localizationStrings.SelectSection || "Select Section"}</Text>
-              <View 
+              <View
                 style={styles.segmentControlContainer}
                 onLayout={(e: LayoutChangeEvent) => setContainerWidth(e.nativeEvent.layout.width)}
               >
-                <Animated.View 
+                <Animated.View
                   style={[
-                    styles.segmentSlider, 
-                    { 
+                    styles.segmentSlider,
+                    {
                       width: sliderWidth,
                       transform: [{ translateX }]
                     }
-                  ]} 
+                  ]}
                 />
                 <TouchableOpacity
                   activeOpacity={1}
