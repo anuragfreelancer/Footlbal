@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   fabText: {
     color: '#fff',
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '900',
     letterSpacing: 0.8,
   },

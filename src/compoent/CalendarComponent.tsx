@@ -74,7 +74,7 @@ const CalendarComponent = ({ onDateSelect, markedDates = {} }: { onDateSelect: (
       <View style={styles.calendarHeader}>
         <TouchableOpacity style={styles.navButton} onPress={() => changeMonth("prev")}>
           <Image
-            source={imageIndex.backNavs}
+            source={imageIndex.backorange}
             style={{
               height: 23,
               width: 23,
@@ -202,17 +202,11 @@ const styles = StyleSheet.create({
     marginHorizontal: normalize(10),
   },
   navButton: {
-    padding: normalize(8),
-    backgroundColor: "#F8F9FA",
-    borderRadius: normalize(10),
-    borderWidth: 1,
-    borderColor: "#E9ECEF",
-    justifyContent: "center",
-    alignItems: "center",
+
   },
   navIcon: {
     resizeMode: 'contain',
-    tintColor: "#1A1C1E",
+    tintColor: "#334155", // Slate 700 for a softer, more modern look
   },
   weekRow: {
     flexDirection: "row",

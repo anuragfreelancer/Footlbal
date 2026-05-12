@@ -25,7 +25,7 @@ const Players = () => {
     searchPlaylist, setSearchPlaylist,
     filterData,
   } = usePlayers();
-  
+
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<any[]>([]);
 
   const togglePlayerSelect = (id: any) => {
@@ -109,14 +109,14 @@ const Players = () => {
   return (
     <View style={styles.mainContainer}>
       <StatusBarComponent />
-      
+
       {/* Curved Top Background */}
       <View style={styles.topBackground} />
 
       {isLoading && <LoadingModal />}
 
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView 
+        <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
           stickyHeaderIndices={[1]}
@@ -193,7 +193,7 @@ const Players = () => {
             activeOpacity={0.9}
           >
             <Text style={styles.fabText}>
-              {localizationStrings.StartSection} ({selectedPlayerIds.length})
+              {localizationStrings.StartSectionTitle} ({selectedPlayerIds.length}) {" "}
             </Text>
           </TouchableOpacity>
         )}
