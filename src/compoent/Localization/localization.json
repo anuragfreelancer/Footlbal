@@ -310,7 +310,9 @@
             "End": "End",
             "StrengthTraining": "Strength & Conditioning",
             "NoActiveSession": "No Active Sessions",
-            "WaitCoach": "The coach hasn't started any section yet. Please wait or check back later."
+            "WaitCoach": "The coach hasn't started any section yet. Please wait or check back later.",
+            "SelectQuestion": "Please select at least one question.",
+            "LoadingQuestions": "Loading questions..."
       },
       "French": {
             "EndTime": "Heure de fin",
@@ -621,6 +623,8 @@
             "QuestionAddedSuccess": "Question ajoutée avec succès !",
             "End": "Fin",
             "NoActiveSession": "Aucune session active",
-            "WaitCoach": "L'entraîneur n'a pas encore commencé de section. Veuillez patienter ou revenir plus tard."
+            "WaitCoach": "L'entraîneur n'a pas encore commencé de section. Veuillez patienter ou revenir plus tard.",
+            "SelectQuestion": "Veuillez sélectionner au moins une question.",
+            "LoadingQuestions": "Chargement des questions..."
       }
 }

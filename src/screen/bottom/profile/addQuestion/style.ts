@@ -22,7 +22,6 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 12,
-    elevation: 2,
   },
   inputLabel: {
     fontSize: hp(1.6),
@@ -51,7 +50,6 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
-    elevation: 2,
     borderWidth: 1,
     borderColor: '#F1F5F9',
     marginHorizontal: 4,
@@ -67,10 +65,13 @@ export default StyleSheet.create({
     fontSize: hp(1.6),
     fontWeight: '600',
     color: '#64748B',
+    textTransform: "lowercase",
+
   },
   segmentTxtActive: {
-    color: '#0F172A',
+    color: '#192a0fff',
     fontWeight: '700',
+    fontSize: hp(1.7),
   },
   textInputWrapper: {
     backgroundColor: '#F8FAFC',
@@ -106,12 +107,10 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 4,
   },
   submitBtnDisabled: {
     backgroundColor: '#CBD5E1',
     shadowOpacity: 0,
-    elevation: 0,
   },
   submitBtnTxt: {
     color: '#FFF',

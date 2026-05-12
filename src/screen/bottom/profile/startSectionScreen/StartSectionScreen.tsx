@@ -87,6 +87,12 @@ const StartSectionScreen = ({ route, navigation }: any) => {
 
 
   const handleStart = async () => {
+    const totalSelected = selectedBefore.length + selectedAfter.length;
+    if (totalSelected === 0) {
+      errorToast(localizationStrings.SelectQuestion || "Please select at least one question.");
+      return;
+    }
+
     ReactNativeHapticFeedback.trigger("notificationSuccess");
     try {
       setLoading(true);
@@ -234,7 +240,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                 {fetchingQuestions ? (
                   <View style={styles.modalLoader}>
                     <ActivityIndicator color="#A0D803" size="large" />
-                    <Text style={styles.loaderTxt}>Chargement des questions...</Text>
+                    <Text style={styles.loaderTxt}>{localizationStrings.LoadingQuestions || "Loading questions..."}</Text>
                   </View>
                 ) : (
                   <>
@@ -308,7 +314,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
             {/* PREMIUM FOOTER */}
             <View style={styles.footer}>
               <TouchableOpacity
-                style={[styles.mainBtn, loading && styles.btnDisabled]}
+                style={[styles.mainBtn, (loading || (selectedBefore.length + selectedAfter.length === 0)) && styles.btnDisabled]}
                 onPress={handleStart}
                 disabled={loading}
                 activeOpacity={0.8}
