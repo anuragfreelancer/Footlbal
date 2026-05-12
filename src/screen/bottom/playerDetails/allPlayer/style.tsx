@@ -239,7 +239,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '800',
     color: '#0F172A',
-    textTransform: 'uppercase',
   },
   statusBadge: {
     paddingHorizontal: 8,

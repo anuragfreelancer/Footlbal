@@ -106,7 +106,6 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
       {/* Session Header */}
       <View style={styles.sessionHeaderRow}>
         <View style={styles.sessionTypeContainer}>
-          <Text style={styles.sessionTypeIcon}>{getSessionIcon(sessionType)}</Text>
           <Text style={styles.sessionTypeLabel}>{sessionType}</Text>
         </View>
         <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
@@ -213,8 +212,6 @@ const AllPlayer = () => {
   } = useAllPlayer();
   useLanguage();
   const [is] = useState(false);
-  const userGetData = useSelector((state: any) => state?.feature?.userGetData);
-  console.log("allPlay", allPlay)
   return (
     <SafeAreaView style={styles.container}>
       {is ? <LoadingModal /> : null}
