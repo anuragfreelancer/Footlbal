@@ -62,9 +62,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.12,
         shadowRadius: 10,
       },
-      android: {
-        elevation: 6,
-      },
+
     }),
   },
   actionButtonText: {
@@ -93,21 +91,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 12,
       },
-      android: {
-        elevation: 3,
-      },
+
     }),
   },
   selectedCard: {
     borderColor: '#A0D803',
     backgroundColor: '#F7FCF0',
     borderWidth: 1.5,
-    ...Platform.select({
 
-      android: {
-        elevation: 6,
-      },
-    }),
   },
   avatar: {
     width: 56,
@@ -126,6 +117,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#1E293B",
     marginBottom: 4,
+
   },
   position: {
     fontSize: 13,
@@ -164,12 +156,7 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: "center",
     justifyContent: "center",
-    ...Platform.select({
 
-      android: {
-        elevation: 10,
-      },
-    }),
   },
   fabText: {
     color: '#fff',

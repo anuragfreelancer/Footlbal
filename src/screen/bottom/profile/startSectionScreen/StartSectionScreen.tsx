@@ -410,7 +410,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
   },
   backIcon: { width: wp(5), height: wp(5), resizeMode: 'contain' },
   headerTitle: { fontSize: hp(2.4), fontWeight: '600', color: '#0F172A', letterSpacing: 0.5 },
@@ -520,7 +519,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 3,
   },
   liText: { fontSize: hp(1.7), fontWeight: '600', color: '#475569', flex: 1 },
   liTextActive: { color: '#0F172A', fontWeight: '800' },
@@ -549,7 +547,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#A0D803',
     borderStyle: 'dotted',
-    justifyContent: "center"
+    justifyContent: "center",
   },
   addIconCircle: {
     width: wp(8),
