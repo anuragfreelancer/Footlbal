@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.05,
         shadowRadius: 10,
-        elevation: 2,
     },
     statIcon: {
         width: 24,
@@ -115,7 +114,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 0 },
         shadowOpacity: 0.08,
         shadowRadius: 5,
-        elevation: 8,
         marginLeft: 5,
         borderRightWidth: 0, // Removed solid border for shadow edge
     },
@@ -168,6 +166,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#FFFFFF',
         letterSpacing: 1,
+
     },
 
     // Data Styles
@@ -210,7 +209,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,
-        elevation: 2,
     },
     scoreValue: {
         fontSize: 14,
