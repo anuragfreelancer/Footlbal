@@ -1,12 +1,15 @@
 import React from "react";
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, Modal, Pressable } from "react-native";
+import { View, FlatList, TouchableOpacity, Text, StyleSheet, Modal, Pressable, Dimensions } from "react-native";
 import EmptyListComponent from "./EmptyListComponent";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+
+const { height } = Dimensions.get('window');
 
 interface DropdownModalProps {
   visible: boolean;
-  options: string[];
+  options: any[];
   onClose: () => void;
-  onSelect: (item: string) => void;
+  onSelect: (item: any) => void;
 }
 
 const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose, onSelect }) => {
@@ -15,26 +18,32 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
       <Pressable style={styles.overlay} onPress={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.handle} />
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={options}
-            keyExtractor={(item, index) => index.toString()}
+          
+          <View style={styles.listContainer}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={options}
+              keyExtractor={(item, index) => index.toString()}
+              ListEmptyComponent={<EmptyListComponent message="Not Found Data" />}
+              contentContainerStyle={{ paddingBottom: hp(2) }}
+              renderItem={({ item }: any) => (
+                <TouchableOpacity
+                  style={styles.option}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    onSelect(item);
+                    onClose();
+                  }}
+                >
+                  <Text style={styles.optionText}>
+                    {item?.team_name || item?.name || item?.position_name || item?.load_type || item}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
 
-            ListEmptyComponent={<EmptyListComponent message="Not Found Data" />} // Common Empty Component
-
-            renderItem={({ item }: any) => (
-              <TouchableOpacity
-                style={styles.option}
-                onPress={() => {
-                  onSelect(item);
-                  onClose();
-                }}
-              >
-                <Text style={styles.optionText}>{item?.team_name || item?.name || item?.position_name || item?.load_type} </Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton} activeOpacity={0.8}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -47,49 +56,57 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(15, 23, 42, 0.75)",
   },
   modalContainer: {
     backgroundColor: "white",
-    paddingVertical: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingHorizontal: 15,
+    borderTopLeftRadius: wp(10),
+    borderTopRightRadius: wp(10),
+    paddingHorizontal: wp(6),
+    paddingBottom: hp(4),
+    maxHeight: height * 0.8, // Fix for large data
   },
   handle: {
-    width: 20,
-    height: 3,
-    backgroundColor: "#ccc",
+    width: wp(12),
+    height: 5,
+    backgroundColor: "#E2E8F0",
     borderRadius: 10,
     alignSelf: "center",
+    marginVertical: hp(1.5),
+  },
+  listContainer: {
+    maxHeight: height * 0.6, // Ensure list is scrollable
   },
   option: {
-    padding: 5,
-    borderBottomWidth: 0.8,
-    borderColor: "#9DB2BF",
+    paddingVertical: hp(2),
+    borderBottomWidth: 1,
+    borderColor: "#F1F5F9",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   optionText: {
-    fontSize: 14,
-    color: "black",
-    fontWeight: "500",
-    marginBottom: 6,
-    marginTop: 5,
-    textTransform: 'uppercase'
-
+    fontSize: hp(1.8),
+    color: "#0F172A",
+    fontWeight: "700",
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   closeButton: {
-    marginTop: 15,
-    padding: 13,
+    marginTop: hp(2),
+    paddingVertical: hp(2),
     backgroundColor: "#A0D803",
-    borderRadius: 15,
+    borderRadius: wp(5),
     alignItems: "center",
+    shadowColor: "#A0D803",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   closeButtonText: {
     color: "white",
-    fontWeight: "600",
-    fontSize: 16,
+    fontWeight: "800",
+    fontSize: hp(2),
   },
 });
 
