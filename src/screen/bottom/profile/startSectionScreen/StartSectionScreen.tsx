@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Alert,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -27,7 +25,6 @@ import { useLanguage } from '../../../../compoent/Localization/LanguageContext';
 import { errorToast } from '../../../../utils/customToast';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 
 
 
@@ -189,7 +186,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
               contentContainerStyle={styles.scrollContent}
             >
               {/* STICKY INDICATOR / PROGRESS (Optional, but adds premium feel) */}
-              <View style={{ height: 1 }} />
+              <View style={{ height: 22 }} />
 
               <View style={styles.main}>
 
@@ -227,7 +224,6 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                           >
                             {item.label}
                           </Text>
-                          {type === item.key && <View style={styles.activeIndicator} />}
                         </View>
                       </AnimatedItem>
                     ))}
@@ -321,7 +317,7 @@ const StartSectionScreen = ({ route, navigation }: any) => {
                   <ActivityIndicator color="#FFF" />
                 ) : (
                   <View style={styles.btnContent}>
-                    <Text style={styles.mainBtnTxt}>{localizationStrings.StartSection || "Start section"}</Text>
+                    <Text style={styles.mainBtnTxt}>{localizationStrings.StartSectionTitle || "Start section"}</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -388,8 +384,8 @@ const AnimatedItem = ({ children, isSelected, onPress, delay = 0, style }: any) 
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: '#F8FAFC' },
   flex: { flex: 1 },
-  scrollContent: { paddingBottom: hp(22) },
-  main: { padding: wp(5) },
+  scrollContent: { paddingBottom: hp(5) },
+  main: { paddingHorizontal: wp(5), paddingTop: hp(1) },
 
   // HEADER
   headerContainer: {
@@ -398,84 +394,70 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: wp(5),
     paddingVertical: hp(2),
+
   },
   backCircle: {
-    width: wp(11),
-    height: wp(11),
-    borderRadius: wp(5.5),
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(5),
     backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 4,
   },
   backIcon: { width: wp(5), height: wp(5), resizeMode: 'contain' },
-  headerTitle: { fontSize: hp(2.4), fontWeight: '600', color: '#0F172A', letterSpacing: 0.5 },
+  headerTitle: { fontSize: hp(2.2), fontWeight: '700', color: '#0F172A', letterSpacing: -0.5 },
 
   // CARDS
   glassCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: wp(8),
-    padding: wp(5),
-    marginBottom: hp(2.5),
-    borderWidth: 1.5,
-    borderColor: '#FFFFFF',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 20 },
-    shadowOpacity: 0.1,
-    shadowRadius: 30,
-    elevation: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: wp(6),
+    padding: wp(4.5),
+    marginBottom: hp(2),
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    shadowColor: '#64748B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
   },
-  cardDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#A0D803', marginRight: 10 },
+  cardDot: { width: 6, height: 6, borderRadius: 3, marginRight: 8 },
   sectionLabel: {
-    fontSize: hp(1.6),
-    fontWeight: '600',
-    color: 'black',
-    letterSpacing: 1.5,
+    fontSize: hp(1.5),
+    fontWeight: '700',
+    color: '#334155',
+    letterSpacing: 0.5,
   },
 
   // SESSION TYPES
-  typeGrid: { flexDirection: 'row', justifyContent: 'space-between', gap: wp(3) },
+  typeGrid: { flexDirection: 'row', justifyContent: 'space-between', gap: wp(2) },
   typeBox: {
     flex: 1,
-    backgroundColor: '#F1F5F9',
-    borderRadius: wp(10),
-    minHeight: hp(5),
+    backgroundColor: '#F8FAFC',
+    borderRadius: wp(3),
+    height: hp(5.5),
     alignItems: 'center',
     justifyContent: "center",
-    borderWidth: 2,
-    borderColor: 'transparent',
-    padding: wp(2),
-    position: 'relative',
-    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: '#F1F5F9',
+    padding: wp(1),
   },
   typeBoxActive: {
-    backgroundColor: '#A0D803',
+    backgroundColor: '#FFFFFF',
     borderColor: '#A0D803',
   },
-  iconContainer: {
-    width: wp(12),
-    height: wp(12),
-    borderRadius: wp(4),
-    backgroundColor: '#E2E8F0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: hp(1),
-  },
-  iconContainerActive: { backgroundColor: 'rgba(160, 216, 3, 0.15)' },
-  typeIcon: { fontSize: hp(3) },
-  typeTxt: { fontSize: hp(2.5), fontWeight: '600', color: 'black', textAlign: 'center' },
-  typeTxtActive: { color: '#0F172A', fontWeight: '600' },
+  typeTxt: { fontSize: hp(1.6), fontWeight: '600', color: '#64748B', textAlign: 'center' },
+  typeTxtActive: { color: '#0F172A', fontWeight: '700', fontSize: 16 },
   activeIndicator: {
     position: 'absolute',
-    bottom: 0,
-    width: '40%',
-    height: 4,
+    bottom: -1,
+    width: '30%',
+    height: 3,
     backgroundColor: '#A0D803',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    borderRadius: 1.5,
   },
 
   // QUESTIONS
@@ -483,128 +465,117 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: hp(2),
-    gap: 10,
+    marginBottom: hp(1.5),
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
   },
   countBadge: {
-    backgroundColor: 'rgba(160, 216, 3, 0.1)',
-    paddingHorizontal: wp(2.5),
-    paddingVertical: hp(0.5),
-    borderRadius: wp(2.5),
+    backgroundColor: '#F0FDF4',
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(0.4),
+    borderRadius: wp(1.5),
     borderWidth: 1,
-    borderColor: 'rgba(160, 216, 3, 0.2)',
-    minWidth: wp(12),
-    alignItems: 'center',
+    borderColor: '#DCFCE7',
   },
-  countText: { fontSize: hp(1.2), fontWeight: '600', color: '#166534' },
-  questionContainer: { gap: hp(1.2) },
+  countText: { fontSize: hp(1.2), fontWeight: '700', color: '#166534' },
+  questionContainer: { gap: hp(1) },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    padding: wp(4),
-    borderRadius: wp(5),
-    borderWidth: 1.5,
+    padding: wp(3.5),
+    borderRadius: wp(4),
+    borderWidth: 1,
     borderColor: '#F1F5F9',
   },
   listItemActive: {
     backgroundColor: '#FFFFFF',
     borderColor: '#A0D803',
     shadowColor: '#A0D803',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
   },
-  liText: { fontSize: hp(1.7), fontWeight: '600', color: '#475569', flex: 1 },
-  liTextActive: { color: '#0F172A', fontWeight: '800' },
+  liText: { fontSize: hp(1.6), fontWeight: '500', color: '#475569', flex: 1 },
+  liTextActive: { color: '#0F172A', fontWeight: '700' },
   liCheck: {
-    width: wp(6),
-    height: wp(6),
-    borderRadius: wp(2),
-    borderWidth: 2,
+    width: wp(5.5),
+    height: wp(5.5),
+    borderRadius: wp(1.5),
+    borderWidth: 1.5,
     borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFF',
+    marginLeft: wp(2),
   },
   liCheckActive: { backgroundColor: '#A0D803', borderColor: '#A0D803' },
-  checkTxt: { color: '#FFF', fontSize: hp(1.2), fontWeight: '600' },
+  checkTxt: { color: '#FFF', fontSize: hp(1.1), fontWeight: '700' },
 
   // ADD BUTTON
   addBtn: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: hp(2.2),
-    paddingHorizontal: wp(5),
+    paddingVertical: hp(1.8),
+    paddingHorizontal: wp(4),
     borderRadius: wp(4),
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: hp(3),
-    borderWidth: 2,
+    marginBottom: hp(2),
+    borderWidth: 1.5,
     borderColor: '#A0D803',
-    borderStyle: 'dotted',
+    borderStyle: 'dashed',
     justifyContent: "center",
   },
-  addIconCircle: {
-    width: wp(8),
-    height: wp(8),
-    borderRadius: wp(4),
-    backgroundColor: 'rgba(160, 216, 3, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: wp(3),
-  },
-  addPlus: { color: '#A0D803', fontSize: hp(2.9), fontWeight: '700' },
-  addBtnTxt: { color: 'black', fontSize: hp(2), fontWeight: '600' },
+  addBtnTxt: { color: '#0F172A', fontSize: hp(1.7), fontWeight: '700' },
 
   // SCHEDULE
   pickContainer: {
     flexDirection: 'row',
     backgroundColor: '#F8FAFC',
-    borderRadius: wp(6),
+    borderRadius: wp(4),
     padding: wp(1),
     borderWidth: 1,
-    borderColor: '#e9f0e2ff',
+    borderColor: '#F1F5F9',
   },
-  pickBox: { flex: 1, flexDirection: 'row', alignItems: 'center', padding: wp(3.5) },
+  pickBox: { flex: 1, flexDirection: 'row', alignItems: 'center', padding: wp(3) },
   pickIconBox: {
-    width: wp(10),
-    height: wp(10),
-    borderRadius: wp(3),
+    width: wp(9),
+    height: wp(9),
+    borderRadius: wp(2.5),
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: wp(3),
+    marginRight: wp(2.5),
   },
-  pickIcon: { width: wp(4.5), height: wp(4.5) },
-  pickLabel: { fontSize: hp(1.1), fontWeight: '800', color: '#94A3B8', marginBottom: 2, },
-  pickValue: { fontSize: hp(1.6), fontWeight: '600', color: '#0F172A' },
-  pickDivider: { width: 1, height: '50%', backgroundColor: '#E2E8F0', alignSelf: 'center' },
+  pickIcon: { width: wp(4), height: wp(4), resizeMode: 'contain' },
+  pickLabel: { fontSize: hp(1.1), fontWeight: '700', color: '#94A3B8', marginBottom: 1 },
+  pickValue: { fontSize: hp(1.5), fontWeight: '700', color: '#0F172A' },
+  pickDivider: { width: 1, height: '40%', backgroundColor: '#E2E8F0', alignSelf: 'center' },
 
   // FOOTER & MAIN BUTTON
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     paddingHorizontal: wp(6),
-    paddingTop: hp(2),
+    paddingTop: hp(1.5),
     paddingBottom: Platform.OS === 'ios' ? hp(4) : hp(2.5),
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
   },
   mainBtn: {
     backgroundColor: '#A0D803',
-    borderRadius: wp(6),
-    height: hp(8),
+    borderRadius: wp(4),
+    height: hp(6.5),
     justifyContent: 'center',
     alignItems: 'center',
-
+    shadowColor: '#A0D803',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
-  btnDisabled: { backgroundColor: '#CBD5E1', shadowOpacity: 0 },
+  btnDisabled: { backgroundColor: '#CBD5E1', shadowOpacity: 0, },
   btnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
-  mainBtnTxt: { fontSize: hp(2), fontWeight: '600', color: '#FFF', letterSpacing: 1, },
+  mainBtnTxt: { fontSize: hp(1.8), fontWeight: '700', color: '#FFF', letterSpacing: 0.5 },
   btnArrowCircle: {
     width: wp(7),
     height: wp(7),
@@ -618,7 +589,8 @@ const styles = StyleSheet.create({
 
   // LOADERS
   modalLoader: { padding: hp(5), alignItems: 'center' },
-  loaderTxt: { marginTop: hp(1.5), color: 'black', fontWeight: '600' },
+  loaderTxt: { marginTop: hp(1.5), color: '#64748B', fontWeight: '600', fontSize: hp(1.6) },
   emptyCardTrigger: { padding: hp(4), alignItems: 'center', justifyContent: 'center' },
-  modalEmptyText: { color: '#94A3B8', fontSize: hp(1.7), textAlign: 'center', fontStyle: 'italic', lineHeight: hp(2.5) },
+  modalEmptyText: { color: '#94A3B8', fontSize: hp(1.5), textAlign: 'center', fontStyle: 'italic', lineHeight: hp(2.2) },
 });
+
