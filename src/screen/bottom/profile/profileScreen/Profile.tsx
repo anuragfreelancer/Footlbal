@@ -43,27 +43,13 @@ const Profile = () => {
 
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
     // { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
-    { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://bomiappadmin.jensgetfitgroup.com/privacy-policies.php" },
+    { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },
     // { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
     { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
 
-  const PlayData = [
-    { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
-    { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
-    { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://bomiappadmin.jensgetfitgroup.com/privacy-policies.php" },
-    // { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
-    // { title: localizationStrings.SubscriptionPlans, icon: imageIndex.players, screen: ScreenNameEnum.SubscriptionPlansScreen },
-    { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
-    { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
-    { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
-  ];
 
-  const handleLanguageSelect = (lang: string) => {
-    setSelectedLang(lang);
-    // add your i18n language change logic here
-  };
 
   const handleConfirmDelete = async () => {
     setIsLoading(true);

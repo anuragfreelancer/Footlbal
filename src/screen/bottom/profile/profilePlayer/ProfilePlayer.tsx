@@ -48,7 +48,7 @@ const ProfilePlayer = () => {
     // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
 
-  const handleLanguageSelect = (lang) => {
+  const handleLanguageSelect = (lang: any) => {
     setSelectedLang(lang);
     // add your i18n language change logic here
   };
@@ -92,10 +92,10 @@ const ProfilePlayer = () => {
         </View>
         <Text style={styles.menuText}>{title}</Text>
       </View>
-      <Image 
-        source={imageIndex.arroRight} 
-        style={{ height: 18, width: 18, tintColor: '#C7C7CC' }} 
-        resizeMode="contain" 
+      <Image
+        source={imageIndex.arroRight}
+        style={{ height: 18, width: 18, tintColor: '#C7C7CC' }}
+        resizeMode="contain"
       />
     </TouchableOpacity>
   );
@@ -110,7 +110,7 @@ const ProfilePlayer = () => {
   return (
     <View style={styles.container}>
       <StatusBarComponent />
-      
+
       {/* Curved Top Background */}
       <View style={styles.topBackground} />
 
@@ -130,8 +130,8 @@ const ProfilePlayer = () => {
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
                 source={
-                  getLogin?.userGetData?.image 
-                    ? { uri: getLogin?.userGetData?.image } 
+                  getLogin?.userGetData?.image
+                    ? { uri: getLogin?.userGetData?.image }
                     : imageIndex.prfEdit
                 }
                 style={styles.avatar}
@@ -142,10 +142,10 @@ const ProfilePlayer = () => {
                 <Text style={styles.profileEmail}>{getLogin?.userGetData?.email}</Text>
               </View>
             </View>
-            <Image 
-              source={imageIndex.arroRight} 
-              style={{ height: 20, width: 20, tintColor: '#A0D803' }} 
-              resizeMode="contain" 
+            <Image
+              source={imageIndex.arroRight}
+              style={{ height: 20, width: 20, tintColor: '#A0D803' }}
+              resizeMode="contain"
             />
           </TouchableOpacity>
 
@@ -161,18 +161,18 @@ const ProfilePlayer = () => {
             />
           </View>
 
-          <LogoutModal 
-            isVisible={modal} 
-            close={() => setModal(false)} 
+          <LogoutModal
+            isVisible={modal}
+            close={() => setModal(false)}
             onSumbit={() => {
               handleLogout();
               setModal(false);
-            }} 
+            }}
           />
-          <LanguageModal 
-            visible={isModalVisible} 
-            onClose={() => setModalVisible(false)} 
-            onSelectLanguage={handleLanguageSelect} 
+          <LanguageModal
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            onSelectLanguage={handleLanguageSelect}
           />
           <DeleteConfirmModal
             visible={showDelete}
