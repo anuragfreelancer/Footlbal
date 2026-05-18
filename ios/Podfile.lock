@@ -1834,15 +1834,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNImageCropPicker (0.42.0):
-    - React-Core
-    - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.42.0)
-    - TOCropViewController (~> 2.7.4)
-  - RNImageCropPicker/QBImagePickerController (0.42.0):
-    - React-Core
-    - React-RCTImage
-    - TOCropViewController (~> 2.7.4)
   - RNNotifee (9.1.8):
     - React-Core
     - RNNotifee/NotifeeCore (= 9.1.8)
@@ -1979,7 +1970,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.1)
-  - TOCropViewController (2.7.4)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2064,7 +2054,6 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
@@ -2085,7 +2074,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SocketRocket
-    - TOCropViewController
 
 EXTERNAL SOURCES:
   boost:
@@ -2247,8 +2235,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNImageCropPicker:
-    :path: "../node_modules/react-native-image-crop-picker"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNPermissions:
@@ -2352,14 +2338,12 @@ SPEC CHECKSUMS:
   RNFBMessaging: 893d27b8fa2cc2d83df635099c2a551b324da432
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 34f241199f5b2ce0225054450bf097287bb3abad
-  RNImageCropPicker: b0afedeefd8655254a15c34103718455fde6ce59
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNPermissions: 34a056b3e81da28fafb55fb8f895acf4ac9504a1
   RNReactNativeHapticFeedback: eb5395b503c7a8f10de5e6722ef8afd3c61bc4f5
   RNScreens: 150e342212af4d9dd7ba8a2d786a32dbe15cca04
   RNSVG: 799a6ac538f026335bd64639629894a432bbf65e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: 464c847c822847c88560af530ca15273b8e45261
 
 PODFILE CHECKSUM: 1e415bcecfd27c4011b3016a70f618ba06992fe0
