@@ -9,41 +9,143 @@ import {
   ActivityIndicator,
   Platform,
   Image,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import VersionCheck from "react-native-version-check";
 import imageIndex from "./assets/imageIndex";
+import { color } from "./constant";
 
+const { width } = Dimensions.get("window");
+
+// Update parameters
 const IOS_APP_ID = "6748689173";
 const ANDROID_PACKAGE_NAME = "com.KMMPRPE";
+
+// ==========================================
+// 🛠️ DEBUG FLAG FOR TESTING THE MODAL
+// Set this to true to force show the update modal during local development!
+// ==========================================
+const DEBUG_FORCE_SHOW = false;
+
+/**
+ * Robust semantic version comparison helper.
+ * Returns true if the latest version is higher than the current version.
+ */
+const isVersionNewer = (current: string, latest: string): boolean => {
+  if (!current || !latest) return false;
+
+  // Clean version strings from any non-numeric characters like "v1.2.3" -> "1.2.3"
+  const cleanCurrent = current.replace(/[^0-9.]/g, "");
+  const cleanLatest = latest.replace(/[^0-9.]/g, "");
+
+  const currentParts = cleanCurrent.split(".").map(Number);
+  const latestParts = cleanLatest.split(".").map(Number);
+
+  for (let i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
+    const cur = currentParts[i] || 0;
+    const lat = latestParts[i] || 0;
+    if (lat > cur) return true;
+    if (cur > lat) return false;
+  }
+  return false;
+};
 
 /**
  * UpdateModal Component
  * Checks for app updates on iOS (App Store) and Android (Play Store)
- * and displays a premium modal if a new version is available.
+ * and displays a premium football-themed modal if a new version is available.
  */
 const UpdateModal = () => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [storeUrl, setStoreUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [latestVersion, setLatestVersion] = useState("");
+  const [currentVersion, setCurrentVersion] = useState("");
 
   const checkAppVersion = useCallback(async () => {
-    try {
-      // Check if update is needed based on the platform
-      const updateInfo = await VersionCheck.needUpdate({
-        provider: Platform.OS === "ios" ? "appStore" : "playStore",
-        packageName: Platform.OS === "android" ? ANDROID_PACKAGE_NAME : undefined,
-        appID: Platform.OS === "ios" ? IOS_APP_ID : undefined,
-      });
+    // If debug mode is active, mock a newer version and show modal
+    if (DEBUG_FORCE_SHOW) {
+      console.log("[UpdateModal] Debug Force Show is enabled");
+      setCurrentVersion("1.0.0");
+      setLatestVersion("2.1.0");
+      setStoreUrl(
+        Platform.OS === "ios"
+          ? `https://apps.apple.com/in/app/kmmp-rpe-football/id${IOS_APP_ID}`
+          : `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`
+      );
+      setVisible(true);
+      return;
+    }
 
-      if (updateInfo?.isNeeded) {
-        setLatestVersion(updateInfo.latestVersion || "");
-        setStoreUrl(updateInfo.storeUrl || "");
+    try {
+      // 1. Get current local version
+      const localVersion = VersionCheck.getCurrentVersion();
+      setCurrentVersion(localVersion || "1.0.0");
+
+      let gotUpdateNeeded = false;
+      let fetchedLatestVersion = "";
+      let fetchedStoreUrl = "";
+
+      // 2. Fetch using react-native-version-check
+      try {
+        const updateInfo = await VersionCheck.needUpdate({
+          provider: Platform.OS === "ios" ? "appStore" : "playStore",
+          packageName: Platform.OS === "android" ? ANDROID_PACKAGE_NAME : undefined,
+          appID: Platform.OS === "ios" ? IOS_APP_ID : undefined,
+        });
+
+        if (updateInfo) {
+          gotUpdateNeeded = !!updateInfo.isNeeded;
+          fetchedLatestVersion = updateInfo.latestVersion || "";
+          fetchedStoreUrl = updateInfo.storeUrl || "";
+        }
+      } catch (err) {
+        console.warn("[UpdateModal] Primary needUpdate check failed, attempting fallback:", err);
+      }
+
+      // 3. Robust fallback lookup (especially for iOS / custom stores)
+      if (!gotUpdateNeeded) {
+        if (Platform.OS === "ios") {
+          // Fallback iOS lookup using iTunes API directly
+          const response = await fetch(
+            `https://itunes.apple.com/lookup?id=${IOS_APP_ID}&country=in&timestamp=${Date.now()}`
+          );
+          const data = await response.json();
+          if (data && data.results && data.results.length > 0) {
+            const storeVer = data.results[0].version;
+            fetchedStoreUrl =
+              data.results[0].trackViewUrl ||
+              `https://apps.apple.com/in/app/kmmp-rpe-football/id${IOS_APP_ID}`;
+
+            if (isVersionNewer(localVersion, storeVer)) {
+              gotUpdateNeeded = true;
+              fetchedLatestVersion = storeVer;
+            }
+          }
+        } else {
+          // Play Store fallback logic
+          const storeVer = await VersionCheck.getLatestVersion({
+            provider: "playStore",
+            packageName: ANDROID_PACKAGE_NAME,
+          });
+          fetchedStoreUrl = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
+
+          if (storeVer && isVersionNewer(localVersion, storeVer)) {
+            gotUpdateNeeded = true;
+            fetchedLatestVersion = storeVer;
+          }
+        }
+      }
+
+      // 4. Show the modal if an update is needed
+      if (gotUpdateNeeded) {
+        setLatestVersion(fetchedLatestVersion);
+        setStoreUrl(fetchedStoreUrl);
         setVisible(true);
       }
     } catch (error: any) {
-      console.warn("[UpdateModal] Version check failed:", error?.message || error);
+      console.warn("[UpdateModal] All version checks failed:", error?.message || error);
     }
   }, []);
 
@@ -63,16 +165,18 @@ const UpdateModal = () => {
         await Linking.openURL(storeUrl);
       } else {
         // Fallback deep links if storeUrl is missing
-        const url = Platform.OS === "ios" 
-          ? `itms-apps://apps.apple.com/app/id${IOS_APP_ID}`
-          : `market://details?id=${ANDROID_PACKAGE_NAME}`;
+        const url =
+          Platform.OS === "ios"
+            ? `itms-apps://apps.apple.com/app/id${IOS_APP_ID}`
+            : `market://details?id=${ANDROID_PACKAGE_NAME}`;
         await Linking.openURL(url);
       }
     } catch (err) {
       // Fallback to browser URL if deep link fails
-      const fallbackUrl = Platform.OS === "ios"
-        ? `https://apps.apple.com/app/id${IOS_APP_ID}`
-        : `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
+      const fallbackUrl =
+        Platform.OS === "ios"
+          ? `https://apps.apple.com/in/app/kmmp-rpe-football/id${IOS_APP_ID}`
+          : `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
       Linking.openURL(fallbackUrl);
     } finally {
       setLoading(false);
@@ -86,38 +190,62 @@ const UpdateModal = () => {
       <View style={styles.overlay}>
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.card}>
-            {/* Logo / Icon Container */}
-            <View style={styles.iconContainer}>
-               <Image source={imageIndex.appLogo} style={styles.logo} resizeMode="contain" />
+            {/* Top Premium Gradient/Accent Bar */}
+            <View style={styles.accentBar} />
+
+            {/* Logo / Icon Container with Glow */}
+            <View style={styles.logoOuterGlow}>
+              <View style={styles.iconContainer}>
+                {imageIndex.appLogo ? (
+                  <Image source={imageIndex.appLogo} style={styles.logo} resizeMode="contain" />
+                ) : (
+                  <View style={styles.fallbackLogoPlaceholder}>
+                    <Text style={styles.fallbackLogoText}>⚽</Text>
+                  </View>
+                )}
+              </View>
             </View>
 
-            <Text style={styles.title}>New Update Available</Text>
-            
-            {latestVersion ? (
-              <Text style={styles.versionText}>Version {latestVersion} is now ready</Text>
-            ) : null}
+            {/* Title */}
+            <Text style={styles.title}>Update Available</Text>
 
+            {/* Version Badges */}
+            <View style={styles.versionBadgeContainer}>
+              <View style={styles.versionBadge}>
+                <Text style={styles.versionBadgeLabel}>Current</Text>
+                <Text style={styles.versionBadgeValue}>v{currentVersion || "1.0.0"}</Text>
+              </View>
+              <Text style={styles.arrowSeparator}>➔</Text>
+              <View style={[styles.versionBadge, styles.latestBadge]}>
+                <Text style={styles.versionBadgeLabel}>Latest</Text>
+                <Text style={[styles.versionBadgeValue, styles.latestValue]}>
+                  v{latestVersion || "1.0"}
+                </Text>
+              </View>
+            </View>
+
+            {/* Message Description */}
             <Text style={styles.message}>
-              A newer version of the app is available with improved performance and new features. Please update now for the best experience.
+              A newer, faster, and more stable version of KMMP RPE FOOTBALL is ready for you. Update now to enjoy the latest workouts, features, and optimal performance!
             </Text>
 
-            {/* Primary Action Button */}
-            <TouchableOpacity 
-              style={[styles.updateButton, loading && styles.updateButtonDisabled]} 
-              onPress={openStore} 
+            {/* Primary Action Button - Premium Football Theme (Orange) */}
+            <TouchableOpacity
+              style={[styles.updateButton, loading && styles.updateButtonDisabled]}
+              onPress={openStore}
               disabled={loading}
               activeOpacity={0.8}
             >
               {loading ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
-                <Text style={styles.updateButtonText}>Update Now</Text>
+                <Text style={styles.updateButtonText}>UPDATE NOW</Text>
               )}
             </TouchableOpacity>
 
-            {/* Secondary Action Button */}
+            {/* Secondary Action Button - Maybe Later */}
             <TouchableOpacity style={styles.laterButton} onPress={() => setVisible(false)}>
-              <Text style={styles.laterButtonText}>Maybe Later</Text>
+              <Text style={styles.laterButtonText}>close</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -129,7 +257,7 @@ const UpdateModal = () => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.75)", // Slightly darker overlay for focus
+    backgroundColor: "rgba(8, 16, 65, 0.82)", // Premium dark Navy blue overlay with high opacity
     justifyContent: "center",
     alignItems: "center",
   },
@@ -142,86 +270,136 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 340,
     backgroundColor: "#FFFFFF",
-    borderRadius: 28, // More rounded corners for premium feel
-    padding: 28,
+    borderRadius: 30, // Beautifully rounded corners
+    paddingHorizontal: 24,
+    paddingBottom: 28,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.25,
-    shadowRadius: 24,
-    elevation: 12,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.35,
+    shadowRadius: 30,
+    elevation: 20,
+    overflow: "hidden",
+  },
+  accentBar: {
+    height: 6,
+    width: "100%",
+    backgroundColor: "rgba(160, 216, 3, 1)'", // Orange accent bar at top
+    position: "absolute",
+    top: 0,
+  },
+  logoOuterGlow: {
+    marginTop: 32,
+    marginBottom: 20,
+    borderRadius: 28,
+    padding: 3,
+    backgroundColor: "rgba(254, 212, 40, 0.15)", // Subtle gold border/glow around the logo container
   },
   iconContainer: {
-    width: 88,
-    height: 88,
-    backgroundColor: "#F9FAFB",
-    borderRadius: 22,
+    width: 90,
+    height: 90,
+    backgroundColor: "#081041", // Dark navy circle background
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#F3F4F6",
+
   },
   logo: {
-    width: 64,
-    height: 64,
+    width: 68,
+    height: 68,
+  },
+  fallbackLogoPlaceholder: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fallbackLogoText: {
+    fontSize: 44,
   },
   title: {
     fontSize: 24,
-    fontWeight: "800",
-    color: "#111827",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  versionText: {
-    fontSize: 14,
-    color: "#6B7280",
-    fontWeight: "700",
+    fontWeight: "900",
+    color: "#081041", // Premium Dark Navy
     marginBottom: 16,
+    textAlign: "center",
+    letterSpacing: 0.3,
+  },
+  versionBadgeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
     backgroundColor: "#F3F4F6",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    overflow: "hidden",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  versionBadge: {
+    alignItems: "center",
+  },
+  versionBadgeLabel: {
+    fontSize: 10,
+    color: "rgba(115, 125, 140, 0.8)",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    marginBottom: 2,
+  },
+  versionBadgeValue: {
+    fontSize: 14,
+    color: "#4B5563",
+    fontWeight: "800",
+  },
+  arrowSeparator: {
+    fontSize: 14,
+    color: "#A5A5A5",
+    marginHorizontal: 12,
+    fontWeight: "bold",
+  },
+  latestBadge: {
+    backgroundColor: "rgba(251, 91, 43, 0.08)", // Light orange tint
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  latestValue: {
+    color: "rgba(160, 216, 3, 1)'", // Orange font for latest version
   },
   message: {
-    fontSize: 15,
-    lineHeight: 23,
+    fontSize: 14,
+    lineHeight: 22,
     color: "#4B5563",
     textAlign: "center",
-    marginBottom: 32,
+    marginBottom: 28,
+    paddingHorizontal: 6,
+    fontWeight: "500",
   },
   updateButton: {
-    backgroundColor: "#111827", // Dark Slate / Black
+    backgroundColor: "rgba(160, 216, 3, 1)'", // Vibrant Orange
     width: "100%",
-    paddingVertical: 16,
+    paddingVertical: 15,
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+
   },
   updateButtonDisabled: {
     opacity: 0.6,
   },
   updateButtonText: {
     color: "#FFFFFF",
-    fontSize: 17,
-    fontWeight: "700",
+    fontSize: 16,
+    fontWeight: "900",
+    letterSpacing: 1,
   },
   laterButton: {
-    marginTop: 18,
+    marginTop: 16,
     paddingVertical: 10,
     width: "100%",
     alignItems: "center",
   },
   laterButtonText: {
     fontSize: 15,
-    color: "#9CA3AF",
-    fontWeight: "600",
+    color: color.grey || "#ADADAD", // Premium Muted Gray
+    fontWeight: "700",
   },
 });
 
