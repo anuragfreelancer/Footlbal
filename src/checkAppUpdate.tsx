@@ -161,23 +161,37 @@ const UpdateModal = () => {
     if (loading) return;
     setLoading(true);
     try {
-      if (storeUrl) {
-        await Linking.openURL(storeUrl);
+      let urlToOpen = storeUrl;
+
+      // iOS Simulator doesn't support the itms-apps:// scheme and throws "invalid address".
+      // Converting itms-apps:// to https:// ensures it opens in Safari on Simulator,
+      // and on physical devices Safari will automatically redirect the user to the native App Store.
+      if (Platform.OS === "ios") {
+        if (urlToOpen && urlToOpen.startsWith("itms-apps://")) {
+          urlToOpen = urlToOpen.replace("itms-apps://", "https://");
+        } else if (!urlToOpen) {
+          urlToOpen = `https://apps.apple.com/in/app/kmmp-rpe-football/id${IOS_APP_ID}`;
+        }
       } else {
-        // Fallback deep links if storeUrl is missing
-        const url =
-          Platform.OS === "ios"
-            ? `itms-apps://apps.apple.com/app/id${IOS_APP_ID}`
-            : `market://details?id=${ANDROID_PACKAGE_NAME}`;
-        await Linking.openURL(url);
+        // Android package name link fallback
+        if (!urlToOpen) {
+          urlToOpen = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
+        }
       }
+
+      console.log("[UpdateModal] Directing to store URL:", urlToOpen);
+      await Linking.openURL(urlToOpen);
     } catch (err) {
-      // Fallback to browser URL if deep link fails
+      console.warn("[UpdateModal] Failed to open URL, trying absolute fallback:", err);
       const fallbackUrl =
         Platform.OS === "ios"
           ? `https://apps.apple.com/in/app/kmmp-rpe-football/id${IOS_APP_ID}`
           : `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
-      Linking.openURL(fallbackUrl);
+      try {
+        await Linking.openURL(fallbackUrl);
+      } catch (innerErr) {
+        console.error("[UpdateModal] Absolute fallback also failed:", innerErr);
+      }
     } finally {
       setLoading(false);
     }
@@ -284,7 +298,7 @@ const styles = StyleSheet.create({
   accentBar: {
     height: 6,
     width: "100%",
-    backgroundColor: "rgba(160, 216, 3, 1)'", // Orange accent bar at top
+    backgroundColor: "rgba(160, 216, 3, 1)", // Orange accent bar at top
     position: "absolute",
     top: 0,
   },
@@ -361,7 +375,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   latestValue: {
-    color: "rgba(160, 216, 3, 1)'", // Orange font for latest version
+    color: "rgba(160, 216, 3, 1)", // Orange font for latest version
   },
   message: {
     fontSize: 14,
@@ -387,8 +401,7 @@ const styles = StyleSheet.create({
   updateButtonText: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "900",
-    letterSpacing: 1,
+    fontWeight: "500",
   },
   laterButton: {
     marginTop: 16,
