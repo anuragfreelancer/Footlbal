@@ -57,7 +57,7 @@ const isVersionNewer = (current: string, latest: string): boolean => {
  * and displays a premium football-themed modal if a new version is available.
  */
 const UpdateModal = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [storeUrl, setStoreUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [latestVersion, setLatestVersion] = useState("");
@@ -174,7 +174,9 @@ const UpdateModal = () => {
         }
       } else {
         // Android package name link fallback
-        if (!urlToOpen) {
+        if (urlToOpen && urlToOpen.startsWith("market://")) {
+          urlToOpen = urlToOpen.replace("market://", "https://play.google.com/store/apps/");
+        } else if (!urlToOpen) {
           urlToOpen = `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`;
         }
       }
@@ -387,7 +389,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   updateButton: {
-    backgroundColor: "rgba(160, 216, 3, 1)'", // Vibrant Orange
+    backgroundColor: "rgba(160, 216, 3, 1)", // Vibrant Orange
     width: "100%",
     paddingVertical: 15,
     borderRadius: 16,
