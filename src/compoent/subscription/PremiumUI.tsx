@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import localizationStrings from '../Localization/Localization';
 import { useLanguage } from '../Localization/LanguageContext';
 
-const PremiumUI = ({ expiry }) => {
+const PremiumUI = ({ expiry }: any) => {
   useLanguage();
   return (
     <View style={[styles.card, styles.premium]}>
