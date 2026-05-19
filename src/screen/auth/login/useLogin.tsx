@@ -21,17 +21,18 @@ const useLogin = () => {
     };
     fetchToken();
   }, []);
+  // deepore.technorizen@gmail.com
   // Newcoash@gmail.com
 
   // 1) Joshs1424@gmail.com
   // const [credentials, setCredentials] = useState({ email: 'Ramji@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'playerkmmp@gmail.com', password: '123456' });
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  // const [credentials, setCredentials] = useState({ email: '', password: '' });
   // const [credentials, setCredentials] = useState({ email: 'Amanwo@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'kmmp@gmail.com', password: '123456' });
-  // const [credentials, setCredentials] = useState({ email: 'Coachtesting@gmail.com', password: '123456' });
+  // const [credentials, setCredentials] = useState({ email: 'himanshusinha011@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'Uplayer@gmail.com', password: '123456' });
-  // const [credentials, setCredentials] = useState({ email: 'John@gmail.com', password: '123456' });
+  const [credentials, setCredentials] = useState({ email: 'Tesingsq2@gmail.com', password: '123456' });
   //  Teisng124@gmail.com
   const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();

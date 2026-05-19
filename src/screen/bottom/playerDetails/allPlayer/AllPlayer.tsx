@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator, Alert
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -14,6 +14,7 @@ import useAllPlayer from "./useAllPlayer";
 import styles from "./style";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import SubscriptionCard from "../../../../compoent/subscription/SubscriptionCard";
+import { useSubscription } from "../../../../compoent/subscription/useSubscription";
 import { useSelector } from "react-redux";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 
@@ -202,23 +203,25 @@ const SessionDetailCard = React.memo(({ item }: { item: any }) => {
 
 const AllPlayer = () => {
   const {
-    isLoading,
     navigation,
     viewType,
     allPlay,
     searchPlaylist,
     setSearchPlaylist,
-    filterData
+    filterData,
+    isLoading
   } = useAllPlayer();
   useLanguage();
+  const getLogin = useSelector((state: any) => state?.feature);
+  const { isSubscribed } = useSubscription();
+
   const [is] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
       {is ? <LoadingModal /> : null}
       <StatusBarComponent />
       <View style={[styles.container, { padding: 15 }]}>
-
-        {/* {userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null} */}
+        {getLogin?.userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
 
 
         {/* Search Bar */}
@@ -247,8 +250,32 @@ const AllPlayer = () => {
 
         <TouchableOpacity
           style={styles.fab}
-          // onPress={() => (navigation as any).navigate(ScreenNameEnum.SummaryTable)}
-          onPress={() => (navigation as any).navigate(ScreenNameEnum.AddPlayer)}
+          onPress={() => {
+            // Check if profile is still loading (or if userGetData is empty)
+            if (isLoading || !getLogin?.userGetData) {
+              Alert.alert(
+                localizationStrings.Validation || "Loading",
+                "Please wait while checking your subscription status..."
+              );
+              return;
+            }
+
+            if (!isSubscribed) {
+              Alert.alert(
+                localizationStrings.ConfirmSubscription || "Subscription Required",
+                "Please subscribe to a plan first to add players.",
+                [
+                  { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
+                  {
+                    text: localizationStrings.ViewSubscriptionPlans || "View Plans",
+                    onPress: () => (navigation as any).navigate(ScreenNameEnum.SubscriptionPlansScreen)
+                  }
+                ]
+              );
+            } else {
+              (navigation as any).navigate(ScreenNameEnum.AddPlayer);
+            }
+          }}
         >
           <Image source={imageIndex.floter} style={{ height: 74, width: 74 }} resizeMode="contain" />
         </TouchableOpacity>

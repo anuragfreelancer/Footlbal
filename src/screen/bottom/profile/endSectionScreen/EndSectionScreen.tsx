@@ -16,6 +16,7 @@ import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import { base_url } from "../../../SubscriptionPlans/SubscriptionPlansScreen";
 import ScreenNameEnum from "../../../../routes/screenName.enum";
 import { EndSection } from "../../../../redux/Api/AuthApi";
+import { useSubscription } from "../../../../compoent/subscription/useSubscription";
 
 const EndSectionScreen = () => {
   useLanguage();
@@ -31,6 +32,7 @@ const EndSectionScreen = () => {
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
+  const { isSubscribed } = useSubscription();
 
   const getCoachSession = async () => {
     try {
@@ -63,6 +65,21 @@ const EndSectionScreen = () => {
     }
   };
   const handleEndSection = () => {
+    if (!isSubscribed) {
+      Alert.alert(
+        localizationStrings.ConfirmSubscription || "Subscription Required",
+        "Please subscribe to a plan first to end sessions.",
+        [
+          { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
+          {
+            text: localizationStrings.ViewSubscriptionPlans || "View Plans",
+            onPress: () => (navigation as any).navigate(ScreenNameEnum.SubscriptionPlansScreen)
+          }
+        ]
+      );
+      return;
+    }
+
     if (selectedPlayerIds.length === 0) {
       Alert.alert(localizationStrings.pleaseS);
       return;

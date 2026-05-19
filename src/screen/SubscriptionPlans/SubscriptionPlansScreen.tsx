@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-   StatusBar,
+  StatusBar,
   Dimensions,
   TextInput,
   Alert,
@@ -21,6 +21,7 @@ import { createCheckoutSession, GetProfile } from '../../redux/Api/AuthApi';
 import { successToast } from '../../utils/customToast';
 import ScreenNameEnum from '../../routes/screenName.enum';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { logout } from '../../redux/feature/authSlice';
 
 const { width } = Dimensions.get('window');
 
@@ -77,6 +78,14 @@ export default function SubscriptionPlansScreen() {
   const [playerInput, setPlayerInput] = useState('20');
   const [submitting, setSubmitting] = useState(false);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: ScreenNameEnum.SPLASH_SCREEN }],
+    });
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (userId) GetProfile(userId, dispatch);
@@ -111,7 +120,7 @@ export default function SubscriptionPlansScreen() {
     subscription_expiry_date: string; // YYYY-MM-DD
   }) => {
 
- 
+
     const url = `${base_url}/activate_subscription`;
 
     const res = await fetch(url, {
@@ -186,7 +195,7 @@ export default function SubscriptionPlansScreen() {
                 checkoutRes?.data?.url ??
                 checkoutRes?.url;
 
-                console.log("asssss",checkoutUrl)
+              console.log("asssss", checkoutUrl)
               if (checkoutUrl && typeof checkoutUrl === 'string') {
                 setSubmitting(false);
                 successToast(localizationStrings.OpeningPayment);
@@ -211,41 +220,27 @@ export default function SubscriptionPlansScreen() {
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
 
       <View style={styles.headerContainer}>
-        <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.SubscriptionPlans} />
+        {navigation.canGoBack() ? (
+          <CustomHeader imageSource={imageIndex.backNav} label={localizationStrings.SubscriptionPlans} />
+        ) : (
+          <View style={styles.simpleHeaderContainer}>
+            <Text style={styles.simpleHeaderTitle}>{localizationStrings.SubscriptionPlans}</Text>
+          </View>
+        )}
       </View>
 
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Hero Section */}
-        <View style={styles.heroSection}>
-          <View style={[styles.badge, { backgroundColor: 'rgba(160, 216, 3, 1)' + '20' }]}>
-            <Text style={[styles.badgeText, { color: 'black' }]}>{localizationStrings.MostPopular}</Text>
-          </View>
-          <Text style={styles.heroTitle}>{localizationStrings.UnlockTeamExcellence}</Text>
-          <Text style={styles.heroSubtitle}>{localizationStrings.HeroSubtitle}</Text>
-        </View>
-
         {/* Plan Card */}
         <View style={styles.card}>
-          <View style={styles.planHeader}>
-            <View style={styles.planTitleContainer}>
-              <Text style={styles.planName}>{localizationStrings[plan.nameKey]}</Text>
-              <View style={[styles.trialBadge, { backgroundColor: plan.accentColor + '20' }]}>
-                <Text style={[styles.trialBadgeText, { color: 'black' }]}>
-                  {formatStr(localizationStrings.DayFreeTrial, plan.freeTrialDays)}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Price Section */}
           <View style={styles.priceSection}>
             <View style={styles.priceRow}>
               <Text style={styles.currency}>€</Text>
               <Text style={styles.price}>{totalPrice.toFixed(2)}</Text>
-              <Text style={styles.pricePeriod}>{localizationStrings.PerMonth}</Text>
+              {/* <Text style={styles.pricePeriod}>{localizationStrings.PerMonth}</Text> */}
             </View>
 
-            <Text style={styles.priceSubtitle}>
+            {/* <Text style={styles.priceSubtitle}>
               {hasExtraPlayers ? (
                 <Text>
                   <Text style={styles.basePrice}>€{plan.basePrice.toFixed(2)}</Text>{' '}
@@ -254,11 +249,11 @@ export default function SubscriptionPlansScreen() {
               ) : (
                 formatStr(localizationStrings.ForUpToPlayers, plan.maxPlayers)
               )}
-            </Text>
+            </Text> */}
           </View>
 
           {/* Player Input */}
-          <View style={styles.playerInputSection}>
+          {/* <View style={styles.playerInputSection}>
             <Text style={styles.sectionTitle}>{localizationStrings.CustomizeTeamSize}</Text>
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabelText}>{localizationStrings.NumberOfPlayers}</Text>
@@ -306,7 +301,7 @@ export default function SubscriptionPlansScreen() {
                 </View>
               </View>
             )}
-          </View>
+          </View> */}
 
           {/* Features */}
           <View style={styles.featuresSection}>
@@ -336,17 +331,13 @@ export default function SubscriptionPlansScreen() {
             ) : (
               <>
                 <Text style={styles.buttonText}>{localizationStrings.StartFreeTrial}</Text>
-                <Text style={styles.buttonSubtext}>
-                  {formatStr(localizationStrings.ThenPerMonthCancel, totalPrice.toFixed(2))}
-                </Text>
+
               </>
             )}
           </TouchableOpacity>
 
           {/* Guarantee */}
-          <View style={styles.guarantee}>
-            <Text style={styles.guaranteeText}>{localizationStrings.MoneyBackGuarantee}</Text>
-          </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -440,4 +431,43 @@ const styles = StyleSheet.create({
   buttonSubtext: { color: '#000000ff', fontSize: 13, marginTop: 4 },
   guarantee: { paddingVertical: 10, alignItems: 'center' },
   guaranteeText: { fontSize: 12, color: 'rgba(160, 216, 3, 1)', textAlign: 'center' },
+  customHeaderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    paddingHorizontal: 4,
+    height: 46,
+  },
+  customHeaderTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1F2937',
+    textAlign: 'left',
+    flex: 1,
+  },
+  logoutHeaderButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: '#F3F4F6',
+  },
+  logoutText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#EF4444',
+  },
+  simpleHeaderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    height: 46,
+  },
+  simpleHeaderTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1F2937',
+    textAlign: 'center',
+  },
 });

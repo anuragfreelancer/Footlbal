@@ -13,8 +13,9 @@ type RootStackParamList = {
 };
 
 const Splash: React.FC = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-     const isLogin = useSelector((state:any) => state.auth);
+    const navigation = useNavigation<any>();
+    const isLogin = useSelector((state:any) => state.auth);
+    const userGetData = useSelector((state: any) => state.feature?.userGetData);
     const isFocus = useIsFocused();
     const checkLogout = () => {
       if (isLogin?.isLogin) {

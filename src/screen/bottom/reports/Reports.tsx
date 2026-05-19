@@ -13,6 +13,7 @@ import useMessageList from "../messages/useMessageList";
 import EmptyListComponent from "../../../compoent/EmptyListComponent";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import SearchBar from "../../../compoent/SearchBar";
+import SubscriptionCard from "../../../compoent/subscription/SubscriptionCard";
 
 
 const Reports = () => {
@@ -65,6 +66,7 @@ const Reports = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {isLoading ? <LoadingModal /> : null}
       <StatusBarComponent />
+
       <View style={styles.headerRow}>
 
         <Text style={styles.header}>

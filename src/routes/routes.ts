@@ -129,6 +129,7 @@ const _routes = () => {
         logo: imageIndex.reports,
         logo1: imageIndex.reportsActivE,
       },
+
       {
         name: ScreenNameEnum.Profile,
         Component: Profile,

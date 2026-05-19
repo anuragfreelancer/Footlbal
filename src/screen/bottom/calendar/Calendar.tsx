@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import ScreenNameEnum from "../../../routes/screenName.enum";
 import { errorToast } from "../../../utils/customToast";
+import { useSubscription } from "../../../compoent/subscription/useSubscription";
 
 const CustomCalendar = () => {
   useLanguage();
@@ -34,6 +35,8 @@ const CustomCalendar = () => {
     isLogin,
     NewfilterData,
   } = useCalendar();
+  
+  const { isSubscribed } = useSubscription();
   const [planModalVisible, setPlanModalVisible] = useState(false);
   const [startSectionModalVisible, setStartSectionModalVisible] = useState(false);
   const [sessionLoading, setSessionLoading] = useState(false);
@@ -51,6 +54,21 @@ const CustomCalendar = () => {
     questionnaire1: number[];
 
   }) => {
+    if (!isSubscribed) {
+      Alert.alert(
+        localizationStrings.ConfirmSubscription || "Subscription Required",
+        "Your 7-day trial has ended. Please subscribe to a plan to start sessions.",
+        [
+          { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
+          { 
+            text: localizationStrings.ViewSubscriptionPlans || "View Plans", 
+            onPress: () => (navigation as any).navigate(ScreenNameEnum.SubscriptionPlansScreen)
+          }
+        ]
+      );
+      return;
+    }
+
     if (!(time instanceof Date) || !(date instanceof Date)) {
       errorToast(localizationStrings.date);
       return;

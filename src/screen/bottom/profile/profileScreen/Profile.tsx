@@ -24,7 +24,11 @@ const Profile = () => {
   const { language } = useLanguage();
 
   const getLogin = useSelector((state: any) => state?.feature);
+  console.log(getLogin, "getLogin getLogin getLogin");
+
   const isLogin = useSelector((state: any) => state?.auth);
+  console.log(isLogin, "isLogin");
+
   const [modal, setModal] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -114,7 +118,6 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <StatusBarComponent />
-
       {/* Curved Top Background */}
       <View style={styles.topBackground} />
 
@@ -158,6 +161,7 @@ const Profile = () => {
               resizeMode="contain"
             />
           </TouchableOpacity>
+          {getLogin?.userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
 
           <View style={styles.menuContainer}>
             {MenuItems.map((item, index) => (

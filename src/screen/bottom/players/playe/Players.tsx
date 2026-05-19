@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   View, Text, FlatList, Image, TouchableOpacity,
-  ActivityIndicator, ScrollView
+  ActivityIndicator, ScrollView, Alert
 } from "react-native";
 import imageIndex from "../../../../assets/imageIndex";
 import StatusBarComponent from "../../../../compoent/StatusBarCompoent";
@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../../compoent/Localization/LanguageContext";
 import { errorToast } from "../../../../utils/customToast";
+import { useSubscription } from "../../../../compoent/subscription/useSubscription";
 
 const Players = () => {
   useLanguage();
@@ -27,6 +28,7 @@ const Players = () => {
   } = usePlayers();
 
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<any[]>([]);
+  const { isSubscribed } = useSubscription();
 
   const togglePlayerSelect = (id: any) => {
     if (selectedPlayerIds.includes(id)) {
@@ -37,6 +39,21 @@ const Players = () => {
   };
 
   const handleStartSection = () => {
+    if (!isSubscribed) {
+      Alert.alert(
+        localizationStrings.ConfirmSubscription || "Subscription Required",
+        "Please subscribe to a plan first to start sessions.",
+        [
+          { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
+          {
+            text: localizationStrings.ViewSubscriptionPlans || "View Plans",
+            onPress: () => (navigation as any).navigate(ScreenNameEnum.SubscriptionPlansScreen)
+          }
+        ]
+      );
+      return;
+    }
+
     if (selectedPlayerIds.length === 0) {
       errorToast(localizationStrings?.Pleaseselectleastone || "Please select at least one player")
       return;
