@@ -68,7 +68,7 @@ const EndSectionScreen = () => {
     if (!isSubscribed) {
       Alert.alert(
         localizationStrings.ConfirmSubscription || "Subscription Required",
-        "Please subscribe to a plan first to end sessions.",
+        localizationStrings.SubRequiredToEndSessions || "Please subscribe to a plan first to end sessions.",
         [
           { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
           {

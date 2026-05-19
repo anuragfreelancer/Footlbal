@@ -42,7 +42,7 @@ const Players = () => {
     if (!isSubscribed) {
       Alert.alert(
         localizationStrings.ConfirmSubscription || "Subscription Required",
-        "Please subscribe to a plan first to start sessions.",
+        localizationStrings.SubRequiredToStartSessions || "Please subscribe to a plan first to start sessions.",
         [
           { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
           {
