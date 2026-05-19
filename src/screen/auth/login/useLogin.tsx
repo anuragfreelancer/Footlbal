@@ -32,7 +32,7 @@ const useLogin = () => {
   // const [credentials, setCredentials] = useState({ email: 'kmmp@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'himanshusinha011@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'Uplayer@gmail.com', password: '123456' });
-  const [credentials, setCredentials] = useState({ email: 'Tesingsq2@gmail.com', password: '123456' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   //  Teisng124@gmail.com
   const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();

@@ -185,11 +185,7 @@ const DashboardScreen = () => {
             }
             style={styles.avatar}
           />
-          {imgloading && (
-            <View style={styles.avatarLoader}>
-              <ActivityIndicator size="small" color="#9CA3AF" />
-            </View>
-          )}
+
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{getLogin?.userGetData?.user_name || isLogin?.userData?.user_name || ""}</Text>

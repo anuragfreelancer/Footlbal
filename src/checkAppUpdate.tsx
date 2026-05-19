@@ -207,7 +207,9 @@ const UpdateModal = () => {
           <View style={styles.card}>
             {/* Top Premium Gradient/Accent Bar */}
             <View style={styles.accentBar} />
-
+            <TouchableOpacity style={styles.laterButton} onPress={() => setVisible(false)}>
+              <Text style={styles.laterButtonText}>X</Text>
+            </TouchableOpacity>
             {/* Logo / Icon Container with Glow */}
             <View style={styles.logoOuterGlow}>
               <View style={styles.iconContainer}>
@@ -259,9 +261,7 @@ const UpdateModal = () => {
             </TouchableOpacity>
 
             {/* Secondary Action Button - Maybe Later */}
-            <TouchableOpacity style={styles.laterButton} onPress={() => setVisible(false)}>
-              <Text style={styles.laterButtonText}>close</Text>
-            </TouchableOpacity>
+
           </View>
         </SafeAreaView>
       </View>
@@ -408,11 +408,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 10,
     width: "100%",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
   laterButtonText: {
-    fontSize: 15,
-    color: color.grey || "#ADADAD", // Premium Muted Gray
+    fontSize: 20,
+    color: "black", // Premium Muted Gray
     fontWeight: "700",
   },
 });
