@@ -16,7 +16,6 @@ import VersionCheck from "react-native-version-check";
 import imageIndex from "./assets/imageIndex";
 import { color } from "./constant";
 
-const { width } = Dimensions.get("window");
 
 // Update parameters
 const IOS_APP_ID = "6748689173";
