@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
   // ADD BUTTON
   addBtn: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: hp(1.8),
+    paddingVertical: hp(2.0),
     paddingHorizontal: wp(4),
     borderRadius: wp(4),
     flexDirection: 'row',
@@ -541,7 +541,6 @@ const styles = StyleSheet.create({
     marginBottom: hp(2),
     borderWidth: 1.5,
     borderColor: '#A0D803',
-    borderStyle: 'dashed',
     justifyContent: "center",
   },
   addBtnTxt: { color: '#0F172A', fontSize: hp(1.7), fontWeight: '700' },
@@ -573,10 +572,7 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: wp(6),
     paddingTop: hp(1.5),
-    paddingBottom: Platform.OS === 'ios' ? hp(4) : hp(2.5),
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+
   },
   mainBtn: {
     backgroundColor: '#A0D803',
@@ -584,10 +580,7 @@ const styles = StyleSheet.create({
     height: hp(6.5),
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#A0D803',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+
   },
   btnDisabled: { backgroundColor: '#CBD5E1', shadowOpacity: 0, },
   btnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
