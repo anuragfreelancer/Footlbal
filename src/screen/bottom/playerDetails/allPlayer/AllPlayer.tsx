@@ -220,12 +220,13 @@ const AllPlayer = () => {
     <SafeAreaView style={styles.container}>
       {is ? <LoadingModal /> : null}
       <StatusBarComponent />
+      {getLogin?.userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
+
       <View style={[styles.container, { padding: 15 }]}>
-        {getLogin?.userGetData?.subscription_status == "false" ? <SubscriptionCard /> : null}
 
 
         {/* Search Bar */}
-        <View style={{ marginBottom: 15 }}>
+        <View style={{ marginBottom: 5 }}>
           <SearchBar
             value={searchPlaylist}
             onSearchChange={setSearchPlaylist}
@@ -263,7 +264,7 @@ const AllPlayer = () => {
             if (!isSubscribed) {
               Alert.alert(
                 localizationStrings.ConfirmSubscription || "Subscription Required",
-                localizationStrings.SubRequiredToAddPlayers || "Please subscribe to a plan first to add players.",
+                "Please subscribe to a plan first to add players.",
                 [
                   { text: localizationStrings.Cancel || "Cancel", style: 'cancel' },
                   {
