@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">KMMP</string>
+      <string name="StallionProjectId">6a0c409dc77862510270a9eb</string>
+  <string name="StallionAppToken">spb_FTLx5umZgKLTEyiMNf9-81BgANTOvx7pNhA-gFXbg9</string>
+
 </resources>

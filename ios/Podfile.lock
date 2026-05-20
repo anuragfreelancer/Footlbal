@@ -1410,6 +1410,28 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-stallion (2.4.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+    - ZIPFoundation
   - react-native-version-check (3.5.0):
     - React-Core
   - react-native-webview (13.16.1):
@@ -1971,6 +1993,7 @@ PODS:
     - Yoga
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
+  - ZIPFoundation (0.9.20)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -2017,6 +2040,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-stallion (from `../node_modules/react-native-stallion`)
   - react-native-version-check (from `../node_modules/react-native-version-check`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2074,6 +2098,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SocketRocket
+    - ZIPFoundation
 
 EXTERNAL SOURCES:
   boost:
@@ -2161,6 +2186,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-stallion:
+    :path: "../node_modules/react-native-stallion"
   react-native-version-check:
     :path: "../node_modules/react-native-version-check"
   react-native-webview:
@@ -2301,6 +2328,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: afc464441362333ffe4cd96f3e623e374362a2f6
+  react-native-stallion: b59cec9cc5ed5492a28904e53615eefe842abcd9
   react-native-version-check: 842a3b0e7221798cbe8c6abaf24aab3ed0b485ce
   react-native-webview: f633c4a809c13efdfbb410645b9cf0690474e1ca
   React-NativeModulesApple: ce75ed8f1188483be3620bf9dbb3b1286dd39bab
@@ -2345,6 +2373,7 @@ SPEC CHECKSUMS:
   RNSVG: 799a6ac538f026335bd64639629894a432bbf65e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 464c847c822847c88560af530ca15273b8e45261
+  ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
 
 PODFILE CHECKSUM: 1e415bcecfd27c4011b3016a70f618ba06992fe0
 

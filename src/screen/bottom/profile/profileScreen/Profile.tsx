@@ -50,7 +50,7 @@ const Profile = () => {
     { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },
     // { title: localizationStrings.SendFeedback, icon: imageIndex.feedback, screen: ScreenNameEnum.Feedback },
     { title: localizationStrings.Logout, icon: imageIndex.logut, screen: "Logout" },
-    { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
+    // { title: localizationStrings.delete, icon: imageIndex.delete, screen: "delete" }
   ];
 
 

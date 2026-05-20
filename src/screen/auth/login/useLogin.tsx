@@ -27,7 +27,7 @@ const useLogin = () => {
   // 1) Joshs1424@gmail.com
   // const [credentials, setCredentials] = useState({ email: 'Ramji@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'playerkmmp@gmail.com', password: '123456' });
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: 'test@example.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'Amanwo@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'kmmp@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'himanshusinha011@gmail.com', password: '123456' });
