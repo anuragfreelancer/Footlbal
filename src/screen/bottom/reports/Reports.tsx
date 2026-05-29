@@ -97,19 +97,8 @@ const Reports = () => {
         contentContainerStyle={{ paddingBottom: 40 }}
       >
         {/* Recent Reports Section */}
-        {rpfData?.userGetData?.length > 0 && (
-          <View style={{ marginBottom: 10 }}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{localizationStrings.RecentSession || "Recent Reports"}</Text>
-            </View>
-            <FlatList
-              data={rpfData.userGetData.slice(0, 10)}
-              scrollEnabled={false}
-              keyExtractor={(item: any) => item?.id?.toString() ?? String(Math.random())}
-              renderItem={({ item }) => <RecentSessionCard item={item} />}
-            />
-          </View>
-        )}
+
+
 
         {/* Chat Messages Section */}
         <View>
