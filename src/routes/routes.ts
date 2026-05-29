@@ -114,7 +114,7 @@ const _routes = () => {
       {
         name: ScreenNameEnum.SummaryTable,
         Component: SummaryTable,
-        label: "Tableau récapitulatif",
+        label: "Tableau",
         logo: imageIndex.profileUser,
         logo1: imageIndex.profileUser
       },

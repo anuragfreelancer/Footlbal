@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { GetChat, SendMessage } from '../../../redux/Api/AuthApi';
+import { GetChat, GetchatPlayer, GetProfile, SendMessage } from '../../../redux/Api/AuthApi';
 import { useSelector } from 'react-redux';
 const usePlayerChatScreen = () => {
   const navigation = useNavigation();
@@ -10,8 +10,19 @@ const usePlayerChatScreen = () => {
   const isLogin = useSelector((state: any) => state?.auth);
   const getLogin = useSelector((state: any) => state?.feature);
 
+  const [userName, setUserName] = useState<any>(null);
 
-  const userName = "ss"
+  useEffect(() => {
+    const fetchCoachProfile = async () => {
+      if (getLogin?.userGetData?.coach_id) {
+        const data = await GetchatPlayer(getLogin?.userGetData?.coach_id);
+        if (data && data.result) {
+          setUserName(data.result);
+        }
+      }
+    };
+    fetchCoachProfile();
+  }, [getLogin?.userGetData?.coach_id]);
   const sendMessage = async () => {
     const trimmedMessage = messageText.trim();
     if (!trimmedMessage) return;

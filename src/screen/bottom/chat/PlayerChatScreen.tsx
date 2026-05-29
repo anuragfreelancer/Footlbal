@@ -32,26 +32,34 @@ const PlayerChatScreen = () => {
         messages,
         sendMessage,
 
+        isLogin,
         getLogin
     } = usePlayerChatScreen();
 
 
     const renderMessage = ({ item }: any) => {
-        const isCurrentUser = item.sender_id === getLogin?.userGetData?.coach_id;
+        const isMyMessage = item.sender_id === isLogin?.userData?.id;
 
         return (
             <View
                 style={[
                     styles.messageContainer,
-                    !isCurrentUser ? styles.sentMessage : styles.receivedMessage,
+                    isMyMessage ? styles.sentMessage : styles.receivedMessage,
                 ]}
             >
-                {isCurrentUser && (
-                    <Image source={{ uri: userName?.image }} style={styles.profileImage} />
+                {!isMyMessage && (
+                    <Image
+                        source={
+                            userName?.image && userName.image !== "https://kmmps.store/public/uploads/users/"
+                                ? { uri: userName?.image }
+                                : imageIndex.prfEdit
+                        }
+                        style={styles.profileImage}
+                    />
                 )}
                 <View
-                    style={[styles.messageBubble, !isCurrentUser ? styles.sentBubble : styles.receivedBubble]}>
-                    <Text style={[styles.messageText, !isCurrentUser ? styles.sentText : styles.receivedText]}>
+                    style={[styles.messageBubble, isMyMessage ? styles.sentBubble : styles.receivedBubble]}>
+                    <Text style={[styles.messageText, isMyMessage ? styles.sentText : styles.receivedText]}>
                         {item.chat_message}
                     </Text>
 
@@ -172,7 +180,6 @@ const styles = StyleSheet.create({
     },
     messageBubble: {
         padding: 8,
-        borderRadius: 11,
         maxWidth: "75%",
     },
     sentMessage: {
@@ -183,13 +190,11 @@ const styles = StyleSheet.create({
     },
     sentBubble: {
         backgroundColor: "#A0D803",
-        borderBottomLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderRadius: 8
     },
     receivedBubble: {
         backgroundColor: "#F2F7FB",
-        borderBottomRightRadius: 20,
-        borderTopLeftRadius: 20,
+        borderRadius: 8
     },
     messageText: {
         fontSize: 14,
