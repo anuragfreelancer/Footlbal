@@ -27,7 +27,7 @@ const useLogin = () => {
   // 1) Joshs1424@gmail.com
   // const [credentials, setCredentials] = useState({ email: 'Ramji@gmail.com', password: '123456' });
   // const [credentials, setCredentials] = useState({ email: 'playerkmmp@gmail.com', password: '123456' });
-  const [credentials, setCredentials] = useState({ email: 'Mk12@gmail.com', password: '123456' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({ email: '', password: '' });
   const dispatch = useDispatch();
   const navigation = useNavigation();

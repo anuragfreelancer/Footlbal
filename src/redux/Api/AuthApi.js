@@ -1607,11 +1607,6 @@ const GetChat = async (
                 const response = JSON.parse(res);
                 if (response.status == '1') {
                     return response
-                } else {
-                    errorToast(
-                        response?.message || response?.error,
-                    );
-                    return response
                 }
             })
             .catch((error) =>
