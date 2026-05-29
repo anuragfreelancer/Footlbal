@@ -32,6 +32,7 @@ const AllPlayerMessages = () => {
             <StatusBarComponent />
 
             <View style={styles.container}>
+                <Text style={styles.header}>{localizationStrings.Messages || "Messages"}</Text>
                 <SearchBar
                     value={searchPlaylist}
                     onSearchChange={setSearchPlaylist}
@@ -60,31 +61,18 @@ const AllPlayerMessages = () => {
                             />
                             <View style={styles.textContainer}>
                                 <Text style={styles.name} numberOfLines={1}>
-                                    {item?.user_name ?? "aaa"}
-                                </Text>
-                                <Text style={styles.name} numberOfLines={1}>
-
-                                    {item?.email ?? ""}
+                                    {item?.user_name ?? "Unknown Player"}
                                 </Text>
                                 <Text style={styles.lastMessage} numberOfLines={1}>
-                                    {item?.last_message ?? ""}
+                                    {item?.email ?? ""}
                                 </Text>
                             </View>
                             <View style={styles.timeContainer}>
-                                <Text style={styles.time}>
-                                    {item?.updated_at
-                                        ? moment(item.updated_at).isBefore(moment().subtract(24, "hours"))
-                                            ? moment(item.updated_at).format("MMM D, YYYY")
-                                            : moment(item.updated_at).fromNow()
-                                        : ""}
-                                </Text>
-                                {(item?.unread_count > 0 || item?.unread) && (
-                                    <View style={styles.unreadBadge}>
-                                        <Text style={styles.unreadBadgeText}>
-                                            {item?.unread_count > 0 ? item.unread_count : ""}
-                                        </Text>
-                                    </View>
-                                )}
+                                <Image 
+                                    source={imageIndex.bubbleChat} 
+                                    style={{ width: 20, height: 20, tintColor: 'rgba(160, 216, 3, 1)' }} 
+                                    resizeMode="contain" 
+                                />
                             </View>
                         </TouchableOpacity>
                     )}

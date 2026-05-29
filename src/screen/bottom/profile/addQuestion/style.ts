@@ -92,10 +92,7 @@ export default StyleSheet.create({
   footer: {
     paddingHorizontal: wp(6),
     paddingTop: hp(2),
-    paddingBottom: Platform.OS === 'ios' ? hp(4) : hp(2.5),
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+
   },
   submitBtn: {
     backgroundColor: '#A0D803',
@@ -103,10 +100,7 @@ export default StyleSheet.create({
     height: hp(7),
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#A0D803',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+
   },
   submitBtnDisabled: {
     backgroundColor: '#CBD5E1',
