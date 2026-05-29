@@ -13,6 +13,8 @@ import LoadingModal from "../../../utils/Loader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import localizationStrings from "../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
+import { ActivityIndicator } from "react-native";
+import { color } from "../../../constant";
 
 
 const Messages = () => {
@@ -28,7 +30,7 @@ const Messages = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <LoadingModal visible={isLoading} />
+
             <StatusBarComponent />
             <View style={styles.headerWrap}>
                 <CustomHeader imageSource={imageIndex.backNavs} label="Message" />
@@ -38,6 +40,9 @@ const Messages = () => {
                     value={searchData}
                     onSearchChange={setSearchData}
                 />
+
+                (isLoading ?  <ActivityIndicator color={color.primary} style={{ marginVertical: 30 }} /> :
+
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={filteredMessages}
@@ -91,6 +96,8 @@ const Messages = () => {
                         </TouchableOpacity>
                     )}
                 />
+                )
+
             </View>
         </SafeAreaView>
     );

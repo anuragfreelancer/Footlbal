@@ -8,12 +8,14 @@ export const pathImage: { pathImage: string } = {
 export const color = {
 
     baground: 'white',
-    buttonColor:'rgba(251, 91, 43, 1)',
-    borderColor:'#FED428',
-    borderPrimary:'#081041',
-    white:'#fff',
-    grey:'rgba(173, 164, 165, 1)',
-    black:'#000000'
+    buttonColor: 'rgba(251, 91, 43, 1)',
+    borderColor: '#FED428',
+    borderPrimary: '#081041',
+    white: '#fff',
+    grey: 'rgba(173, 164, 165, 1)',
+    black: '#000000',
+    primary: 'rgba(160, 216, 3, 1)',
+
 
 }
 
