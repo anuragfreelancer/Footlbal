@@ -519,6 +519,38 @@ const GetProfile = async (userId, dispatch) => {
     }
 };
 
+
+
+
+const GetchatPlayer = async (userId,) => {
+    console.log(" user id ----", userId)
+    try {
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        const formdata = new FormData();
+        formdata.append("user_id", userId);
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+        };
+        const response = await fetch(`${base_url}${constant.getrofile}`, requestOptions)
+        const resText = await response.text(); // Ensure text is received before parsing
+        const responseData = JSON.parse(resText);
+        console.log("get api  --- ", responseData)
+        if (responseData.status === '1') {
+            console.log("coach palyer", responseData.status)
+            return responseData;
+        } else {
+            console.log("sssss", responseData.message)
+            return responseData;
+            // errorToast(responseData.message || 'Unsuccessfully');
+        }
+    } catch (error) {
+        errorToast('Network error');
+        return null;
+    }
+};
 const GetaboutusePolicyApi = async (
     setLoading,
 ) => {
@@ -1888,4 +1920,4 @@ const UpdateCoachSessionApi = async (param, setLoading) => {
     }
 };
 
-export { UpdateCoachSessionApi, AddQuestionAnsApi, DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi, GetReviewsByCoachIdApi, AddQuestionApi, GetQuestionByCoachApi }  
+export { GetchatPlayer, UpdateCoachSessionApi, AddQuestionAnsApi, DelliteApi, Getplayer2, Get_user_by_id2, GetCoachSession, Get_user_by_id, SendMessage, EndSection, StartSection, AttendanceApi, GetNotifications, EndRpfFrom, GetChat, FeedbackApicall, PrivacyPolicyApi, GetAllChatMessage, GetSubmitRPF, SumitRpfFrom, GetTraining, PlayerPostEditApi, Getplayer, TrainingCategory, PositioncCategory, Teamcategory, PlayerPostApi, GetaboutusePolicyApi, AddContactUs, ChangePasswordApi, LoginUserApi, UpdateProfile_Api, GetProfile, SinupUserApi, ForgotPassUserApi, OtpUserApi, UpdatePassUserApi, createCheckoutSession, AddReviewApi, GetReviewsByCoachIdApi, AddQuestionApi, GetQuestionByCoachApi }  

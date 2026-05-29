@@ -11,6 +11,7 @@ import localizationStrings from "../../../compoent/Localization/Localization";
 import { useLanguage } from "../../../compoent/Localization/LanguageContext";
 import usePlayers from "../players/playe/usePlayers";
 import { color } from "../../../constant";
+import usePlayerSideMessages from "./usePlayerSideMessages";
 
 
 const PlayerSideMessages = () => {
@@ -21,7 +22,7 @@ const PlayerSideMessages = () => {
         navigation,
         searchPlaylist, setSearchPlaylist,
         filterData,
-    } = usePlayers();
+    } = usePlayerSideMessages();
 
 
     return (

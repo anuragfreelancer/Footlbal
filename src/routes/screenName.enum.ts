@@ -8,6 +8,7 @@ enum ScreenNameEnum {
   SubscriptionPlansScreen = "SubscriptionPlansScreen",
   PaymentWebViewScreen = "PaymentWebViewScreen",
   SignUpScreen = "SignUpScreen",
+  PlayerChatScreen = "PlayerChatScreen",
   OtpScreen = "OtpScreen",
   CreatePassword = "CreatePassword",
   PasswordReset = "PasswordReset",

@@ -45,6 +45,7 @@ import { useEffect } from "react";
 import { GetProfile } from "../redux/Api/AuthApi";
 import AllPlayerMessages from "../screen/bottom/messages/AllPlayerMessages";
 import PlayerSideMessages from "../screen/bottom/messages/PlayerSideMessages";
+import PlayerChatScreen from "../screen/bottom/chat/PlayerChatScreen";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -156,8 +157,8 @@ const _routes = () => {
         logo1: imageIndex.homeActive,
       },
       {
-        name: ScreenNameEnum.Messages,
-        Component: PlayerSideMessages,
+        name: ScreenNameEnum.PlayerChatScreen,
+        Component: PlayerChatScreen,
         label: localizationStrings.Messages,
         logo: imageIndex.bubbleChat,
         logo1: imageIndex.bubbleChat
