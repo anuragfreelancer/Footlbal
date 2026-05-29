@@ -37,6 +37,7 @@ enum ScreenNameEnum {
   StartTrainingFed = "StartTrainingFed",
   StartSectionScreen = "StartSectionScreen",
   AddQuestion = "AddQuestion",
+  PlayerSideMessages = "PlayerSideMessages",
   SummaryTable = "SummaryTable",
   CommonWebView = "CommonWebView",
 }

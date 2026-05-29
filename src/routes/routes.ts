@@ -44,6 +44,7 @@ import CommonWebView from "../screen/CommonWebView";
 import { useEffect } from "react";
 import { GetProfile } from "../redux/Api/AuthApi";
 import AllPlayerMessages from "../screen/bottom/messages/AllPlayerMessages";
+import PlayerSideMessages from "../screen/bottom/messages/PlayerSideMessages";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -156,7 +157,7 @@ const _routes = () => {
       },
       {
         name: ScreenNameEnum.Messages,
-        Component: Messages,
+        Component: PlayerSideMessages,
         label: localizationStrings.Messages,
         logo: imageIndex.bubbleChat,
         logo1: imageIndex.bubbleChat
