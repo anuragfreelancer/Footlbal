@@ -29,7 +29,7 @@ const AllPlayerMessages = () => {
             <StatusBarComponent />
 
             <View style={styles.container}>
-                <Text style={styles.header}>{localizationStrings.Messages || "Messages"}</Text>
+                <Text style={styles.header}>{localizationStrings.Messages}</Text>
                 <SearchBar
                     value={searchPlaylist}
                     onSearchChange={setSearchPlaylist}
