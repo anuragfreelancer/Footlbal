@@ -18,7 +18,7 @@ const DropdownModal: React.FC<DropdownModalProps> = ({ visible, options, onClose
       <Pressable style={styles.overlay} onPress={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.handle} />
-          
+
           <View style={styles.listContainer}>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -87,8 +87,6 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: hp(1.8),
     color: "#0F172A",
-    fontWeight: "700",
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   closeButton: {

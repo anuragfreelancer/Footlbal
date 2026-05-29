@@ -103,33 +103,28 @@ const MyTeam = () => {
                   <View style={styles.infoContainer}>
                     <Text style={styles.name} numberOfLines={1}>{item?.user_name}</Text>
                     <Text style={styles.position}>{item?.position || localizationStrings.ForwardPosition || "Forward"}</Text>
-
-                    <View style={styles.actionContainer}>
-                      <TouchableOpacity
-                        style={styles.actionButton}
-                        activeOpacity={0.7}
-                        onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
-                          item: item
-                        })}
-                      >
-                        <Image source={imageIndex.edit} style={[styles.actionIcon, styles.editIcon]} />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={styles.actionButton}
-                        activeOpacity={0.7}
-                        onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
-                          item: item
-                        })}
-                      >
-                        <Image source={imageIndex.bubbleChat} style={[styles.actionIcon, styles.msgIcon]} />
-                      </TouchableOpacity>
-                    </View>
                   </View>
 
-                  <View style={styles.detailContainer}>
-                    <Text style={styles.label}>{localizationStrings.IntensityLabel || "Intensity"}</Text>
-                    <Text style={styles.value}>—</Text>
+                  <View style={styles.actionContainer}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      activeOpacity={0.7}
+                      onPress={() => (navigation as any).navigate(ScreenNameEnum.PlayerDetails, {
+                        item: item
+                      })}
+                    >
+                      <Image source={imageIndex.edit} style={[styles.actionIcon, styles.editIcon]} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.actionButtonMsg}
+                      activeOpacity={0.7}
+                      onPress={() => navigation.navigate(ScreenNameEnum.ChatScreen, {
+                        item: item
+                      })}
+                    >
+                      <Image source={imageIndex.bubbleChat} style={[styles.actionIcon,]} />
+                    </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
               )}

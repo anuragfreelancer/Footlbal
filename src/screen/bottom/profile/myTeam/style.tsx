@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: hp(2.4),
-    fontWeight: "800",
     color: "#0F172A",
     letterSpacing: -0.5,
   },
@@ -69,11 +68,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     padding: wp(4),
-    borderRadius: wp(5),
+    borderRadius: wp(4),
     marginVertical: hp(1),
     marginHorizontal: wp(5),
-    borderWidth: 1.5,
-    borderColor: "rgba(160, 216, 3, 1)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#F8FAFC",
   },
   playerAvatar: {
     height: wp(15),
@@ -89,7 +93,6 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: hp(1.9),
-    fontWeight: "700",
     color: "#0F172A",
   },
   position: {
@@ -101,26 +104,27 @@ const styles = StyleSheet.create({
   actionContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: hp(1.2),
-    gap: wp(3),
+    gap: wp(2.5),
   },
   actionButton: {
-    backgroundColor: "rgba(160, 216, 3, 0.1)",
-    padding: wp(2),
+    backgroundColor: "#F1F5F9",
+    padding: wp(2.5),
     borderRadius: wp(2.5),
-    borderWidth: 1,
-    borderColor: 'rgba(160, 216, 3, 0.2)',
+  },
+  actionButtonMsg: {
+    padding: wp(2.5),
+    borderRadius: wp(2.5),
   },
   actionIcon: {
-    height: wp(4),
-    width: wp(4),
+    height: wp(5.8),
+    width: wp(5.8),
     resizeMode: 'contain',
   },
   editIcon: {
-    tintColor: "#A0D803",
+    tintColor: "#64748B",
   },
   msgIcon: {
-    tintColor: "#3B82F6",
+    tintColor: "#A0D803",
   },
   detailContainer: {
     alignItems: "flex-end",

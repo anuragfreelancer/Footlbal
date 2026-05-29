@@ -20,7 +20,7 @@ export default function TabNavigator() {
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
-          height: 70 + insets.bottom,       // ✅ iPhone home indicator ke liye
+          height: 60 + insets.bottom,       // ✅ iPhone home indicator ke liye
           paddingBottom: insets.bottom,      // ✅ Icons upar rahe home bar se
           paddingTop: 10,
 
