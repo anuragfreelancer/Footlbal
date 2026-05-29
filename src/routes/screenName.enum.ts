@@ -15,6 +15,7 @@ enum ScreenNameEnum {
   EndSectionScreen = "EndSectionScreen",
   Calendar = "Calendar",
   Players = "Players",
+  AllPlayerMessages = "AllPlayerMessages",
   Reports = "Reports",
   TabNavigator = "TabNavigator",
   Profile = "Profile",

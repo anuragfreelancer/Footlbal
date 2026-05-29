@@ -42,7 +42,6 @@ const Profile = () => {
   // menu data
   const MenuItems = [
     { title: localizationStrings.MyTeam, icon: imageIndex.myteam, screen: ScreenNameEnum.MyTeam },
-    { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
     { title: localizationStrings.Language, icon: imageIndex.translating, screen: "Language" },
 
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },

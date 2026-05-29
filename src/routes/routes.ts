@@ -43,6 +43,7 @@ import SummaryTable from "../screen/bottom/playerDetails/summaryTable/SummaryTab
 import CommonWebView from "../screen/CommonWebView";
 import { useEffect } from "react";
 import { GetProfile } from "../redux/Api/AuthApi";
+import AllPlayerMessages from "../screen/bottom/messages/AllPlayerMessages";
 
 const useAuth = () => {
   return useSelector((state: any) => state?.auth);
@@ -123,6 +124,13 @@ const _routes = () => {
         logo1: imageIndex.playersActive
       },
       {
+        name: ScreenNameEnum.AllPlayerMessages,
+        Component: AllPlayerMessages,
+        label: localizationStrings.Messages,
+        logo: imageIndex.bubbleChat,
+        logo1: imageIndex.bubbleChat
+      },
+      {
         name: ScreenNameEnum.Reports,
         Component: AllPlayer,
         label: localizationStrings.Reports,
@@ -137,6 +145,7 @@ const _routes = () => {
         logo: imageIndex.profile,
         logo1: imageIndex.profileUser,
       },
+
     ] : [
       {
         name: ScreenNameEnum.HOME_SCREEN,
@@ -145,13 +154,13 @@ const _routes = () => {
         logo: imageIndex.home,
         logo1: imageIndex.homeActive,
       },
-      // {
-      //   name: ScreenNameEnum.Messages,
-      //   Component: Messages,
-      //   label: localizationStrings.Messages,
-      //   logo: imageIndex.bubbleChat,
-      //   logo1: imageIndex.bubbleChat
-      // },
+      {
+        name: ScreenNameEnum.Messages,
+        Component: Messages,
+        label: localizationStrings.Messages,
+        logo: imageIndex.bubbleChat,
+        logo1: imageIndex.bubbleChat
+      },
 
       {
         name: ScreenNameEnum.Reports,

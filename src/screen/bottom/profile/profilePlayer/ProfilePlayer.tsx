@@ -37,8 +37,6 @@ const ProfilePlayer = () => {
 
 
   const PlayData = [
-    { title: localizationStrings.ChatMessages, icon: imageIndex.bubbleChat, screen: ScreenNameEnum.Messages },
-
     { title: localizationStrings.ChangePassword, icon: imageIndex.changePass, screen: ScreenNameEnum.ChangePassword },
     // { title: localizationStrings.AboutFootball, icon: imageIndex.about, screen: ScreenNameEnum.AboutFootb },
     { title: localizationStrings.PrivacyPolicy, icon: imageIndex.document, screen: "https://kmmps.store/kmmp-privacy-policy.html" },

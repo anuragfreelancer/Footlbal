@@ -29,8 +29,7 @@ const App: FunctionComponent<any> = () => {
     <View style={{ flex: 1 }}>
       <AppNavigator />
 
-      {/* FLOATING QA BUTTON FOR STALLION TESTING */}
-      <TouchableOpacity 
+      {/* <TouchableOpacity 
         style={styles.floatingQA} 
         onPress={showModal} 
         activeOpacity={0.8}
@@ -38,8 +37,7 @@ const App: FunctionComponent<any> = () => {
         <Text style={styles.floatingQAText}>⚙️ Stallion</Text>
       </TouchableOpacity>
 
-      {/* PREMIUM STALLION UPDATE PROMPT MODAL */}
-      <Modal
+       <Modal
         visible={isRestartRequired}
         transparent={true}
         animationType="fade"
@@ -63,7 +61,7 @@ const App: FunctionComponent<any> = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };
